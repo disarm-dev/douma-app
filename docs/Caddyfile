@@ -1,0 +1,27 @@
+bwa.app.disarm.io, nam.app.disarm.io, swz.app.disarm.io, zwe.app.disarm.io {
+	root douma.app/serve
+	rewrite / {
+		#regexp .*
+		#ext !.js, !.css, !.jpg, !.png, !.ico, !.ttf, !.geojson
+		ext /
+		to {path} /index.html
+	}
+	#redir 301 {
+	#	if {uri} not_match /(nam|bwa|swz|zwe)/
+	#	/ http://www.disarm.io
+	#}
+	git git@bitbucket.org:disarm-platform/douma.app.git {
+		path ../ #douma.app
+ 		branch develop
+		key /home/disarm/.ssh/id_rsa
+		hook /redeploy
+		hook_type bitbucket
+		then_long sh deploy.sh
+	}
+	timeouts {
+		read 1m
+	}
+	log access.log
+	gzip
+}
+

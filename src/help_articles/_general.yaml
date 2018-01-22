@@ -1,0 +1,60 @@
+- title: What is DiSARM?
+  content: >
+    DiSARM is the Disease Surveillance And Risk Monitoring platform.
+    Find out more at <a href='http://www.disarm.io'>disarm.io</a>
+
+- title: Reloading and updating
+  content: >
+    - DiSARM is designed to run offline in a robust way that protects your data.
+
+    - In general, you can try reloading any page that looks like it's stuck loading (click the reload button on your browser).
+    If you're editing a form, you may lose your entry unless you save first.
+
+    - If DISARM is online, it will check to see if there's a new version available. If there is, it will download and update in the background, letting you know
+    when it's ready.
+    Sometimes (due to a slow connection or other issue), the update doesn't work.
+
+
+    - If things get stuck on a desktop browser, you can try a "force reload", which is `ctrl+shift+r` on Windows (`cmd+shift+r` on Mac).
+    This will try to re-download the required application files and start up again. Your data (except unsaved forms) will not be removed.
+
+- title: Log-in
+  image: login.png
+  content: Enter your username and password, Just click login.
+
+- title: Log-out
+  image: logout.png
+  content: >
+    Just click logout on the sidebar.
+    Note that if you somehow logout when you are offline, you won't be able to use DiSARM again until you login
+    (which you can only do if you're online).
+
+- title: I've lost my password
+  content: Please ask someone.
+
+- title: What is my username or password?
+  content: If you don't have these, please ask the person who set up DiSARM for you.
+
+- title: How can I report if something is broken?
+  content: Please send an email to <a href='mailto://help@disarm.io'>help@disarm.io</a> to get help.
+
+- title: Offline functionality
+  content: Offline functionality is primarily designed to work for the IRS Record componenent, which allows users to collect data out in the field offline.
+           Other parts of the application may work offline, however these are not fully functional.
+
+- title: Data usage
+  content: >
+    - DiSARM is designed to use the smallest possible amount of data. As far as possible, base files are only downloaded once.
+
+
+    - For the simplest use (access to `Record` only), we only need to download the application, which is less than 2 Mb.
+
+
+    - Syncing records is around 10 Kb for sending 100 for responses, but with a minimum size of 1Kb per sync - i.e. syncing 1 record is still 1 Kb.
+
+
+    - For the base data used in the `Plan`, `Tasker` and `Monitor` components, we need some 'geodata'. Depending on the instance, this can be between 2.5 Mb and 7 Mb.
+      But _this should only need to be downloaded once_.
+
+    - Once you're up and running with either the simpler `Record` component (~ 2Mb), or one of the more advanced mapping components (~ 9Mb), you should be able
+      to restart the application without needing to load any more data.

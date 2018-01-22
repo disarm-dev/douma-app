@@ -1,0 +1,18 @@
+# Help sections
+
+# NOTE: If you're editing any of the 'included' help files on a development server, you
+# will need to re-save THIS file in order to reload the changes
+# - webpack doesn't seem to watch the included files.
+
+- section_title: General
+  articles: !include ./_general
+- section_title: IRS Plan
+  articles: !include ./_irs_plan
+- section_title: IRS Monitor
+  articles: !include ./_irs_monitor
+- section_title: IRS Record
+  articles: !include ./_irs_record
+- section_title: Form builder
+  articles: !include ./_form_builder
+
+

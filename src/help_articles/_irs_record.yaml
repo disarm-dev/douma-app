@@ -1,0 +1,9 @@
+- title: Can I edit records after I've synced?
+  image:
+  content: >
+    It's only possible to edit records before you sync.
+    At the moment, after they're synced you will need to ask someone to edit the record for you.
+
+- title: GPS accuracy
+  content: >
+    The GPS accuracy is recorded and synced with the form record, but it's not shown.

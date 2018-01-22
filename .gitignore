@@ -1,0 +1,12 @@
+*.sublime-workspace
+*.pem
+.idea
+.tern-port
+
+.DS_Store
+node_modules/
+dist/
+npm-debug.log*
+
+serve/
+.nyc_output

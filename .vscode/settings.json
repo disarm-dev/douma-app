@@ -1,0 +1,26 @@
+{
+    "search.exclude": {
+        "*.sublime-workspace": true,
+        "*.pem": true,
+        ".idea": true,
+        "**/*.tern-port": true,
+        ".DS_Store": true,
+        "node_modules/": true,
+        "dist/": true,
+        "npm-debug.log*": true,
+        "serve/": true,
+        ".nyc_output": true
+    },
+    "files.exclude": {
+        "*.sublime-workspace": true,
+        "*.pem": true,
+        ".idea": true,
+        "**/*.tern-port": true,
+        ".DS_Store": true,
+        "node_modules/": true,
+        "dist/": true,
+        "npm-debug.log*": true,
+        "serve/": true,
+        ".nyc_output": true
+    }
+}

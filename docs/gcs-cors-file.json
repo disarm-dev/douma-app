@@ -1,0 +1,8 @@
+[
+    {
+      "origin": ["http://*.disarm.io", "http://localhost:8080", "http://*.localhost:8080", "http://localhost:5000", "http://*.localhost:500036"],
+      "responseHeader": ["Content-Type"],
+      "method": ["GET", "HEAD", "DELETE"],
+      "maxAgeSeconds": 30
+    }
+]

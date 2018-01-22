@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" style='background: white'>
+  <head>
+    <meta charset="utf-8">
+    <meta name=viewport content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#E91E63">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="shortcut icon" href="/static/favicon.ico?v3">
+    <link rel="icon" type="image/png" sizes="96x96" href="/static/favicon-96x96.png">
+
+    <!--PACE LOADING -->
+    <link rel="stylesheet" href="/static/loader/pace.css">
+    <script>
+      window.paceOptions = {
+        eventLag: false,
+        ajax: {
+          ignoreURLs: ['google-analytics.com', 'favicon', 'favicon-96x96', 'VERSION', '/?version_commit_hash_short', 'geojson']
+        }
+      }
+    </script>
+    <script src="/static/loader/pace.min.js"></script>
+
+  </head>
+
+  <body style='background: white'>
+    <div id="douma">
+      <div style="
+          float: none;
+          margin-top: 44px;
+      ">
+        <img src="/static/loading-logo.png" style="
+            margin-left: auto;
+            margin-right: auto;
+            display: block;
+            height: 80px;
+        ">
+      </div>
+    </div>
+  </body>
+</html>
