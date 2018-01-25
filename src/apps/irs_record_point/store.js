@@ -5,7 +5,6 @@ import Raven from 'raven-js'
 import CONFIG from 'config/common'
 import {ResponseController} from 'lib/models/response/controller'
 import {guess_location_for} from "../../lib/models/response/guess_location";
-import Raven from "raven-js";
 
 const controller = new ResponseController('record')
 
