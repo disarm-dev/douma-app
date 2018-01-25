@@ -10,3 +10,5 @@ npm-debug.log*
 
 serve/
 .nyc_output
+
+static/instances
