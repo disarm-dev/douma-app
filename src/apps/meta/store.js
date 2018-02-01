@@ -59,7 +59,11 @@ export default {
         if (response.instance_slug !== context.rootState.instance_config.instance.slug && response.instance_slug !== 'all') {
           return Promise.reject({error: 'User not authenticated for this instance'})
         }
-
+        console.warn('WARNING!')
+        console.warn('Adding foci permissions to user, need to remove this!')
+        console.warn('WARNING!')
+        response.permissions.push('read:foci')
+        response.permissions.push('write:foci')
         const authenticated_user = new User(response)
 
         // You have a valid, authenticated user
@@ -67,7 +71,6 @@ export default {
 
           // Start by clearing instance-specific data ONLY if instance_id has changed
           context.dispatch('clear_data_storage', {instance_id_changed, authenticated_user: authenticated_user.model}).then(() => {
-
             // Set some basic stuff
             context.commit('set_personalised_instance_id', login_details.personalised_instance_id)
             context.commit('set_user', authenticated_user.model)

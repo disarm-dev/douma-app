@@ -33,6 +33,9 @@ export default {
     'meta': {
       title: 'User', icon: 'person', geodata_required: false
     },
+    'foci': {
+      title: 'Foci', icon: 'bubble_chart', geodata_required: false
+    }
   },
   hash_params: {
     INSTANCE_ID: 'instance',
