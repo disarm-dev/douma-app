@@ -37,8 +37,7 @@
     },
     methods: {
       handle_click({row, event}) {
-        // do something
-        console.log('row', row)
+        this.$router.push({name: 'foci:detail', params: {foci_id: row.id}})
       }
     }
   }
