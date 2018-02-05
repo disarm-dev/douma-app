@@ -8,7 +8,7 @@ async function read_all() {
   // return request_handler(request)
 
 
-  const result = await fetch('/static/case_clusters.geojson').then(res => res.json())
+  const result = await fetch('/static/case_clusters.json').then(res => res.json())
   return result
 }
 

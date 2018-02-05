@@ -8,7 +8,7 @@ async function read_all() {
   // return request_handler(request)
 
 
-  const result = await fetch('/static/cases.geojson').then(res => res.json())
+  const result = await fetch('/static/cases.json').then(res => res.json())
   return result
 }
 
