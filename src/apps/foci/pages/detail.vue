@@ -1,6 +1,6 @@
 <template>
   <div class="detail-container">
-    <span class="md-headline">I am the detail view. {{foci_id}}</span>
+    <span class="md-headline title">I am the detail view. {{foci_id}}</span>
     <md-card class="form">
       <md-card-content>
         <form  v-if="case_cluster" @submit.stop.prevent="save_changes">
@@ -53,21 +53,30 @@
 
 <style scoped>
   .detail-container {
-    margin: 2em 1em;
+    width: 80%;
+    margin: 1em auto;
+    padding: 0 1em;
+  }
+
+  @media (max-width: 800px) {
+    .detail-container {
+      width: 100%;
+    }
+  }
+
+  .title {
+    margin: 1em 0;
   }
 
   .form {
-    max-width: 600px;
-    margin: 1em auto;
+    margin: 1em 0;
   }
 
   .map {
-    background-color: grey;
-
-    width: 80%;
-    margin: 0 auto;
     height: 800px;
 
+    /* Delete when real map */
+    background-color: grey;
     justify-content: center;
     align-items: center;
   }
