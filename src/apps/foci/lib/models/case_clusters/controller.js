@@ -9,11 +9,11 @@ export class CaseClustersController {
   }
 
   async read_all_network() {
-    const remote_responses = await this.remote.read_all()
+    const case_clusters = await this.remote.read_all()
 
-    // await this.local.create_or_update_bulk(remote_responses)
+    // await this.local.create_or_update_bulk(case_clusters)
 
-    return remote_responses
+    return case_clusters
   }
 
   // async read_local() {
