@@ -39,16 +39,12 @@ test('table_columns should be an array of string when data is there', t => {
       $store: {
         state: {
           foci: {
-            case_clusters: {
-              features: [
-                {
-                  properties: {
-                    test_1: 1,
-                    test_2: 1
-                  }
-                }
-              ]
-            }
+            case_clusters: [
+              {
+                test_1: 1,
+                test_2: 1
+              }
+            ]
           }
         }
       }
@@ -75,16 +71,12 @@ test('table_data should be an array of objects when data is there', t => {
       $store: {
         state: {
           foci: {
-            case_clusters: {
-              features: [
-                {
-                  properties: {
-                    test_1: 1,
-                    test_2: 1
-                  }
-                }
-              ]
-            }
+            case_clusters: [
+              {
+                test_1: 1,
+                test_2: 1
+              }
+            ]
           }
         }
       }

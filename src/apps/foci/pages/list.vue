@@ -19,8 +19,8 @@
     computed: {
       table_data() {
         const case_clusters = this.$store.state.foci.case_clusters
-        if (case_clusters && case_clusters.hasOwnProperty('features') && Array.isArray(case_clusters.features)) {
-          return case_clusters.features.map(f => f.properties)
+        if (case_clusters && case_clusters.length) {
+          return case_clusters
         } else {
           return []
         }
@@ -28,9 +28,8 @@
       table_columns() {
         const case_clusters = this.$store.state.foci.case_clusters
 
-        if (case_clusters && case_clusters.hasOwnProperty('features') && Array.isArray(case_clusters.features)) {
-          const properties = case_clusters.features.map(f => f.properties)
-          return Object.keys(properties[0])
+        if (case_clusters && case_clusters.length) {
+          return Object.keys(case_clusters[0])
         } else {
           return []
         }
