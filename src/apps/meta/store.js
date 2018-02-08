@@ -59,11 +59,7 @@ export default {
         if (response.instance_slug !== context.rootState.instance_config.instance.slug && response.instance_slug !== 'all') {
           return Promise.reject({error: 'User not authenticated for this instance'})
         }
-        console.warn('WARNING!')
-        console.warn('Adding foci permissions to user, need to remove this!')
-        console.warn('WARNING!')
-        response.permissions.push('read:foci')
-        response.permissions.push('write:foci')
+        
         const authenticated_user = new User(response)
 
         // You have a valid, authenticated user
