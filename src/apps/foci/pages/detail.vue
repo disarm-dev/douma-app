@@ -24,8 +24,6 @@
 </template>
 
 <script>
-  //import { mapState, mapActions, mapMutations } from 'vuex'
-
   export default {
     name: 'detail',
     props: {
@@ -35,17 +33,33 @@
     data() {
       return {
         case_cluster: null,
-        excluded_fields: ['id', 'geometry']
+        excluded_fields: ['id', 'geometry'],
+        fields_for_edit: []
       }
     },
     computed: {},
-    mounted() {
+    created() {
       const case_cluster = this.$store.state.foci.case_clusters.find(case_cluster => case_cluster.id === this.foci_id)
-      this.case_cluster = case_cluster
+      if (case_cluster) {
+        this.case_cluster = case_cluster
+        this.set_fields_for_edit(case_cluster)
+      } else {
+
+      }
     },
     methods: {
       save_changes() {
         console.log('saving changes....')
+      },
+      set_fields_for_edit(case_cluster) {
+        const keys_without_excluded_keys = []
+        const keys = Object.keys(case_cluster)
+        keys.forEach(key => {
+          if (!this.excluded_fields.includes(key)) {
+            keys_without_excluded_keys.push(key)
+          }
+        })
+        this.fields_for_edit = keys_without_excluded_keys
       }
     }
   }
