@@ -8,10 +8,10 @@
           <div v-for="key in fields_for_edit">
             <md-input-container>
               <label>{{key}}</label>
-              <md-input v-model="case_cluster[key]"></md-input>
+              <md-input v-model="case_cluster[key]" :type="typeof case_cluster[key] === 'number' ? 'number' : 'text'"></md-input>
             </md-input-container>
           </div>
-          <md-button type="submit" class="md-primary md-raised">Save changes</md-button>
+          <md-button type="submit" class="md-primary md-raised" @click="save_changes">Save changes</md-button>
         </form>
       </md-card-content>
     </md-card>
@@ -31,23 +31,39 @@
     },
     data() {
       return {
-        case_cluster: null,
+        // case_cluster: null,
         excluded_fields: ['id', 'geometry'],
         fields_for_edit: []
       }
     },
-    computed: {},
-    created() {
-      const case_cluster = this.$store.state.foci.case_clusters.find(case_cluster => case_cluster.id === this.foci_id)
-      if (case_cluster) {
-        this.case_cluster = case_cluster
-        this.set_fields_for_edit(case_cluster)
-      } else {
-        // TODO: display error message 
+    computed: {
+      case_cluster() {
+        if (this.$store.state.foci.case_clusters) {
+          const case_cluster = this.$store.state.foci.case_clusters.find(case_cluster => case_cluster.id === this.foci_id)
+          this.set_fields_for_edit(case_cluster)
+          return case_cluster
+        } else {
+          return {}
+        }
       }
     },
+    // created() {
+    //   const case_cluster = 
+    //   if (case_cluster) {
+    //     this.case_cluster = case_cluster
+        
+    //   } else {
+    //     // TODO: display error message 
+    //   }
+    // },
     methods: {
       save_changes() {
+        this.$store.dispatch('foci/update_case_cluster', this.case_cluster).then(res => {
+          console.log('res', res);
+        })
+        .catch(err => {
+          console.log('err', err);
+        })
         console.log('saving changes....')
       },
       set_fields_for_edit(case_cluster) {

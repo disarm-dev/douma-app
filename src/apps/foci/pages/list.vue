@@ -35,9 +35,6 @@
         }
       }
     },
-    created() {
-      this.$store.dispatch('foci/get_case_clusters')
-    },
     methods: {
       handle_click({row, event}) {
         this.$router.push({name: 'foci:detail', params: {foci_id: row.id}})

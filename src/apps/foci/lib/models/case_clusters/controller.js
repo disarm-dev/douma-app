@@ -33,4 +33,10 @@ export class CaseClustersController {
     const case_clusters = await this.local.read_all()
     return case_clusters
   }
+
+  async update_case_cluster(case_cluster) {
+    const updated_cluster = await remote.update(case_cluster)
+    this.local.update(updated_cluster)
+    return case_cluster
+  }
 }
