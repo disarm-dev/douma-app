@@ -12,10 +12,9 @@ async function read_all() {
   return result
 }
 
-// TOOD: fix url and use same pattern
 function _read_all() {
   return {
-    url_suffix: '/record/all',
+    url_suffix: '/foci/cases',
   }
 }
 

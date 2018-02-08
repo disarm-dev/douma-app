@@ -6,7 +6,9 @@ const fields = {
   v1: {
     responses: 'id, [personalised_instance_id+instance_slug]',
     plan: 'id',
-    assignment_plan: 'id'
+    assignment_plan: 'id',
+    case_clusters: 'id',
+    cases: 'id'
   }
 }
 
@@ -21,7 +23,8 @@ db.version(1).stores({
 
   "monitor/plan": fields.v1.plan,
   "plan/plan": fields.v1.plan,
-  
+  "foci/case_clusters": fields.v1.case_clusters,
+  "foci/cases": fields.v1.cases,
 })
 
 // db.version(2)

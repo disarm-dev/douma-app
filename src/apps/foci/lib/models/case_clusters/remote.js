@@ -1,6 +1,6 @@
-// import {request_handler} from "lib/remote/request-handler"
+import {request_handler} from "lib/remote/request-handler"
 
-export default {read_all}
+export default {read_all, update}
 
 async function read_all() {
   // TODO: replace with request handler when server is deployed and has endpoints
@@ -12,10 +12,22 @@ async function read_all() {
   return result
 }
 
-// TOOD: fix url and use same pattern
 function _read_all() {
   return {
-    url_suffix: '/record/all',
+    url_suffix: '/foci/cluster'
+  }
+}
+
+async function update(case_cluster) {
+  const request = _update(case_cluster)
+  return request_handler(request)
+}
+
+function _update(case_cluster) {
+  return {
+    method: 'PUT',
+    url_suffix: '/foci/cluster',
+    data: case_cluster
   }
 }
 

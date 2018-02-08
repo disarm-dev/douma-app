@@ -27,8 +27,7 @@
   export default {
     name: 'detail',
     props: {
-      foci_id: String,
-
+      foci_id: String
     },
     data() {
       return {
@@ -44,7 +43,7 @@
         this.case_cluster = case_cluster
         this.set_fields_for_edit(case_cluster)
       } else {
-
+        // TODO: display error message 
       }
     },
     methods: {

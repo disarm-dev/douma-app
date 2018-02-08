@@ -1,11 +1,12 @@
 import {CaseClustersController} from "./lib/models/case_clusters/controller"
 import {CasesController} from "./lib/models/cases/controller"
 
-const case_clusters_controller = new CaseClustersController()
-const cases_controller = new CasesController()
+const case_clusters_controller = new CaseClustersController('foci')
+const cases_controller = new CasesController('foci')
 
 export default {
   namespaced: true,
+  unpersisted_state_keys: ['cases', 'case_clusters'],
   state: {
     cases: null,
     case_clusters: null
@@ -26,7 +27,6 @@ export default {
     },
     async get_cases(context) {
       const cases = await cases_controller.read_all_network()
-      //
       context.commit('set_cases', cases)
     },
     get_cases_fc(context) {

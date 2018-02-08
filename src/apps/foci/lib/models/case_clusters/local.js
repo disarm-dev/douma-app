@@ -10,19 +10,20 @@ export default class Local {
   }
 
   async read_all() {
+    console.log('this', this);
     return await this.table.toArray()
   }
 
-  async create(response) {
-    await this.table.add(response)
+  async create(case_cluster) {
+    await this.table.add(case_cluster)
   }
 
-  async update(response) {
-    await this.table.put(response)
+  async update(case_cluster) {
+    await this.table.put(case_cluster)
   }
 
-  async create_or_update_bulk(responses) {
-    return await this.table.bulkPut(responses)
+  async create_or_update_bulk(case_clusters) {
+    return await this.table.bulkPut(case_clusters)
   }
 
   async remove_all() {

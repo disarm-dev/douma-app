@@ -12,24 +12,25 @@ export class CasesController {
   async read_all_network() {
     const cases = await this.remote.read_all()
 
-    // await this.local.create_or_update_bulk(remote_responses)
+    await this.local.create_or_update_bulk(cases)
 
     return cases
   }
 
-  convert_cases_to_fc(case_clusters) {
-    const array_of_features = case_clusters.map(case_cluster => {
-      const case_feature = feature(case_cluster.geometry)
-      delete case_cluster.geometry
-      case_feature.properties  = case_cluster
+  convert_cases_to_fc(cases) {
+    const array_of_features = cases.map(single_case => {
+      const case_feature = feature(single_case.geometry)
+      delete single_case.geometry
+      case_feature.properties  = single_case
       return case_feature
     })
 
     return featureCollection(array_of_features)
   }
 
-  // async read_local() {
-  //   const case_clusters = await this.local.read_all()
-  // }
+  async read_local() {
+    const cases = await this.local.read_all()
+    return cases
+  }
 
 }

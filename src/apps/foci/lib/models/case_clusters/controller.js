@@ -13,26 +13,24 @@ export class CaseClustersController {
   async read_all_network() {
     const case_clusters = await this.remote.read_all()
 
-    // await this.local.create_or_update_bulk(case_clusters)
+    await this.local.create_or_update_bulk(case_clusters)
 
     return case_clusters
   }
 
-  convert_case_clusters_to_fc(cases) {
-    debugger
-    const array_of_features = cases.map(single_case => {
-      debugger
-      const case_cluster_feature = feature(single_case.geometry)
-      delete single_case.geometry
-      case_cluster_feature.properties  = single_case
+  convert_case_clusters_to_fc(case_clusters) {
+    const array_of_features = case_clusters.map(case_cluster => {
+      const case_cluster_feature = feature(case_cluster.geometry)
+      delete case_cluster.geometry
+      case_cluster_feature.properties  = case_cluster
       return case_cluster_feature
     })
 
     return featureCollection(array_of_features)
   }
 
-  // async read_local() {
-  //   const case_clusters = await this.local.read_all()
-  // }
-
+  async read_local() {
+    const case_clusters = await this.local.read_all()
+    return case_clusters
+  }
 }

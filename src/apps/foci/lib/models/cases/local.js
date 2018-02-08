@@ -13,16 +13,16 @@ export default class Local {
     return await this.table.toArray()
   }
 
-  async create(response) {
-    await this.table.add(response)
+  async create(single_case) {
+    await this.table.add(single_case)
   }
 
-  async update(response) {
-    await this.table.put(response)
+  async update(single_case) {
+    await this.table.put(single_case)
   }
 
-  async create_or_update_bulk(responses) {
-    return await this.table.bulkPut(responses)
+  async create_or_update_bulk(cases) {
+    return await this.table.bulkPut(cases)
   }
 
   async remove_all() {
