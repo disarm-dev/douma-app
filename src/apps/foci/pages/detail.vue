@@ -5,7 +5,7 @@
       <md-card-content>
         <form  v-if="case_cluster" @submit.stop.prevent="save_changes">
           <span class="md-title">Attributes</span>
-          <div v-for="key in Object.keys(case_cluster)" v-if="!excluded_fields.includes(key)">
+          <div v-for="key in fields_for_edit">
             <md-input-container>
               <label>{{key}}</label>
               <md-input v-model="case_cluster[key]"></md-input>
