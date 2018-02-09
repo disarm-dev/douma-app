@@ -32,6 +32,10 @@ export default {
       const cases = await cases_controller.read_all_network()
       context.commit('set_cases', cases)
     },
+    async get_cases_local(context) {
+      const case_clusters = await case_clusters_controller.read_local()
+      context.commit('set_case_clusters', case_clusters)
+    },
     get_cases_fc(context) {
       return cases_controller.convert_cases_to_fc(context.state.cases)
     },

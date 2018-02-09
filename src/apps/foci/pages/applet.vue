@@ -1,8 +1,12 @@
 <template>
   <div>
     <div>
+      <md-button @click="get_local">
+        Get local case clusters
+      </md-button>
+
       <md-button @click="get_case_clusters">
-        Get case clusters 
+        Get remote case clusters 
       </md-button>
     </div>
 
@@ -15,6 +19,9 @@ export default {
   methods: {
     get_case_clusters() {
       this.$store.dispatch('foci/get_case_clusters')
+    },
+    get_local() {
+      this.$store.dispatch('foci/get_cases_local')
     }
   }
 }
