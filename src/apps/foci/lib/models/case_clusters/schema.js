@@ -1,5 +1,7 @@
 // TODO: Move this out of douma and into it's own package that can be used on the server as well.
 export const case_cluster_schema = {
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://disarm.io/schemas/case_cluster.json",
   "title": "Case cluster",
   "type": "object",
   "properties": {

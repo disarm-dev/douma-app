@@ -1,7 +1,13 @@
+import Ajv from 'ajv'
+
+import {case_cluster_schema} from './schema'
 import remote from './remote'
 import Local from './local'
 
 import {featureCollection, feature} from '@turf/helpers'
+
+const ajv = new Ajv()
+
 
 
 export class CaseClustersController {
@@ -12,6 +18,12 @@ export class CaseClustersController {
 
   async read_all_network() {
     const case_clusters = await this.remote.read_all()
+
+    for (const case_cluster of case_clusters) {
+      if (!ajv.validate(case_cluster_schema, case_cluster)) {
+        throw ajv.errors
+      }
+    }
 
     await this.local.create_or_update_bulk(case_clusters)
 
