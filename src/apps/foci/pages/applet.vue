@@ -2,10 +2,10 @@
   <div>
     <div>
       <md-button @click="get_case_clusters">
-        Get case clusters
+        Get case clusters 
       </md-button>
     </div>
-    
+
     <router-view></router-view>
   </div>
 </template>
