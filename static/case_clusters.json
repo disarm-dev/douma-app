@@ -1,8 +1,8 @@
 [
   {
-    "id": "2949c6b9-b388-43aa-9a5b-2ea2ea899c00",
-    "cases": "94",
-    "status": "investigated",
+    "_id": "1",
+    "status": "inactive",
+    "investigation_status": "suggested",
     "geometry": {
       "type": "Polygon",
       "coordinates": [
@@ -68,9 +68,9 @@
     }
   },
   {
-    "id": "5ee3762d-1f5a-47db-adae-68bbd5509ef1",
-    "cases": "54",
-    "status": "not investigated",
+    "_id": "2",
+    "status": "active",
+    "investigation_status": "visual review",
     "geometry": {
       "type": "Polygon",
       "coordinates": [
