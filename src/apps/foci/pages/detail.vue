@@ -32,7 +32,7 @@
     data() {
       return {
         // case_cluster: null,
-        excluded_fields: ['id', 'geometry'],
+        excluded_fields: ['_id', 'geometry'],
         fields_for_edit: []
       }
     },
