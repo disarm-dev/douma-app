@@ -47,15 +47,6 @@
         }
       }
     },
-    // created() {
-    //   const case_cluster = 
-    //   if (case_cluster) {
-    //     this.case_cluster = case_cluster
-        
-    //   } else {
-    //     // TODO: display error message 
-    //   }
-    // },
     methods: {
       save_changes() {
         this.$store.dispatch('foci/update_case_cluster', this.case_cluster).then(res => {
