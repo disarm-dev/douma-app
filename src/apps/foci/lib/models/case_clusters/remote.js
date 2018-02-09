@@ -5,6 +5,10 @@ export default {read_all, update}
 async function read_all() {
   const request = _read_all()
   return request_handler(request)
+
+  // const res = await fetch('/static/case_clusters.json')
+  // const case_clusters = await res.json()
+  // return case_clusters
 }
 
 function _read_all() {
