@@ -7,8 +7,8 @@ const fields = {
     responses: 'id, [personalised_instance_id+instance_slug]',
     plan: 'id',
     assignment_plan: 'id',
-    case_clusters: 'id',
-    cases: 'id'
+    case_clusters: '_id',
+    cases: '_id'
   }
 }
 

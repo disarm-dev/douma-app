@@ -5,10 +5,10 @@
       <md-card-content>
         <form  v-if="case_cluster" @submit.stop.prevent="save_changes">
           <span class="md-title">Attributes</span>
-          <div v-for="key in fields_for_edit">
+          <div v-for="field in fields_for_edit">
             <md-input-container>
-              <label>{{key}}</label>
-              <md-input v-model="case_cluster[key]" :type="typeof case_cluster[key] === 'number' ? 'number' : 'text'"></md-input>
+              <label>{{field}}</label>
+              <md-input v-model="case_cluster[field]" :type="typeof case_cluster[key] === 'number' ? 'number' : 'text'"></md-input>
             </md-input-container>
           </div>
           <md-button type="submit" class="md-primary md-raised" @click="save_changes">Save changes</md-button>
