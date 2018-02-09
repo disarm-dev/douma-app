@@ -5,7 +5,8 @@
   "private": true,
   "scripts": {
     "dev": "node build/dev-server.js",
-    "start": "npm install; npm run build; node server.js",
+    "prestart": "npm install; npm run build",
+    "start": "node server.js",
     "build": "node build/build.js",
     "unit": "env BABEL_ENV=test NODE_ENV=production NODE_PATH=src ava",
     "unit-cov": "env BABEL_ENV=test NODE_ENV=production NODE_PATH=src nyc ava --verbose",
