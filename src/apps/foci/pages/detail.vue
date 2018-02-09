@@ -8,7 +8,7 @@
           <div v-for="field in fields_for_edit">
             <md-input-container>
               <label>{{field}}</label>
-              <md-input v-model="case_cluster[field]" :type="typeof case_cluster[key] === 'number' ? 'number' : 'text'"></md-input>
+              <md-input v-model="case_cluster[field]" :type="typeof case_cluster[field] === 'number' ? 'number' : 'text'"></md-input>
             </md-input-container>
           </div>
           <md-button type="submit" class="md-primary md-raised" @click="save_changes">Save changes</md-button>
