@@ -16,12 +16,15 @@
 
 <script>
 export default {
+  created() {
+    this.get_local()
+  },
   methods: {
     get_case_clusters() {
       this.$store.dispatch('foci/get_case_clusters')
     },
     get_local() {
-      this.$store.dispatch('foci/get_cases_local')
+      this.$store.dispatch('foci/get_case_clusters_local')
     }
   }
 }

@@ -10,7 +10,6 @@ export default class Local {
   }
 
   async read_all() {
-    console.log('this', this);
     return await this.table.toArray()
   }
 

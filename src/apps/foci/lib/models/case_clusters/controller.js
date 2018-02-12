@@ -33,6 +33,7 @@ export class CaseClustersController {
 
   async read_local() {
     const case_clusters = await this.local.read_all()
+    validate_case_clusters(case_clusters)
     return case_clusters
   }
 
