@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>Case clusters: {{cases.length}}</p>
+    <p>Case clusters: {{case_clusters.length}}</p>
     <p>Cases: {{cases.length}}</p>
   </div>
 </template>
