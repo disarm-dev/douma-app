@@ -5,11 +5,20 @@
       <md-card-content>
         <form  v-if="case_cluster" @submit.stop.prevent="save_changes">
           <span class="md-title">Attributes</span>
-          <div v-for="field in fields_for_edit">
-            <md-input-container>
-              <label>{{field}}</label>
-              <md-input v-model="case_cluster[field]" :type="typeof case_cluster[field] === 'number' ? 'number' : 'text'"></md-input>
+          <div v-for="field in fields" :key="field.name">
+
+            <md-input-container v-if="field.enum">
+              <label for="movie">{{field.name}}</label>
+              <md-select v-model="case_cluster[field.name]">
+                <md-option v-for="value in field.enum" :value="value" :key="value">{{value}}</md-option>
+              </md-select>
             </md-input-container>
+            
+            <md-input-container v-else>
+              <label>{{field}}</label>
+              <md-input v-model="case_cluster[field.name]" :type="field.type"></md-input>
+            </md-input-container>
+
           </div>
           <md-button type="submit" class="md-primary md-raised" @click="save_changes">Save changes</md-button>
         </form>
@@ -24,6 +33,8 @@
 </template>
 
 <script>
+  import {case_cluster_schema} from '../lib/models/case_clusters/schema'
+
   export default {
     name: 'detail',
     props: {
@@ -31,9 +42,8 @@
     },
     data() {
       return {
-        // case_cluster: null,
         excluded_fields: ['_id', 'geometry'],
-        fields_for_edit: []
+        fields: []
       }
     },
     computed: {
@@ -42,9 +52,12 @@
           const case_cluster = this.$store.state.foci.case_clusters.find(case_cluster => case_cluster._id === this.foci_id)
           return case_cluster
         } else {
-          return {}
+          return null
         }
       }
+    },
+    created() {
+      this.create_fields_for_edit()
     },
     methods: {
       save_changes() {
@@ -56,15 +69,23 @@
         })
         console.log('saving changes....')
       },
-      set_fields_for_edit(case_cluster) {
-        const keys_without_excluded_keys = []
-        const keys = Object.keys(case_cluster)
-        keys.forEach(key => {
-          if (!this.excluded_fields.includes(key)) {
-            keys_without_excluded_keys.push(key)
+      create_fields_for_edit() {
+        const excluded_fields = ['_id', 'geometry']
+        const property_names = Object.keys(case_cluster_schema.properties)
+        property_names.forEach(property_name => {
+          if (excluded_fields.includes(property_name)) {
+            return
           }
+
+          const property = case_cluster_schema.properties[property_name]
+          property.name = property_name
+
+          if (property.type === 'string') {
+            property.type = 'text'
+          }
+
+          this.fields.push(property)
         })
-        this.fields_for_edit = keys_without_excluded_keys
       }
     }
   }
