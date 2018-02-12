@@ -39,8 +39,7 @@
     computed: {
       case_cluster() {
         if (this.$store.state.foci.case_clusters) {
-          const case_cluster = this.$store.state.foci.case_clusters.find(case_cluster => case_cluster.id === this.foci_id)
-          this.set_fields_for_edit(case_cluster)
+          const case_cluster = this.$store.state.foci.case_clusters.find(case_cluster => case_cluster._id === this.foci_id)
           return case_cluster
         } else {
           return {}
