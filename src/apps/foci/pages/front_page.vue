@@ -4,6 +4,9 @@
 
     <ul>
       <li>
+        <router-link :to="{name: 'foci:status'}">Status view</router-link>
+      </li>
+      <li>
         <router-link :to="{name: 'foci:list'}">List view</router-link>
       </li>
       <li>
