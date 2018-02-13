@@ -1,6 +1,18 @@
 <template>
-  <div>
-    <p>Case clusters: {{case_clusters.length}}</p>
+  <div class="container">
+    <md-card>
+      <md-card-header>
+        <div class="md-title">Case clusters</div>
+        <!-- <div class="md-subhead">Subtitle here</div> -->
+      </md-card-header>
+      <md-card-content>
+        <p>There are {{case_clusters.length}} case clusters currently saved on your device. </p>
+      </md-card-content>
+      <md-card-actions>
+        <md-button class="md-primary">Rerun remote model</md-button>
+      </md-card-actions>
+    </md-card>
+    
     <p>Cases: {{cases.length}}</p>
   </div>
 </template>
@@ -26,4 +38,10 @@ export default {
   }
 }
 </script>
+<style>
+  .container {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+</style>
 
