@@ -9,7 +9,7 @@
         <p>There are {{case_clusters.length}} case clusters currently saved on your device. </p>
       </md-card-content>
       <md-card-actions>
-        <md-button class="md-primary">Rerun remote model</md-button>
+        <md-button @click="rerun_model" class="md-primary">Rerun remote model</md-button>
       </md-card-actions>
     </md-card>
     
@@ -34,6 +34,11 @@ export default {
       } else {
         return []
       }
+    }
+  },
+  methods: {
+    rerun_model() {
+      // TODO: Rerun model here
     }
   }
 }
