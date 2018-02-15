@@ -9,7 +9,8 @@ export default {
   unpersisted_state_keys: ['cases', 'case_clusters'],
   state: {
     cases: null,
-    case_clusters: null
+    case_clusters: null,
+    case_clusters_count: null
   },
   mutations: {
     set_cases(state, cases) {
@@ -21,6 +22,9 @@ export default {
     set_case_cluster(state, incoming_case_cluster) {
       const index = state.case_clusters.find(cluster => cluster._id === incoming_case_cluster._id)
       state.case_clusters.splice(index, 1, incoming_case_cluster)
+    },
+    set_case_clusters_count(state, count) {
+      state.case_clusters_count = count
     }
   },
   actions: {
@@ -49,6 +53,10 @@ export default {
     async update_case_cluster(context, case_cluster) {
       const updated_case_cluster = await case_clusters_controller.update_case_cluster(case_cluster)
       context.commit('set_case_cluster', case_cluster)
+    },
+    async get_case_clusters_count(context) {
+      const count = await case_clusters_controller.read_count()
+      context.commit('set_case_clusters_count', count)
     }
   }
 }

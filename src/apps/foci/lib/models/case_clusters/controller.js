@@ -43,4 +43,9 @@ export class CaseClustersController {
     this.local.update(updated_cluster)
     return case_cluster
   }
+
+  async read_count() {
+    const count = this.remote.read_count()
+    return count
+  }
 }

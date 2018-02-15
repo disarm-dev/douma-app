@@ -44,6 +44,30 @@ test('case_clusters returns case_clusters from store', t => {
   t.deepEqual(actual, expected)
 })
 
+test('case_clusters_count returns case_clusters_count from store', t => {
+  const mock_store = {
+    state: {
+      foci: {
+        case_clusters: [{ _id: 1 }],
+        cases: [],
+        case_clusters_count: 2
+      }
+    }
+  }
+
+  const wrapper = shallow(status, {
+    mocks: {
+      $store: mock_store
+    }
+  })
+
+  const actual = wrapper.vm.case_clusters_count
+  const expected = 2
+
+  t.deepEqual(actual, expected)
+})
+
+
 test('cases return cases from store', t => {
   const mock_store = {
     state: {
@@ -66,6 +90,37 @@ test('cases return cases from store', t => {
   t.deepEqual(actual, expected)
 })
 
+test('renders button for getting count from remote', t => {
+  const wrapper = shallow(status, {
+    mocks: {
+      $store: mock_store_empty
+    }
+  })
+
+  const button = wrapper.find('md-button#read_remote_count')
+
+  t.true(button.exists())
+})
+
+test('clicking button calls read_remote_model', t => {
+  const spy = sinon.spy()
+
+  const wrapper = shallow(status, {
+    mocks: {
+      $store: mock_store_empty
+    }
+  })
+
+  wrapper.setMethods({
+    read_remote_count: spy
+  })
+
+  const button = wrapper.find('md-button#read_remote_count')
+  button.trigger('click')
+
+  t.true(spy.called)
+})
+
 test('renders button for rerunning model', t => {
   const wrapper = shallow(status, {
     mocks: {
@@ -73,7 +128,7 @@ test('renders button for rerunning model', t => {
     }
   })
 
-  const button = wrapper.find('md-button')
+  const button = wrapper.find('md-button#rerun_model')
 
   t.true(button.exists())
 })
@@ -91,7 +146,7 @@ test('clicking button calls rerun_model', t => {
     rerun_model: spy
   })
 
-  const button = wrapper.find('md-button')
+  const button = wrapper.find('md-button#rerun_model')
   button.trigger('click')
 
   t.true(spy.called)

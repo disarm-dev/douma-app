@@ -1,6 +1,6 @@
 import {request_handler} from "lib/remote/request-handler"
 
-export default {read_all, update}
+export default { read_all, update, read_count}
 
 async function read_all() {
   const request = _read_all()
@@ -30,3 +30,13 @@ function _update(case_cluster) {
   }
 }
 
+async function read_count() {
+  const request = _read_count()
+  return request_handler(request)
+}
+
+function _read_count() {
+  return {
+    url_suffix: 'foci/number_of_clusters'
+  }
+}
