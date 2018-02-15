@@ -173,6 +173,36 @@ test('clicking get case clusters count button calls read_remote_clusters_count',
   t.true(spy.called)
 })
 
+test('renders button for getting cases from remote', t => {
+  const wrapper = shallow(status, {
+    mocks: {
+      $store: mock_store_empty
+    }
+  })
+
+  const button = wrapper.find('md-button#read_remote_cases')
+
+  t.true(button.exists())
+})
+
+test('clicking get cases count button calls read_remote_cases', t => {
+  const spy = sinon.spy()
+
+  const wrapper = shallow(status, {
+    mocks: {
+      $store: mock_store_empty
+    }
+  })
+
+  wrapper.setMethods({
+    read_remote_cases: spy
+  })
+
+  const button = wrapper.find('md-button#read_remote_cases')
+  button.trigger('click')
+
+  t.true(spy.called)
+})
 
 test('renders button for getting cases count from remote', t => {
   const wrapper = shallow(status, {

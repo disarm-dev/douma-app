@@ -26,7 +26,8 @@
         <p>There are {{cases.length}} cases currently saved on your device. </p>
       </md-card-content>
       <md-card-actions>
-        <md-button id="read_remote_cases_count" @click="read_remote_cases_count" class="md-primary">Get remote number of cases</md-button>
+        <md-button id="read_remote_cases" @click="read_remote_cases">Get remote</md-button>
+        <md-button id="read_remote_cases_count" @click="read_remote_cases_count" class="md-primary">Get count</md-button>
       </md-card-actions>
     </md-card>
   </div>
@@ -68,6 +69,15 @@ export default {
     },
   },
   methods: {
+    // cases stuff
+    read_remote_cases() {
+      this.$store.dispatch('foci/get_cases')
+    },
+    read_remote_cases_count() {
+      this.$store.dispatch('foci/get_cases_count')
+    },
+
+    // case clusters stuff
     rerun_model() {
       // TODO: Rerun model here
     },
@@ -76,9 +86,6 @@ export default {
     },
     read_remote_case_clusters_count() {
       this.$store.dispatch('foci/get_case_clusters_count')
-    },
-    read_remote_cases_count() {
-      this.$store.dispatch('foci/get_cases_count')
     }
   }
 }
@@ -90,7 +97,7 @@ export default {
   }
 
   .card {
-    margin-bottom: 1em;
+    margin-top: 1em;
   }
 </style>
 
