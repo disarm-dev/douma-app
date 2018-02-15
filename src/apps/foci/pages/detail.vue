@@ -3,7 +3,7 @@
     <span class="md-headline title">I am the detail view. {{foci_id}}</span>
     <md-card class="form">
       <md-card-content>
-        <form  v-if="case_cluster" @submit.stop.prevent="save_changes">
+        <form  v-if="case_cluster" @submit.stop.prevent="save_changes" id="attributes">
           <span class="md-title">Attributes</span>
           <div v-for="field in fields" :key="field.name">
 
@@ -62,12 +62,13 @@
     methods: {
       save_changes() {
         this.$store.dispatch('foci/update_case_cluster', this.case_cluster).then(res => {
+          // TODO: Alert user that save was successful
           console.log('res', res);
         })
         .catch(err => {
+          // TODO: Alert user that an error occured
           console.log('err', err);
         })
-        console.log('saving changes....')
       },
       create_fields_for_edit() {
         const excluded_fields = ['_id', 'geometry']

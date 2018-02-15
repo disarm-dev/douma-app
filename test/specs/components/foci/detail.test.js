@@ -1,6 +1,6 @@
 import test from 'ava'
 import {shallow, mount, createLocalVue} from 'vue-test-utils'
-// import sinon from 'sinon'
+import sinon from 'sinon'
 import foci_detail from '../../../../src/apps/foci/pages/detail.vue'
 
 
@@ -42,12 +42,56 @@ test('finds case_cluster', t => {
   t.deepEqual(wrapper.vm.case_cluster, {_id: 1})
 })
 
-test.skip('renders attributes if there is a cluster', t => {
+test('save_changes calls dispatch', t => {
+  const spy = sinon.stub().resolves()
+  const mock_store = {
+    dispatch: spy,
+    state: {
+      foci: {
+        case_clusters: [{ _id: 1 }, { _id: 2 }]
+      }
+    }
+  }
+  const wrapper = shallow(foci_detail, {
+    propsData: { foci_id: 1 },
+    mocks: { $store: mock_store }
+  })
+
+  wrapper.vm.save_changes()
+
+  t.true(spy.called)
+  t.is(spy.getCall(0).args[0], 'foci/update_case_cluster')
+  t.deepEqual(spy.getCall(0).args[1], { _id: 1 })
+})
+
+test('renders attributes if there is a cluster', t => {
+  const mock_store = {
+    state: {
+      foci: {
+        case_clusters: [{ _id: 1 }, { _id: 2 }]
+      }
+    }
+  }
+  const wrapper = shallow(foci_detail, {
+    propsData: { foci_id: 1 },
+    mocks: { $store: mock_store }
+  })
+
+  t.deepEqual(wrapper.vm.case_cluster, {_id: 1})
+  const attributes = wrapper.find("#attributes")
+  t.true(attributes.exists())
 
 })
 
-test.skip('does not render attributes unless there a cluster', t => {
+test('does not render attributes unless there a cluster', t => {
+  const wrapper = shallow(foci_detail, {
+    propsData: { foci_id: 1 },
+    mocks: { $store: mock_store_empty }
+  })
 
+  t.is(wrapper.vm.case_cluster, undefined)
+  const attributes = wrapper.find("#attributes")
+  t.false(attributes.exists())
 })
 
 test('renders an input for each property on a case_cluster', t => {
@@ -72,7 +116,7 @@ test('renders an input for each property on a case_cluster', t => {
   t.is(inputs.length, 2)
 })
 
-test.skip('create_fields_for_edit creates array of objects', t => {
+test('create_fields_for_edit creates array of objects', t => {
   const wrapper = shallow(foci_detail, {
     mocks: {
       $store: mock_store_empty
