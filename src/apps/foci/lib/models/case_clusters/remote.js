@@ -37,6 +37,6 @@ async function read_count() {
 
 function _read_count() {
   return {
-    url_suffix: 'foci/number_of_clusters'
+    url_suffix: '/foci/number_of_clusters'
   }
 }

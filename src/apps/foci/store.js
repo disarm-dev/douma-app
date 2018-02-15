@@ -6,7 +6,7 @@ const cases_controller = new CasesController('foci')
 
 export default {
   namespaced: true,
-  unpersisted_state_keys: ['cases', 'case_clusters'],
+  unpersisted_state_keys: ['cases', 'case_clusters', 'case_clusters_count', 'cases_count'],
   state: {
     cases: null,
     case_clusters: null,
