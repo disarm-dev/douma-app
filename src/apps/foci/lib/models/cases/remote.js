@@ -1,6 +1,6 @@
-// import {request_handler} from "lib/remote/request-handler"
+import {request_handler} from "lib/remote/request-handler"
 
-export default {read_all}
+export default { read_all, read_count}
 
 async function read_all() {
   // TODO: replace with request handler when server is deployed and has endpoints
@@ -18,3 +18,13 @@ function _read_all() {
   }
 }
 
+async function read_count() {
+  const request = _read_count()
+  return request_handler(request)
+}
+
+function _read_count() {
+  return {
+    url_suffix: 'foci/number_of_cases'
+  }
+}

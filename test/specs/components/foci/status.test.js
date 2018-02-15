@@ -67,6 +67,27 @@ test('case_clusters_count returns case_clusters_count from store', t => {
   t.deepEqual(actual, expected)
 })
 
+test('cases_count returns cases_count from store', t => {
+  const mock_store = {
+    state: {
+      foci: {
+        cases_count: 2
+      }
+    }
+  }
+
+  const wrapper = shallow(status, {
+    mocks: {
+      $store: mock_store
+    }
+  })
+
+  const actual = wrapper.vm.cases_count
+  const expected = 2
+
+  t.deepEqual(actual, expected)
+})
+
 
 test('cases return cases from store', t => {
   const mock_store = {
@@ -90,19 +111,19 @@ test('cases return cases from store', t => {
   t.deepEqual(actual, expected)
 })
 
-test('renders button for getting count from remote', t => {
+test('renders button for getting case clusters count from remote', t => {
   const wrapper = shallow(status, {
     mocks: {
       $store: mock_store_empty
     }
   })
 
-  const button = wrapper.find('md-button#read_remote_count')
+  const button = wrapper.find('md-button#read_remote_clusters_count')
 
   t.true(button.exists())
 })
 
-test('clicking button calls read_remote_model', t => {
+test('clicking get case clusters count button calls read_remote_clusters_count', t => {
   const spy = sinon.spy()
 
   const wrapper = shallow(status, {
@@ -112,10 +133,42 @@ test('clicking button calls read_remote_model', t => {
   })
 
   wrapper.setMethods({
-    read_remote_count: spy
+    read_remote_case_clusters_count: spy
   })
 
-  const button = wrapper.find('md-button#read_remote_count')
+  const button = wrapper.find('md-button#read_remote_clusters_count')
+  button.trigger('click')
+
+  t.true(spy.called)
+})
+
+
+test('renders button for getting cases count from remote', t => {
+  const wrapper = shallow(status, {
+    mocks: {
+      $store: mock_store_empty
+    }
+  })
+
+  const button = wrapper.find('md-button#read_remote_cases_count')
+
+  t.true(button.exists())
+})
+
+test('clicking get cases count button calls read_remote_cases_count', t => {
+  const spy = sinon.spy()
+
+  const wrapper = shallow(status, {
+    mocks: {
+      $store: mock_store_empty
+    }
+  })
+
+  wrapper.setMethods({
+    read_remote_cases_count: spy
+  })
+
+  const button = wrapper.find('md-button#read_remote_cases_count')
   button.trigger('click')
 
   t.true(spy.called)

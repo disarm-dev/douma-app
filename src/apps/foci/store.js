@@ -10,7 +10,8 @@ export default {
   state: {
     cases: null,
     case_clusters: null,
-    case_clusters_count: null
+    case_clusters_count: null,
+    cases_count: null
   },
   mutations: {
     set_cases(state, cases) {
@@ -25,6 +26,9 @@ export default {
     },
     set_case_clusters_count(state, count) {
       state.case_clusters_count = count
+    },
+    set_cases_count(state, count) {
+      state.cases_count = count
     }
   },
   actions: {
@@ -57,6 +61,10 @@ export default {
     async get_case_clusters_count(context) {
       const count = await case_clusters_controller.read_count()
       context.commit('set_case_clusters_count', count)
+    },
+    async get_cases_count(context) {
+      const count = await cases_controller.read_count()
+      context.commit('set_cases_count', count)
     }
   }
 }

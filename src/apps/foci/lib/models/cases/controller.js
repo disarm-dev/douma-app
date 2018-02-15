@@ -33,4 +33,8 @@ export class CasesController {
     return cases
   }
 
+  async read_count() {
+    const count = this.remote.read_count()
+    return count
+  }
 }
