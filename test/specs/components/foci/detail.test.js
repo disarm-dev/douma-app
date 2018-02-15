@@ -5,6 +5,7 @@ import foci_detail from '../../../../src/apps/foci/pages/detail.vue'
 
 
 const mock_store_empty = {
+  dispatch: () => Promise.resolve(),
   state: {
     foci: {
       case_clusters: []
@@ -17,17 +18,21 @@ const mocks = {
 }
 
 test('renders', t => {
-  const wrapper = shallow(foci_detail, {mocks})
+  const wrapper = shallow(foci_detail, {
+    mocks, 
+    methods: {render_map: () => { }}
+  })
   t.true(wrapper.exists())
 })
 
 test('excluded fields is equal to something', t => {
-  const wrapper = shallow(foci_detail, {mocks})
+  const wrapper = shallow(foci_detail, { mocks, methods: { render_map: () => { } }})
   t.deepEqual(wrapper.vm.excluded_fields, ['_id', 'geometry'])
 })
 
 test('finds case_cluster', t => {
   const mock_store = {
+    dispatch: () => Promise.resolve(),
     state: {
       foci: {
         case_clusters: [{_id: 1}, {_id: 2}]
@@ -36,7 +41,8 @@ test('finds case_cluster', t => {
   }
   const wrapper = shallow(foci_detail, {
     propsData: {foci_id: 1},
-    mocks: {$store: mock_store}
+    mocks: {$store: mock_store},
+    methods: { render_map: () => { } }
   })
 
   t.deepEqual(wrapper.vm.case_cluster, {_id: 1})
@@ -54,7 +60,8 @@ test('save_changes calls dispatch', t => {
   }
   const wrapper = shallow(foci_detail, {
     propsData: { foci_id: 1 },
-    mocks: { $store: mock_store }
+    mocks: { $store: mock_store },
+    methods: { render_map: () => { } }
   })
 
   wrapper.vm.save_changes()
@@ -66,6 +73,7 @@ test('save_changes calls dispatch', t => {
 
 test('renders attributes if there is a cluster', t => {
   const mock_store = {
+    dispatch: () => Promise.resolve(),
     state: {
       foci: {
         case_clusters: [{ _id: 1 }, { _id: 2 }]
@@ -74,7 +82,8 @@ test('renders attributes if there is a cluster', t => {
   }
   const wrapper = shallow(foci_detail, {
     propsData: { foci_id: 1 },
-    mocks: { $store: mock_store }
+    mocks: { $store: mock_store },
+    methods: { render_map: () => { } }
   })
 
   t.deepEqual(wrapper.vm.case_cluster, {_id: 1})
@@ -86,7 +95,8 @@ test('renders attributes if there is a cluster', t => {
 test('does not render attributes unless there a cluster', t => {
   const wrapper = shallow(foci_detail, {
     propsData: { foci_id: 1 },
-    mocks: { $store: mock_store_empty }
+    mocks: { $store: mock_store_empty },
+    methods: { render_map: () => { } }
   })
 
   t.is(wrapper.vm.case_cluster, undefined)
@@ -96,6 +106,7 @@ test('does not render attributes unless there a cluster', t => {
 
 test('renders an input for each property on a case_cluster', t => {
   const mock_store = {
+    dispatch: () => Promise.resolve(),
     state: {
       foci: {
         case_clusters: [
@@ -110,7 +121,8 @@ test('renders an input for each property on a case_cluster', t => {
     propsData: {foci_id: '1'},
     mocks: {
       $store: mock_store
-    }
+    },
+    methods: { render_map: () => { } }
   })
   const inputs = wrapper.findAll('md-select')
   t.is(inputs.length, 2)
@@ -120,7 +132,8 @@ test('create_fields_for_edit creates array of objects', t => {
   const wrapper = shallow(foci_detail, {
     mocks: {
       $store: mock_store_empty
-    }
+    },
+    methods: { render_map: () => { } }
   })
 
   const actual = wrapper.vm.fields
