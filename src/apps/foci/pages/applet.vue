@@ -45,6 +45,7 @@ export default {
   methods: {
     get_local() {
       this.$store.dispatch("foci/get_case_clusters_local");
+      this.$store.dispatch("foci/get_cases_local");
     }
   }
 };

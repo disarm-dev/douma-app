@@ -29,7 +29,7 @@ test('renders router-view', t => {
   t.true(router_view.exists())
 })
 
-test('calls get_local on created', t => {
+test('calls get_local on created with correct args', t => {
   const stub = sinon.stub()
   const mock_store = {
     dispatch: stub
@@ -40,4 +40,5 @@ test('calls get_local on created', t => {
 
   t.true(stub.called)
   t.is(stub.getCall(0).args[0], 'foci/get_case_clusters_local')
+  t.is(stub.getCall(1).args[0], 'foci/get_cases_local')
 })
