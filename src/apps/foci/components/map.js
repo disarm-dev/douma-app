@@ -7,7 +7,7 @@ import uuid from 'uuid/v4'
 
 export function render_map(map_container_id) {
   // TODO: Fix this
-  // Need to require as an import will break the tests....
+  // Need to require, an import will break the tests....
   const mapboxgl = require('mapbox-gl')
 
   return new Promise((resolve) => {
