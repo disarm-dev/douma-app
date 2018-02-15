@@ -25,8 +25,8 @@
       </md-card-content>
     </md-card>
 
-    <md-card class="map">
-      <h1>map</h1>
+    <md-card class="map" id="map">
+      
     </md-card>
 
   </div>
@@ -34,7 +34,9 @@
 
 <script>
   import {case_cluster_schema} from '../lib/models/case_clusters/schema'
-
+  import {render_map, add_polygon_layer} from '../components/map'
+  
+  let map
   export default {
     name: 'detail',
     props: {
@@ -42,6 +44,7 @@
     },
     data() {
       return {
+        map_id: 'map',
         excluded_fields: ['_id', 'geometry'],
         fields: []
       }
@@ -58,6 +61,9 @@
     },
     created() {
       this.create_fields_for_edit()
+    },
+    mounted() {
+      this.render_map()
     },
     methods: {
       save_changes() {
@@ -87,6 +93,13 @@
 
           this.fields.push(property)
         })
+      },
+      async render_map() {
+        map = await render_map(this.map_id)
+        const case_cluster_fc = await this.$store.dispatch('foci/get_case_cluster_fc', this.foci_id)
+        if (case_cluster_fc) {
+          add_polygon_layer(map, case_cluster_fc)
+        }
       }
     }
   }
@@ -115,10 +128,5 @@
 
   .map {
     height: 800px;
-
-    /* Delete when real map */
-    background-color: grey;
-    justify-content: center;
-    align-items: center;
   }
 </style>

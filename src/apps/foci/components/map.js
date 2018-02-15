@@ -1,5 +1,4 @@
 import CONFIG from 'config/common'
-
 import uuid from 'uuid/v4'
 
 // This is mostly copied from 'lib/helpers/basic_map'

@@ -54,6 +54,10 @@ export default {
     get_case_clusters_fc(context) {
       return case_clusters_controller.convert_case_clusters_to_fc(context.state.case_clusters)
     },
+    get_case_cluster_fc(context, case_cluster_id) {
+      const case_cluster = context.state.case_clusters.find(c => c._id === case_cluster_id)
+      return case_clusters_controller.convert_case_clusters_to_fc([case_cluster])
+    },
     async update_case_cluster(context, case_cluster) {
       const updated_case_cluster = await case_clusters_controller.update_case_cluster(case_cluster)
       context.commit('set_case_cluster', case_cluster)
