@@ -1,11 +1,15 @@
 import CONFIG from 'config/common'
-import mapboxgl from 'mapbox-gl'
+
 import uuid from 'uuid/v4'
 
 // This is mostly copied from 'lib/helpers/basic_map'
 // It's been duplicated in order to experiment with a new approach to composing maps
 
 export function render_map(map_container_id) {
+  // TODO: Fix this
+  // Need to require as an import will break the tests....
+  const mapboxgl = require('mapbox-gl')
+
   return new Promise((resolve) => {
 
     const map = new mapboxgl.Map({

@@ -9,14 +9,20 @@
   export default {
     name: 'map',
     data() {
-      return {}
+      return {
+        map_id: 'map'
+      }
     },
-    async mounted() {
-      const map = await render_map('map')
-      const case_clusters_feature_collection = await this.$store.dispatch('foci/get_case_clusters_fc')
-      const layer_id = add_polygon_layer(map, case_clusters_feature_collection)
+    mounted() {
+      this.render_map()
     },
-    methods: {}
+    methods: {
+      async render_map() {
+        const map = await render_map(this.map_id)
+        const case_clusters_feature_collection = await this.$store.dispatch('foci/get_case_clusters_fc')
+        const layer_id = add_polygon_layer(map, case_clusters_feature_collection)
+      }
+    }
   }
 </script>
 
