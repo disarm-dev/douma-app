@@ -111,6 +111,37 @@ test('cases return cases from store', t => {
   t.deepEqual(actual, expected)
 })
 
+test('renders button for getting case clusters from remote', t => {
+  const wrapper = shallow(status, {
+    mocks: {
+      $store: mock_store_empty
+    }
+  })
+
+  const button = wrapper.find('md-button#read_remote_clusters')
+
+  t.true(button.exists())
+})
+
+test('clicking get case clusters count button calls read_remote_clusters', t => {
+  const spy = sinon.spy()
+
+  const wrapper = shallow(status, {
+    mocks: {
+      $store: mock_store_empty
+    }
+  })
+
+  wrapper.setMethods({
+    read_remote_clusters: spy
+  })
+
+  const button = wrapper.find('md-button#read_remote_clusters')
+  button.trigger('click')
+
+  t.true(spy.called)
+})
+
 test('renders button for getting case clusters count from remote', t => {
   const wrapper = shallow(status, {
     mocks: {

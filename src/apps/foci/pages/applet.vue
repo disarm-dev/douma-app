@@ -33,10 +33,6 @@
 
     </md-toolbar>
 
-    <md-button @click="get_case_clusters">
-      Get remote case clusters 
-    </md-button>
-
     <router-view></router-view>
   </div>
 </template>
@@ -47,9 +43,6 @@ export default {
     this.get_local();
   },
   methods: {
-    get_case_clusters() {
-      this.$store.dispatch("foci/get_case_clusters");
-    },
     get_local() {
       this.$store.dispatch("foci/get_case_clusters_local");
     }
