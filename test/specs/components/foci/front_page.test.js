@@ -15,5 +15,5 @@ test('it renders three links', t => {
 
   const elements = wrapper.findAll('router-link')
 
-  t.is(elements.length, 3)
+  t.is(elements.length, 4)
 })

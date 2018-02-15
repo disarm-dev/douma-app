@@ -23,14 +23,14 @@ test('renders', t => {
 
 test('excluded fields is equal to something', t => {
   const wrapper = shallow(foci_detail, {mocks})
-  t.deepEqual(wrapper.vm.excluded_fields, ['id', 'geometry'])
+  t.deepEqual(wrapper.vm.excluded_fields, ['_id', 'geometry'])
 })
 
 test('finds case_cluster', t => {
   const mock_store = {
     state: {
       foci: {
-        case_clusters: [{id: 1}, {id: 2}]
+        case_clusters: [{_id: 1}, {_id: 2}]
       }
     }
   }
@@ -39,32 +39,15 @@ test('finds case_cluster', t => {
     mocks: {$store: mock_store}
   })
 
-  t.deepEqual(wrapper.vm.case_cluster, {id: 1})
+  t.deepEqual(wrapper.vm.case_cluster, {_id: 1})
 })
 
-// TODO: move some logic from the template into the component, v-if and stuff
-test('renders inputs for all except excluded fields', t => {
+test.skip('renders attributes if there is a cluster', t => {
 
-  const mock_store = {
-    state: {
-      foci: {
-        case_clusters: [
-          {id: '1', status: "", investigated: "", geometry: ""},
-          {id: '2', status: "", investigated: "", geometry: ""}
-        ]
-      }
-    }
-  }
+})
 
-  const wrapper = shallow(foci_detail, {
-    propsData: {foci_id: '1'},
-    mocks: {
-      $store: mock_store
-    }
-  })
+test.skip('does not render attributes unless there a cluster', t => {
 
-  t.deepEqual(wrapper.vm.fields_for_edit, ['status', 'investigated'])
-  
 })
 
 test('renders an input for each property on a case_cluster', t => {
@@ -72,8 +55,8 @@ test('renders an input for each property on a case_cluster', t => {
     state: {
       foci: {
         case_clusters: [
-          {id: '1', status: "", investigated: "", geometry: ""},
-          {id: '2', status: "", investigated: "", geometry: ""}
+          {_id: '1', status: "", investigated: "", geometry: ""},
+          {_id: '2', status: "", investigated: "", geometry: ""}
         ]
       }
     }
@@ -85,6 +68,18 @@ test('renders an input for each property on a case_cluster', t => {
       $store: mock_store
     }
   })
-  const inputs = wrapper.findAll('md-input')
+  const inputs = wrapper.findAll('md-select')
   t.is(inputs.length, 2)
+})
+
+test.skip('create_fields_for_edit creates array of objects', t => {
+  const wrapper = shallow(foci_detail, {
+    mocks: {
+      $store: mock_store_empty
+    }
+  })
+
+  const actual = wrapper.vm.fields
+  const expected = [{ "type": "text", "enum": ["investigated", "suggested", "visual review"], "name": "investigation_status" }, { "type": "text", "enum": ["active", "inactive", "cleared"], "name": "status" }]
+  t.deepEqual(actual, expected)
 })
