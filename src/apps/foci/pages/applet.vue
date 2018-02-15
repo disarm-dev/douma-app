@@ -1,10 +1,6 @@
 <template>
   <div>
     <div>
-      <md-button @click="get_local">
-        Get local case clusters
-      </md-button>
-
       <md-button @click="get_case_clusters">
         Get remote case clusters 
       </md-button>
