@@ -1,6 +1,6 @@
 import remote from './remote'
 import Local from './local'
-
+import { validate_case_locations } from '../../validation'
 import {featureCollection, feature} from '@turf/helpers'
 
 export class CaseLocationsController {
@@ -11,7 +11,7 @@ export class CaseLocationsController {
 
   async read_all_network() {
     const case_locations = await this.remote.read_all()
-
+    validate_case_locations(case_locations)
     await this.local.create_or_update_bulk(case_locations)
 
     return case_locations
@@ -30,6 +30,7 @@ export class CaseLocationsController {
 
   async read_local() {
     const case_locations = await this.local.read_all()
+    validate_case_locations(case_locations)
     return case_locations
   }
 
