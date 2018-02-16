@@ -1,7 +1,15 @@
 <template>
   <div>
     <md-toolbar>
+
       <div class="md-toolbar-container">
+        
+        <div v-if="show_back_button">
+          <md-button @click="go_back()" class="md-icon-button">
+            <md-icon>arrow_back</md-icon>
+          </md-button>
+        </div>
+
         <div class="filter_name">
           <span>Status:</span>
         </div>
@@ -39,6 +47,17 @@
 
 <script>
 export default {
+  computed: {
+    show_back_button() {
+      const routes_to_show_button = ['foci:detail', 'foci:map', 'foci:list', 'foci:status']
+      const current_page = this.$route.name
+      if (routes_to_show_button.includes(current_page)) {
+        return true
+      } else {
+        return false
+      }
+    }
+  },
   created() {
     this.get_local();
   },
@@ -46,6 +65,9 @@ export default {
     get_local() {
       this.$store.dispatch("foci/get_case_clusters_local");
       this.$store.dispatch("foci/get_cases_local");
+    },
+    go_back() {
+      this.$router.go(-1)
     }
   }
 };
