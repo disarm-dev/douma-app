@@ -29,9 +29,6 @@ export const case_cluster_schema = {
     "geometry": {
       "type": "object"
     },
-    "updated_at": {
-      "type": "number"
-    },
     "personalised_instance_id": {
       "type": "string"
     }
