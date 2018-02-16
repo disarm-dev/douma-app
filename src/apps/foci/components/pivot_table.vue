@@ -28,11 +28,8 @@ export default {
       x_axis_enums: ['active', 'inactive', 'cleared'],
 
       y_axis_property: 'investigation_status',
-      y_axis_enums: ['investiated', 'suggested', 'visual review'],
+      y_axis_enums: ['investigated', 'suggested', 'visual review']
     }
-  },
-  mounted() {
-    console.log('this.data', this.data);
   },
   methods: {
     get_data_for(x_axis_property, x, y_axis_property, y) {
