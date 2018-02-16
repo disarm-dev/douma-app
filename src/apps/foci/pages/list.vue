@@ -3,19 +3,22 @@
     <h1>I am the list view. I render lists.</h1>
 
     <v-client-table v-if="table_data.length" :data="table_data" :columns="table_columns" @row-click="handle_click"></v-client-table>
+
+    <div>
+      <pivot-table :data="table_data">
+
+      </pivot-table>
+    </div>
   </div>
 </template>
 
 <script>
   //import { mapState, mapActions, mapMutations } from 'vuex'
+  import pivot_table from '../components/pivot_table'
 
   export default {
     name: 'list',
-    mounted() {
-    },
-    data() {
-      return {}
-    },
+    components: {'pivot-table': pivot_table},
     computed: {
       table_data() {
         const case_clusters = this.$store.state.foci.case_clusters
