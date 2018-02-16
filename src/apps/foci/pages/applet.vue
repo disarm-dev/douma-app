@@ -1,14 +1,13 @@
 <template>
   <div>
-    <md-toolbar v-if="show_back_button">
+    <md-toolbar v-if="show_back_button" class="md-dense">
 
       <div class="md-toolbar-container" >
-        <!-- <div> -->
-          <md-button @click="go_back()" class="md-icon-button">
-            <md-icon>arrow_back</md-icon>
-          </md-button>
-        </div>
-      <!-- </div> -->
+        <md-button @click="go_back()" class="md-icon-button">
+          <md-icon>arrow_back</md-icon>
+        </md-button>
+      </div>
+      
     </md-toolbar>
 
     <router-view></router-view>
@@ -21,11 +20,7 @@ export default {
     show_back_button() {
       const routes_to_show_button = ['foci:detail', 'foci:map', 'foci:list', 'foci:status']
       const current_page = this.$route.name
-      if (routes_to_show_button.includes(current_page)) {
-        return true
-      } else {
-        return false
-      }
+      return routes_to_show_button.includes(current_page)
     }
   },
   created() {
