@@ -54,7 +54,7 @@
       }
     },
     methods: {
-      handle_click({row, event}) {
+      handle_click(row) {
         this.$router.push({name: 'foci:detail', params: {foci_id: row._id}})
       }
     }
