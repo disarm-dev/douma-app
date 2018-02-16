@@ -40,7 +40,7 @@
         }
       },
       table_columns() {
-        const ignored_columns = ['geometry']
+        const ignored_columns = ['geometry', 'personalised_instance_id']
         const case_clusters = this.$store.state.foci.case_clusters
 
         if (case_clusters && case_clusters.length) {

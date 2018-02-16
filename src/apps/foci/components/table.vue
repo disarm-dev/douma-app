@@ -8,7 +8,7 @@
 
     <md-table-body>
       <md-table-row v-for="row in table_data" :key="row._id" @click="click(row)">
-        <md-table-cell v-for="column of table_columns" :key="column" md-numeric>{{row[column]}}</md-table-cell>
+        <md-table-cell v-for="column of table_columns" :key="column">{{row[column]}}</md-table-cell>
       </md-table-row>
     </md-table-body>
   </md-table>
