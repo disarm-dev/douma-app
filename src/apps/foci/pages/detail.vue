@@ -77,7 +77,7 @@
         })
       },
       create_fields_for_edit() {
-        const excluded_fields = ['_id', 'geometry']
+        const excluded_fields = ['_id', 'geometry', 'updated_at', 'personalised_instance_id']
         const property_names = Object.keys(case_cluster_schema.properties)
         property_names.forEach(property_name => {
           if (excluded_fields.includes(property_name)) {
