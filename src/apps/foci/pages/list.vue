@@ -6,7 +6,7 @@
         <md-toolbar>
           <h1 class="md-title">Case clusters</h1>
         </md-toolbar>
-        <pretty-table v-if="table_data.length" :table_data="table_data" :table_columns="table_columns" @click="handle_click"></pretty-table>
+        <pretty-table :table_data="table_data" :table_columns="table_columns" @click="handle_click"></pretty-table>
       </md-table-card>
     </div>
 
@@ -27,6 +27,8 @@
   import pivot_table from '../components/pivot_table'
   import pretty_table from '../components/table'
 
+  import {case_cluster_schema} from '../lib/models/case_clusters/schema'
+
   export default {
     name: 'list',
     components: {'pivot-table': pivot_table, 'pretty-table': pretty_table},
@@ -40,15 +42,15 @@
         }
       },
       table_columns() {
-        const ignored_columns = ['geometry', 'personalised_instance_id']
-        const case_clusters = this.$store.state.foci.case_clusters
-
-        if (case_clusters && case_clusters.length) {
-          const columns = Object.keys(case_clusters[0])
-          return columns.filter(column => !ignored_columns.includes(column))
-        } else {
-          return []
-        }
+        const fields = []
+        const excluded_fields = ['personalised_instance_id', 'geometry']
+        const property_names = Object.keys(case_cluster_schema.properties)
+        property_names.forEach(property_name => {
+          if (!excluded_fields.includes(property_name)) {
+            fields.push(property_name)
+          }
+        })
+        return fields
       }
     },
     methods: {
