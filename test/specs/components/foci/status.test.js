@@ -7,7 +7,7 @@ const mock_store_empty = {
   state: {
     foci: {
       case_clusters: [],
-      cases: []
+      case_locations: []
     }
   }
 }
@@ -27,7 +27,7 @@ test('case_clusters returns case_clusters from store', t => {
     state: {
       foci: {
         case_clusters: [{_id: 1}],
-        cases: []
+        case_locations: []
       }
     }
   }
@@ -49,7 +49,7 @@ test('case_clusters_count returns case_clusters_count from store', t => {
     state: {
       foci: {
         case_clusters: [{ _id: 1 }],
-        cases: [],
+        case_locations: [],
         case_clusters_count: 2
       }
     }
@@ -67,11 +67,11 @@ test('case_clusters_count returns case_clusters_count from store', t => {
   t.deepEqual(actual, expected)
 })
 
-test('cases_count returns cases_count from store', t => {
+test('case_locations_count returns case_locations_count from store', t => {
   const mock_store = {
     state: {
       foci: {
-        cases_count: 2
+        case_locations_count: 2
       }
     }
   }
@@ -82,19 +82,19 @@ test('cases_count returns cases_count from store', t => {
     }
   })
 
-  const actual = wrapper.vm.cases_count
+  const actual = wrapper.vm.case_locations_count
   const expected = 2
 
   t.deepEqual(actual, expected)
 })
 
 
-test('cases return cases from store', t => {
+test('case_locations return case_locations from store', t => {
   const mock_store = {
     state: {
       foci: {
         case_clusters: [],
-        cases: [{ _id: 1 }]
+        case_locations: [{ _id: 1 }]
       }
     }
   }
@@ -105,7 +105,7 @@ test('cases return cases from store', t => {
     }
   })
 
-  const actual = wrapper.vm.cases
+  const actual = wrapper.vm.case_locations
   const expected = [{ _id: 1 }]
 
   t.deepEqual(actual, expected)
@@ -173,19 +173,19 @@ test('clicking get case clusters count button calls read_remote_clusters_count',
   t.true(spy.called)
 })
 
-test('renders button for getting cases from remote', t => {
+test('renders button for getting case_locations from remote', t => {
   const wrapper = shallow(status, {
     mocks: {
       $store: mock_store_empty
     }
   })
 
-  const button = wrapper.find('md-button#read_remote_cases')
+  const button = wrapper.find('md-button#read_remote_case_locations')
 
   t.true(button.exists())
 })
 
-test('clicking get cases count button calls read_remote_cases', t => {
+test('clicking get case_locations count button calls read_remote_case_locations', t => {
   const spy = sinon.spy()
 
   const wrapper = shallow(status, {
@@ -195,28 +195,28 @@ test('clicking get cases count button calls read_remote_cases', t => {
   })
 
   wrapper.setMethods({
-    read_remote_cases: spy
+    read_remote_case_locations: spy
   })
 
-  const button = wrapper.find('md-button#read_remote_cases')
+  const button = wrapper.find('md-button#read_remote_case_locations')
   button.trigger('click')
 
   t.true(spy.called)
 })
 
-test('renders button for getting cases count from remote', t => {
+test('renders button for getting case_locations count from remote', t => {
   const wrapper = shallow(status, {
     mocks: {
       $store: mock_store_empty
     }
   })
 
-  const button = wrapper.find('md-button#read_remote_cases_count')
+  const button = wrapper.find('md-button#read_remote_case_locations_count')
 
   t.true(button.exists())
 })
 
-test('clicking get cases count button calls read_remote_cases_count', t => {
+test('clicking get case_locations count button calls read_remote_case_locations_count', t => {
   const spy = sinon.spy()
 
   const wrapper = shallow(status, {
@@ -226,10 +226,10 @@ test('clicking get cases count button calls read_remote_cases_count', t => {
   })
 
   wrapper.setMethods({
-    read_remote_cases_count: spy
+    read_remote_case_locations_count: spy
   })
 
-  const button = wrapper.find('md-button#read_remote_cases_count')
+  const button = wrapper.find('md-button#read_remote_case_locations_count')
   button.trigger('click')
 
   t.true(spy.called)

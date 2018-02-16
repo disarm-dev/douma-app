@@ -8,7 +8,7 @@ const fields = {
     plan: 'id',
     assignment_plan: 'id',
     case_clusters: '_id',
-    cases: '_id'
+    case_locations: '_id'
   }
 }
 
@@ -24,7 +24,7 @@ db.version(1).stores({
   "monitor/plan": fields.v1.plan,
   "plan/plan": fields.v1.plan,
   "foci/case_clusters": fields.v1.case_clusters,
-  "foci/cases": fields.v1.cases,
+  "foci/case_locations": fields.v1.case_locations,
 })
 
 // db.version(2)

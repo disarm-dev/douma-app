@@ -18,16 +18,16 @@
     
     <md-card  class="card">
       <md-card-header>
-        <div class="md-title">Cases</div>
+        <div class="md-title">Case_locations</div>
         <!-- <div class="md-subhead">Subtitle here</div> -->
       </md-card-header>
       <md-card-content>
-        <p>There are {{cases_count}} cases on the remote server. </p>
-        <p>There are {{cases.length}} cases currently saved on your device. </p>
+        <p>There are {{case_locations_count}} case_locations on the remote server. </p>
+        <p>There are {{case_locations.length}} case_locations currently saved on your device. </p>
       </md-card-content>
       <md-card-actions>
-        <md-button id="read_remote_cases" @click="read_remote_cases">Get remote</md-button>
-        <md-button id="read_remote_cases_count" @click="read_remote_cases_count" class="md-primary">Get count</md-button>
+        <md-button id="read_remote_case_locations" @click="read_remote_case_locations">Get remote</md-button>
+        <md-button id="read_remote_case_locations_count" @click="read_remote_case_locations_count" class="md-primary">Get count</md-button>
       </md-card-actions>
     </md-card>
   </div>
@@ -51,30 +51,30 @@ export default {
         return 'X'
       }
     },
-    cases() {
-      const cases = this.$store.state.foci.cases
-      if (cases && cases.length) {
-        return cases
+    case_locations() {
+      const case_locations = this.$store.state.foci.case_locations
+      if (case_locations && case_locations.length) {
+        return case_locations
       } else {
         return []
       }
     },
-    cases_count() {
-      const cases_count = this.$store.state.foci.cases_count
-      if (cases_count !== null) {
-        return cases_count
+    case_locations_count() {
+      const case_locations_count = this.$store.state.foci.case_locations_count
+      if (case_locations_count !== null) {
+        return case_locations_count
       } else {
         return 'X'
       }
     },
   },
   methods: {
-    // cases stuff
-    read_remote_cases() {
-      this.$store.dispatch('foci/get_cases')
+    // case_locations stuff
+    read_remote_case_locations() {
+      this.$store.dispatch('foci/get_case_locations')
     },
-    read_remote_cases_count() {
-      this.$store.dispatch('foci/get_cases_count')
+    read_remote_case_locations_count() {
+      this.$store.dispatch('foci/get_case_locations_count')
     },
 
     // case clusters stuff

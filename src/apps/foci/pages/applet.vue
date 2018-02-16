@@ -64,7 +64,7 @@ export default {
   methods: {
     get_local() {
       this.$store.dispatch("foci/get_case_clusters_local");
-      this.$store.dispatch("foci/get_cases_local");
+      this.$store.dispatch("foci/get_case_locations_local");
     },
     go_back() {
       this.$router.go(-1)
