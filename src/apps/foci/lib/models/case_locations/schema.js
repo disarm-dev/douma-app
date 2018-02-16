@@ -5,7 +5,9 @@ export const case_location_schema = {
   "type": "object",
   "properties": {
     "_id": {
-      "type": "string"
+      "type": "string",
+      "minLength": 24,
+      "maxLength": 24
     },
     "geometry": {
       "type": "object"

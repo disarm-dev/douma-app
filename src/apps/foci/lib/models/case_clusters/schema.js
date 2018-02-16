@@ -6,7 +6,9 @@ export const case_cluster_schema = {
   "type": "object",
   "properties": {
     "_id": {
-      "type": "string"
+      "type": "string",
+      "minLength": 24,
+      "maxLength": 24
     },
     "investigation_status": {
       "type": "string",
