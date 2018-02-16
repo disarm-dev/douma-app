@@ -1,22 +1,34 @@
 <template>
   <div>
-    <h1>Front page</h1>
+    <md-card class="card">
+      <md-card-header>
+        <div class="md-title">Foci Applet</div>
+        <div class="md-subhead">This is what the DiSARM foci tool can do for you. TODO: replace this text</div>
+      </md-card-header>
 
-    <ul>
-      <li>
-        <router-link :to="{name: 'foci:status'}">Status view</router-link>
-      </li>
-      <li>
-        <router-link :to="{name: 'foci:list'}">List view</router-link>
-      </li>
-      <li>
-        <router-link :to="{name: 'foci:map'}">Map view</router-link>
-      </li>
-      <li>
-        <router-link :to="{ name: 'foci:detail', params: { foci_id: '123'}}">Test Detail view</router-link>
-      </li>
+      <md-list>
+        <md-list-item>
+          <md-icon>autorenew</md-icon> 
+          <span>  
+            <router-link :to="{name: 'foci:status'}">Status view</router-link>
+          </span>
+        </md-list-item>
 
-    </ul>
+        <md-list-item>
+          <md-icon>list</md-icon> 
+          <span>
+            <router-link :to="{name: 'foci:list'}">List view</router-link>
+          </span>
+        </md-list-item>
+
+        <md-list-item>
+          <md-icon>map</md-icon> 
+          <span>
+            <router-link :to="{name: 'foci:map'}">Map view</router-link>
+          </span>
+        </md-list-item>
+      </md-list>
+    </md-card>
   </div>
 </template>
 
@@ -35,5 +47,8 @@
 </script>
 
 <style scoped>
-
+  .card {
+    max-width: 600px;
+    margin: 2em auto;
+  }
 </style>
