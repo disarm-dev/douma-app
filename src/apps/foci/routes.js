@@ -40,6 +40,16 @@ export default [
         }
       },
       {
+        path: 'list/:foci_id',
+        component: detail,
+        props: true,
+        name: 'foci:list:detail',
+        meta: {
+          can: 'read foci',
+          fail: '/meta/home'
+        }
+      },
+      {
         path: 'map',
         component: map,
         name: 'foci:map',
@@ -49,10 +59,10 @@ export default [
         }
       },
       {
-        path: 'detail/:foci_id',
+        path: 'map/:foci_id',
         component: detail,
         props: true,
-        name: 'foci:detail',
+        name: 'foci:map:detail',
         meta: {
           can: 'read foci',
           fail: '/meta/home'
