@@ -1,4 +1,4 @@
-import { validate_case_clusters } from '../../validate_case_clusters'
+import { validate_case_clusters } from '../../validation'
 import remote from './remote'
 import Local from './local'
 
@@ -22,9 +22,10 @@ export class CaseClustersController {
 
   convert_case_clusters_to_fc(case_clusters) {
     const array_of_features = case_clusters.map(case_cluster => {
-      const case_cluster_feature = feature(case_cluster.geometry)
-      delete case_cluster.geometry
-      case_cluster_feature.properties  = case_cluster
+      const case_cluster_copy = Object.assign({}, case_cluster)
+      const case_cluster_feature = feature(case_cluster_copy.geometry)
+      delete case_cluster_copy.geometry
+      case_cluster_feature.properties = case_cluster_copy
       return case_cluster_feature
     })
 
@@ -40,7 +41,7 @@ export class CaseClustersController {
   async update_case_cluster(case_cluster) {
     validate_case_clusters([case_cluster])
     const updated_cluster = await remote.update(case_cluster)
-    this.local.update(updated_cluster)
+    this.local.update(case_cluster)
     return case_cluster
   }
 
