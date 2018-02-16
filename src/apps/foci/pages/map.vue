@@ -1,13 +1,18 @@
 <template>
-  <div id="map"></div>
+  <div>
+    <filters></filters>
+    <div id="map"></div>
+  </div>
 </template>
 
 <script>
+  import filters from '../components/filters'
   import {render_map, add_polygon_layer} from '../components/map'
 
   let map 
   export default {
     name: 'map',
+    components: {filters},
     data() {
       return {
         map_id: 'map'

@@ -1,5 +1,8 @@
 <template>
   <div class="list">
+    <div>
+      <filters></filters>
+    </div>
 
     <div class="table-container">
       <md-table-card>
@@ -26,12 +29,13 @@
   //import { mapState, mapActions, mapMutations } from 'vuex'
   import pivot_table from '../components/pivot_table'
   import pretty_table from '../components/table'
+  import filters from '../components/filters'
 
   import {case_cluster_schema} from '../lib/models/case_clusters/schema'
 
   export default {
     name: 'list',
-    components: {'pivot-table': pivot_table, 'pretty-table': pretty_table},
+    components: {'pivot-table': pivot_table, 'pretty-table': pretty_table, filters},
     computed: {
       table_data() {
         const case_clusters = this.$store.state.foci.case_clusters
