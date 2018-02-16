@@ -58,3 +58,17 @@ export function add_polygon_layer(map, feature_collection) {
   })
   return id
 }
+
+export function add_points_layer(map, feature_collection) {
+  const id = uuid()
+
+  map.addLayer({
+    id: id,
+    type: 'circle',
+    source: {
+      type: 'geojson',
+      data: feature_collection
+    }
+  })
+  return id
+}
