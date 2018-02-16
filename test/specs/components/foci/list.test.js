@@ -22,17 +22,6 @@ test('it renders', t => {
   t.true(wrapper.exists())
 })
 
-
-test('table_columns should be an empty array when no case_clusters', t => {
-  const wrapper = shallow(foci_list, {
-    mocks: {
-      $store: mock_store_empty
-    }
-  })
-
-  t.deepEqual(wrapper.vm.table_columns, [])
-})
-
 test('table_columns should be an array of string when data is there', t => {
   const wrapper = shallow(foci_list, {
     mocks: {
@@ -51,7 +40,7 @@ test('table_columns should be an array of string when data is there', t => {
     }
   })
 
-  t.deepEqual(wrapper.vm.table_columns, ['test_1', 'test_2'])
+  t.deepEqual(wrapper.vm.table_columns, ['_id', 'investigation_status', 'status',  'updated_at'])
 })
 
 
