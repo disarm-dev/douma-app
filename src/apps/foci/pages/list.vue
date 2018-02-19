@@ -18,7 +18,7 @@
         <md-toolbar>
           <h1 class="md-title">Summary</h1>
         </md-toolbar>
-        <pivot-table :data="table_data"></pivot-table>
+        <pivot-table :data="table_data" @click="set_filters"></pivot-table>
       </md-table-card>
     </div>
 
@@ -60,6 +60,15 @@
     methods: {
       handle_click(row) {
         this.$router.push({name: 'foci:list:detail', params: {foci_id: row._id}})
+      },
+      set_filters(data) {
+        Object.keys(data)
+          .map(key => {
+            return {name: key, value: data[key]}
+          })
+          .forEach(filter => {
+            this.$store.commit('foci/set_filter', filter)
+          })
       }
     }
   }

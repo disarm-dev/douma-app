@@ -37,7 +37,7 @@ export default {
 
     // filters
     set_filter(state, filter) {
-      if (state.filters.includes(filter)) {
+      if (state.filters.find(f => f.name === filter.name)) {
         const index = state.filters.findIndex(f => f.name === filter.name)
         state.filters.splice(index, 1, filter)
       } else {

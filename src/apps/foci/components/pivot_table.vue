@@ -14,7 +14,9 @@
   <md-table-body>
     <md-table-row v-for="y in y_axis_enums" :key="y">
       <md-table-cell>{{y_axis_property}}: {{y}}</md-table-cell>
-      <md-table-cell v-for="x in x_axis_enums" :key="x" md-numeric>{{get_data_for(x_axis_property, x, y_axis_property, y)}}</md-table-cell>
+      <md-table-cell v-for="x in x_axis_enums" :key="x" md-numeric @click.native="handle_click(x_axis_property, x, y_axis_property, y)">
+        {{get_data_for(x_axis_property, x, y_axis_property, y)}}
+      </md-table-cell>
     </md-table-row>
   </md-table-body>
 </md-table>
@@ -38,6 +40,10 @@ export default {
       })
 
       return found.length
+    },
+    handle_click(x_axis_property, x, y_axis_property, y) {
+      const data = {[x_axis_property]: x, [y_axis_property]: y}
+      this.$emit('click', data)
     }
   }
 }
