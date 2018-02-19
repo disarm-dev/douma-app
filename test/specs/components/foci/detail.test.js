@@ -6,6 +6,7 @@ import foci_detail from '../../../../src/apps/foci/pages/detail.vue'
 
 const mock_store_empty = {
   dispatch: () => Promise.resolve(),
+  commit: () => {},
   state: {
     foci: {
       case_clusters: []
@@ -33,6 +34,7 @@ test('excluded fields is equal to something', t => {
 test('finds case_cluster', t => {
   const mock_store = {
     dispatch: () => Promise.resolve(),
+    commit: () => {},
     state: {
       foci: {
         case_clusters: [{_id: 1}, {_id: 2}]
@@ -52,6 +54,7 @@ test('save_changes calls dispatch', t => {
   const spy = sinon.stub().resolves()
   const mock_store = {
     dispatch: spy,
+    commit: () => {},
     state: {
       foci: {
         case_clusters: [{ _id: 1 }, { _id: 2 }]
@@ -74,6 +77,7 @@ test('save_changes calls dispatch', t => {
 test('renders attributes if there is a cluster', t => {
   const mock_store = {
     dispatch: () => Promise.resolve(),
+    commit: () => {},
     state: {
       foci: {
         case_clusters: [{ _id: 1 }, { _id: 2 }]
@@ -107,6 +111,7 @@ test('does not render attributes unless there a cluster', t => {
 test('renders an input for each property on a case_cluster', t => {
   const mock_store = {
     dispatch: () => Promise.resolve(),
+    commit: () => {},
     state: {
       foci: {
         case_clusters: [

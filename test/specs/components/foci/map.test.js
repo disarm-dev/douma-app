@@ -4,9 +4,15 @@ import {shallow} from 'vue-test-utils'
 import map from '../../../../src/apps/foci/pages/map.vue'
 
 const mock_store = {
+  state: {
+    foci: {
+      filters: []
+    }
+  },
   dispath: () => {
     return Promise.resolve()
-  }
+  },
+  commit: () => {},
 }
 
 test('renders', t => {
