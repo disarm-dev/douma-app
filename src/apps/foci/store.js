@@ -14,9 +14,7 @@ export default {
     case_locations_count: null
   },
   mutations: {
-    set_case_locations(state, case_locations) {
-      state.case_locations = case_locations
-    },
+    // case clusters
     set_case_clusters(state, case_clusters) {
       state.case_clusters = case_clusters
     },
@@ -27,29 +25,51 @@ export default {
     set_case_clusters_count(state, count) {
       state.case_clusters_count = count
     },
+
+    // case locations
+    set_case_locations(state, case_locations) {
+      state.case_locations = case_locations
+    },
     set_case_locations_count(state, count) {
       state.case_locations_count = count
     }
   },
   actions: {
+    // Case clusters
     async get_case_clusters(context) {
       const case_clusters = await case_clusters_controller.read_all_network()
       context.commit('set_case_clusters', case_clusters)
       context.commit('set_case_clusters_count', case_clusters.length)
     },
+    async get_case_clusters_count(context) {
+      const count = await case_clusters_controller.read_count()
+      context.commit('set_case_clusters_count', count)
+    },
+    async update_case_cluster(context, case_cluster) {
+      const updated_case_cluster = await case_clusters_controller.update_case_cluster(case_cluster)
+      context.commit('set_case_cluster', case_cluster)
+    },
     async get_case_clusters_local(context) {
       const case_clusters = await case_clusters_controller.read_local()
       context.commit('set_case_clusters', case_clusters)
     },
+    
+    // Case locations
     async get_case_locations(context) {
       const case_locations = await case_locations_controller.read_all_network()
       context.commit('set_case_locations', case_locations)
       context.commit('set_case_locations_count', case_locations.length)
     },
+    async get_case_locations_count(context) {
+      const count = await case_locations_controller.read_count()
+      context.commit('set_case_locations_count', count)
+    },
     async get_case_locations_local(context) {
       const case_locations = await case_locations_controller.read_local()
       context.commit('set_case_locations', case_locations)
     },
+    
+    // probably shouldn't be in the store
     get_case_locations_fc(context) {
       return case_locations_controller.convert_case_locations_to_fc(context.state.case_locations)
     },
@@ -59,18 +79,6 @@ export default {
     get_case_cluster_fc(context, case_cluster_id) {
       const case_cluster = context.state.case_clusters.find(c => c._id === case_cluster_id)
       return case_clusters_controller.convert_case_clusters_to_fc([case_cluster])
-    },
-    async update_case_cluster(context, case_cluster) {
-      const updated_case_cluster = await case_clusters_controller.update_case_cluster(case_cluster)
-      context.commit('set_case_cluster', case_cluster)
-    },
-    async get_case_clusters_count(context) {
-      const count = await case_clusters_controller.read_count()
-      context.commit('set_case_clusters_count', count)
-    },
-    async get_case_locations_count(context) {
-      const count = await case_locations_controller.read_count()
-      context.commit('set_case_locations_count', count)
     }
   }
 }
