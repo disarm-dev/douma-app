@@ -105,12 +105,15 @@
   .detail-container {
     width: 80%;
     margin: 1em auto;
-    padding: 0 1em;
   }
 
   @media (max-width: 800px) {
     .detail-container {
       width: 100%;
+    }
+
+    .form {
+      margin: 1em !important;
     }
   }
 
