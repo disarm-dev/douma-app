@@ -9,7 +9,11 @@ const mock_store_empty = {
     foci: {
       case_clusters: {}
     }
-  }
+  },
+  getters: {
+    'foci/filtered_case_clusters': []
+  },
+  commit: () => {}
 }
 
 
@@ -23,24 +27,28 @@ test('it renders', t => {
 })
 
 test('table_columns should be an array of string when data is there', t => {
-  const wrapper = shallow(foci_list, {
-    mocks: {
-      $store: {
-        state: {
-          foci: {
-            case_clusters: [
-              {
-                test_1: 1,
-                test_2: 1
-              }
-            ]
-          }
+  const $store = Object.assign(
+    mock_store_empty,
+    {
+      state: {
+        foci: {
+          case_clusters: [
+            {
+              test_1: 1,
+              test_2: 1
+            }
+          ]
         }
       }
     }
+  )
+  const wrapper = shallow(foci_list, {
+    mocks: {
+      $store
+    }
   })
 
-  t.deepEqual(wrapper.vm.table_columns, ['_id', 'investigation_status', 'status',  'updated_at'])
+  t.deepEqual(wrapper.vm.table_columns, ['_id', 'investigation_status', 'status'])
 })
 
 
@@ -54,21 +62,18 @@ test('table_data should be an empty array when no case_clusters', t => {
   t.deepEqual(wrapper.vm.table_data, [])
 })
 
-test('table_data should be an array of objects when data is there', t => {
+test('table_data should be an array of objects when data is there', async t => {
+  const $store = Object.assign(
+    mock_store_empty,
+    {
+      getters: {
+        'foci/filtered_case_clusters': [{ test_1: 1, test_2: 1 }]
+      }
+    }
+  )
   const wrapper = shallow(foci_list, {
     mocks: {
-      $store: {
-        state: {
-          foci: {
-            case_clusters: [
-              {
-                test_1: 1,
-                test_2: 1
-              }
-            ]
-          }
-        }
-      }
+      $store
     }
   })
   t.deepEqual(wrapper.vm.table_data, [{test_1: 1, test_2: 1}])
