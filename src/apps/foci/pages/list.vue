@@ -38,7 +38,7 @@
     components: {'pivot-table': pivot_table, 'pretty-table': pretty_table, filters},
     computed: {
       table_data() {
-        const case_clusters = this.$store.state.foci.case_clusters
+        const case_clusters = this.$store.getters['foci/filtered_case_clusters']
         if (case_clusters && case_clusters.length) {
           return case_clusters
         } else {

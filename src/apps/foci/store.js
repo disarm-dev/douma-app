@@ -45,6 +45,20 @@ export default {
       }
     }
   },
+  getters: {
+    filtered_case_clusters(state) {
+      if (!state.case_clusters) return []
+
+      return state.case_clusters.filter(case_cluster => {
+        return state.filters.every(filter => {
+          // if the filters value is "", then we don't use that filter
+          if (!filter.value.length) return true
+
+          return case_cluster[filter.name] === filter.value
+        })
+      })
+    }
+  },
   actions: {
     // Case clusters
     async get_case_clusters(context) {

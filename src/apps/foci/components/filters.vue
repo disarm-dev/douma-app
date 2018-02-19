@@ -11,6 +11,7 @@
             <md-option value="inactive">inactive</md-option>
             <md-option value="active">active</md-option>
             <md-option value="cleared">cleared</md-option>
+            <md-option value=""></md-option>
           </md-select>
         </md-input-container>
       </div>
@@ -25,6 +26,7 @@
             <md-option value="investigated">investigated</md-option>
             <md-option value="suggested">suggested</md-option>
             <md-option value="visual_review">visual review</md-option>
+            <md-option value=""></md-option>
           </md-select>
         </md-input-container>
       </div>
