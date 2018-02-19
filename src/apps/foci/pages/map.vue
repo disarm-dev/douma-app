@@ -44,7 +44,7 @@
           // Using case clusters as all points should be within one, use case locations if this is no longer true.
           zoom_to_feature(map, case_clusters_feature_collection)
         } else {
-          // alert user that no case clusters were rendered
+          this.$store.commit('root:set_snackbar', {message: "No case clusters found. Check status page."})
         }
         
 
@@ -53,7 +53,8 @@
         if (case_locations_feature_collection.features.length) {
           this.case_locations_layer_id = add_points_layer(map, case_locations_feature_collection)
         } else {
-          // alert user that no case locations were rendered
+          // Having two snack bars right after each other stops the messages from diplaying...
+          // this.$store.commit('root:set_snackbar', {message: "No case locations found."})
         }
       },
       handle_click(feature) {
