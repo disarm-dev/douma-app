@@ -12,7 +12,8 @@
     add_polygon_layer, 
     add_points_layer, 
     add_click_handler, 
-    remove_click_handler
+    remove_click_handler,
+    zoom_to_feature
   } from '../components/map'
 
   let map 
@@ -37,6 +38,10 @@
         // case locations
         const case_locations_feature_collection = await this.$store.dispatch('foci/get_case_locations_fc')
         const case_locations_layer_id = add_points_layer(map, case_locations_feature_collection)
+
+        // Using case clusters as all points should be within one.
+        // Use case locations if this is no longer true.
+        zoom_to_feature(map, case_clusters_feature_collection)
 
         add_click_handler(map, case_cluster_layer_id, this.handle_click)
       },

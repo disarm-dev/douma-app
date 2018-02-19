@@ -1,5 +1,6 @@
 import CONFIG from 'config/common'
 import uuid from 'uuid/v4'
+import bbox from '@turf/bbox'
 
 // This is mostly copied from 'lib/helpers/basic_map'
 // It's been duplicated in order to experiment with a new approach to composing maps
@@ -94,4 +95,10 @@ export function add_click_handler(map, layer_id, click_handler) {
 // will be nice to have later
 export function remove_click_handler(map, layer_id, click_handler) {
   map.off('click', layer_id, click_handler);
+}
+
+export function zoom_to_feature(map, feature) {
+  // feature can be a geojson feature or feature_collection, bboz takes any valid geojson
+  const bounding_box = bbox(feature)
+  map.fitBounds(bounding_box, { padding: 20 })
 }
