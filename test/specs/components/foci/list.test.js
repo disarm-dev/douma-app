@@ -28,6 +28,7 @@ test('it renders', t => {
 
 test('table_columns should be an array of string when data is there', t => {
   const $store = Object.assign(
+    {},
     mock_store_empty,
     {
       state: {
@@ -64,6 +65,7 @@ test('table_data should be an empty array when no case_clusters', t => {
 
 test('table_data should be an array of objects when data is there', async t => {
   const $store = Object.assign(
+    {},
     mock_store_empty,
     {
       getters: {
