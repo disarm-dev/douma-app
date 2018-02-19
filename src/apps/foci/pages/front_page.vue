@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <md-card class="card">
       <md-card-header>
         <div class="md-title">Foci Applet</div>
@@ -47,6 +47,10 @@
 </script>
 
 <style scoped>
+  .container {
+    padding: 0 1em;
+  }
+
   .card {
     max-width: 600px;
     margin: 2em auto;
