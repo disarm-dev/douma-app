@@ -1,8 +1,11 @@
 import Ajv from 'ajv'
 import { case_cluster_schema } from './models/case_clusters/schema'
 import { case_location_schema } from './models/case_locations/schema'
+import geometry_schema from './geometry_schema'
 
 const ajv = new Ajv()
+ajv.addSchema(geometry_schema)
+
 const case_cluster_validate = ajv.compile(case_cluster_schema);
 const case_location_validate = ajv.compile(case_location_schema);
 

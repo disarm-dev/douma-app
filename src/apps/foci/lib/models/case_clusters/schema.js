@@ -27,7 +27,7 @@ export const case_cluster_schema = {
       ]
     },
     "geometry": {
-      "type": "object"
+      "$ref": "http://disarm.io/schemas/geojson/geometry.json"
     },
     "personalised_instance_id": {
       "type": "string"

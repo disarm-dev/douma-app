@@ -10,7 +10,7 @@ export const case_location_schema = {
       "maxLength": 24
     },
     "geometry": {
-      "type": "object"
+      "$ref": "http://disarm.io/schemas/geojson/geometry.json"
     }
   },
   "required": ["_id", "geometry"]
