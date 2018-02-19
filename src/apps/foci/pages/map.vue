@@ -1,7 +1,7 @@
 <template>
   <div>
     <filters></filters>
-    <div id="map"></div>
+    <div id="map_container"></div>
   </div>
 </template>
 
@@ -22,7 +22,7 @@
     components: {filters},
     data() {
       return {
-        map_id: 'map'
+        map_id: 'map_container'
       }
     },
     mounted() {

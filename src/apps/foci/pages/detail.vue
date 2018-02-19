@@ -25,7 +25,7 @@
       </md-card-content>
     </md-card>
 
-    <md-card class="map" id="map">
+    <md-card class="map" id="map_container">
       
     </md-card>
 
@@ -44,7 +44,7 @@
     },
     data() {
       return {
-        map_id: 'map',
+        map_id: 'map_container',
         excluded_fields: ['_id', 'geometry'],
         fields: []
       }
