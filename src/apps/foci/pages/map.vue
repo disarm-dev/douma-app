@@ -22,7 +22,10 @@
     components: {filters},
     data() {
       return {
-        map_id: 'map_container'
+        map_id: 'map_container',
+
+        case_cluster_layer_id: '',
+        case_locations_layer_id: ''
       }
     },
     mounted() {
@@ -33,17 +36,25 @@
         const map = await render_map(this.map_id)
         // case clusters
         const case_clusters_feature_collection = await this.$store.dispatch('foci/get_case_clusters_fc')
-        const case_cluster_layer_id = add_polygon_layer(map, case_clusters_feature_collection)
+        if (case_clusters_feature_collection.features.length) {
+          this.case_cluster_layer_id = add_polygon_layer(map, case_clusters_feature_collection)
+          
+          add_click_handler(map, this.case_cluster_layer_id, this.handle_click)
+          
+          // Using case clusters as all points should be within one, use case locations if this is no longer true.
+          zoom_to_feature(map, case_clusters_feature_collection)
+        } else {
+          // alert user that no case clusters were rendered
+        }
+        
 
         // case locations
         const case_locations_feature_collection = await this.$store.dispatch('foci/get_case_locations_fc')
-        const case_locations_layer_id = add_points_layer(map, case_locations_feature_collection)
-
-        // Using case clusters as all points should be within one.
-        // Use case locations if this is no longer true.
-        zoom_to_feature(map, case_clusters_feature_collection)
-
-        add_click_handler(map, case_cluster_layer_id, this.handle_click)
+        if (case_locations_feature_collection.features.length) {
+          this.case_locations_layer_id = add_points_layer(map, case_locations_feature_collection)
+        } else {
+          // alert user that no case locations were rendered
+        }
       },
       handle_click(feature) {
         const {_id} = feature.properties
