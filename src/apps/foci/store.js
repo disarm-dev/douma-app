@@ -11,7 +11,8 @@ export default {
     case_locations: null,
     case_clusters: null,
     case_clusters_count: null,
-    case_locations_count: null
+    case_locations_count: null,
+    filters: []
   },
   mutations: {
     // case clusters
@@ -32,6 +33,16 @@ export default {
     },
     set_case_locations_count(state, count) {
       state.case_locations_count = count
+    },
+
+    // filters
+    set_filter(state, filter) {
+      if (state.filters.includes(filter)) {
+        const index = state.filters.findIndex(f => f.name === filter.name)
+        state.filters.splice(index, 1, filter)
+      } else {
+        state.filters.push(filter)
+      }
     }
   },
   actions: {
