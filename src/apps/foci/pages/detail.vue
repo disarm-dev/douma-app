@@ -68,12 +68,10 @@
     methods: {
       save_changes() {
         this.$store.dispatch('foci/update_case_cluster', this.case_cluster).then(res => {
-          // TODO: Alert user that save was successful
-          console.log('res', res);
+          this.$store.commit('root:set_snackbar', {message: "Successfully updated case cluster."})
         })
         .catch(err => {
-          // TODO: Alert user that an error occured
-          console.log('err', err);
+          this.$store.commit('root:set_snackbar', {message: "Error updating case cluster."})
         })
       },
       create_fields_for_edit() {
