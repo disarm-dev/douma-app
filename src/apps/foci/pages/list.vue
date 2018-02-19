@@ -69,6 +69,7 @@
   .list {
     max-width: 900px;
     margin: 0 auto;
+    padding: 0 1em;
   }
   
   .table-container {

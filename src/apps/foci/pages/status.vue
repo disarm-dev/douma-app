@@ -9,7 +9,7 @@
         <p>There are {{case_clusters_count}} case clusters on the remote server. </p>
         <p>There are {{case_clusters.length}} case clusters currently saved on your device. </p>
       </md-card-content>
-      <md-card-actions>
+      <md-card-actions class="responsive-card-actions">
         <md-button id="read_remote_clusters" @click="read_remote_clusters">Get remote</md-button>
         <md-button id="read_remote_clusters_count" @click="read_remote_case_clusters_count" class="md-primary">Get count</md-button>
         <md-button id="rerun_model" @click="rerun_model" class="md-primary">Rerun remote model</md-button>
@@ -25,7 +25,7 @@
         <p>There are {{case_locations_count}} case_locations on the remote server. </p>
         <p>There are {{case_locations.length}} case_locations currently saved on your device. </p>
       </md-card-content>
-      <md-card-actions>
+      <md-card-actions class="responsive-card-actions">
         <md-button id="read_remote_case_locations" @click="read_remote_case_locations">Get remote</md-button>
         <md-button id="read_remote_case_locations_count" @click="read_remote_case_locations_count" class="md-primary">Get count</md-button>
       </md-card-actions>
@@ -97,7 +97,14 @@ export default {
   }
 
   .card {
-    margin-top: 1em;
+    margin: 1em 0;
+  }
+
+  @media screen and (max-width: 500px) {
+    .responsive-card-actions {
+      flex-direction: column;
+      align-items: flex-end !important;
+    }
   }
 </style>
 

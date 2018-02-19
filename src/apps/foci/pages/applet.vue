@@ -48,10 +48,6 @@ export default {
 };
 </script>
 <style>
-  .filter_name {
-    margin: 0 10px;
-  }
-  
   .crumb {
     color: white !important;
   }

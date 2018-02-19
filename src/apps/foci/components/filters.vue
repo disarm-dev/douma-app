@@ -5,7 +5,7 @@
         <span>Status:</span>
       </div>
 
-      <div>
+      <div class="filter-select">
         <md-input-container>
           <md-select>
             <md-option value="inactive">inactive</md-option>
@@ -19,7 +19,7 @@
         <span>Investigation Status:</span>
       </div>
 
-      <div>
+      <div class="filter-select">
         <md-input-container>
           <md-select>
             <md-option value="investigated">investigated</md-option>
@@ -31,12 +31,20 @@
 
     </div>
 </template>
-<style>
+<style scoped>
   .filter-container {
     width: 100%;
     height: 64px;
     display: flex;
     align-items: center;
     align-self: flex-start;
+  }
+
+  .filter_name {
+    margin: 0 10px;
+  }
+
+  .filter-select {
+    margin-right: 15px;
   }
 </style>
