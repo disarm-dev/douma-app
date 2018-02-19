@@ -9,7 +9,7 @@ async function read_all() {
 
 function _read_all() {
   return {
-    url_suffix: '/foci/case',
+    url_suffix: '/foci/case_locations',
   }
 }
 
@@ -20,6 +20,6 @@ async function read_count() {
 
 function _read_count() {
   return {
-    url_suffix: '/foci/number_of_cases'
+    url_suffix: '/foci/number_of_case_locations'
   }
 }
