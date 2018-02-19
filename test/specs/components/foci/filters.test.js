@@ -1,7 +1,7 @@
 import test from 'ava'
 import { shallow } from 'vue-test-utils'
 import sinon from 'sinon'
-import applet from '../../../../src/apps/foci/components/filters.vue'
+import filters from '../../../../src/apps/foci/components/filters.vue'
 
 const mock_store = {
   commit: () => {},
@@ -13,7 +13,7 @@ const mock_store = {
 }
 
 test('renders', t => {
-  const wrapper = shallow(applet, {
+  const wrapper = shallow(filters, {
     mocks: { 
       $store: mock_store
     }
@@ -35,7 +35,7 @@ test('can get correct investigation_status when filters are set', t => {
     }
   )
   
-  const wrapper = shallow(applet, {
+  const wrapper = shallow(filters, {
     mocks: {
       $store
     }
@@ -45,7 +45,7 @@ test('can get correct investigation_status when filters are set', t => {
 })
 
 test('gets empty investigation_status when filters are not set', t => {
-  const wrapper = shallow(applet, {
+  const wrapper = shallow(filters, {
     mocks: {
       $store: mock_store
     }
@@ -67,7 +67,7 @@ test('can get correct status when filters are set', t => {
     }
   )
 
-  const wrapper = shallow(applet, {
+  const wrapper = shallow(filters, {
     mocks: {
       $store
     }
@@ -77,7 +77,7 @@ test('can get correct status when filters are set', t => {
 })
 
 test('gets emprty status when filters are not set', t => {
-  const wrapper = shallow(applet, {
+  const wrapper = shallow(filters, {
     mocks: {
       $store: mock_store
     }
@@ -86,8 +86,77 @@ test('gets emprty status when filters are not set', t => {
   t.is(wrapper.vm.status, '')
 })
 
-test.todo('sets correct investigation_status')
+test('sets correct investigation_status', t => {
+  const spy = sinon.spy()
+  const $store = Object.assign(
+    {},
+    mock_store,
+    {
+      commit: spy
+    }
+  )
 
-test.todo('sets correct status')
+  const wrapper = shallow(filters, {
+    mocks: {
+      $store
+    }
+  })
 
-test.todo('clear_filters call commit correctly')
+  wrapper.vm.investigation_status = 'suggested'
+
+  t.true(spy.called)
+
+  t.is(spy.getCall(0).args[0], 'foci/set_filter')
+  t.deepEqual(spy.getCall(0).args[1], {name: 'investigation_status', value: 'suggested'})
+})
+
+test('sets correct status', t => {
+  const spy = sinon.spy()
+  const $store = Object.assign(
+    {},
+    mock_store,
+    {
+      commit: spy
+    }
+  )
+
+  const wrapper = shallow(filters, {
+    mocks: {
+      $store
+    }
+  })
+
+  wrapper.vm.status = 'inactive'
+
+  t.true(spy.called)
+
+  t.is(spy.getCall(0).args[0], 'foci/set_filter')
+  t.deepEqual(spy.getCall(0).args[1], { name: 'status', value: 'inactive' })
+})
+
+test('clear_filters call commit correctly', t => {
+  const spy = sinon.spy()
+  const $store = Object.assign(
+    {},
+    mock_store,
+    {
+      commit: spy
+    }
+  )
+
+  const wrapper = shallow(filters, {
+    mocks: {
+      $store
+    }
+  })
+
+  wrapper.vm.clear_filters()
+
+  t.true(spy.calledTwice)
+
+  t.is(spy.getCall(0).args[0], 'foci/set_filter')
+  t.deepEqual(spy.getCall(0).args[1], { name: 'investigation_status', value: '' })
+
+  t.is(spy.getCall(1).args[0], 'foci/set_filter')
+  t.deepEqual(spy.getCall(1).args[1], { name: 'status', value: '' })
+})
