@@ -31,7 +31,7 @@
         </md-input-container>
       </div>
 
-      <md-button @click="clear_filters">
+      <md-button id="clear" @click="clear_filters">
         Clear
       </md-button>
 

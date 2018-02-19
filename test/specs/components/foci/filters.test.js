@@ -160,3 +160,22 @@ test('clear_filters call commit correctly', t => {
   t.is(spy.getCall(1).args[0], 'foci/set_filter')
   t.deepEqual(spy.getCall(1).args[1], { name: 'status', value: '' })
 })
+
+
+test('clicking clear calls clear', t => {
+  const spy = sinon.spy()
+
+  const wrapper = shallow(filters, {
+    mocks: {
+      $store: mock_store
+    }
+  })
+
+  wrapper.setMethods({clear_filters: spy})
+
+  const button = wrapper.find('#clear')
+
+  button.trigger('click')
+
+  t.true(spy.called)
+})
