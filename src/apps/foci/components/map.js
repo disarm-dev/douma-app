@@ -72,3 +72,26 @@ export function add_points_layer(map, feature_collection) {
   })
   return id
 }
+
+export function add_click_handler(map, layer_id, click_handler) {
+  // wrapping the handler makes for a simpler api
+  // it is however a bit confusing as 
+  // you will have to call remote_click_handler with the result of add_click_handler
+  // and not the original click_handler passed in
+  // we don't have to worry about for now though.
+  const handler = function (e) {
+    const feature = e.features[0]
+    if (feature) {
+      click_handler(feature)
+    }
+  }
+
+  map.on('click', layer_id, handler);
+
+  return handler
+}
+
+// will be nice to have later
+export function remove_click_handler(map, layer_id, click_handler) {
+  map.off('click', layer_id, click_handler);
+}

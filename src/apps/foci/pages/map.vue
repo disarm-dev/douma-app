@@ -7,7 +7,13 @@
 
 <script>
   import filters from '../components/filters'
-  import {render_map, add_polygon_layer, add_points_layer} from '../components/map'
+  import {
+    render_map, 
+    add_polygon_layer, 
+    add_points_layer, 
+    add_click_handler, 
+    remove_click_handler
+  } from '../components/map'
 
   let map 
   export default {
@@ -31,9 +37,12 @@
         // case locations
         const case_locations_feature_collection = await this.$store.dispatch('foci/get_case_locations_fc')
         const case_locations_layer_id = add_points_layer(map, case_locations_feature_collection)
+
+        add_click_handler(map, case_cluster_layer_id, this.handle_click)
       },
-      handle_click(row) {
-        this.$router.push({name: 'foci:map:detail', params: {foci_id: row._id}})
+      handle_click(feature) {
+        const {_id} = feature.properties
+        this.$router.push({name: 'foci:map:detail', params: {foci_id: _id}})
       }
     }
   }
