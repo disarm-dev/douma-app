@@ -18,7 +18,7 @@
 
   let map 
   export default {
-    name: 'map',
+    name: 'case_cluster_map',
     components: {filters},
     data() {
       return {
@@ -54,7 +54,7 @@
 </script>
 
 <style scoped>
-  #map {
+  #map_container {
     height: 800px;
   }
 </style>
