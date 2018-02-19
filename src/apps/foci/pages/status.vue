@@ -79,7 +79,7 @@ export default {
 
     // case clusters stuff
     rerun_model() {
-      // TODO: Rerun model here
+      this.$store.dispatch('foci/run_model')
     },
     read_remote_clusters() {
       this.$store.dispatch("foci/get_case_clusters");

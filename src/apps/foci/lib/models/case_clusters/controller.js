@@ -49,4 +49,8 @@ export class CaseClustersController {
     const {count} = await this.remote.read_count()
     return count
   }
+
+  async run_model() {
+    await remote.run_model()
+  }
 }

@@ -1,6 +1,6 @@
 import {request_handler} from "lib/remote/request-handler"
 
-export default { read_all, update, read_count}
+export default { read_all, update, read_count, run_model }
 
 async function read_all() {
   const request = _read_all()
@@ -38,5 +38,17 @@ async function read_count() {
 function _read_count() {
   return {
     url_suffix: '/foci/number_of_case_clusters'
+  }
+}
+
+async function run_model() {
+  const request = _run_model()
+  return request_handler(request)
+}
+
+function _run_model() {
+  return {
+    method: 'POST',
+    url_suffix: '/foci/model/run'
   }
 }
