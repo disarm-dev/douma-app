@@ -78,7 +78,7 @@ export default {
       const case_clusters = await case_clusters_controller.read_local()
       context.commit('set_case_clusters', case_clusters)
     },
-    async run_model() {
+    async run_model(context) {
       await case_clusters_controller.run_model()
       context.commit('root:set_snackbar', {message: "Running remote model"}, {root: true})
     },
