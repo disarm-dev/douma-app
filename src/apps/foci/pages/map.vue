@@ -28,21 +28,30 @@
         case_locations_layer_id: ''
       }
     },
-    mounted() {
-      this.render_map()
+    computed: {
+      filters() {
+        return this.$store.state.foci.filters
+      }
+    },
+    watch: {
+      'filters': 'filter_case_clusers'
+    },
+    async mounted() {
+      await this.render_map()
+      this.filter_case_clusers()
     },
     methods: {
       async render_map() {
-        const map = await render_map(this.map_id)
+        this.map = await render_map(this.map_id)
         // case clusters
         const case_clusters_feature_collection = await this.$store.dispatch('foci/get_case_clusters_fc')
         if (case_clusters_feature_collection.features.length) {
-          this.case_cluster_layer_id = add_polygon_layer(map, case_clusters_feature_collection)
+          this.case_cluster_layer_id = add_polygon_layer(this.map, case_clusters_feature_collection)
           
-          add_click_handler(map, this.case_cluster_layer_id, this.handle_click)
+          add_click_handler(this.map, this.case_cluster_layer_id, this.handle_click)
           
           // Using case clusters as all points should be within one, use case locations if this is no longer true.
-          zoom_to_feature(map, case_clusters_feature_collection)
+          zoom_to_feature(this.map, case_clusters_feature_collection)
         } else {
           this.$store.commit('root:set_snackbar', {message: "No case clusters found. Check status page."})
         }
@@ -51,7 +60,7 @@
         // case locations
         const case_locations_feature_collection = await this.$store.dispatch('foci/get_case_locations_fc')
         if (case_locations_feature_collection.features.length) {
-          this.case_locations_layer_id = add_points_layer(map, case_locations_feature_collection)
+          this.case_locations_layer_id = add_points_layer(this.map, case_locations_feature_collection)
         } else {
           // Having two snack bars right after each other stops the messages from diplaying...
           // this.$store.commit('root:set_snackbar', {message: "No case locations found."})
@@ -60,6 +69,18 @@
       handle_click(feature) {
         const {_id} = feature.properties
         this.$router.push({name: 'foci:map:detail', params: {foci_id: _id}})
+      },
+      filter_case_clusers() {
+        if (!this.case_cluster_layer_id) return 
+        
+        const combined_filter = this.filters
+          .filter(f => f.value.length)
+          .reduce((map_filter, filter) => {
+            map_filter.push(['==', filter.name, filter.value])   
+            return map_filter    
+          }, ['all']) 
+
+        this.map.setFilter(this.case_cluster_layer_id, combined_filter)
       }
     }
   }
