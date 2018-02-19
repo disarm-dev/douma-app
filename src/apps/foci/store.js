@@ -35,6 +35,7 @@ export default {
     async get_case_clusters(context) {
       const case_clusters = await case_clusters_controller.read_all_network()
       context.commit('set_case_clusters', case_clusters)
+      context.commit('set_case_clusters_count', case_clusters.length)
     },
     async get_case_clusters_local(context) {
       const case_clusters = await case_clusters_controller.read_local()
@@ -43,6 +44,7 @@ export default {
     async get_case_locations(context) {
       const case_locations = await case_locations_controller.read_all_network()
       context.commit('set_case_locations', case_locations)
+      context.commit('set_case_locations_count', case_locations.length)
     },
     async get_case_locations_local(context) {
       const case_locations = await case_locations_controller.read_local()
