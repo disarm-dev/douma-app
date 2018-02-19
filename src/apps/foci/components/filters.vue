@@ -31,6 +31,10 @@
         </md-input-container>
       </div>
 
+      <md-button @click="clear_filters">
+        Clear
+      </md-button>
+
     </div>
 </template>
 <script>
@@ -61,6 +65,13 @@ export default {
       set(value) {
         this.$store.commit('foci/set_filter', {name: 'status', value})
       }
+    }
+  },
+  methods: {
+    clear_filters() {
+      const value = ''
+      this.$store.commit('foci/set_filter', {name: 'investigation_status', value})
+      this.$store.commit('foci/set_filter', {name: 'status', value})
     }
   }
 }
