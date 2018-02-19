@@ -36,7 +36,6 @@
   import {case_cluster_schema} from '../lib/models/case_clusters/schema'
   import {render_map, add_polygon_layer, zoom_to_feature} from '../components/map'
   
-  let map
   export default {
     name: 'detail',
     props: {
@@ -93,12 +92,10 @@
         })
       },
       async render_map() {
-        map = await render_map(this.map_id)
+        const map = await render_map(this.map_id)
         const case_cluster_fc = await this.$store.dispatch('foci/get_case_cluster_fc', this.foci_id)
-        if (case_cluster_fc) {
-          add_polygon_layer(map, case_cluster_fc)
-          zoom_to_feature(map, case_cluster_fc)
-        }
+        add_polygon_layer(map, case_cluster_fc)
+        zoom_to_feature(map, case_cluster_fc)
       }
     }
   }
