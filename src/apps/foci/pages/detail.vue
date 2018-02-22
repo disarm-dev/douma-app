@@ -34,7 +34,7 @@
 
 <script>
   import {case_cluster_schema} from '../lib/models/case_clusters/schema'
-  import {render_map, remove_map, add_polygon_layer, zoom_to_feature} from '../components/map'
+  import {render_map, add_polygon_layer, zoom_to_feature, update_layer} from '../components/map'
   
   export default {
     name: 'detail',
@@ -46,7 +46,8 @@
         map_id: 'map_container',
         excluded_fields: ['_id', 'geometry'],
         fields: [],
-        case_cluster: null
+        case_cluster: null,
+        case_cluster_layer_id: ''
       }
     },
     watch: {
@@ -72,7 +73,7 @@
         this.$store.dispatch('foci/update_case_cluster', this.case_cluster).then(res => {
           this.$store.commit('root:set_snackbar', {message: "Successfully updated case cluster."})
           // we should just update the layer, but this is way simpler for now and works reliably
-          this.rerender_map()
+          this.update_case_cluster_map()
         })
         .catch(err => {
           this.$store.commit('root:set_snackbar', {message: "Error updating case cluster."})
@@ -99,15 +100,12 @@
       async render_map() {
         this.map = await render_map(this.map_id)
         const case_cluster_fc = await this.$store.dispatch('foci/get_case_cluster_fc', this.foci_id)
-        add_polygon_layer(this.map, case_cluster_fc)
+        this.case_cluster_layer_id = add_polygon_layer(this.map, case_cluster_fc)
         zoom_to_feature(this.map, case_cluster_fc)
       },
-      remove_map() {
-        remove_map(this.map)
-      },
-      async rerender_map() {
-       this.remove_map()
-       await this.render_map()
+      async update_case_cluster_map() {
+       const case_cluster_fc = await this.$store.dispatch('foci/get_case_cluster_fc', this.foci_id)
+       update_layer(this.map, this.case_cluster_layer_id, case_cluster_fc)
       }
     }
   }

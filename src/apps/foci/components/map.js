@@ -84,6 +84,10 @@ export function add_points_layer(map, feature_collection) {
   return id
 }
 
+export function update_layer(map, layer_id, feature_collection) {
+  map.getSource(layer_id).setData(feature_collection);
+}
+
 export function add_click_handler(map, layer_id, click_handler) {
   // wrapping the handler makes for a simpler api
   // it is however a bit confusing as 
