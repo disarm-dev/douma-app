@@ -47,7 +47,7 @@ export default {
     },
     case_clusters_count() {
       const case_clusters_count = this.$store.state.foci.case_clusters_count
-      if (case_clusters_count !== null) {
+      if (case_clusters_count) {
         return {...case_clusters_count, date: moment(case_clusters_count.date).format('MMM Do YYYY, h:mm a')}
       } else {
         return {count: 'X', date: 'never'}
@@ -63,7 +63,7 @@ export default {
     },
     case_locations_count() {
       const case_locations_count = this.$store.state.foci.case_locations_count
-      if (case_locations_count !== null) {
+      if (case_locations_count) {
         return {...case_locations_count, date: moment(case_locations_count.date).format('MMM Do YYYY, h:mm a')}
       } else {
         return {count: 'X', date: 'never'}

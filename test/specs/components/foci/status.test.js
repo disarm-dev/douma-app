@@ -1,6 +1,7 @@
 import test from 'ava'
 import { shallow } from 'vue-test-utils'
 import sinon from 'sinon'
+import moment from 'moment'
 import status from '../../../../src/apps/foci/pages/status.vue'
 
 const mock_store_empty = {
@@ -45,12 +46,13 @@ test('case_clusters returns case_clusters from store', t => {
 })
 
 test('case_clusters_count returns case_clusters_count from store', t => {
+  const date = new Date()
   const mock_store = {
     state: {
       foci: {
         case_clusters: [{ _id: 1 }],
         case_locations: [],
-        case_clusters_count: 2
+        case_clusters_count: {count: 2, date: date}
       }
     }
   }
@@ -62,16 +64,17 @@ test('case_clusters_count returns case_clusters_count from store', t => {
   })
 
   const actual = wrapper.vm.case_clusters_count
-  const expected = 2
+  const expected = { count: 2, date: moment(date).format('MMM Do YYYY, h:mm a')}
 
   t.deepEqual(actual, expected)
 })
 
 test('case_locations_count returns case_locations_count from store', t => {
+  const date = new Date()
   const mock_store = {
     state: {
       foci: {
-        case_locations_count: 2
+        case_locations_count: {count: 2, date: date}
       }
     }
   }
@@ -83,7 +86,7 @@ test('case_locations_count returns case_locations_count from store', t => {
   })
 
   const actual = wrapper.vm.case_locations_count
-  const expected = 2
+  const expected = { count: 2, date: moment(date).format('MMM Do YYYY, h:mm a')}
 
   t.deepEqual(actual, expected)
 })

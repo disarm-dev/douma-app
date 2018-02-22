@@ -14,7 +14,7 @@ test('should accept filters as a prop', t => {
     propsData: {filters}
   })
 
-  t.true(wrapper.hasProp('filters', filters))
+  t.deepEqual(wrapper.props().filters, filters)
 })
 
 test('should emit remove_filter event when removing a filter', t => {

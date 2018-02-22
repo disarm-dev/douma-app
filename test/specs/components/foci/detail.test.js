@@ -64,7 +64,7 @@ test('save_changes calls dispatch', t => {
   const wrapper = shallow(foci_detail, {
     propsData: { foci_id: 1 },
     mocks: { $store: mock_store },
-    methods: { render_map: () => { } }
+    methods: { render_map: () => { }, rerender_map: () => {} }
   })
 
   wrapper.vm.save_changes()

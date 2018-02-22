@@ -3,11 +3,17 @@ import { shallow } from 'vue-test-utils'
 import sinon from 'sinon'
 import pivot_table from '../../../../src/apps/foci/components/pivot_table.vue'
 
+const propsData = {
+  data: [],
+  x_axis_property: 'status',
+  x_axis_enums: ['active', 'inactive', 'cleared'],
+  y_axis_property: 'investigation_status',
+  y_axis_enums: ['investigated', 'suggested', 'visual review']
+}
+
 test('renders', t => {
   const wrapper = shallow(pivot_table, {
-    propsData: {
-      data: []
-    }
+    propsData
   })
 
   t.true(wrapper.exists())
@@ -15,9 +21,7 @@ test('renders', t => {
 
 test('renders a row for each y_axis_enum + header', t => {
   const wrapper = shallow(pivot_table, {
-    propsData: {
-      data: []
-    }
+    propsData
   })
 
   const table_rows = wrapper.findAll('md-table-row')
@@ -28,9 +32,7 @@ test('renders a row for each y_axis_enum + header', t => {
 
 test('renders a table-head for each x_axis_enum + header', t => {
   const wrapper = shallow(pivot_table, {
-    propsData: {
-      data: []
-    }
+    propsData
   })
 
   const table_heads = wrapper.findAll('md-table-head')
@@ -41,9 +43,7 @@ test('renders a table-head for each x_axis_enum + header', t => {
 
 test('renders a table full of zeros when there is no data', t => {
   const wrapper = shallow(pivot_table, {
-    propsData: {
-      data: []
-    }
+    propsData
   })
 
   const cells = wrapper.findAll('md-table-cell.data-field')
@@ -61,9 +61,7 @@ test('renders a table full of zeros when there is no data', t => {
 test.skip('clicking a cell calls handle_click', async t => {
   const spy = sinon.spy()
   const wrapper = shallow(pivot_table, {
-    propsData: {
-      data: []
-    }
+    propsData
   })
 
   wrapper.setMethods({handle_click: spy})
