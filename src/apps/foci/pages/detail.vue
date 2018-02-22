@@ -49,20 +49,23 @@
         case_cluster: null
       }
     },
+    watch: {
+      '$store.state.foci.case_clusters': 'set_case_cluster'
+    },
     created() {
       this.create_fields_for_edit()
-      this.case_cluster = this.get_case_cluster()
+      this.set_case_cluster()
     },
     mounted() {
       this.render_map()
     },
     methods: {
-      get_case_cluster() {
+      set_case_cluster() {
         if (this.$store.state.foci.case_clusters) {
           const case_cluster = this.$store.state.foci.case_clusters.find(case_cluster => case_cluster._id === this.foci_id)
-          return case_cluster
+          this.case_cluster = case_cluster
         } else {
-          return null
+          this.case_cluster = null
         }
       },
       save_changes() {
