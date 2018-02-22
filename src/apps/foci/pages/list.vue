@@ -18,7 +18,15 @@
         <md-toolbar>
           <h1 class="md-title">Summary</h1>
         </md-toolbar>
-        <pivot-table :data="table_data" @click="set_filters"></pivot-table>
+        <pivot-table
+         :x_axis_property="x_axis_property"
+         :x_axis_enums="x_axis_enums"
+         :y_axis_property="y_axis_property"
+         :y_axis_enums="y_axis_enums"
+         :data="table_data" 
+         @click="set_filters"
+         >
+         </pivot-table>
       </md-table-card>
     </div>
 
@@ -36,6 +44,15 @@
   export default {
     name: 'list',
     components: {'pivot-table': pivot_table, 'pretty-table': pretty_table, filters},
+    data() {
+      return {
+        // pivot table stuff
+        x_axis_property: 'status',
+        x_axis_enums: ['active', 'inactive', 'cleared'],
+        y_axis_property: 'investigation_status',
+        y_axis_enums: ['investigated', 'suggested', 'visual review']
+      }
+    },
     computed: {
       table_data() {
         const case_clusters = this.$store.getters['foci/filtered_case_clusters']

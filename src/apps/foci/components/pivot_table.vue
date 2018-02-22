@@ -23,15 +23,12 @@
 </template>
 <script>
 export default {
-  props: ['data'],
-  data() {
-    return {
-      x_axis_property: 'status',
-      x_axis_enums: ['active', 'inactive', 'cleared'],
-
-      y_axis_property: 'investigation_status',
-      y_axis_enums: ['investigated', 'suggested', 'visual review']
-    }
+  props: {
+    data: Array,
+    x_axis_property: String,
+    x_axis_enums: Array,
+    y_axis_property: String,
+    y_axis_enums: Array
   },
   methods: {
     get_data_for(x_axis_property, x, y_axis_property, y) {
