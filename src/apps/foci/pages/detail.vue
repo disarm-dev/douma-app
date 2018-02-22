@@ -34,7 +34,7 @@
 
 <script>
   import {case_cluster_schema} from '../lib/models/case_clusters/schema'
-  import {render_map, add_polygon_layer, zoom_to_feature} from '../components/map'
+  import {render_map, remove_map, add_polygon_layer, zoom_to_feature} from '../components/map'
   
   export default {
     name: 'detail',
@@ -45,29 +45,31 @@
       return {
         map_id: 'map_container',
         excluded_fields: ['_id', 'geometry'],
-        fields: []
+        fields: [],
+        case_cluster: null
       }
     },
-    computed: {
-      case_cluster() {
+    created() {
+      this.create_fields_for_edit()
+      this.case_cluster = this.get_case_cluster()
+    },
+    mounted() {
+      this.render_map()
+    },
+    methods: {
+      get_case_cluster() {
         if (this.$store.state.foci.case_clusters) {
           const case_cluster = this.$store.state.foci.case_clusters.find(case_cluster => case_cluster._id === this.foci_id)
           return case_cluster
         } else {
           return null
         }
-      }
-    },
-    created() {
-      this.create_fields_for_edit()
-    },
-    mounted() {
-      this.render_map()
-    },
-    methods: {
+      },
       save_changes() {
         this.$store.dispatch('foci/update_case_cluster', this.case_cluster).then(res => {
           this.$store.commit('root:set_snackbar', {message: "Successfully updated case cluster."})
+          // we should just update the layer, but this is way simpler for now and works reliably
+          this.rerender_map()
         })
         .catch(err => {
           this.$store.commit('root:set_snackbar', {message: "Error updating case cluster."})
@@ -92,10 +94,17 @@
         })
       },
       async render_map() {
-        const map = await render_map(this.map_id)
+        this.map = await render_map(this.map_id)
         const case_cluster_fc = await this.$store.dispatch('foci/get_case_cluster_fc', this.foci_id)
-        add_polygon_layer(map, case_cluster_fc)
-        zoom_to_feature(map, case_cluster_fc)
+        add_polygon_layer(this.map, case_cluster_fc)
+        zoom_to_feature(this.map, case_cluster_fc)
+      },
+      remove_map() {
+        remove_map(this.map)
+      },
+      async rerender_map() {
+       this.remove_map()
+       await this.render_map()
       }
     }
   }

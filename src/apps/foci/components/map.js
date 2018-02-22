@@ -36,6 +36,10 @@ export function render_map(map_container_id) {
   })
 }
 
+export function remove_map(map) {
+  map.remove()
+}
+
 export function add_polygon_layer(map, feature_collection) {
   // Could check if feature collection has points, or polygons
   // Then we only need one function
@@ -50,11 +54,14 @@ export function add_polygon_layer(map, feature_collection) {
     },
     paint: {
       'fill-opacity': 0.2,
-    //   'fill-color': {
-    //     property: layer_string,
-    //     stops: palette
-    //   },
-    //   'fill-outline-color': 'black'
+      'fill-color': [
+        'match',
+          ['get', 'status'],
+          'active', '#F44336',
+          'inactive', '#FFB300',
+          'cleared', '#4CAF50',
+          /* other */ '#ccc'
+      ]
     }
   })
   return id
