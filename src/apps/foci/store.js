@@ -20,7 +20,7 @@ export default {
       state.case_clusters = case_clusters
     },
     set_case_cluster(state, incoming_case_cluster) {
-      const index = state.case_clusters.find(cluster => cluster._id === incoming_case_cluster._id)
+      const index = state.case_clusters.findIndex(cluster => cluster._id === incoming_case_cluster._id)
       state.case_clusters.splice(index, 1, incoming_case_cluster)
     },
     set_case_clusters_count(state, count) {
