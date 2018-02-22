@@ -6,7 +6,7 @@ const case_locations_controller = new CaseLocationsController('foci')
 
 export default {
   namespaced: true,
-  unpersisted_state_keys: ['case_locations', 'case_clusters', 'case_clusters_count', 'case_locations_count'],
+  unpersisted_state_keys: ['case_locations', 'case_clusters'],
   state: {
     case_locations: null,
     case_clusters: null,
@@ -24,7 +24,7 @@ export default {
       state.case_clusters.splice(index, 1, incoming_case_cluster)
     },
     set_case_clusters_count(state, count) {
-      state.case_clusters_count = count
+      state.case_clusters_count = {count, date: new Date()}
     },
 
     // case locations
@@ -32,7 +32,7 @@ export default {
       state.case_locations = case_locations
     },
     set_case_locations_count(state, count) {
-      state.case_locations_count = count
+      state.case_locations_count = { count, date: new Date() }
     },
 
     // filters

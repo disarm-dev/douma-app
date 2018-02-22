@@ -6,7 +6,7 @@
         <!-- <div class="md-subhead">Subtitle here</div> -->
       </md-card-header>
       <md-card-content>
-        <p>There are {{case_clusters_count}} case clusters on the remote server. </p>
+        <p>There were {{case_clusters_count.count}} case clusters on the remote server on {{case_clusters_count.date}}. </p>
         <p>There are {{case_clusters.length}} case clusters currently saved on your device. </p>
       </md-card-content>
       <md-card-actions class="responsive-card-actions">
@@ -18,12 +18,12 @@
     
     <md-card  class="card">
       <md-card-header>
-        <div class="md-title">Case_locations</div>
+        <div class="md-title">Case locations</div>
         <!-- <div class="md-subhead">Subtitle here</div> -->
       </md-card-header>
       <md-card-content>
-        <p>There are {{case_locations_count}} case_locations on the remote server. </p>
-        <p>There are {{case_locations.length}} case_locations currently saved on your device. </p>
+        <p>There were {{case_locations_count.count}} case locations on the remote server on {{case_locations_count.date}} </p>
+        <p>There are {{case_locations.length}} case locations currently saved on your device. </p>
       </md-card-content>
       <md-card-actions class="responsive-card-actions">
         <md-button id="read_remote_case_locations" @click="read_remote_case_locations">Get remote</md-button>
@@ -33,6 +33,8 @@
   </div>
 </template>
 <script>
+import moment from 'moment'
+
 export default {
   computed: {
     case_clusters() {
@@ -46,9 +48,9 @@ export default {
     case_clusters_count() {
       const case_clusters_count = this.$store.state.foci.case_clusters_count
       if (case_clusters_count !== null) {
-        return case_clusters_count
+        return {...case_clusters_count, date: moment(case_clusters_count.date).format('MMM Do YYYY, h:mm a')}
       } else {
-        return 'X'
+        return {count: 'X', date: 'never'}
       }
     },
     case_locations() {
@@ -62,9 +64,9 @@ export default {
     case_locations_count() {
       const case_locations_count = this.$store.state.foci.case_locations_count
       if (case_locations_count !== null) {
-        return case_locations_count
+        return {...case_locations_count, date: moment(case_locations_count.date).format('MMM Do YYYY, h:mm a')}
       } else {
-        return 'X'
+        return {count: 'X', date: 'never'}
       }
     },
   },
