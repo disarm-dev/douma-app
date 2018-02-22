@@ -76,6 +76,9 @@ export function add_points_layer(map, feature_collection) {
     source: {
       type: 'geojson',
       data: feature_collection
+    },
+    paint: {
+      'circle-opacity': 0.7,
     }
   })
   return id
