@@ -3,7 +3,7 @@
     <md-card class="card">
       <md-card-header>
         <div class="md-title">Foci Applet</div>
-        <div class="md-subhead">This is what the DiSARM foci tool can do for you. TODO: replace this text</div>
+        <div class="md-subhead">Inspect, filter and update case clusters in real time. Get started by clicking on a link below.</div>
       </md-card-header>
 
       <md-list>
