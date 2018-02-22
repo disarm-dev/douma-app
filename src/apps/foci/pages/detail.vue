@@ -1,6 +1,6 @@
 <template>
   <div class="detail-container">
-    <span class="md-headline title">I am the detail view. {{foci_id}}</span>
+    <span class="md-headline title">Case cluster: {{foci_id}}</span>
     <md-card class="form">
       <md-card-content>
         <form  v-if="case_cluster" @submit.stop.prevent="save_changes" id="attributes">
