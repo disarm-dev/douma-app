@@ -91,6 +91,7 @@ var webpackConfig = merge(baseWebpackConfig, {
         ignore: ['.*']
       },
       { from: './src/offline-analytics.js' },
+      { from: './index.html', to: '200.html' },
       { from: './src/manifest.json' },
       { from: './node_modules/sw-offline-google-analytics/build/offline-google-analytics-import.min.js' },
     ]),
