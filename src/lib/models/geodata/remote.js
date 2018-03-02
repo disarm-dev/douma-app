@@ -12,7 +12,7 @@ import {save_geodata_to_idb} from 'lib/models/geodata/local.geodata_store'
  */
 function geodata_url_for(level_name) {
   const slug = get_slug()
-  return `/static/instances/${slug}/spatial_hierarchy/${slug}.${level_name}.geojson`
+  return `https://application-registry-server.herokuapp.com/api/geojson/${slug}/${level_name}`
 }
 
 function get_geodata_for(level_name, update_progress) {
