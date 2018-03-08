@@ -1,6 +1,6 @@
 import {request_handler} from 'lib/remote/request-handler'
 
-export default {read_plan_current, create_plan}
+export default { read_plan_current, create_plan, read_plans}
 
 // PLANS
 function read_plan_current() {
@@ -11,6 +11,18 @@ function read_plan_current() {
 function _read_plan_current() {
   return {
     url_suffix: '/plan/current',
+    timeout: 10000
+  }
+}
+
+function read_plans() {
+  const request = _read_plans()
+  return request_handler(request)
+}
+
+function _read_plans() {
+  return {
+    url_suffix: '/plan/all',
     timeout: 10000
   }
 }

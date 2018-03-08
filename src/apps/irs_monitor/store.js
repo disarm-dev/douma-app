@@ -26,6 +26,7 @@ export default {
     last_id: null, // ObjectID of most recently synced response
     filters: [],
     plan: null,
+    plans: [],
     filter: null,
     map_options: {
       show_response_points: true,
@@ -59,6 +60,9 @@ export default {
     // set plan
     set_plan: (state, plan) => {
       state.plan = plan
+    },
+    set_all_plans: (state, plans) => {
+      state.plans = plans
     },
     set_filter: (state, {filter_name, filter_object}) => {
       const new_filters = set_filter(state.filters, filter_name, filter_object)
@@ -181,6 +185,14 @@ export default {
           } catch (e) {
             console.log(e)
           }
+        })
+    },
+
+    load_all_plans: (context) => {
+      return plan_controller.read_plans()
+        .then(plans => {
+          console.log('plans', plans);
+          context.commit('set_all_plans', plans)
         })
     }
   }
