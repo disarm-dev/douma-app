@@ -5,8 +5,7 @@
       <label>Select plan</label>
       <md-select v-model="plan">
         <md-option v-for="plan in plans" :key="plan._id" :value="plan._id">
-          <!-- TODO: Format the date with moment -->
-          {{plan.updated_at}}
+          {{plan.updated_at | format_date }}, {{plan.targets.length}} areas
         </md-option>
       </md-select>
     </md-input-container>
@@ -14,6 +13,7 @@
 </template>
 <script>
   import {mapState} from 'vuex'
+  import moment from 'moment'
 
   export default {
     // TODO: Pass in data as a prop
@@ -30,6 +30,11 @@
           const plan = this.$store.state.irs_monitor.plans.find(plan => plan._id === plan_id)
           this.$store.commit('irs_monitor/set_plan', plan)
         }
+      }
+    },
+    filters: {
+      format_date(date_int) {
+        return moment(date_int).format('DD MMMM YYYY')
       }
     }
   }
