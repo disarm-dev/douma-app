@@ -153,7 +153,7 @@ export function boot_app() {
   set_common_analytics(douma_app)
 }
 
-export function do_stuff_after_login_and_we_know_which_applet_you_are_allowed_to_use() {
+export function do_stuff_after_login_and_we_know_which_applets_you_are_allowed_to_use_but_first_we_need_to_select_an_instance(instance_name, store, router) {
   // TODO: We need to dynamically register the applet stores here.
   // https://vuex.vuejs.org/en/modules.html#dynamic-module-registration
 
