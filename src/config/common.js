@@ -5,7 +5,7 @@ export default {
     // Standard DOUMA API
     url: BUILD_TIME.BRANCH === 'master' ? 'https://douma-dev-api.herokuapp.com' : 'https://douma-dev-api.herokuapp.com',
     // url: 'http://localhost:3000',
-    version: 'v6',
+    version: 'v7',
 
     // Currently not used
     WEATHER_API_URL: 'https://weather.api.disarm.io/processor/output',
