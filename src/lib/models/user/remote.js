@@ -12,6 +12,7 @@ function _authenticate(user) {
     url_suffix: '/login',
     data: user,
     method: 'post',
-    timeout: 10000
+    timeout: 10000,
+    params: {country: 'instance'}
   }
 }
