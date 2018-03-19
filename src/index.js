@@ -12,7 +12,7 @@ import 'vue-multiselect/dist/vue-multiselect.min.css'
 import {configure_service_worker} from './config/service_worker_client'
 import {configure_error_tracking} from 'config/error_tracking.js'
 import {get_instance_config} from 'config/load_instance_config.js'
-import { boot_app} from 'config/configure_application.js'
+import {configure_application} from 'config/configure_application.js'
 
 // Configure service_worker
 configure_service_worker()
@@ -20,4 +20,7 @@ configure_service_worker()
 // configure_error_tracking!!
 configure_error_tracking()
 
-boot_app()
+get_instance_config()
+  .then(instance_config => {
+    configure_application(instance_config)
+  })
