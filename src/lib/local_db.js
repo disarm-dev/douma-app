@@ -13,6 +13,7 @@ const fields = {
 }
 
 db.version(1).stores({
+  instance_config: 'config_id',
   geodata_collection: `disarm_geodata_key, geodata`, // geodata_collection has two columns, called 'disarm_geodata_key' and 'geodata'
 
   "monitor/responses": fields.v1.responses,
