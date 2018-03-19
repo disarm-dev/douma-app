@@ -13,7 +13,7 @@
       </md-card-content>
     </md-card>
 
-    <instance_selector></instance_selector>
+    <!-- <instance_selector></instance_selector> -->
 
     <span>Version: {{commit_hash}}</span>
     <a class='licenses_link' href="/static/3rdpartylicenses.txt"><span>Licenses</span></a>
