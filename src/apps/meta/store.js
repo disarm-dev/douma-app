@@ -7,6 +7,7 @@ import {decorate_applets} from 'lib/instance_data/decorated_applets'
 import {User} from 'lib/models/user/model'
 import {set_raven_user_context} from 'config/error_tracking.js'
 import {setup_acl} from "lib/acess-control-list"
+import {get_configurations} from 'lib/models/instance_config/remote'
 
 export default {
   namespaced: true,
@@ -15,6 +16,7 @@ export default {
     user: null,
     previous_route: '',
     personalised_instance_id: 'default',
+    configurations: []
   },
   mutations: {
     set_previous_route: (state, previous_route) => {
@@ -25,6 +27,9 @@ export default {
     },
     set_personalised_instance_id: (state, personalised_instance_id) => {
       state.personalised_instance_id = personalised_instance_id || 'default'
+    },
+    set_configurations(state, configurations) {
+      state.configurations = configurations
     }
   },
   getters: {
@@ -104,6 +109,10 @@ export default {
         context.commit(mutation, {}, {root: true})
       })
       console.warn('Instance changed. Local data storage cleared for:', applets.join(', '))
+    },
+    get_instances: async (context) => {
+      const configurations = await get_configurations()
+      context.commit('set_configurations', configurations)
     }
   }
 }

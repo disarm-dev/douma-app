@@ -14,3 +14,23 @@ function _read_instance_config(instance) {
     }
   }
 }
+
+export function get_configurations() {
+  const options = {
+    method: 'get',
+    url_suffix: '/config',
+    params: { country: 'app' }
+  }
+
+  return request_handler(options)
+}
+
+export function get_configuration(config_id) {
+  const options = {
+    method: 'get',
+    url_suffix: `/config/${config_id}`,
+    params: {country: 'app'}
+  }
+
+  return request_handler(options)
+}

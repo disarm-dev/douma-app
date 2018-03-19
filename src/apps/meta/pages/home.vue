@@ -13,6 +13,8 @@
       </md-card-content>
     </md-card>
 
+    <instance_selector></instance_selector>
+
     <span>Version: {{commit_hash}}</span>
     <a class='licenses_link' href="/static/3rdpartylicenses.txt"><span>Licenses</span></a>
   </div>
@@ -21,9 +23,11 @@
 <script>
   import {mapGetters} from 'vuex'
   import BUILD_TIME from 'config/build-time'
+  import instance_selector from './instance_selector.vue'
 
   export default {
     name: 'home',
+    components: {instance_selector},
     computed: {
       ...mapGetters({
         decorated_applets: 'meta/decorated_applets'

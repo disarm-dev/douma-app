@@ -58,7 +58,7 @@ function is_valid_subdomain(subdomain) {
 /**
  * @returns Promise
  */
-export async function get_instance_config(hash_params) {
+export async function get_instance_config() {
   const instance_slug = determine_instance()
   try {
     const instance_config = await read_instance_congfiguration_for(instance_slug)
