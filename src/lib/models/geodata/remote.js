@@ -12,7 +12,7 @@ import {save_geodata_to_idb} from 'lib/models/geodata/local.geodata_store'
  */
 function geodata_url_for(level_name) {
   const slug = get_slug()
-  return `https://application-registry-server.herokuapp.com/api/geojson/${slug}/${level_name}`
+  return `/geodata/${slug}/${level_name}`
 }
 
 function get_geodata_for(level_name, update_progress) {
@@ -23,10 +23,10 @@ function get_geodata_for(level_name, update_progress) {
 function _get_geodata_for(level_name, update_progress) {
   const data_version = get_data_version()
 
-  const url = geodata_url_for(level_name)
+  const url_suffix = geodata_url_for(level_name)
 
   return {
-    url,
+    url_suffix,
     timeout: 300000,
     params: {
       data_version
@@ -51,7 +51,8 @@ function store_geodata({level_name, level_geodata}) {
  */
 export function get_and_store_locally_geodata_for(level_name, update_progress) {
   return get_geodata_for(level_name, update_progress)
-    .then((level_geodata) => {
+    .then((response) => {
+      const level_geodata = response.geodata_data
       return store_geodata({level_name, level_geodata})
     })
 }
