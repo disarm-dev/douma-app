@@ -39,7 +39,9 @@ import {setup_acl} from "lib/acess-control-list"
  * @returns {Vue}
  */
 export function configure_application (instance_config) {
-
+  // Configure spatial_helpers to use instance_config
+  // We need to do this before we create the store, the store relies on some of the function in spatial_hierarchy_helpers
+  configure_spatial_helpers(instance_config)
 
   // CREATE REQUIRED OBJECTS FOR APP (store AND router)
 
@@ -64,8 +66,6 @@ export function configure_application (instance_config) {
   // BEFORE VUE APP IS CREATED (USING store OR router)
 
 
-  // Configure spatial_helpers to use instance_config
-  configure_spatial_helpers(instance_config)
   console.log('TODO: @idea 🤔 Can we start getting the tile-cover thing going here, to cache all needed vector tiles? https://github.com/mapbox/tile-cover')
 
   // Configure standard_handler for remote requests
