@@ -102,3 +102,23 @@ test('should set start_date from set_start_date_season', t => {
   const actual = +new Date(wrapper.vm.start)
   t.is(actual, int_date)
 })
+
+test('should show button if season_start_date', t => {
+  const wrapper = shallow(TemporalFilters, {
+    propsData: {
+      season_start_date: (+new Date('2017-9-3'))
+    }
+  })
+
+  const button = wrapper.find('#season-button')
+
+  t.true(button.exists())
+})
+
+test('should hide button if no season_start_date', t => {
+  const wrapper = shallow(TemporalFilters, )
+
+  const button = wrapper.find('#season-button')
+
+  t.false(button.exists())
+})
