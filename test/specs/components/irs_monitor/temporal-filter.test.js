@@ -122,3 +122,20 @@ test('should hide button if no season_start_date', t => {
 
   t.false(button.exists())
 })
+
+test('clicking set season button runs set_start_date_season', t => {
+  const spy = sinon.spy()
+
+  const wrapper = shallow(TemporalFilters, {
+    propsData: {
+      season_start_date: (+new Date('2017-9-3'))
+    },
+    methods: {
+      set_start_date_season: spy
+    }
+  })
+
+  wrapper.find('#season-button').trigger('click')
+
+  t.true(spy.called)
+})
