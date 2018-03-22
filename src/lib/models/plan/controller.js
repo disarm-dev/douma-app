@@ -23,6 +23,10 @@ export class PlanController {
   async create_plan(plan){
     return await this.remote.create_plan(plan)
   }
+
+  async read_plans() {
+    return await this.remote.read_plans()
+  }
 }
 
 

@@ -10,6 +10,7 @@
     </md-card-header>
 
     <md-card-content v-show="show_filters">
+      <plans></plans>
       <filters :responses="responses"></filters>
       <aggregation_settings :responses="responses" :targets="targets"></aggregation_settings>
       <limit_to :responses="responses" :targets="targets"></limit_to>
@@ -25,10 +26,11 @@
   import filters from './filters/filters.vue'
   import limit_to from './limit-to.vue'
   import guess_locations from './guess-locations'
+  import plans from './plans'
 
   export default {
     name: 'controls',
-    components: {filters, aggregation_settings, limit_to, guess_locations},
+    components: {filters, aggregation_settings, limit_to, guess_locations, plans},
     props: ['responses', 'targets'],
     computed: {
       ...mapState({
