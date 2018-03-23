@@ -43,6 +43,7 @@ export default {
       if (this.season_start_date) {
         this.start = new Date(this.season_start_date)
         this.end = new Date()
+        this.add_temporal_filter()
       }
     },
     set_start_and_end_dates() {
@@ -54,8 +55,6 @@ export default {
       this.end = new Date(Math.max(...dates))
     },
     add_temporal_filter() {
-      if (!this.responses || !this.responses.length) return
-
       // emit start
       this.$emit('change', {
         name: 'recorded_on',
