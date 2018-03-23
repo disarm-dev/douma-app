@@ -191,12 +191,10 @@ export default {
     load_all_plans: (context) => {
       return plan_controller.read_plans()
         .then(plans => {
-          console.log('plans', plans);
           context.commit('set_all_plans', plans)
         })
     },
-    'get_network_plan_detail': (context, plan_id) => {
-      console.log('store plan id', plan_id)
+    get_network_plan_detail: (context, plan_id) => {
       return plan_controller.read_plan_detail_network(plan_id).then(plan_json => {
         if (Object.keys(plan_json).length === 0) {
           return context.commit('root:set_snackbar', {message: 'There is no remote plan. Please create one.'}, {root: true})
@@ -218,8 +216,7 @@ export default {
 
       })
     },
-    'get_network_plan_list': (context) => {
-      console.log('Get bnetwork plan list')
+    get_network_plan_list: (context) => {
       return plan_controller.read_plan_list_network().then(plan_json => {
         if (Object.keys(plan_json).length === 0) {
           return context.commit('root:set_snackbar', {message: 'There is no remote plan. Please create one.'}, {root: true})
