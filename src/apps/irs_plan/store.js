@@ -15,10 +15,12 @@ export default {
     // Actual data
     current_plan: null, // Instance of plan model
 
+    plan_list:[],
     // Kind of data
     areas_included_by_click: [],
     areas_excluded_by_click: [],
     bulk_selected_ids: [],
+
 
     // Map
     selected_filter_area_option: null,
@@ -158,6 +160,40 @@ export default {
           context.commit('root:set_snackbar', {message: 'ERROR: Plan is not valid'}, {root: true})
         }
 
+      })
+    },
+    'get_network_plan_detail': (context,plan_id) => {
+      console.log('store plan id',plan_id)
+      return controller.read_plan_detail_network(plan_id).then(plan_json => {
+        if (Object.keys(plan_json).length === 0) {
+          return context.commit('root:set_snackbar', {message: 'There is no remote plan. Please create one.'}, {root: true})
+        }
+
+        try {
+          new Plan().validate(plan_json)
+
+          let target_areas = plan_json.targets.map(area => {
+            return area.id
+          })
+
+          context.commit('clear_plan')
+          context.commit('set_plan', plan_json)
+          context.commit('add_selected_target_areas', target_areas)
+          context.commit('set_unsaved_changes', false)
+        } catch (e) {
+          console.error(e)
+          context.commit('root:set_snackbar', {message: 'ERROR: Plan is not valid'}, {root: true})
+        }
+
+      })
+    },
+    'get_network_plan_list': (context) => {
+      console.log('Get bnetwork plan list')
+      return controller.read_plan_list_network().then(plan_json => {
+        if (Object.keys(plan_json).length === 0) {
+          return context.commit('root:set_snackbar', {message: 'There is no remote plan. Please create one.'}, {root: true})
+        }
+          return plan_json
       })
     }
   }

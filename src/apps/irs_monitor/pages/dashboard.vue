@@ -116,7 +116,7 @@
       load_all_plans() {
         this.$startLoading('irs_monitor/load_all_plans')
 
-        this.$store.dispatch('irs_monitor/load_all_plans')
+        this.$store.dispatch('irs_monitor/get_network_plan_list')
           .then(() => {
             this.$endLoading('irs_monitor/load_all_plans')
             this.$store.commit('root:set_snackbar', {message: 'Successfully retrieved all plans'})

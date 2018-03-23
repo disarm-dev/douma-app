@@ -1,5 +1,23 @@
 <template>
   <div>
+    <md-dialog md-open-from="#custom" md-close-to="#custom" ref="select_plan_dialog">
+      <md-dialog-title>Select a plan</md-dialog-title>
+
+      <md-dialog-content>
+        <md-list>
+        <md-list-item v-for="plan in plan_list" @click="load_plan_detail(plan._id)">
+          <span>
+            {{(new Date(plan.date)).toLocaleDateString()}}
+            {{plan.targets}} targets
+          </span>
+        </md-list-item>
+      </md-list>
+      </md-dialog-content>
+
+      <md-dialog-actions>
+        <md-button class="md-primary" @click="close_dialog('select_plan_dialog')">Cancel</md-button>
+      </md-dialog-actions>
+    </md-dialog>
     <controls>
       <md-button
         slot="primary_action"
@@ -15,6 +33,11 @@
         <md-menu-item @click="load_plan" :disabled="!$can('read', 'irs_plan') || isLoading('irs_plan/load_plan')">
           <md-icon>assignment_turned_in</md-icon>
           <span>Load plan</span>
+        </md-menu-item>
+
+        <md-menu-item :disabled="!$can('read', 'irs_plan') || isLoading('irs_plan/load_plan')" @click="toggle_plan_selector">
+          <md-icon>assignment_turned_in</md-icon>
+          <span>Select Specific Plan</span>
         </md-menu-item>
 
         <!--EDIT MODE-->
@@ -103,7 +126,9 @@
     data() {
       return {
         edit_mode: false,
-        edit_disabled: true
+        edit_disabled: true,
+        select_plan_dialog:false,
+        plan_list:[],
       }
     },
     computed: {
@@ -147,12 +172,33 @@
       }
     },
     created() {
+      this.$store.dispatch('irs_plan/get_network_plan_list')
+        .then(plan_list => this.plan_list = plan_list)
+      console.log('Plan  page created')
       if (!geodata_in_cache_and_valid()) {
         this.$store.commit('meta/set_snackbar', {message: 'Message from PLAN: Problem with geodata'})
         this.$router.push({name: 'meta:geodata'})
       }
     },
     methods: {
+      open_dialog(ref) {
+        this.$refs[ref].open();
+      },
+      close_dialog(ref) {
+        this.$refs[ref].close();
+      },
+      toggle_plan_selector(){
+          this.open_dialog('select_plan_dialog')
+      },
+      load_plan_detail(plan_id){
+        console.log('load plan detail ', plan_id)
+        this.close_dialog('select_plan_dialog')
+        this.$startLoading('irs_plan/load_plan_detail')
+
+        this.$store.dispatch('irs_plan/get_network_plan_detail',plan_id)
+          .then(() => { this.$endLoading('irs_plan/load_plan_detail') })
+          .catch(() => { this.$endLoading('irs_plan/load_plan_detail') })
+      },
       load_plan() {
         this.$startLoading('irs_plan/load_plan')
 

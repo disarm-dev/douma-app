@@ -11,6 +11,15 @@ export class PlanController {
     return await this.remote.read_plan_current()
   }
 
+  async read_plan_detail_network(plan_id) {
+    console.log('Plan id controler',plan_id)
+    return await this.remote.read_plan_detail(plan_id)
+  }
+
+  async read_plan_list_network() {
+    return await this.remote.read_plan_list()
+  }
+
   async create_plan(plan){
     return await this.remote.create_plan(plan)
   }

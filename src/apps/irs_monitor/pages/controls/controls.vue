@@ -10,7 +10,7 @@
     </md-card-header>
 
     <md-card-content v-show="show_filters">
-      <plans></plans>
+      <plans :plans="plans"></plans>
       <filters :responses="responses"></filters>
       <aggregation_settings :responses="responses" :targets="targets"></aggregation_settings>
       <limit_to :responses="responses" :targets="targets"></limit_to>
@@ -35,6 +35,7 @@
     computed: {
       ...mapState({
         filters: state => state.irs_monitor.filters,
+        plans: state => state.irs_monitor.plans,
       }),
       show_filters: {
         get(){
