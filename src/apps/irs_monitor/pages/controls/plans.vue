@@ -9,9 +9,6 @@
         </md-option>
       </md-select>
     </md-input-container>
-    <md-button>
-      Reset to current plan
-    </md-button>
   </div>
 </template>
 <script>
