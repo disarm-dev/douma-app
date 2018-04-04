@@ -3,8 +3,8 @@ import BUILD_TIME from 'config/build-time'
 export default {
   api: {
     // Standard DOUMA API
-    url: BUILD_TIME.BRANCH === 'master' ? 'https://douma-dev-api.herokuapp.com' : 'https://douma-dev-api.herokuapp.com',
-    // url: 'http://localhost:3000',
+    //url: BUILD_TIME.BRANCH === 'master' ? 'https://douma-dev-api.herokuapp.com' : 'https://douma-dev-api.herokuapp.com',
+     url: 'http://localhost:3000',
     version: 'v7',
 
     // Currently not used
@@ -35,6 +35,9 @@ export default {
     },
     'foci': {
       title: 'Foci', icon: 'bubble_chart', geodata_required: false
+    },
+    'seasons': {
+      title: 'Seasons', icon: 'bubble_chart', geodata_required: false
     }
   },
   hash_params: {
