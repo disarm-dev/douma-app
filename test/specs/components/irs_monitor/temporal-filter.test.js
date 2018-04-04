@@ -75,17 +75,6 @@ test('should emit 2 valid temporal filters when adding the temporal filter', t =
   t.deepEqual(expected_end, actual_end)
 })
 
-// TODO: Decide: Can't see a need for this, change if needed or remove if no need
-test.failing('should not emit a filter when there are no responses', t => {
-  const wrapper = shallow(TemporalFilters)
-
-  sinon.spy(wrapper.vm, '$emit')
-
-  wrapper.vm.add_temporal_filter()
-
-  t.is(wrapper.vm.$emit.called, false)
-})
-
 
 test('should set start_date from set_start_date_season', t => {
   const date = new Date('2017-9-3')
