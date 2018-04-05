@@ -3,41 +3,59 @@ import {shallow, createLocalVue} from 'vue-test-utils'
 import Vuex from 'vuex'
 import sinon from 'sinon'
 import Seasons from 'apps/seasons/seasons.vue'
-const localVue = createLocalVue()
-localVue.use(Vuex)
-
-let getters
-let store
-
-const  irs_seasons = [
-  new Date('2017-9-1').toString(),
-  new Date('2017-9-1').toString(),
-  new Date('2017-9-1').toString()
-]
-
-test.beforeEach(()=>{
-  getters = {
-    irs_seasons: () =>   [
-      new Date('2017-9-1').toString(),
-      new Date('2017-9-1').toString(),
-      new Date('2017-9-1').toString()
-    ]
-  }
-
-  store = new Vuex.Store({
-    getters
-  })
-})
-
-
 
 test('should render', t => {
-  shallow(Seasons,{store,localVue})
-  t.pass()
+  const mock_store = {
+    state: {
+      instance_config: {
+        applets: {
+          irs_monitor: {
+            season_start_dates: []
+          }
+        }
+      }
+    }
+  }
+
+  const wrapper = shallow(Seasons, {
+    mocks: {
+      $store: mock_store
+    }
+  })
+
+  t.true(wrapper.exists())
 })
 
-test.failing('should render the correct amount of pills', t => {
-  const wrapper = shallow(Seasons,{store,localVue})
-  //expect(wrapper.classes()).toContain('md-chip')
-  t.is(wrapper.findAll('md-chip').length,irs_seasons.length)
+test('should render the correct number of items', t => {
+  const mock_store = {
+    state: {
+      instance_config: {
+        applets: {
+          irs_monitor: {
+            season_start_dates: [
+              '2017-9-1',
+              '2017-10-1',
+              '2017-11-1'
+            ]
+          }
+        }
+      }
+    }
+  }
+
+  const wrapper = shallow(Seasons, {
+    mocks: {
+      $store: mock_store
+    }
+  })
+
+  const list_items = wrapper.findAll('md-list-item')
+
+  // test the items exist
+  t.true(list_items.at(0).exists())
+  t.true(list_items.at(1).exists())
+  t.true(list_items.at(2).exists())
+
+  // test that there are no more items than we expect.
+  t.throws(list_items.at.bind(this,3))
 })
