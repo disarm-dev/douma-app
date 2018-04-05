@@ -73,9 +73,17 @@ export default {
     add_filter: (state, field_filter) => {
 
       const filter_present = state.filters.some(f => isEqual(f, field_filter))
-
       if (filter_present) return
 
+      // we replace temporal filters with the same comparator
+      if (field_filter.name === 'recorded_on') {
+        const filter_index = state.filters.findIndex(f => isEqual(f.name, field_filter.name) && isEqual(f.comparator, field_filter.comparator))
+        if (filter_index >= 0) {
+          state.filters.splice(filter_index, 1, field_filter)
+          return
+        }
+      } 
+        
       state.filters.push(field_filter)
     },
     remove_filter: (state, field_filter) => {
