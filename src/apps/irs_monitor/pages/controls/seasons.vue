@@ -59,6 +59,8 @@
         })
       },
       set_default_season() {
+        if (!this.plans.season_start_dates) return
+
         const index = this.season_start_dates.length -  1
         const start_date = this.season_start_dates[index]
         this.add_temporal_filter(start_date, index)
