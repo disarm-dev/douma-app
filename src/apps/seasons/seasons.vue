@@ -13,6 +13,9 @@
   <md-list>
     <md-list-item v-for="season_start_date in season_start_dates" :key="season_start_date">
       {{season_start_date}}
+      <span> <md-button @click="push_date()">
+    Remove season
+  </md-button></span>
     </md-list-item>
   </md-list>
 </div>
