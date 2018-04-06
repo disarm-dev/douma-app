@@ -3,8 +3,8 @@ import BUILD_TIME from 'config/build-time'
 export default {
   api: {
     // Standard DOUMA API
-    //url: BUILD_TIME.BRANCH === 'master' ? 'https://douma-dev-api.herokuapp.com' : 'https://douma-dev-api.herokuapp.com',
-     url: 'http://localhost:3000',
+    url: BUILD_TIME.BRANCH === 'master' ? 'https://douma-dev-api.herokuapp.com' : 'https://douma-dev-api.herokuapp.com',
+    //  url: 'http://localhost:3000',
     version: 'v7',
 
     // Currently not used
