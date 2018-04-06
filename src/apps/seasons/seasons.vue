@@ -1,7 +1,9 @@
 <template>
   <div style="max-width: 600px; margin: 0 auto;">
     <md-card>
-      <md-card-container>
+      <md-card-content>
+        <span style="color: red;" class="md-error" v-if="error">{{error}}</span>
+
         <md-input-container>
           <label>Season start date</label>
           <md-input v-model="new_season_start_date"></md-input>
@@ -22,17 +24,20 @@
             </span>
           </md-list-item>
         </md-list>
-      </md-card-container>
+      </md-card-content>
     </md-card>
   </div>
 </template>
 
 <script>
+  import {custom_validations} from '@locational/application-registry-validation'
+
   export default {
     name: "seasons",
     data() {
       return {
-        new_season_start_date: ''
+        new_season_start_date: '',
+        error: ''
       }
     },
     computed: {
@@ -41,9 +46,29 @@
       }
     },
     methods:{
+      validate_seasons(season_start_dates) {
+        const configuration = {
+          applets: {
+            irs_monitor: {
+              season_start_dates
+            }
+          }
+        }
+        try {
+          // TODO: Horrible!!!!
+          custom_validations[5](configuration)
+          return true
+        } catch (e) {
+          this.error = e.message
+          return false
+        }
+      },
       push_date(){
-        this.$store.state.instance_config.applets.irs_monitor.season_start_dates.push(this.new_season_start_date)
-        this.new_season_start_date = ""
+        const season_start_dates = [...this.$store.state.instance_config.applets.irs_monitor.season_start_dates, this.new_season_start_date]
+        if (this.validate_seasons(season_start_dates)) {
+          this.$store.state.instance_config.applets.irs_monitor.season_start_dates.push(this.new_season_start_date)
+          this.new_season_start_date = ""
+        }
       },
       remove_season(index){
         this.$store.state.instance_config.applets.irs_monitor.season_start_dates.splice(index, 1)
