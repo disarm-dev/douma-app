@@ -9,7 +9,7 @@
           <md-input v-model="new_season_start_date"></md-input>
         </md-input-container>
 
-        <md-button @click="push_date()">
+        <md-button id="add_new_season" @click="push_date()">
           Add new season
         </md-button>
 
