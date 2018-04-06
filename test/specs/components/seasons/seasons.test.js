@@ -57,5 +57,5 @@ test('should render the correct number of items', t => {
   t.true(list_items.at(2).exists())
 
   // test that there are no more items than we expect.
-  t.true(list_items.at.bind(this,3))
+  t.throws(list_items.at.bind(this, 3))
 })
