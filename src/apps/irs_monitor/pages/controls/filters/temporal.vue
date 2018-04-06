@@ -14,10 +14,6 @@
     <div class="date-input">
       <md-button @click="add_temporal_filter">Add filter</md-button>
     </div>
-
-    <div class="date-input" v-if="season_start_date">
-      <md-button @click="set_start_date_season" id="season-button">Set to season</md-button>
-    </div>
   </div>
 </template>
 
@@ -27,7 +23,7 @@ import moment from 'moment-mini'
 
 export default {
   name: 'temporal',
-  props: ['responses', 'season_start_date'],
+  props: ['responses'],
   components: {DatePicker},
   data () {
     return {
@@ -35,17 +31,10 @@ export default {
       end: null,
     }
   },
-  created() {
-    this.set_start_date_season()
+  mounted() {
+    this.set_start_and_end_dates()
   },
   methods: {
-    set_start_date_season() {
-      if (this.season_start_date) {
-        this.start = new Date(this.season_start_date)
-        this.end = new Date()
-        this.add_temporal_filter()
-      }
-    },
     set_start_and_end_dates() {
       if (!this.responses || !this.responses.length) return
 

@@ -10,6 +10,7 @@
     </md-card-header>
 
     <md-card-content v-show="show_filters">
+      <seasons :season_start_dates="season_start_dates"></seasons>
       <plans :plans="plans"></plans>
       <filters :responses="responses"></filters>
       <aggregation_settings :responses="responses" :targets="targets"></aggregation_settings>
@@ -27,15 +28,17 @@
   import limit_to from './limit-to.vue'
   import guess_locations from './guess-locations'
   import plans from './plans'
+  import seasons from './seasons'
 
   export default {
     name: 'controls',
-    components: {filters, aggregation_settings, limit_to, guess_locations, plans},
+    components: {filters, aggregation_settings, limit_to, guess_locations, plans, seasons},
     props: ['responses', 'targets'],
     computed: {
       ...mapState({
         filters: state => state.irs_monitor.filters,
         plans: state => state.irs_monitor.plans,
+        season_start_dates: state => state.instance_config.applets.irs_monitor.season_start_dates
       }),
       show_filters: {
         get(){
