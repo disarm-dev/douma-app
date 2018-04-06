@@ -5,7 +5,7 @@
     <md-input v-model="new_season_start_date"></md-input>
   </md-input-container>
 
-  <md-button>
+  <md-button @click="push_date()">
     Add new season
   </md-button>
 
@@ -29,6 +29,11 @@
     computed: {
       season_start_dates() {
         return this.$store.state.instance_config.applets.irs_monitor.season_start_dates.sort((a,b) => a>b)
+      }
+    },
+    methods:{
+      push_date(){
+        this.$store.state.instance_config.applets.irs_monitor.season_start_dates.push(this.new_season_start_date)
       }
     }
   }
