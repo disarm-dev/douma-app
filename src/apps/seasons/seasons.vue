@@ -31,6 +31,7 @@
 
 <script>
   import {custom_validations} from '@locational/application-registry-validation'
+  import {request_handler} from 'lib/remote/request-handler'
 
   export default {
     name: "seasons",
@@ -68,10 +69,26 @@
         if (this.validate_seasons(season_start_dates)) {
           this.$store.state.instance_config.applets.irs_monitor.season_start_dates.push(this.new_season_start_date)
           this.new_season_start_date = ""
+          this.save_config(this.$store.state.instance_config)
         }
       },
       remove_season(index){
         this.$store.state.instance_config.applets.irs_monitor.season_start_dates.splice(index, 1)
+        this.save_config(this.$store.state.instance_config)
+      },
+      async save_config(config_data) {
+        try {
+          const res = await request_handler({
+            method: 'post',
+            data: {
+              config_data
+            },
+            url_suffix: '/config'
+          })
+          console.log('res', res);
+        } catch (e) {
+          this.error = e.message
+        }
       }
     }
   }
