@@ -36,10 +36,10 @@
         let end_date
 
         // is last date
-        if ((this.season_start_dates.length - 1) === index) {
+        if (/*(this.season_start_dates.length - 1) === index*/index === 0) {
           end_date = new Date()
         } else { // is not last date
-          end_date = this.season_start_dates[index+1]
+          end_date = this.season_start_dates[index-1]
         }
 
         // emit start
@@ -59,11 +59,11 @@
         })
       },
       set_default_season() {
-        if (!this.plans.season_start_dates) return
+     //   if (!this.plans.season_start_dates) return
 
         const index = this.season_start_dates.length -  1
-        const start_date = this.season_start_dates[index]
-        this.add_temporal_filter(start_date, index)
+        const start_date = this.season_start_dates[0]
+        this.add_temporal_filter(start_date, 0)
       }
     }
   }

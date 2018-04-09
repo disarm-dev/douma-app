@@ -61,11 +61,81 @@ test('should render the correct number of items', t => {
   t.throws(list_items.at.bind(this, 3))
 })
 
-test.todo('renders a remove button for each list item')
+test('renders a remove button for each list item', t => {
+  const mock_store = {
+    state: {
+      instance_config: {
+        applets: {
+          irs_monitor: {
+            season_start_dates: ['2018-01-01','2018-02-01','2018-03-01']
+          }
+        }
+      }
+    }
+  }
 
-test.todo('shows an error if error')
+  const wrapper = shallow(Seasons,{
+    mocks:{
+      $store:mock_store
+    }
+  })
 
-test.todo('renders an add button')
+  const buttons = wrapper.findAll('md-list-item md-button')
+
+  t.true(buttons.at(0).exists())
+  t.true(buttons.at(1).exists())
+  t.true(buttons.at(2).exists())
+
+  // test that there are no more items than we expect.
+  t.throws(buttons.at.bind(this, 3))
+
+})
+
+test('shows an error if error',t => {
+  const mock_store = {
+    state: {
+      instance_config: {
+        applets: {
+          irs_monitor: {
+            season_start_dates: []
+          }
+        }
+      }
+    }
+  }
+
+  const wrapper = shallow(Seasons,{
+    mocks:{
+      $store:mock_store
+    }
+  })
+  t.throws(()=>wrapper.findAll('.md-error').at(0).exists())
+  wrapper.setData({ error: 'There is an error' })
+  t.true(wrapper.findAll('.md-error').at(0).exists())
+})
+
+
+test('renders an add button', t => {
+  const mock_store = {
+    state: {
+      instance_config: {
+        applets: {
+          irs_monitor: {
+            season_start_dates: []
+          }
+        }
+      }
+    }
+  }
+
+  const wrapper = shallow(Seasons,{
+    mocks:{
+      $store:mock_store
+    }
+  })
+  let button = wrapper.findAll('#add_new_season');
+  t.true(button.at(0).exists())
+})
 
 // UI Interactions
 test('clicking add new season should call push_date', t => {
@@ -102,7 +172,37 @@ test('clicking add new season should call push_date', t => {
 // const buttons = wrapper.findAll('md-list-item md-button')
 // buttons.at(0).trigger('click')
 
-test.todo('clicking remove season should call remove_season')
+test('clicking remove season should call remove_season', t => {
+  const remove_season = sinon.spy();
+
+  const mock_store = {
+    state: {
+      instance_config: {
+        applets: {
+          irs_monitor: {
+            season_start_dates: ['2018-01-01']
+          }
+        }
+      }
+    }
+  }
+
+
+  const wrapper = shallow(Seasons, {
+    mocks: {
+      $store: mock_store
+    },
+    methods: {
+      remove_season
+    }
+  })
+
+  const buttons = wrapper.findAll('md-list-item md-button')
+  buttons.at(0).trigger('click')
+  t.true(remove_season.calledOnce)
+})
+
+
 
 // Method test
 

@@ -38,7 +38,7 @@
       ...mapState({
         filters: state => state.irs_monitor.filters,
         plans: state => state.irs_monitor.plans,
-        season_start_dates: state => state.instance_config.applets.irs_monitor.season_start_dates
+        season_start_dates: state => state.instance_config.applets.irs_monitor.season_start_dates.sort((a,b)=>a<b)
       }),
       show_filters: {
         get(){
