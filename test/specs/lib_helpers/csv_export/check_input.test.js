@@ -1,8 +1,15 @@
 import test from 'ava';
-import {hidden_one} from 'lib/helpers/csv-export/flatten'
+import {check_input} from 'lib/helpers/csv-export/check_input'
 
-test('title', t => {
-  hidden_one()
-  t.is(true, true, 'nothing wrong here');
+test('takes Array', t => {
+  const data = []
+  const actual = check_input(data)
+  t.true(actual);
+});
+
+test('breaks if string', t => {
+  const data = 'some data'
+  const actual = check_input(data)
+  t.false(actual)
 });
 
