@@ -148,6 +148,8 @@ export default {
       // TODO: @refac DEFINITELY put batching inside the controller!
       const max_records_in_batch = CONFIG.remote.max_records_batch_size
 
+      console.log("TODO: Could be a location to calculate form sync lag (using 'form completion' timestamp)")
+
       // Clone so we can easily splice. response_id ensures updating works
       const records_left = clonedeep(records)
 
