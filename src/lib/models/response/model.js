@@ -5,6 +5,7 @@ import omit from 'lodash.omit'
 import {ResponseSchema} from './schemas/schema'
 import cache from 'config/cache'
 import {get_planning_level_id_field, get_planning_level_name} from 'lib/instance_data/spatial_hierarchy_helper'
+import moment from 'moment'
 
 export class Response {
   model;
@@ -56,8 +57,15 @@ export class Response {
     const decorated = omit(this.model, 'synced')
     console.log('🚨 TODO: Update record model use on server and everywhere else (e.g. aggregations and monitor)')
     decorated.country = decorated.instance_slug
+
     // TODO: @refac Stop adding location_selection to root of response before sending. Don't need it anymore. (https://gitlab.com/disarm/disarm-feedback/issues/47)
     decorated.location_selection = decorated.location.selection
+
+    // record 'initial form completion duration in seconds' based on timestamps",
+    // but only the first time - subsequent times will be edits, and want to ignore
+    if (!decorated.hasOwnProperty('initial_form_completion_duration_seconds')) {
+      decorated.initial_form_completion_duration_seconds = moment().diff(decorated.recorded_on, 'seconds')
+    }
 
     return decorated
   }
