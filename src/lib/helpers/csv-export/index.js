@@ -1,8 +1,12 @@
 import {check_input} from './check_input'
 import {process} from './process'
 
-export function do_thing(with_this) {
-  check_input(with_this)
-  process(with_this)
-  return format_output(with_this)
+/**
+ * Take an array of odd-shaped and nested JSON, return the CSV string
+ * @param json_array
+ * @returns {*}
+ */
+export function flatten_json_to_csv(json_array) {
+  if (!check_input(json_array)) return []
+  return process(json_array)
 }
