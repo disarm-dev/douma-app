@@ -1,5 +1,5 @@
 import flatten from 'flat'
 
-export function make_flat(json) {
+export function process(json) {
   return flatten(json)
 }
