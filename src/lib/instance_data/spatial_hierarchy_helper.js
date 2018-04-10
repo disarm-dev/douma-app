@@ -29,6 +29,10 @@ const get_planning_level_id_field = () => {
  * Something like 'villages' for NAM for 'localities' for SWZ
  */
 const get_planning_level_name = () => {
+  if (instance_config_cache === null || spatial_hierarchy_cache === null) {
+    console.error('Trying to access instance_config_cache or spatial_hierarchy_cache before they are populated')
+    return false
+  }
   const planning_level_name = spatial_hierarchy_cache.markers.planning_level_name // e.g. villages for NAM
   const planning_level = spatial_hierarchy_cache.levels.find(sp => sp.name === planning_level_name)
   return planning_level.name
