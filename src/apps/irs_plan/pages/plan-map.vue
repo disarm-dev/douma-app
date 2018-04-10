@@ -572,7 +572,7 @@
             'fill-opacity': 0.9,
             'fill-outline-color': 'black'
           }
-        }, 'records')
+        }, this._map.getLayer('records') ? 'records' : null)
       },
 
       download_plan_geojson() {
