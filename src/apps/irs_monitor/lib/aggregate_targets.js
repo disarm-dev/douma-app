@@ -11,6 +11,7 @@ import cache from "config/cache"
 
 export function get_targets(targets, spatial_aggregation_level) {
   const planning_level_name = get_planning_level_name()
+  if (!planning_level_name) return []
 
   if (spatial_aggregation_level === planning_level_name) {
     // Spatial aggregation level is the same as the planning_level so we return the targets
