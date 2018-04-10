@@ -1,12 +1,8 @@
-import test from 'ava';
+import test from 'ava'
 
-function process(thing) {
-  return [['a'], [1], [2]]
-}
+import {process} from 'lib/helpers/csv-export/process'
 
-test('single level', t => {
-  const start_with = [{a: 1}, {a: 2}]
-  const end_with = [['a'], [1], [2]]
-  const result = process(start_with)
-  t.deepEqual(end_with, result)
-});
+test('simple array', t => {
+  const json_array = [{a: 1}, {a: 2, b: 3}]
+  t.pass()
+})
