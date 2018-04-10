@@ -247,6 +247,9 @@
         const geojson = this.planning_level_fc
         this.bbox = bbox(geojson)
 
+        // does 'clusters' layer exist? if so,
+        let before_layer = this._map.getLayer('clusters') ? 'clusters' : null
+
         if (!this._map.getSource('target_areas_source')) {
           this._map.addSource('target_areas_source', {
             'type': 'geojson',
@@ -264,7 +267,7 @@
             'fill-outline-color': 'black'
           },
           filter: ['in', '__disarm_geo_id'].concat(this.bulk_selected_ids)
-        }, 'clusters')
+        }, before_layer)
 
         this._map.addLayer({
           id: 'bulk_unselected',
@@ -276,7 +279,7 @@
             'fill-outline-color': 'black'
           },
           filter: ['!in', '__disarm_geo_id'].concat(this.bulk_selected_ids)
-        }, 'clusters')
+        }, before_layer)
 
         this._map.addLayer({
           id: 'selected',
@@ -288,7 +291,7 @@
             'fill-outline-color': 'black'
           },
           filter: ['in', '__disarm_geo_id'].concat(this.areas_included_by_click)
-        }, 'clusters')
+        }, before_layer)
 
         this._map.addLayer({
           id: 'unselected',
@@ -300,7 +303,7 @@
             'fill-outline-color': 'black'
           },
           filter: ['in', '__disarm_geo_id'].concat(this.areas_excluded_by_click)
-        }, 'clusters')
+        }, before_layer)
 
         if (this.selected_filter_area) {
           this._map.addLayer({
