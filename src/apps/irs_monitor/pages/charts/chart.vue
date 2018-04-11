@@ -9,8 +9,8 @@
 
     <div :id="chart_id"></div>
 
-    <md-card-content v-if="!has_responses">
-      <div><em>Not enough data to display chart (and who likes empty charts anyway?)</em></div>
+    <md-card-content v-if="!chart_data">
+      <div><em>Not enough data to display chart</em></div>
     </md-card-content>
 
   </div>
@@ -20,7 +20,8 @@
   import Plotly from 'plotly.js/dist/plotly-basic.min.js'
   import {get} from 'lodash'
 
-  import get_data from '../../lib/get_data_for_viz'
+  import Worker from 'worker-loader!../../lib/get_data_for_viz'
+  // import Worker from 'worker-loader!./worker'
   import cache from 'config/cache'
   import CONFIG from 'config/common'
 
@@ -29,7 +30,8 @@
     name: 'custom_chart',
     props: ['chart_id', 'responses', 'targets', 'aggregations', 'options'],
     watch: {
-      'responses': 'render_chart',
+      'responses': 'get_chart_data',
+      'chart_data': 'render_chart'
     },
     data() {
       return {
@@ -46,7 +48,7 @@
       this.data = []
     },
     mounted() {
-      this.render_chart()
+      // this.render_chart()
     },
     beforeDestroy() {
       for(let fn of this.plotly_event_listeners) {
@@ -55,6 +57,41 @@
       }
     },
     methods: {
+      get_chart_data() {
+        if (!this.has_responses) {
+          return false
+        }
+
+        const geodata = cache.geodata // TODO: @refac When we fix geodata into store, etc
+        const responses = this.responses
+        const targets = this.targets
+        const aggregations = this.aggregations
+        const options = this.options
+
+        // const func = get_data
+        const params = {
+          responses,
+          targets,
+          aggregations,
+          options,
+          geodata
+        }
+
+        // debugger
+        const worker = new Worker();
+
+        worker.postMessage(params);
+
+        worker.addEventListener("message", function (event) {
+          console.log('message event', event.data)
+          this.chart_data = event.data
+        });
+        // const worker = get_data
+
+        // this.$worker.run(() => get_data(params))
+        //   .then((chart_data) => this.chart_data = chart_data)
+        //   .catch(console.error)
+      },
       render_chart() {
         // If no responses and chart was previously rendered, then remove it and return
         // Do these checks to avoid rendering whole chart if data has changed
@@ -62,16 +99,6 @@
           if (this._chart) Plotly.purge(this._chart)
           return false
         }
-
-        const geodata = cache.geodata // TODO: @refac When we fix geodata into store, etc
-
-        this.chart_data = get_data({
-          responses: this.responses,
-          targets: this.targets,
-          aggregations: this.aggregations,
-          options: this.options,
-          geodata: geodata
-        })
 
         // Check options not empty
         const options_layout = get(this.options, 'layout', {})
