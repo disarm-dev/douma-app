@@ -1,4 +1,12 @@
 import Vue from 'vue'
+Vue.config.devtools = true
+Vue.config.performance = true
+
+import VueWorker from 'vue-worker'
+Vue.use(VueWorker)
+
+import AsyncComputed from 'vue-async-computed'
+Vue.use(AsyncComputed)
 
 // Components
 import {ClientTable} from 'vue-tables-2'

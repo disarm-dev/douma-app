@@ -1,8 +1,17 @@
-import {get} from 'lodash'
+import {get, has} from 'lodash'
 
 import {decorate_for_chart, decorate_for_map, decorate_for_pie, decorate_for_table} from './decorate_data_for_viz'
 import {categorical_bins, spatial_bins, time_series_bins} from './bin_responses'
 import CONFIG from "config/common"
+
+
+// Respond to message from parent thread
+
+self.addEventListener('message', (event) => {
+  if (!has(event.data, 'options.chart_type')) return
+  const result = get_data(event.data)
+  self.postMessage(result)
+})
 
 /**
  * Prepare and aggregate data for a basic series chart
@@ -17,7 +26,6 @@ import CONFIG from "config/common"
  * @returns {array}
  */
 export default function get_data({responses, targets, aggregations, options, geodata}) {
-
   // filter geodata in here
   const limit_to = get(options, 'limit_to', 'all')
   switch (limit_to) {

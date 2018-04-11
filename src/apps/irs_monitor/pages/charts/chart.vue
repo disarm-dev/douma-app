@@ -9,8 +9,8 @@
 
     <div :id="chart_id"></div>
 
-    <md-card-content v-if="!chart_data">
-      <div><em>Not enough data to display chart</em></div>
+    <md-card-content v-if="!has_responses">
+      <div><em>Not enough data to display chart (and who likes empty charts anyway?)</em></div>
     </md-card-content>
 
   </div>
@@ -20,8 +20,7 @@
   import Plotly from 'plotly.js/dist/plotly-basic.min.js'
   import {get} from 'lodash'
 
-  import Worker from 'worker-loader!../../lib/get_data_for_viz'
-  // import Worker from 'worker-loader!./worker'
+  import get_data from '../../lib/get_data_for_viz'
   import cache from 'config/cache'
   import CONFIG from 'config/common'
 
@@ -77,22 +76,10 @@
           geodata
         }
 
-        // debugger
-        const worker = new Worker();
-
-        worker.postMessage(params);
-
-        worker.addEventListener("message", function (event) {
-          console.log('message event', event.data)
-          this.chart_data = event.data
-        });
-        // const worker = get_data
-
-        // this.$worker.run(() => get_data(params))
-        //   .then((chart_data) => this.chart_data = chart_data)
-        //   .catch(console.error)
+        this.chart_data = get_data(params)
       },
       render_chart() {
+        console.time('render_chart')
         // If no responses and chart was previously rendered, then remove it and return
         // Do these checks to avoid rendering whole chart if data has changed
         if (!this.has_responses) {
@@ -116,6 +103,7 @@
             this.plotly_event_listeners.push(fn)
           })
 
+        console.timeEnd('render_chart')
         return true
       }
     }
