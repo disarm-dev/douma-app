@@ -233,6 +233,7 @@
     async created() {
       await this.$store.dispatch('irs_record_point/read_records')
       this._validator = new Validator(this.instance_config.validations)
+
       if (this.response_id) {
         /*
           found becomes undefined if this.$store.dispatch('irs_record_point/read_records') is not awaited
