@@ -199,7 +199,7 @@
             'fill-opacity': 0.9,
             'fill-outline-color': 'black'
           }
-        }, 'area_labels')
+        }, this._map.getLayer('area_labels') ? 'area_labels' : null)
 
         const centroid_features = this._aggregated_responses_fc.features.map((feature) => {
           const c = centroid(feature)
