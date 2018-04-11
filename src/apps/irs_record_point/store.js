@@ -1,10 +1,12 @@
 import clonedeep from 'lodash.clonedeep'
 import Raven from 'raven-js'
+import has from 'lodash.has'
 
 
 import CONFIG from 'config/common'
 import {ResponseController} from 'lib/models/response/controller'
 import {guess_location_for} from "../../lib/models/response/guess_location";
+import moment from 'moment'
 
 const controller = new ResponseController('record')
 
@@ -155,7 +157,17 @@ export default {
       const results = {pass: [], fail: []}
 
       while (records_left.length > 0) {
-        const records_batch = records_left.splice(0, max_records_in_batch)
+        let records_batch = records_left.splice(0, max_records_in_batch)
+
+        // calculate sync lag for each record
+        records_batch = records_batch.map(record => {
+          if (!has(record, 'most_recent_form_completed_time')) {
+            record.form_sync_lag_minutes = 'unknown'
+          } else {
+            record.form_sync_lag_minutes = moment().diff(record.most_recent_form_completed_time, 'minutes')
+          }
+          return record
+        })
 
         // TODO: @refac This should be try...catch
         await controller.create_batch_network(records_batch)

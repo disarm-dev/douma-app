@@ -223,4 +223,7 @@
   .md-card {
     margin: 10px;
   }
+  #surveyContainer {
+    font-size: 24px;
+  }
 </style>

@@ -12,12 +12,12 @@
 
 <script>
   import download from 'downloadjs'
-  import json2csv from 'json2csv'
   import moment from 'moment-mini'
   import {mapState, mapGetters} from 'vuex'
 
   import cache from 'config/cache.js'
   import {get_planning_level_name} from 'lib/instance_data/spatial_hierarchy_helper'
+  import {flatten_json_to_csv} from 'lib/helpers/csv-export'
 
   export default {
     name: 'plan_summary',
@@ -61,9 +61,9 @@
     },
     methods: {
       download_plan() {
-        const data = this.table.data
-        const fields = this.table.columns
-        const content = json2csv({data, fields})
+        if (this.table.data.length === 0) return
+
+        const content = flatten_json_to_csv(this.table.data)
         const date = moment().format('YYYY-MM-DD_HHmm')
 
         download(content, `${this.slug}_irs_plan_${date}.csv`)
