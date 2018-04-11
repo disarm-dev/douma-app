@@ -44,9 +44,9 @@
   import {mapState, mapGetters} from 'vuex'
   import moment from 'moment-mini'
   import download from 'downloadjs'
-  import json2csv from 'json2csv'
 
   import controls from 'components/controls.vue'
+  import {flatten_json_to_csv} from 'lib/helpers/csv-export'
 
   export default {
     name: 'summary',
@@ -90,9 +90,7 @@
       download_responses() {
         if(!this.responses.length) return
 
-        const fields = Object.keys(this.responses[0])
-        const data = this.responses
-        const content = json2csv({data, fields})
+        const content = flatten_json_to_csv(this.responses)
 
         const date = moment().format('YYYY-MM-DD_HHmm')
         download(content, `${this.instance_config.instance.slug}_responses_${date}.csv`)
