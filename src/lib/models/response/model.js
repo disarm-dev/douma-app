@@ -67,9 +67,6 @@ export class Response {
       decorated.initial_form_completion_duration_seconds = moment().diff(decorated.recorded_on, 'seconds')
     }
 
-    // update the most recent 'form_completed_at' timestamp
-    decorated.most_recent_form_completed_time = new Date()
-
     return decorated
   }
 
