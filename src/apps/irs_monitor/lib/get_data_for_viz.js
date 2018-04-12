@@ -5,14 +5,6 @@ import {categorical_bins, spatial_bins, time_series_bins} from './bin_responses'
 import CONFIG from "config/common"
 
 
-// Respond to message from parent thread
-
-self.addEventListener('message', (event) => {
-  if (!has(event.data, 'options.chart_type')) return
-  const result = get_data(event.data)
-  self.postMessage(result)
-})
-
 /**
  * Prepare and aggregate data for a basic series chart
  * @param {array} responses - bunch of responses
