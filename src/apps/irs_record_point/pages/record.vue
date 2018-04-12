@@ -149,7 +149,9 @@
   import location_selection from './location_selection'
   import review from './validation.vue'
   import form_renderer from './form.vue'
+  import {ResponseController} from 'lib/models/response/controller'
 
+  const controller = new ResponseController('record')
 
   export default {
     name: 'Record',
@@ -231,13 +233,17 @@
       }
     },
     async created() {
-      await this.$store.dispatch('irs_record_point/read_records')
+      const personalised_instance_id = this.$store.state.meta.personalised_instance_id
+      const instance = this.$store.state.instance_config.instance.slug
+
+      const responses = await controller.read_all_cache({personalised_instance_id, instance})
+
       this._validator = new Validator(this.instance_config.validations)
       if (this.response_id) {
         /*
           found becomes undefined if this.$store.dispatch('irs_record_point/read_records') is not awaited
          */
-        const found = this.$store.state.irs_record_point.responses.find(r => r.id === this.response_id)
+        const found = responses.find(r => r.id === this.response_id)
         if (found.uneditable) {
           return this.$router.replace({name: 'irs_record_point:view', params: {response_id: this.response_id}})
         } else {

@@ -99,14 +99,6 @@ export default {
         context.commit('root:set_snackbar', {message: 'Could not update record locally'}, {root: true})
       }
     },
-
-    read_records: async (context) => {
-      console.log('wrong!'); debugger
-      const personalised_instance_id = context.rootState.meta.personalised_instance_id
-      const instance = context.rootState.instance_config.instance.slug
-      const retrieved_responses = await controller.read_all_cache({personalised_instance_id, instance})
-      context.commit('set_responses', retrieved_responses)
-    }
   }
 }
 
