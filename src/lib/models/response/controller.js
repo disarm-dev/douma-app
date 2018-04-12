@@ -147,6 +147,10 @@ export class ResponseController {
     await controller.update_local(response)
   }
 
+  async guess_locations(responses) {
+
+  }
+
 }
 
 
