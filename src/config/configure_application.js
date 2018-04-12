@@ -1,8 +1,6 @@
 import Vue from 'vue'
 
-import VueWorker from 'vue-worker'
-Vue.use(VueWorker)
-
+// Async computed properties - https://alligator.io/vuejs/async-computed-properties/
 import AsyncComputed from 'vue-async-computed'
 Vue.use(AsyncComputed)
 

@@ -99,7 +99,6 @@
     "vue-slider-component": "^2.2.7",
     "vue-tables-2": "^0.6.23",
     "vue-virtual-scroll-list": "^1.1.2",
-    "vue-worker": "^1.2.1",
     "vuejs-datepicker": "^0.9.7",
     "vuex": "^2.3.1",
     "vuex-loading": "^0.1.11",
