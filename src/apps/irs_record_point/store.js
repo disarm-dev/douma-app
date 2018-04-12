@@ -14,13 +14,26 @@ export default {
   unpersisted_state_keys: ['responses'],
   state: {
     responses: [],
+    guessed_responses:0,
+    responses_not_in_village:0,
 
     // Not pure metadata, but we want to persist between each form entry
     persisted_metadata: {},
-    guessed_responses:0,
-    responses_not_in_village:0
   },
   mutations: {
+    clear_data_storage: (state) => {
+      state.team_name = null
+      console.warn('Not clearing irs_record_point.responses - use localStorage.clear() if you really want')
+    },
+    set_persisted_metadata: (state, {name, value}) => {
+      const new_metadata = {...state.persisted_metadata, [name]: value}
+      state.persisted_metadata = new_metadata
+    },
+    set_team_name: (state, team_name) => {
+      state.persisted_metadata.team_name = team_name
+    },
+
+    // Guessing
     clear_guessed_responses: (state) => {
       state.guessed_responses = 0
     },
@@ -33,10 +46,8 @@ export default {
     add_fixes: (state, fixes) => {
       state.responses_not_in_village += fixes
     },
-    clear_data_storage: (state) => {
-      state.team_name = null
-      console.warn('Not clearing irs_record_point.responses - use localStorage.clear() if you really want')
-    },
+
+    // Don't want
     set_responses: (state, responses) => {
       state.responses = responses
     },
@@ -53,16 +64,7 @@ export default {
         state.responses.splice(index, 1, response)
       }
     },
-    set_persisted_metadata: (state, {name, value}) => {
-      const new_metadata = {...state.persisted_metadata, [name]: value}
-      state.persisted_metadata = new_metadata
-    },
-    set_team_name: (state, team_name) => {
-      state.persisted_metadata.team_name = team_name
-    },
-    set_category: (state, category) => {
-      state.persisted_metadata.category = category
-    }
+
   },
   actions: {
     guess_response_locations: async (context,responses) => {
