@@ -51,7 +51,7 @@
     "geoposition-to-object": "^1.0.2",
     "is-number": "^3.0.0",
     "js-schema": "git+https://github.com/disarm-platform/js-schema.git",
-    "json2csv": "^3.7.3",
+    "json2csv": "^4.0.3",
     "lodash": "^4.17.4",
     "lodash.clone": "^4.5.0",
     "lodash.clonedeep": "^4.5.0",
@@ -174,7 +174,7 @@
     "last 2 versions",
     "not ie <= 10"
   ],
-  "version": "1711.30.6",
+  "version": "1.0.0",
   "ava": {
     "require": [
       "./test/helpers/setup.js"

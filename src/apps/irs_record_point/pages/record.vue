@@ -239,6 +239,7 @@
       const responses = await controller.read_all_cache({personalised_instance_id, instance})
 
       this._validator = new Validator(this.instance_config.validations)
+
       if (this.response_id) {
         /*
           found becomes undefined if this.$store.dispatch('irs_record_point/read_records') is not awaited

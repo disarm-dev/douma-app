@@ -1,10 +1,12 @@
 import clonedeep from 'lodash.clonedeep'
 import Raven from 'raven-js'
+import has from 'lodash.has'
 
 
 import CONFIG from 'config/common'
 import {ResponseController} from 'lib/models/response/controller'
 import {guess_location_for} from "../../lib/models/response/guess_location";
+import moment from 'moment'
 
 const controller = new ResponseController('record')
 
@@ -100,6 +102,48 @@ export default {
         console.error(e)
         context.commit('root:set_snackbar', {message: 'Could not update record locally'}, {root: true})
       }
+    },
+    create_records: async (context, records) => {
+      // TODO: @refac DEFINITELY put batching inside the controller!
+      const max_records_in_batch = CONFIG.remote.max_records_batch_size
+
+      // Clone so we can easily splice. response_id ensures updating works
+      const records_left = clonedeep(records)
+
+      // Batch creating of records
+      const results = {pass: [], fail: []}
+
+      while (records_left.length > 0) {
+        let records_batch = records_left.splice(0, max_records_in_batch)
+
+        // calculate sync lag for each record
+        records_batch = records_batch.map(record => {
+          if (!has(record, 'most_recent_form_completed_time')) {
+            record.form_sync_lag_minutes = 'unknown'
+          } else {
+            record.form_sync_lag_minutes = moment().diff(record.most_recent_form_completed_time, 'minutes')
+          }
+          return record
+        })
+
+        // TODO: @refac This should be try...catch
+        await controller.create_batch_network(records_batch)
+          .then((passed_records_ids) => {
+            // Find the ids of the  records that were synced, returned either as array of ids or records
+            const ids = passed_records_ids.map(record => typeof record === 'string' ? record : record.id);
+            const synced_records = ids.map(id => records_batch.find(r => r.id === id))
+            context.dispatch('mark_local_responses_as_synced', synced_records)
+            results.pass.push(synced_records)
+          })
+          .catch((failed_records) => {
+            context.dispatch('mark_local_responses_as_uneditable', records_batch)
+            results.fail.push(records_batch)
+          })
+      }
+
+
+      // Return the results array
+      return results
     },
   }
 }
