@@ -73,6 +73,7 @@ module.exports = {
     ]
   },
   plugins: [
+    new webpack.IgnorePlugin(/vertx/),
     new webpack.DefinePlugin({
       __VERSION_COMMIT_HASH_SHORT: JSON.stringify(gitRevisionPlugin.version()),
       __BRANCH: JSON.stringify(gitRevisionPlugin.branch()),
