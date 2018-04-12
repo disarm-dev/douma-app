@@ -127,6 +127,8 @@ export default {
     create_response_local: async (context, response) => {
       try {
         if (Object.keys(response.location.coords).length === 0) Raven.captureException(new Error('Coords is empty'))
+        // update the most recent 'form_completed_at' timestamp
+        response.most_recent_form_completed_time = new Date()
         await controller.create_local(response)
         context.commit('create_response', response)
         context.commit('root:set_snackbar', {message: 'Created record'}, {root: true})
