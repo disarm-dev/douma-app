@@ -4,7 +4,6 @@ import {decorate_for_chart, decorate_for_map, decorate_for_pie, decorate_for_tab
 import {categorical_bins, spatial_bins, time_series_bins} from './bin_responses'
 import CONFIG from "config/common"
 
-
 /**
  * Prepare and aggregate data for a basic series chart
  * @param {array} responses - bunch of responses
@@ -18,6 +17,7 @@ import CONFIG from "config/common"
  * @returns {array}
  */
 export default function get_data({responses, targets, aggregations, options, geodata}) {
+
   // filter geodata in here
   const limit_to = get(options, 'limit_to', 'all')
   switch (limit_to) {

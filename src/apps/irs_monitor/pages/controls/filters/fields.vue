@@ -23,15 +23,13 @@
 </template>
 
 <script>
-  import {mapState} from 'vuex'
   import {get, sort} from 'lodash'
   import flow from 'lodash/fp/flow'
-  import flatten from 'lodash/fp/flatten'
   import uniq from 'lodash/fp/uniq'
   import sortBy from 'lodash/fp/sortBy'
   import map from 'lodash/fp/map'
 
-  import Worker from 'worker-loader!./worker'
+  import FieldNamesWorker from 'worker-loader!../../../lib/field_names.worker'
 
   export default {
     name: 'field-filters',
@@ -76,7 +74,7 @@
 
         return new Promise((resolve, reject) => {
           this.$nextTick(() => {
-            const worker = new Worker()
+            const worker = new FieldNamesWorker()
 
             worker.postMessage({responses: this.responses})
             console.log('postMessage')
@@ -105,7 +103,6 @@
       }
     }
   }
-
 </script>
 
 <style scoped>

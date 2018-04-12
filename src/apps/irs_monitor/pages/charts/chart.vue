@@ -46,9 +46,6 @@
       this.plotly_event_listeners = []
       this.data = []
     },
-    mounted() {
-      // this.render_chart()
-    },
     beforeDestroy() {
       for(let fn of this.plotly_event_listeners) {
         window.removeEventListener('resize', fn)
@@ -79,7 +76,6 @@
         this.chart_data = get_data(params)
       },
       render_chart() {
-        console.time('render_chart')
         // If no responses and chart was previously rendered, then remove it and return
         // Do these checks to avoid rendering whole chart if data has changed
         if (!this.has_responses) {
@@ -103,7 +99,6 @@
             this.plotly_event_listeners.push(fn)
           })
 
-        console.timeEnd('render_chart')
         return true
       }
     }
