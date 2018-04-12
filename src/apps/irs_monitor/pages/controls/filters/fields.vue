@@ -72,15 +72,20 @@
     },
     asyncComputed: {
       field_names() {
+        this.responses.length
+
         return new Promise((resolve, reject) => {
-          const worker = new Worker()
+          this.$nextTick(() => {
+            const worker = new Worker()
 
-          worker.postMessage({responses: this.responses})
+            worker.postMessage({responses: this.responses})
+            console.log('postMessage')
 
-          worker.addEventListener("message", function (event) {
-            console.log('client event', event.data)
-            resolve(event.data)
-          });
+            worker.addEventListener("message", function (event) {
+              console.log('client event', event.data)
+              resolve(event.data)
+            });
+          })
         })
       },
     },
@@ -100,6 +105,7 @@
       }
     }
   }
+
 </script>
 
 <style scoped>
