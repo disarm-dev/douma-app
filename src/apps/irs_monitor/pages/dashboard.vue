@@ -81,6 +81,8 @@
         chart_configs: state => state.instance_config.applets.irs_monitor.charts,
       }),
       ...mapGetters({
+
+        // TODO: Responses data from state
         responses: 'irs_monitor/filtered_responses',
         targets: 'irs_monitor/targets',
       }),

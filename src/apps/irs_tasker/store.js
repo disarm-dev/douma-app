@@ -11,12 +11,14 @@ export default {
   namespaced: true,
   unpersisted_state_keys: [],
   state: {
+    // State
     teams: [], // This is an array of team_names
     assignments: [], // Array of {area_id, team_name}
     selected_team_name: null,
-
-    plan_target_ids: [],
     unsynced_changes: false,
+
+    // Data
+    plan_target_ids: [],
   },
   mutations: {
     set_selected_team_name: (state, selected_team_name) => {

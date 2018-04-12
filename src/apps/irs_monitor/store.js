@@ -21,17 +21,12 @@ export default {
     ui: {
 
     },
-    responses: [],
-    responses_last_updated_at: null,
-    last_id: null, // ObjectID of most recently synced response
-    filters: [],
-    plan: null,
-    filter: null,
+    // State
     map_options: {
       show_response_points: true,
       selected_layer: 'normalised_risk'
     },
-
+    responses_last_updated_at: null,
     dashboard_options: {
       // TODO: @config Extract default temporal_aggregation_level
       temporal_aggregation_level: CONFIG.applets.irs_monitor.defaults.temporal_aggregation_level,
@@ -39,6 +34,15 @@ export default {
       limit_to_plan: true,
       limit_to: ''
     },
+    last_id: null, // ObjectID of most recently synced response
+    filters: [],
+
+    // Data
+    responses: [],
+    plan: null,
+
+    // Unknown if Data or State
+    filter: null,
     guess_selection_ids:{}
   },
   mutations: {
