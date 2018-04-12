@@ -71,10 +71,13 @@
   import download from 'downloadjs'
   import moment from 'moment-mini'
   import {mapState} from 'vuex'
-  import {cloneDeep, flatten, get} from 'lodash'
+  import {flatten, get} from 'lodash'
 
   import controls from 'components/controls.vue'
   import local_record_summary from './local_record_summary'
+  import {ResponseController} from 'lib/models/response/controller'
+
+  const controller = new ResponseController('record')
 
   export default {
     name: 'List',
@@ -83,19 +86,17 @@
       return {
         syncing: false,
         target_denominator: 0,
-        id_search_string: ''
+        id_search_string: '',
+        responses: []
       }
     },
     computed: {
       ...mapState({
         instance_config: state => state.instance_config,
-        unsynced_count: state => state.irs_record_point.responses.filter(r => !r.synced).length,
         online: state => state.network_online
       }),
-      responses() {
-        return this.$store.state.irs_record_point.responses
-      },
       filtered_responses() {
+        if (!this.responses.length) return []
         return this.responses
           .filter(r => {
             if (!this.id_search_string) return true
@@ -103,12 +104,19 @@
           })
           .sort((a, b) => new Date(b.recorded_on) - new Date(a.recorded_on))
       },
+      unsynced_count() {
+        return this.unsynced_responses.length
+      },
       unsynced_responses() {
+        if (!this.responses.length) return []
         return this.responses.filter(r => !r.synced)
       }
     },
-    mounted () {
-      this.$store.dispatch('irs_record_point/read_records')
+    async mounted () {
+        const personalised_instance_id = this.$store.state.meta.personalised_instance_id
+        const instance = this.$store.state.instance_config.instance.slug
+
+        this.responses = await controller.read_all_cache({personalised_instance_id, instance})
     },
     methods: {
       format_response(response) {
