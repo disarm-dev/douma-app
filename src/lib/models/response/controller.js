@@ -4,6 +4,7 @@ import instance_decorator from 'lib/models/response/decorators-evaluated'
 import {store} from 'apps/store'
 import CONFIG from 'config/common'
 import clonedeep from 'lodash.clonedeep'
+import Raven from 'raven-js/typescript/raven'
 
 export class ResponseController {
   constructor(applet_name) {
@@ -110,7 +111,7 @@ export class ResponseController {
     })
     try {
       await this.create_local_bulk(responses)
-    } catch(e) {
+    } catch (e) {
       console.error(e)
     }
   }
@@ -121,10 +122,31 @@ export class ResponseController {
     })
     try {
       await this.create_local_bulk(responses)
-    } catch(e) {
+    } catch (e) {
       console.error(e)
     }
   }
+
+  async create_response_local(response) {
+    // Log an unusual error
+    if (Object.keys(response.location.coords).length === 0) Raven.captureException(new Error('Coords is empty'))
+
+    // update the most recent 'form_completed_at' timestamp
+    response.most_recent_form_completed_time = new Date()
+
+    await controller.create_local(response)
+  }
+
+  async create_response_local(response) {
+    // Log an unusual error
+    if (Object.keys(response.location.coords).length === 0) Raven.captureException(new Error('Coords is empty'))
+
+    // update the most recent 'form_completed_at' timestamp
+    response.most_recent_form_completed_time = new Date()
+
+    await controller.update_local(response)
+  }
+
 }
 
 

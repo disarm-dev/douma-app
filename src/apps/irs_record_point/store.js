@@ -49,7 +49,7 @@ export default {
       state.responses_not_in_village += fixes
     },
 
-    // Don't want
+    // Don't want to keep this 'responses' stuff in here at all
     set_responses: (state, responses) => {
       state.responses = responses
     },
@@ -81,32 +81,6 @@ export default {
         console.error(e)
       }
     },
-    create_response_local: async (context, response) => {
-      try {
-        if (Object.keys(response.location.coords).length === 0) Raven.captureException(new Error('Coords is empty'))
-        // update the most recent 'form_completed_at' timestamp
-        response.most_recent_form_completed_time = new Date()
-        await controller.create_local(response)
-        context.commit('create_response', response)
-        context.commit('root:set_snackbar', {message: 'Created record'}, {root: true})
-      } catch (e) {
-        console.error(e)
-        context.commit('root:set_snackbar', {message: 'Could not save record locally'}, {root: true})
-      }
-    },
-    update_response_local: async (context, response) => {
-      try {
-        if (Object.keys(response.location.coords).length === 0) Raven.captureException(new Error('Coords is empty'))
-        // update the most recent 'form_completed_at' timestamp
-        response.most_recent_form_completed_time = new Date()
-        await controller.update_local(response)
-        context.commit('update_response', response)
-        context.commit('root:set_snackbar', {message: 'Updated record'}, {root: true})
-      } catch (e) {
-        console.error(e)
-        context.commit('root:set_snackbar', {message: 'Could not update record locally'}, {root: true})
-      }
-    }
   }
 }
 

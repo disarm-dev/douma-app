@@ -358,17 +358,24 @@
           this.create_response(decorated_response)
         }
       },
-      create_response(response) {
-        this.$store.dispatch('irs_record_point/create_response_local', response).then(() => {
+      async create_response(response) {
+        try {
+          await controller.create_response_local(response)
           this.$router.push('/irs/record_point/')
-        })
+        } catch(e) {
+          console.error(e)
+          this.$store.state.commit('root:set_snackbar', {message: 'Could not save record locally'})
+        }
       },
-      update_response(response) {
-        this.$store.dispatch('irs_record_point/update_response_local', response).then(() => {
+      async update_response(response) {
+        try {
+          await controller.update_response_local(response)
           this.$router.push('/irs/record_point/')
-        })
+        } catch(e) {
+          console.error(e)
+          this.$store.state.commit('root:set_snackbar', {message: 'Could not update record locally'})
+        }
       },
-
       close_form() {
         // TODO: @refac Check for closing a record without saving in the router instead (and block page changes)
         if (this.response_id) {
