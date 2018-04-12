@@ -2,6 +2,8 @@ import remote from './remote'
 import Local from './local'
 import instance_decorator from 'lib/models/response/decorators-evaluated'
 import {store} from 'apps/store'
+import CONFIG from 'config/common'
+import clonedeep from 'lodash.clonedeep'
 
 export class ResponseController {
   constructor(applet_name) {
@@ -67,6 +69,61 @@ export class ResponseController {
 
   async update_local(response) {
     return await this.local.update(response)
+  }
+
+
+  async create_records(responses) {
+    const max_records_in_batch = CONFIG.remote.max_records_batch_size
+
+    // Clone so we can easily splice. response_id ensures updating works
+    const records_left = clonedeep(responses)
+
+    // Batch creating of responses
+    const results = {pass: [], fail: []}
+
+    while (records_left.length > 0) {
+      const records_batch = records_left.splice(0, max_records_in_batch)
+
+      // TODO: @refac This should be try...catch
+      await this.create_batch_network(records_batch)
+        .then(async (passed_response_ids) => {
+          // Find the ids of the  responses that were synced, returned either as array of ids or responses
+          const ids = passed_response_ids.map(response => typeof response === 'string' ? response : response.id);
+          const synced_records = ids.map(id => records_batch.find(r => r.id === id))
+          await this.mark_local_responses_as_synced(synced_records)
+          results.pass.push(synced_records)
+        })
+        .catch(async (failed_records) => {
+          this.mark_local_responses_as_uneditable(records_batch)
+          results.fail.push(records_batch)
+        })
+    }
+
+    // Return the results array
+    return results
+  }
+
+
+  async mark_local_responses_as_synced(responses) {
+    responses.forEach(response => {
+      response.synced = true
+    })
+    try {
+      await this.create_local_bulk(responses)
+    } catch(e) {
+      console.error(e)
+    }
+  }
+
+  async mark_local_responses_as_uneditable(responses) {
+    responses.forEach(response => {
+      response.uneditable = true
+    })
+    try {
+      await this.create_local_bulk(responses)
+    } catch(e) {
+      console.error(e)
+    }
   }
 }
 
