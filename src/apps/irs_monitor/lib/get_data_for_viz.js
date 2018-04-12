@@ -1,4 +1,4 @@
-import {get, has} from 'lodash'
+import {get} from 'lodash'
 
 import {decorate_for_chart, decorate_for_map, decorate_for_pie, decorate_for_table} from './decorate_data_for_viz'
 import {categorical_bins, spatial_bins, time_series_bins} from './bin_responses'
