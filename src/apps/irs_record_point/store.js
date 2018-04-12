@@ -49,17 +49,6 @@ export default {
       state.responses_not_in_village += fixes
     },
 
-    // Don't want to keep this 'responses' stuff in here at all
-    set_responses: (state, responses) => {
-      state.responses = responses
-    },
-    create_response: (state, response) => {
-      state.responses.push(response)
-    },
-    update_response: (state, response) => {
-      let index = state.responses.findIndex((r) => r.id === response.id)
-      state.responses.splice(index, 1, response)
-    },
     update_responses: (state, responses) => {
       for (const response of responses) {
         let index = state.responses.findIndex((r) => r.id === response.id)
