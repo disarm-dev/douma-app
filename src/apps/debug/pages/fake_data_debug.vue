@@ -19,7 +19,7 @@
 </template>
 
 <script>
-  import {mapState} from 'vuex'
+  import {mapState, mapMutations} from 'vuex'
   import uuid from 'uuid/v4'
   import random_point_in_polygon from 'random-points-on-polygon'
   import {getCoord} from '@turf/invariant'
@@ -32,6 +32,9 @@
   import {Response} from 'lib/models/response/model'
   import {geodata_in_cache_and_valid} from 'lib/models/geodata/geodata.valid'
   import {hydrate_geodata_cache_from_idb} from 'lib/models/geodata/local.geodata_store'
+  import {ResponseController} from 'lib/models/response/controller'
+
+  const controller = new ResponseController('record')
 
   export default {
     name: 'fake_responses_debug',
@@ -129,11 +132,21 @@
           }
         })
 
-        this.$store.dispatch('irs_record_point/create_responses_local', this.responses)
+        try {
+          controller.create_local_bulk(this.responses)
+          this.set_snackbar({message: 'Created records'})
+        } catch(e) {
+          console.error(e) // TODO: Or some better error reporter like Raven
+          this.set_snackbar({message: 'Could not save records locally'})
+        }
+
         this.message_type = 'done'
         this.created_responses_length += this.responses.length
         this.responses = []
-      }
+      },
+      ...mapMutations({
+        set_snackbar: 'root:set_snackbar'
+      })
     }
   }
 </script>

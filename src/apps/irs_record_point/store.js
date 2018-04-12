@@ -76,16 +76,6 @@ export default {
     }
   },
   actions: {
-    create_responses_local: async (context, responses) => {
-      try {
-        await controller.create_local_bulk(responses)
-        context.commit('add_responses', responses)
-        context.commit('root:set_snackbar', {message: 'Created records'}, {root: true})
-      } catch (e) {
-        console.error(e)
-        context.commit('root:set_snackbar', {message: 'Could not save records locally'}, {root: true})
-      }
-    },
     guess_response_locations: async (context,responses) => {
       let guessed_location_responses = responses
       try {
