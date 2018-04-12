@@ -1,6 +1,4 @@
 import Vue from 'vue'
-Vue.config.devtools = true
-Vue.config.performance = true
 
 import VueWorker from 'vue-worker'
 Vue.use(VueWorker)
