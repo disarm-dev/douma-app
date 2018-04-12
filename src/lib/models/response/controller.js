@@ -1,10 +1,7 @@
-import Raven from 'raven-js'
-
 import remote from './remote'
 import Local from './local'
 import instance_decorator from 'lib/models/response/decorators-evaluated'
 import {store} from 'apps/store'
-import {guess_location_for} from "lib/models/response/guess_location"
 
 export class ResponseController {
   constructor(applet_name) {
@@ -49,7 +46,7 @@ export class ResponseController {
 
 
   async read_all_cache({personalised_instance_id, instance}) {
-    const responses = await this.local.read_all()
+    const responses = await this.local.read_all() // TODO: Filter in DB rather than processing all responses?
     return responses.filter(r => {
       return r.instance_slug === instance && r.personalised_instance_id === personalised_instance_id
     })
