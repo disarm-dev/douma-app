@@ -48,7 +48,7 @@
         // TODO: state needed for user, instance, etc. horrible. Refactor Response model to already know this stuff
         const responses = generate_data({state: this.$store.state, areas_count: this.areas_count})
         try {
-          controller.create_local_bulk(responses)
+          controller.create_or_update_bulk_local(responses)
           this.created_responses_length += responses.length
           this.$store.commit('root:set_snackbar', {message: 'Created records'})
         } catch (e) {

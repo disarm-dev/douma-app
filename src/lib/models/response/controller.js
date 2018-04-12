@@ -64,7 +64,7 @@ export class ResponseController {
     return await this.local.create(response)
   }
 
-  async create_local_bulk(responses) {
+  async create_or_update_bulk_local(responses) {
     return await this.local.create_or_update_bulk(responses)
   }
 
@@ -110,7 +110,7 @@ export class ResponseController {
       response.synced = true
     })
     try {
-      await this.create_local_bulk(responses)
+      await this.create_or_update_bulk_local(responses)
     } catch (e) {
       console.error(e)
     }
@@ -121,7 +121,7 @@ export class ResponseController {
       response.uneditable = true
     })
     try {
-      await this.create_local_bulk(responses)
+      await this.create_or_update_bulk_local(responses)
     } catch (e) {
       console.error(e)
     }

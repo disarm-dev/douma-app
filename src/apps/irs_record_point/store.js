@@ -73,7 +73,7 @@ export default {
       let guessed_location_responses = responses
       try {
         guessed_location_responses = guess_location_for(guessed_location_responses)
-        await controller.create_local_bulk(guessed_location_responses)
+        await controller.create_or_update_bulk_local(guessed_location_responses)
         context.commit('update_responses', guessed_location_responses)
         context.commit('root:set_snackbar', {message: 'Finished guessing locations'}, {root: true})
       } catch (e) {
