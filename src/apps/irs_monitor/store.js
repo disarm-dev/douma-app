@@ -34,7 +34,6 @@ export default {
 
     // Data
     responses: [],
-    plan: null,
 
     // Unknown if Data or State
     filter: null,
@@ -46,7 +45,6 @@ export default {
       state.responses = []
       state.responses_last_updated_at = null
       state.filters = []
-      state.plan = null
     },
     // set responses
     set_responses: (state, responses) => {
@@ -55,10 +53,7 @@ export default {
     update_responses_last_updated_at:(state) => {
       state.responses_last_updated_at = new Date
     },
-    // set plan
-    set_plan: (state, plan) => {
-      state.plan = plan
-    },
+
     set_filter: (state, {filter_name, filter_object}) => {
       const new_filters = set_filter(state.filters, filter_name, filter_object)
       state.filters = new_filters
@@ -98,21 +93,21 @@ export default {
     }
   },
   getters: {
-    // Return all the targets from the plan
-    targets(state, getters) {
-      if(!state.plan) return []
+    // // Return all the targets from the plan
+    // targets(state, getters) {
+    //   if(!state.plan) return []
+    //
+    //   const spatial_aggregation_level = state.dashboard_options.spatial_aggregation_level
+    //   return get_targets(state.plan.targets, spatial_aggregation_level)
+    // },
 
-      const spatial_aggregation_level = state.dashboard_options.spatial_aggregation_level
-      return get_targets(state.plan.targets, spatial_aggregation_level)
-    },
-
-    plan_target_area_ids(state) {
-      if (state.plan && state.plan.targets) {
-        return state.plan.targets.map(target => target.id)
-      } else {
-        return []
-      }
-    },
+    // plan_target_area_ids(state) {
+    //   if (state.plan && state.plan.targets) {
+    //     return state.plan.targets.map(target => target.id)
+    //   } else {
+    //     return []
+    //   }
+    // },
   },
   actions: {
     get_responses_local: (context) => {

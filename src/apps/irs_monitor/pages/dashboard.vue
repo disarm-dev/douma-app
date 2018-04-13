@@ -19,6 +19,7 @@
         :responses="filtered_responses"
         :targets="targets"
         :aggregations="aggregations"
+        :plan_target_area_ids="plan_target_area_ids"
         :options="with_dashboard_options(map_options)">
       </dashboard_map>
 
@@ -56,6 +57,7 @@
   import {ResponseController} from 'lib/models/response/controller'
   import {PlanController} from 'lib/models/plan/controller'
   import {Plan} from 'lib/models/plan/model'
+  import {get_targets} from 'apps/irs_monitor/lib/aggregate_targets'
 
   const applet_name = 'monitor'
   const responses_controller = new ResponseController(applet_name)
@@ -92,17 +94,17 @@
         map_options: state => state.instance_config.applets.irs_monitor.map,
         chart_configs: state => state.instance_config.applets.irs_monitor.charts,
       }),
-      ...mapGetters({
-        targets: 'irs_monitor/targets',
-      }),
+      // ...mapGetters({
+      //   targets: 'irs_monitor/targets',
+      // }),
       filtered_responses() {
         const responses = this.responses
         if (!responses.length) return []
         return responses
 
         // responses: 'irs_monitor/filtered_responses',
-        const dashboard_options = this.$store.state.dashboard_options
-        const plan_target_area_ids = getters.plan_target_area_ids
+        const dashboard_options = this.dashboard_options
+        const plan_target_area_ids = this.plan_target_area_ids
 
         // limit to plan if 'dashboard_options.limit_to_plan' is true
         const limited_to_plan = responses.filter(r => {
@@ -119,6 +121,19 @@
         const filtered = filter_responses(limited_to_plan, this.$store.state.irs_monitor.filters)
 
         return filtered
+      },
+      targets() {
+        if(!this.plan) return []
+
+        const spatial_aggregation_level = this.dashboard_options.spatial_aggregation_level
+        return get_targets(this.plan.targets, spatial_aggregation_level)
+      },
+      plan_target_area_ids() {
+        if (this.plan && this.plan.targets) {
+          return this.plan.targets.map(target => target.id)
+        } else {
+          return []
+        }
       }
     },
     async created() {

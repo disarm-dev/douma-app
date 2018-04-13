@@ -51,7 +51,7 @@
   import get_data from '../../lib/get_data_for_viz'
 
   export default {
-    props: ['responses', 'targets', 'aggregations', 'options'],
+    props: ['responses', 'targets', 'aggregations', 'options', 'plan_target_area_ids'],
     components: {map_legend, layer_selector},
     data() {
       return {
@@ -80,9 +80,9 @@
       ...mapState({
         instance_config: state => state.instance_config,
       }),
-      ...mapGetters({
-        plan_target_area_ids: 'irs_monitor/plan_target_area_ids'
-      }),
+      // ...mapGetters({
+      //   plan_target_area_ids: 'irs_monitor/plan_target_area_ids'
+      // }),
       planning_level_fc() {
         return cache.geodata[get_planning_level_name()]
       },
