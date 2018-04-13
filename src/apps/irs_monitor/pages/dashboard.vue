@@ -2,7 +2,7 @@
   <div>
     <!--  SUMMARY, LOAD, DOWNLOAD (DUMPING GROUND) -->
     <dashboard_summary
-        :responses='responses'
+        :responses='filtered_responses'
         :filters='filters'
         @load_responses="load_responses"
         @force_load_responses="force_load_responses"
@@ -12,11 +12,11 @@
     <div class='applet_container'>
 
       <!--DASHBOARD CONTROLS-->
-      <controls :responses="responses" :targets="targets"></controls>
+      <controls :responses="filtered_responses" :targets="targets"></controls>
 
       <!--MAP-->
       <dashboard_map
-        :responses="responses"
+        :responses="filtered_responses"
         :targets="targets"
         :aggregations="aggregations"
         :options="with_dashboard_options(map_options)">
@@ -24,7 +24,7 @@
 
       <!--TABLE-->
       <dashboard_table
-        :responses="responses"
+        :responses="filtered_responses"
         :targets="targets"
         :aggregations="aggregations"
         :options="with_dashboard_options(table_options)">
@@ -33,7 +33,7 @@
       <!-- CUSTOM STATIC-DATA CHARTS, etc -->
       <charts
         v-if="chart_configs"
-        :responses="responses"
+        :responses="filtered_responses"
         :targets="targets"
         :aggregations="aggregations"
         :options="with_dashboard_options(chart_configs)"></charts>
@@ -81,11 +81,12 @@
         chart_configs: state => state.instance_config.applets.irs_monitor.charts,
       }),
       ...mapGetters({
-
-        // TODO: Responses data from state
-        responses: 'irs_monitor/filtered_responses',
         targets: 'irs_monitor/targets',
       }),
+      filtered_responses() {
+        // responses: 'irs_monitor/filtered_responses',
+        return []
+      }
     },
     created() {
       // hydrate
