@@ -74,9 +74,9 @@ const get_all_spatial_hierarchy_level_names = () => spatial_hierarchy_cache.leve
 
 
 
-const get_record_location_selection = () => {
+const get_record_location_selection = (cache) => {
   const record_location_selection_level_name = spatial_hierarchy_cache.markers.record_location_selection_level_name
-  return instance_config_cache.location_selection[record_location_selection_level_name]
+  return cache.location_selection[record_location_selection_level_name]
 }
 
 

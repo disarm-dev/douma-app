@@ -66,7 +66,7 @@ function create_response(state, single_location_selection) {
 export function generate_data({state, areas_count}) {
   // debugger
   let responses = []
-  const location_selection_list = get_record_location_selection()
+  const location_selection_list = get_record_location_selection(cache)
 
   location_selection_list.slice(0, areas_count).forEach(location => {
     let count = 0
