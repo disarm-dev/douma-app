@@ -31,7 +31,6 @@
   import {featureCollection, point} from '@turf/helpers'
   import bbox from '@turf/bbox'
   import centroid from '@turf/centroid'
-  import numeral from 'numeral'
   import {Popup} from 'mapbox-gl'
   import {clone, get} from 'lodash'
   import flatten_object from 'flat'
@@ -76,27 +75,16 @@
       ...mapState({
         instance_config: state => state.instance_config,
       }),
-      planning_level_fc() {
-        return cache.geodata[get_planning_level_name()]
-      },
       entries_for_legend() {
         return entries_for_legend(this.selected_layer, this._risk_scaler)
       },
       selected_layer: {
-        get() {
-          return this.$store.state.irs_monitor.map_options.selected_layer
-        },
-        set(val) {
-          this.$store.commit('irs_monitor/set_selected_layer', val)
-        }
+        get() {return this.$store.state.irs_monitor.map_options.selected_layer},
+        set(val) {this.$store.commit('irs_monitor/set_selected_layer', val) }
       },
       show_response_points: {
-        get() {
-          return this.$store.state.irs_monitor.map_options.show_response_points
-        },
-        set(val) {
-          this.$store.commit('irs_monitor/set_show_response_points', val)
-        }
+        get() {return this.$store.state.irs_monitor.map_options.show_response_points},
+        set(val) {this.$store.commit('irs_monitor/set_show_response_points', val)}
       }
 
     },
