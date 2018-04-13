@@ -7,7 +7,6 @@ import CONFIG from 'config/common'
 
 export default {
   namespaced: true,
-  unpersisted_state_keys: ['responses'],
   state: {
     // State
     map_options: {

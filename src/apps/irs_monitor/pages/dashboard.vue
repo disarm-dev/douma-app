@@ -166,9 +166,9 @@
 
         if (remote_responses_batch.length) {
           const updated_last_id = remote_responses_batch[remote_responses_batch.length - 1]._id
-          this.$store.commit('set_last_id', updated_last_id)
+          this.$store.commit('irs_monitor/set_last_id', updated_last_id)
           this.$store.commit('root:set_snackbar', {message: 'Retrieving more records.'})
-          this.$store.commit('update_responses_last_updated_at')
+          this.$store.commit('irs_monitor/update_responses_last_updated_at')
           return this.retrieve_responses()
         } else {
           this.$store.commit('root:set_snackbar', {message: 'Completed retrieving records. Updated map, table, charts.'})
