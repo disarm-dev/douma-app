@@ -3,12 +3,7 @@ import {isEqual, get} from 'lodash'
 
 import {set_filter, unset_filter} from './pages/controls/filters/controller'
 import CONFIG from 'config/common'
-import {ResponseController} from 'lib/models/response/controller'
-import {get_targets} from "apps/irs_monitor/lib/aggregate_targets"
-import {store} from "../store";
 
-const applet_name = 'monitor'
-const response_controller = new ResponseController(applet_name)
 
 export default {
   namespaced: true,
@@ -29,13 +24,13 @@ export default {
       limit_to: ''
     },
     last_id: null, // ObjectID of most recently synced response
-    filters: [],
+    filter: null,
 
     // Data
     responses: [],
 
     // Unknown if Data or State
-    filter: null,
+    filters: [],
     guess_selection_ids:{}
   },
   mutations: {
@@ -44,10 +39,6 @@ export default {
       state.responses = []
       state.responses_last_updated_at = null
       state.filters = []
-    },
-    // set responses
-    set_responses: (state, responses) => {
-      state.responses = responses
     },
     update_responses_last_updated_at:(state) => {
       state.responses_last_updated_at = new Date
@@ -91,54 +82,6 @@ export default {
     },
     set_last_id(state, last_id) {
       state.last_id = last_id
-    }
-  },
-  getters: {
-    // // Return all the targets from the plan
-    // targets(state, getters) {
-    //   if(!state.plan) return []
-    //
-    //   const spatial_aggregation_level = state.dashboard_options.spatial_aggregation_level
-    //   return get_targets(state.plan.targets, spatial_aggregation_level)
-    // },
-
-    // plan_target_area_ids(state) {
-    //   if (state.plan && state.plan.targets) {
-    //     return state.plan.targets.map(target => target.id)
-    //   } else {
-    //     return []
-    //   }
-    // },
-  },
-  actions: {
-    get_responses_local: (context) => {
-      const personalised_instance_id = context.rootState.meta.personalised_instance_id
-      const instance = context.rootState.instance_config.instance.slug
-      return response_controller.read_all_cache({personalised_instance_id, instance}).then(responses => {
-        context.commit('set_responses', responses)
-      })
-    },
-    get_responses_remote: async (context) => {
-      const last_id = context.state.last_id
-
-      // Guessing
-      if(last_id == null){
-        store.commit('irs_record_point/clear_responses_not_inVillage')
-        store.commit('irs_record_point/clear_guessed_responses')
-      }
-      const responses = await response_controller.read_new_network_write_local(last_id)
-
-      if (responses.length) {
-        const updated_last_id = responses[responses.length - 1]._id
-        context.commit('set_last_id', updated_last_id)
-        context.commit('root:set_snackbar', {message: 'Retrieving more records.'}, {root: true})
-        context.commit('update_responses_last_updated_at')
-        return context.dispatch('get_responses_remote')
-      } else {
-        context.commit('root:set_snackbar', {message: 'Completed retrieving records. Updated map, table, charts.'}, {root: true})
-        return context.dispatch('get_responses_local')
-      }
-
     }
   }
 }

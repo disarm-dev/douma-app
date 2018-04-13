@@ -94,6 +94,9 @@
         table_options: state => state.instance_config.applets.irs_monitor.table,
         map_options: state => state.instance_config.applets.irs_monitor.map,
         chart_configs: state => state.instance_config.applets.irs_monitor.charts,
+
+        // responses metadata
+        last_id: state => state.irs_monitor.last_id
       }),
       // ...mapGetters({
       //   targets: 'irs_monitor/targets',
@@ -148,23 +151,38 @@
         const instance = this.$store.state.instance_config.instance.slug
         this.responses = await responses_controller.read_all_cache({personalised_instance_id, instance})
       },
-      retrieve_responses() {
+      async retrieve_responses() {
         this.$startLoading('irs_monitor/load_responses')
 
-        this.$store.dispatch('irs_monitor/get_responses_remote')
-          .then((responses) => {
-            this.$endLoading('irs_monitor/load_responses')
-            let message
-            if (responses.length > 0) {
-              message = `Successfully retrieved responses`
-            } else {
-              message = 'Successful retrieve, zero records found.'
-            }
-            this.$store.commit('root:set_snackbar', {message})
-          })
-          .catch(e => {
-            this.$endLoading('irs_monitor/load_responses')
-          })
+        const last_id = this.last_id
+
+        // Guessing
+        if (last_id == null) {
+          console.log('🚒 what is happening with guessing stuff')
+          // store.commit('irs_record_point/clear_responses_not_inVillage')
+          // store.commit('irs_record_point/clear_guessed_responses')
+        }
+        const remote_responses_batch = await responses_controller.read_new_network_write_local(last_id)
+
+        if (remote_responses_batch.length) {
+          const updated_last_id = remote_responses_batch[remote_responses_batch.length - 1]._id
+          this.$store.commit('set_last_id', updated_last_id)
+          this.$store.commit('root:set_snackbar', {message: 'Retrieving more records.'})
+          this.$store.commit('update_responses_last_updated_at')
+          return this.retrieve_responses()
+        } else {
+          this.$store.commit('root:set_snackbar', {message: 'Completed retrieving records. Updated map, table, charts.'})
+          await this.load_responses()
+
+          let message
+          if (this.responses.length > 0) {
+            message = `Successfully retrieved responses`
+          } else {
+            message = 'Successful retrieve, zero records found.'
+          }
+          this.$store.commit('root:set_snackbar', {message})
+          this.$endLoading('irs_monitor/load_responses')
+        }
       },
       force_load_responses() {
         this.$store.commit('irs_monitor/set_last_id', null)
