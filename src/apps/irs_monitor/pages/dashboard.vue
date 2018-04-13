@@ -57,8 +57,9 @@
   import {PlanController} from 'lib/models/plan/controller'
   import {Plan} from 'lib/models/plan/model'
 
-  const responses_controller = new ResponseController('record')
-  const plan_controller = new PlanController('plan')
+  const applet_name = 'monitor'
+  const responses_controller = new ResponseController(applet_name)
+  const plan_controller = new PlanController(applet_name)
 
   export default {
     name: 'Dashboard',

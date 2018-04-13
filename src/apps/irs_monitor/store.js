@@ -2,17 +2,13 @@ import Vue from 'vue'
 import {isEqual, get} from 'lodash'
 
 import {set_filter, unset_filter} from './pages/controls/filters/controller'
-import {Plan} from 'lib/models/plan/model'
 import CONFIG from 'config/common'
-import {filter_responses} from "apps/irs_monitor/lib/filters"
 import {ResponseController} from 'lib/models/response/controller'
-import {PlanController} from 'lib/models/plan/controller'
 import {get_targets} from "apps/irs_monitor/lib/aggregate_targets"
 import {store} from "../store";
 
 const applet_name = 'monitor'
 const response_controller = new ResponseController(applet_name)
-const plan_controller = new PlanController(applet_name)
 
 export default {
   namespaced: true,
