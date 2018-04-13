@@ -35,6 +35,7 @@ import {instantiate_axios_instance} from 'lib/remote/axios_instance'
 import BUILD_TIME from 'config/build-time'
 import {clean_up_local_dbs} from "lib/local_db"
 import {setup_acl} from "lib/acess-control-list"
+import {hydrate_geodata_cache_from_idb} from 'lib/models/geodata/local.geodata_store'
 
 
 /**
@@ -42,7 +43,7 @@ import {setup_acl} from "lib/acess-control-list"
  * @param instance_config
  * @returns {Vue}
  */
-export function configure_application (instance_config) {
+export async function configure_application (instance_config) {
 
 
   // CREATE REQUIRED OBJECTS FOR APP (store AND router)
@@ -82,8 +83,9 @@ export function configure_application (instance_config) {
   instantiate_analytics(router)
 
   // Clean up old dbs, do migrations/upgrades here in the future
-  clean_up_local_dbs()
+  await clean_up_local_dbs()
 
+  await hydrate_geodata_cache_from_idb()
 
   setup_acl()
   // CREATE VUE APP
