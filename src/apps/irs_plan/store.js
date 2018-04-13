@@ -138,6 +138,19 @@ export default {
           context.commit('set_unsaved_changes', false)
         })
     },
+    'update_plan': (context, {plan,_id}) => {
+      return controller.update_plan({plan,_id})
+        .then(() => {
+          context.commit('set_plan', plan)
+          context.commit('set_unsaved_changes', false)
+        })
+    },
+    'delete_plan': (context, plan) => {
+      return controller.delete_plan(plan)
+        .then(() => {
+          console.log('Deleted Plan')
+        })
+    },
     'get_network_plan': (context) => {
       return controller.read_plan_current_network().then(plan_json => {
         if (Object.keys(plan_json).length === 0) {

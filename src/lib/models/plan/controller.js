@@ -27,6 +27,14 @@ export class PlanController {
   async read_plans() {
     return await this.remote.read_plans()
   }
+
+  async delete_plan(plan){
+    return await this.remote.delete_plan(plan)
+  }
+
+  async update_plan({plan,_id}){
+    return await this.remote.update_plan({plan,_id})
+  }
 }
 
 
