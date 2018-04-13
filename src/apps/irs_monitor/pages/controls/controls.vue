@@ -36,10 +36,10 @@
       }),
       show_filters: {
         get(){
-          return this.$store.state.irs_monitor.ui.show_filters
+          return this.$store.state.irs_monitor.show_filters
         },
         set(val){
-          this.$store.commit('irs_monitor/set_ui', {show_filters: val})
+          this.$store.commit('irs_monitor/set_show_filters', val)
         }
       }
     },

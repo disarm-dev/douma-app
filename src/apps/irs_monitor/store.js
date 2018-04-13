@@ -14,13 +14,12 @@ export default {
   namespaced: true,
   unpersisted_state_keys: ['responses'],
   state: {
-    ui: {
-    },
     // State
     map_options: {
       show_response_points: true,
       selected_layer: 'normalised_risk'
     },
+    show_filters: false,
     responses_last_updated_at: null,
     dashboard_options: {
       // TODO: @config Extract default temporal_aggregation_level
@@ -75,7 +74,9 @@ export default {
       state.filters.splice(index, 1)
     },
 
-    set_ui: (state, ui) => {state.ui = ui},
+    set_show_filters: (state, value) => {
+      state.show_filters = value
+    },
     set_dashboard_options: (state, options) => {
       state.dashboard_options = options
     },
