@@ -18,6 +18,8 @@
 
       </template>
 
+      <div v-if="isLoading('responses')" slot="text">Loading responses...</div>
+
       <div v-if="!online" slot="text">
         Offline - unable to sync
       </div>
@@ -70,7 +72,7 @@
   import virtual_list from 'vue-virtual-scroll-list'
   import download from 'downloadjs'
   import moment from 'moment-mini'
-  import {mapState} from 'vuex'
+  import {mapState, mapGetters} from 'vuex'
   import {flatten, get} from 'lodash'
 
   import controls from 'components/controls.vue'
@@ -110,17 +112,22 @@
       unsynced_responses() {
         if (!this.responses.length) return []
         return this.responses.filter(r => !r.synced)
-      }
+      },
+      ...mapGetters({
+        isLoading: 'loading/isLoading'
+      })
     },
     mounted () {
       this.load_responses()
     },
     methods: {
       async load_responses() {
+        this.$startLoading('responses')
         const personalised_instance_id = this.$store.state.meta.personalised_instance_id
         const instance = this.$store.state.instance_config.instance.slug
 
         this.responses = await controller.read_all_cache({personalised_instance_id, instance})
+        this.$endLoading('responses')
       },
       format_response(response) {
         const id = this.short_id(get(response, 'id', 'no id'))
