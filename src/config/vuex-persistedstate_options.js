@@ -1,5 +1,6 @@
 import {cloneDeep, get, set} from 'lodash'
 
+
 export function generate_persisted_state_options(instance_stores) {
   const unpersisted_state = generate_unpersisted_state(instance_stores)
 
@@ -22,19 +23,7 @@ export function create_options(unpersisted_state) {
     setState: (key, state, storage) => {
       setTimeout(() => storage.setItem(key, JSON.stringify(state)), 0)
     },
-    reducer: (state) => {
-      if (unpersisted_state.length === 0) {
-        return state
-      } else {
-        const state_copy = cloneDeep(state)
-
-        unpersisted_state.forEach(function ({store_path, default_value}) {
-          set(state_copy, store_path, default_value)
-        })
-
-        return state_copy
-      }
-    }
+    reducer: (state) => { state }
   }
 }
 
