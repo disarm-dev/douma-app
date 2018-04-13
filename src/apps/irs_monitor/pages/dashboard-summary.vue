@@ -28,14 +28,17 @@
     </template>
 
     <div slot="text">
-      <span v-if="plan">[Plan loaded] </span>
-      <span v-if="filters.length">
-        {{filters.length}} filters active, {{responses.length}} filtered records showing
-      </span>
-      <span v-else>
-        {{responses.length}} records
-        Last updated: {{responses_last_updated_at}}
-      </span>
+      <span v-if="$loading.anyLoading">Loading...</span>
+      <template v-else>
+        <span v-if="plan">[Plan loaded] </span>
+        <span v-if="filters.length">
+          {{filters.length}} filters active, {{responses.length}} filtered records showing
+        </span>
+        <span v-else>
+          {{responses.length}} records
+          Last updated: {{responses_last_updated_at}}
+        </span>
+      </template>
     </div>
   </controls>
 
