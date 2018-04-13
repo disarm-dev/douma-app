@@ -4,6 +4,7 @@
     <dashboard_summary
         :responses='filtered_responses'
         :filters='filters'
+        :plan="plan"
         @load_responses="retrieve_responses"
         @force_load_responses="force_load_responses"
         @load_plan="load_plan"

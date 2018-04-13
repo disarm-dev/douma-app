@@ -18,7 +18,6 @@
         >
         </layer_selector>
 
-
       </div>
 
       <md-checkbox :disabled="!responses.length" v-model="show_response_points">Show response points <b v-if="!responses.length">(No responses loaded)</b></md-checkbox>
@@ -80,9 +79,6 @@
       ...mapState({
         instance_config: state => state.instance_config,
       }),
-      // ...mapGetters({
-      //   plan_target_area_ids: 'irs_monitor/plan_target_area_ids'
-      // }),
       planning_level_fc() {
         return cache.geodata[get_planning_level_name()]
       },

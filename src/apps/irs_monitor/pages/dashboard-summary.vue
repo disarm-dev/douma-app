@@ -28,13 +28,14 @@
     </template>
 
     <div slot="text">
-      <div v-if="filters.length">
+      <span v-if="plan">[Plan loaded] </span>
+      <span v-if="filters.length">
         {{filters.length}} filters active, {{responses.length}} filtered records showing
-      </div>
-      <div v-else>
+      </span>
+      <span v-else>
         {{responses.length}} records
         Last updated: {{responses_last_updated_at}}
-      </div>
+      </span>
     </div>
   </controls>
 
@@ -51,7 +52,7 @@
   export default {
     name: 'dashboard-summary',
     components: {controls},
-    props: ['responses', 'filters'],
+    props: ['responses', 'filters', 'plan'],
     mounted() {
     },
     data() {
@@ -59,7 +60,6 @@
     },
     computed: {
       ...mapState({
-        plan: state => state.irs_monitor.plan,
         instance_config: state => state.instance_config,
         responses_last_updated_at: state => {
           if (state.irs_monitor.responses_last_updated_at) {
