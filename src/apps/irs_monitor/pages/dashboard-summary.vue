@@ -49,7 +49,7 @@
   import {flatten_json_to_csv} from 'lib/helpers/csv-export'
 
   export default {
-    name: 'summary',
+    name: 'dashboard-summary',
     components: {controls},
     props: ['responses', 'filters'],
     mounted() {
