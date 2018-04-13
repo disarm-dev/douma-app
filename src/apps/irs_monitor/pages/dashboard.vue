@@ -4,7 +4,7 @@
     <dashboard_summary
         :responses='filtered_responses'
         :filters='filters'
-        @load_responses="load_responses"
+        @load_responses="retrieve_responses"
         @force_load_responses="force_load_responses"
         @load_plan="load_plan"
     ></dashboard_summary>
@@ -51,11 +51,14 @@
   import dashboard_map from './map/dashboard-map.vue'
   import dashboard_table from './table/dashboard-table.vue'
   import charts from './charts/dashboard-charts.vue'
-  import {geodata_in_cache_and_valid} from '../../../lib/models/geodata/geodata.valid'
 
   import {get_geodata} from 'lib/models/geodata/remote.js'
   import {ResponseController} from 'lib/models/response/controller'
+  import {PlanController} from 'lib/models/plan/controller'
+  import {Plan} from 'lib/models/plan/model'
+
   const responses_controller = new ResponseController('record')
+  const plan_controller = new PlanController('plan')
 
   export default {
     name: 'Dashboard',
@@ -69,6 +72,7 @@
     data() {
       return {
         responses: [],
+        plan: null
       }
     },
     computed: {
@@ -123,10 +127,10 @@
       this.responses = await responses_controller.read_all_cache({personalised_instance_id, instance})
     },
     methods: {
-      load_responses() {
+      retrieve_responses() {
         this.$startLoading('irs_monitor/load_responses')
 
-        this.$store.dispatch('irs_monitor/get_all_records')
+        this.$store.dispatch('irs_monitor/get_responses_remote')
           .then((responses) => {
             this.$endLoading('irs_monitor/load_responses')
             let message
@@ -143,19 +147,26 @@
       },
       force_load_responses() {
         this.$store.commit('irs_monitor/set_last_id', null)
-        this.load_responses()
+        this.retrieve_responses()
       },
-      load_plan() {
+      async load_plan() {
         this.$startLoading('irs_monitor/load_plan')
 
-        this.$store.dispatch('irs_monitor/get_current_plan')
-          .then(() => {
-            this.$endLoading('irs_monitor/load_plan')
-            this.$store.commit('root:set_snackbar', {message: 'Successfully retrieved plan'})
-          })
-          .catch(e => {
-            this.$endLoading('irs_monitor/load_plan')
-          })
+        const plan_json = await plan_controller.read_plan_current_network()
+
+        if (Object.keys(plan_json).length === 0) {
+          return this.$store.commit('root:set_snackbar', {message: 'No plan loaded.'})
+        }
+
+        try {
+          new Plan().validate(plan_json)
+          this.plan = plan_json
+          this.$endLoading('irs_monitor/load_plan')
+          this.$store.commit('root:set_snackbar', {message: 'Successfully retrieved plan'})
+        } catch (e) {
+          console.log(e)
+          this.$endLoading('irs_monitor/load_plan')
+        }
       },
       with_dashboard_options(options) {
         if (Array.isArray(options)) {

@@ -12,12 +12,12 @@
 
       <md-menu-item :disabled="!$can('read', 'irs_monitor') || isLoading('irs_monitor/load_responses')" @click="load_responses">
         <md-icon>file_download</md-icon>
-        <span>Load responses</span>
+        <span>Retrieve responses</span>
       </md-menu-item>
 
       <md-menu-item :disabled="!$can('read', 'irs_monitor') || isLoading('irs_monitor/refresh_data') || !responses.length" @click="force_load_responses">
         <md-icon>file_download</md-icon>
-        <span>Re-load all responses</span>
+        <span>Re-retrieve all responses</span>
       </md-menu-item>
 
       <md-menu-item :disabled="!$can('read', 'irs_monitor') || isLoading('irs_monitor/refresh_data') || !responses.length" @click="download_responses">

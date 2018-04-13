@@ -126,8 +126,10 @@ export default {
         context.commit('set_responses', responses)
       })
     },
-    get_all_records: async (context) => {
+    get_responses_remote: async (context) => {
       const last_id = context.state.last_id
+
+      // Guessing
       if(last_id == null){
         store.commit('irs_record_point/clear_responses_not_inVillage')
         store.commit('irs_record_point/clear_guessed_responses')
@@ -139,27 +141,12 @@ export default {
         context.commit('set_last_id', updated_last_id)
         context.commit('root:set_snackbar', {message: 'Retrieving more records.'}, {root: true})
         context.commit('update_responses_last_updated_at')
-        return context.dispatch('get_all_records')
+        return context.dispatch('get_responses_remote')
       } else {
         context.commit('root:set_snackbar', {message: 'Completed retrieving records. Updated map, table, charts.'}, {root: true})
         return context.dispatch('get_responses_local')
       }
 
-    },
-    get_current_plan: (context) => {
-      return plan_controller.read_plan_current_network()
-        .then(plan_json => {
-          if (Object.keys(plan_json).length === 0) {
-            return context.commit('root:set_snackbar', {message: 'No plan loaded.'}, {root: true})
-          }
-
-          try {
-            new Plan().validate(plan_json)
-            context.commit('set_plan', plan_json)
-          } catch (e) {
-            console.log(e)
-          }
-        })
     }
   }
 }
