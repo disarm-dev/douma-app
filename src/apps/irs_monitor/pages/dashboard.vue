@@ -45,8 +45,6 @@
   import {mapState, mapGetters} from 'vuex'
   import {cloneDeep as clone_deep} from 'lodash'
 
-  import {get_geodata} from 'lib/models/geodata/remote.js'
-
   // Components
   import dashboard_summary from './dashboard-summary.vue'
   import controls from './controls/controls.vue'
@@ -54,6 +52,10 @@
   import dashboard_table from './table/dashboard-table.vue'
   import charts from './charts/dashboard-charts.vue'
   import {geodata_in_cache_and_valid} from '../../../lib/models/geodata/geodata.valid'
+
+  import {get_geodata} from 'lib/models/geodata/remote.js'
+  import {ResponseController} from 'lib/models/response/controller'
+  const responses_controller = new ResponseController('record')
 
   export default {
     name: 'Dashboard',
@@ -63,6 +65,11 @@
       dashboard_map,
       dashboard_table,
       charts,
+    },
+    data() {
+      return {
+        responses: [],
+      }
     },
     computed: {
       ...mapState({
@@ -84,13 +91,36 @@
         targets: 'irs_monitor/targets',
       }),
       filtered_responses() {
+        const responses = this.responses
+        if (!responses.length) return []
+        return responses
+
         // responses: 'irs_monitor/filtered_responses',
-        return []
+        const dashboard_options = this.$store.state.dashboard_options
+        const plan_target_area_ids = getters.plan_target_area_ids
+
+        // limit to plan if 'dashboard_options.limit_to_plan' is true
+        const limited_to_plan = responses.filter(r => {
+          if (!dashboard_options.limit_to_plan) return true
+
+          const id = get(r, 'location.selection.id', false)
+          if (id) {
+            return plan_target_area_ids.includes(id)
+          } else {
+            return false
+          }
+        })
+
+        const filtered = filter_responses(limited_to_plan, this.$store.state.irs_monitor.filters)
+
+        return filtered
       }
     },
-    created() {
+    async created() {
       // hydrate
-      this.$store.dispatch('irs_monitor/get_responses_local')
+      const personalised_instance_id = this.$store.state.meta.personalised_instance_id
+      const instance = this.$store.state.instance_config.instance.slug
+      this.responses = await responses_controller.read_all_cache({personalised_instance_id, instance})
     },
     methods: {
       load_responses() {
