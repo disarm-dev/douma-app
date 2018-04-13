@@ -10,7 +10,6 @@ const EXCLUDE_FIELD_FILTER = f => !f.startsWith('location')
 
 // Respond to message from parent thread
 self.addEventListener('message', (event) => {
-  console.log('worker event', event.data)
 
   if (!has(event.data, 'responses')) return // check right kind of message
 

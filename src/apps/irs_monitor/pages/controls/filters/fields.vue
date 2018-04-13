@@ -77,10 +77,8 @@
             const worker = new FieldNamesWorker()
 
             worker.postMessage({responses: this.responses})
-            console.log('postMessage')
 
             worker.addEventListener("message", function (event) {
-              console.log('client event', event.data)
               resolve(event.data)
             });
           })
