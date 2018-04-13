@@ -4,7 +4,7 @@ import instance_decorator from 'lib/models/response/decorators-evaluated'
 import {store} from 'apps/store'
 import CONFIG from 'config/common'
 import clonedeep from 'lodash.clonedeep'
-import Raven from 'raven-js/typescript/raven'
+import Raven from 'raven-js'
 
 export class ResponseController {
   constructor(applet_name) {
