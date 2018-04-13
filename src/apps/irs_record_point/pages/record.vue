@@ -349,31 +349,19 @@
           this.$ga.event('irs_record', 'validation_issues', 'warning', this.validation_result.warnings.map(w => w.name).join('.'))
         }
       },
-      save_response() {
+      async save_response() {
         const decorated_response = this.not_response_response.decorate_for_sending()
 
-        if (this.response_id) {
-          this.update_response(decorated_response)
-        } else {
-          this.create_response(decorated_response)
-        }
-      },
-      async create_response(response) {
         try {
-          await controller.create_response_local(response)
+          if (this.response_id) {
+            await controller.update_response_local(response)
+          } else {
+            await controller.create_response_local(response)
+          }
           this.$router.push('/irs/record_point/')
         } catch(e) {
           console.error(e)
           this.$store.commit('root:set_snackbar', {message: 'Could not save record locally'})
-        }
-      },
-      async update_response(response) {
-        try {
-          await controller.update_response_local(response)
-          this.$router.push('/irs/record_point/')
-        } catch(e) {
-          console.error(e)
-          this.$store.state.commit('root:set_snackbar', {message: 'Could not update record locally'})
         }
       },
       close_form() {
