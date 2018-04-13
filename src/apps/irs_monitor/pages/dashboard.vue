@@ -45,7 +45,7 @@
 
 <script>
   import {mapState, mapGetters} from 'vuex'
-  import {cloneDeep as clone_deep} from 'lodash'
+  import {get, cloneDeep as clone_deep} from 'lodash'
 
   // Components
   import dashboard_summary from './dashboard-summary.vue'
@@ -59,6 +59,7 @@
   import {PlanController} from 'lib/models/plan/controller'
   import {Plan} from 'lib/models/plan/model'
   import {get_targets} from 'apps/irs_monitor/lib/aggregate_targets'
+  import {filter_responses} from 'apps/irs_monitor/lib/filters'
 
   const applet_name = 'monitor'
   const responses_controller = new ResponseController(applet_name)
@@ -104,9 +105,7 @@
       filtered_responses() {
         const responses = this.responses
         if (!responses.length) return []
-        return responses
 
-        // responses: 'irs_monitor/filtered_responses',
         const dashboard_options = this.dashboard_options
         const plan_target_area_ids = this.plan_target_area_ids
 
