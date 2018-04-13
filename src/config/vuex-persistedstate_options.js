@@ -21,9 +21,9 @@ export function create_options(unpersisted_state) {
       }
     },
     setState: (key, state, storage) => {
-      setTimeout(() => storage.setItem(key, JSON.stringify(state)), 0)
+      storage.setItem(key, JSON.stringify(state))
     },
-    reducer: (state) => { state }
+    reducer: (state) => state
   }
 }
 
