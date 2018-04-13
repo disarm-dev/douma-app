@@ -45,16 +45,15 @@
   import {get_planning_level_name} from 'lib/instance_data/spatial_hierarchy_helper'
   import {layer_definitions} from 'config/map_layers'
   import {prepare_palette} from 'lib/helpers/palette_helper'
-  import {LogValueConvertor} from 'lib/helpers/log_helper'
 
   import get_data from '../../lib/get_data_for_viz'
+  import {decorate_with_risk, entries_for_legend} from 'apps/irs_monitor/lib/map-helpers'
 
   export default {
     props: ['responses', 'targets', 'aggregations', 'options', 'plan_target_area_ids'],
     components: {map_legend, layer_selector},
     data() {
       return {
-        layer_definitions,
         _risk_scaler: null,
 
         // map cache
@@ -81,21 +80,7 @@
         return cache.geodata[get_planning_level_name()]
       },
       entries_for_legend() {
-        const layer_definition = get(layer_definitions, this.selected_layer, layer_definitions['default_palette'])
-        const palette = prepare_palette(layer_definition)
-
-
-        return palette.map((array) => {
-          if (this.selected_layer === 'normalised_risk' && this._risk_scaler) {
-            const value = this._risk_scaler.value(array[0])
-            array[0] = numeral(value).format('0.[00]')
-          }
-
-          return {
-            text: array[0],
-            colour: array[1]
-          }
-        })
+        return entries_for_legend(this.selected_layer, this._risk_scaler)
       },
       selected_layer: {
         get() {
@@ -350,35 +335,19 @@
 
       },
 
-      // Data calculations TODO: @refac Remove calculations to lib
       calculate_layer_attributes() {
-        const geodata = cache.geodata // TODO: @refac When we fix geodata into store, etc
-
+        // Get the aggregate data
         this._aggregated_responses_fc = get_data({
           responses: this.responses,
           targets: this.targets,
           aggregations: this.aggregations,
           options: this.options,
-          geodata: geodata
+          geodata: cache.geodata // TODO: @refac When we fix geodata into store, etc
         })
 
-        this._aggregated_responses_fc.features = this.calculate_risk(this._aggregated_responses_fc.features)
+        // Decorate with risk
+        this._aggregated_responses_fc.features = decorate_with_risk(this._aggregated_responses_fc.features, this._risk_scaler)
       },
-      /**
-       * Add scaled/normalised risk to each feature
-       * Also
-       * @param features
-       */
-      calculate_risk(features) {
-        const values_array = features.map(feature => feature.properties.risk).sort().filter(i => i)
-        this._risk_scaler = new LogValueConvertor(values_array)
-
-        const attribute = layer_definitions.normalised_risk.attribute
-        return features.map((feature) => {
-          feature.properties[attribute] = this._risk_scaler.lval(feature.properties.risk)
-          return feature
-        })
-      }
     }
   }
 </script>
