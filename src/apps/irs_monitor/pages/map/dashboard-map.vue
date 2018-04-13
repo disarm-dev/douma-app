@@ -134,9 +134,11 @@
       },
       redraw_layers() {
         if (!this.map_loaded) return
-        this.calculate_layer_attributes()
-        this.switch_layer()
-        this.fit_bounds()
+        setTimeout(() => {
+          this.calculate_layer_attributes()
+          this.switch_layer()
+          this.fit_bounds()
+        }, 0)
       },
       set_selected_layer(layer_string) {
         this.selected_layer = layer_string
