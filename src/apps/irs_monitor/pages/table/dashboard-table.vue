@@ -11,11 +11,11 @@
 
 <script>
   import download from 'downloadjs'
-  import json2csv from 'json2csv'
   import moment from 'moment-mini'
 
   import get_data from '../../lib/get_data_for_viz'
   import cache from 'config/cache'
+  import {flatten_json_to_csv} from 'lib/helpers/csv-export'
 
   export default {
     props: ['responses', 'targets', 'aggregations', 'options'],
@@ -39,10 +39,10 @@
     },
     methods: {
       download_aggregations(){
+        if (this.table_data.length === 0) return
         // TODO: @refac can abstract the download functionality - similar used in multiple places
-        const fields = this.table_columns
-        const data = this.table_data
-        const content = json2csv({data, fields})
+        const content = flatten_json_to_csv(this.table_data)
+
         const date = moment().format('YYYY-MM-DD_HHmm')
         const slug = this.$store.state.instance_config.instance.slug
 

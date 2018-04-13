@@ -1,3 +1,4 @@
+// TODO: Find a way to make this NOT write to a global 
 export function add_network_status_watcher (douma_app) {
   function set_online() {
     return douma_app.$store.commit('root:network_online', true)
