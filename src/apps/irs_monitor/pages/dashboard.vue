@@ -152,7 +152,7 @@
         this.responses = await responses_controller.read_all_cache({personalised_instance_id, instance})
       },
       async retrieve_responses() {
-        this.$startLoading('irs_monitor/load_responses')
+        this.$loading.startLoading('irs_monitor/load_responses')
 
         const last_id = this.last_id
 
@@ -181,7 +181,7 @@
             message = 'Successful retrieve, zero records found.'
           }
           this.$store.commit('root:set_snackbar', {message})
-          this.$endLoading('irs_monitor/load_responses')
+          this.$loading.endLoading('irs_monitor/load_responses')
         }
       },
       force_load_responses() {
@@ -189,7 +189,7 @@
         this.retrieve_responses()
       },
       async load_plan() {
-        this.$startLoading('irs_monitor/load_plan')
+        this.$loading.startLoading('irs_monitor/load_plan')
 
         const plan_json = await plan_controller.read_plan_current_network()
 
@@ -200,11 +200,11 @@
         try {
           new Plan().validate(plan_json)
           this.plan = plan_json
-          this.$endLoading('irs_monitor/load_plan')
+          this.$loading.endLoading('irs_monitor/load_plan')
           this.$store.commit('root:set_snackbar', {message: 'Successfully retrieved plan'})
         } catch (e) {
           console.log(e)
-          this.$endLoading('irs_monitor/load_plan')
+          this.$loading.endLoading('irs_monitor/load_plan')
         }
       },
       with_dashboard_options(options) {

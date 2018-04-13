@@ -14,7 +14,7 @@
           <md-avatar>
             <md-icon v-if="loading_progress[level].status === 'complete'" class="success">check_circle</md-icon>
             <md-icon v-else-if="loading_progress[level].status === 'update_available'" class="md-warn">update</md-icon>
-            <span v-else-if="isLoading(`geodata/${level}`)"><md-spinner md-indeterminate class="md-accent" :md-size="30"></md-spinner></span>
+            <span v-else-if="$loading.isLoading(`geodata/${level}`)"><md-spinner md-indeterminate class="md-accent" :md-size="30"></md-spinner></span>
             <md-icon v-else class="md-warn">error</md-icon>
           </md-avatar>
 
@@ -31,7 +31,7 @@
           <!--DOWNLOAD BUTTON -->
           <md-button
                   @click.native="retrieve_geodata_for(level)"
-                  :disabled="!online || isLoading(`geodata/${level}`)"
+                  :disabled="!online || $loading.isLoading(`geodata/${level}`)"
                   class="md-dense list-button md-raised md-primary"
           >
             Download
@@ -108,7 +108,7 @@
         })
       },
       retrieve_geodata_for(level) {
-        this.$startLoading(`geodata/${level}`)
+        this.$loading.startLoading(`geodata/${level}`)
 
         get_and_store_locally_geodata_for(level, this.update_progress)
           .then(() => {
@@ -116,10 +116,10 @@
           })
           .then(() => {
             this.calculate_loading_progress()
-            this.$endLoading(`geodata/${level}`)
+            this.$loading.endLoading(`geodata/${level}`)
           })
           .catch((err) => {
-            this.$endLoading(`geodata/${level}`)
+            this.$loading.endLoading(`geodata/${level}`)
             console.error(err)
           })
 

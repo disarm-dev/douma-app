@@ -4,11 +4,19 @@ import Vue from 'vue'
 import AsyncComputed from 'vue-async-computed'
 Vue.use(AsyncComputed)
 
+// use vuex
+import Vuex from 'vuex'
+Vue.use(Vuex)
+
+// vuex-loading
+import VueLoading from 'vuex-loading'
+Vue.use(VueLoading)
+
 // Components
 import {ClientTable} from 'vue-tables-2'
 Vue.use(ClientTable)
 
-import TreeView from "vue-json-tree-view"
+import TreeView from 'vue-json-tree-view'
 Vue.use(TreeView)
 
 import VueShortkey from 'vue-shortkey'
@@ -33,9 +41,11 @@ import {need_to_update} from 'lib/remote/check-application-version'
 import {set_raven_user_context} from 'config/error_tracking.js'
 import {instantiate_axios_instance} from 'lib/remote/axios_instance'
 import BUILD_TIME from 'config/build-time'
-import {clean_up_local_dbs} from "lib/local_db"
-import {setup_acl} from "lib/acess-control-list"
+import {clean_up_local_dbs} from 'lib/local_db'
+import {setup_acl} from 'lib/acess-control-list'
 import {hydrate_geodata_cache_from_idb} from 'lib/models/geodata/local.geodata_store'
+import CONFIG from 'config/common'
+import {createVuexLoader} from 'vuex-loading'
 
 
 /**
@@ -43,7 +53,7 @@ import {hydrate_geodata_cache_from_idb} from 'lib/models/geodata/local.geodata_s
  * @param instance_config
  * @returns {Vue}
  */
-export async function configure_application (instance_config) {
+export async function configure_application(instance_config) {
 
 
   // CREATE REQUIRED OBJECTS FOR APP (store AND router)
@@ -95,6 +105,7 @@ export async function configure_application (instance_config) {
     el: '#douma',
     router,
     store,
+    vueLoading: new VueLoading(),
     render: createElement => createElement(DoumaComponent),
   })
 

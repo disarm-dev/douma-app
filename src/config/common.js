@@ -58,13 +58,5 @@ export default {
   },
   remote: {
     max_records_batch_size: 100
-  },
-  vuex_loader_options: {
-    // The Vuex module name, 'loading' by default.
-    moduleName: 'loading',
-    // The Vue component name, 'v-loading' by default.
-    componentName: 'v-loading',
-    // Vue component class name, 'v-loading' by default.
-    className: 'v-loading',
   }
 }

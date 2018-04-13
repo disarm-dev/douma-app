@@ -18,7 +18,8 @@
 
       </template>
 
-      <div v-if="isLoading('responses')" slot="text">Loading responses...</div>
+      <!--<div v-if="$loading.isLoading('responses')" slot="text">Loading responses...</div>-->
+      <div v-if="$loading.anyLoading" slot="text">Loading...</div>
 
       <div v-if="!online" slot="text">
         Offline - unable to sync
@@ -112,22 +113,19 @@
       unsynced_responses() {
         if (!this.responses.length) return []
         return this.responses.filter(r => !r.synced)
-      },
-      ...mapGetters({
-        isLoading: 'loading/isLoading'
-      })
+      }
     },
     mounted () {
       this.load_responses()
     },
     methods: {
       async load_responses() {
-        this.$startLoading('responses')
+        this.$loading.startLoading('responses')
         const personalised_instance_id = this.$store.state.meta.personalised_instance_id
         const instance = this.$store.state.instance_config.instance.slug
 
         this.responses = await controller.read_all_cache({personalised_instance_id, instance})
-        this.$endLoading('responses')
+        this.$loading.endLoading('responses')
       },
       format_response(response) {
         const id = this.short_id(get(response, 'id', 'no id'))
@@ -144,7 +142,7 @@
       },
       async sync() {
         // Really is UI
-        this.$startLoading('irs_record_point/sync')
+        this.$loading.startLoading('irs_record_point/sync')
         this.syncing = true
 
         try {
@@ -153,7 +151,7 @@
           const last_successful_sync_count = flatten(results.pass).length
           const last_failed_sync_count = flatten(results.fail).length
 
-          this.$endLoading('irs_record_point/sync')
+          this.$loading.endLoading('irs_record_point/sync')
           this.syncing = false
 
           // did any responses sync?
@@ -170,7 +168,7 @@
           if (e.response && e.response.status !== 401) {
             this.$store.commit('root:set_snackbar', {message: `Problem syncing responses`})
           }
-          this.$endLoading('irs_record_point/sync')
+          this.$loading.endLoading('irs_record_point/sync')
           this.syncing = false
         }
 

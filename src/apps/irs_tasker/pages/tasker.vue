@@ -2,15 +2,15 @@
   <div>
     <controls>
       <template slot="menu_items">
-        <md-menu-item :disabled="!$can('read', 'irs_tasker') || isLoading('irs_tasker/load_plan')" @click="load_plan">
+        <md-menu-item :disabled="!$can('read', 'irs_tasker') || $loading.isLoading('irs_tasker/load_plan')" @click="load_plan">
           <md-icon>assignment_turned_in</md-icon>
           <span>Load plan</span>
         </md-menu-item>
-        <md-menu-item :disabled="!$can('write', 'irs_tasker') || isLoading('irs_tasker/save_assignments') || !plan_target_ids.length || !assignments.length || !unsynced_changes" @click="save_assignments">
+        <md-menu-item :disabled="!$can('write', 'irs_tasker') || $loading.isLoading('irs_tasker/save_assignments') || !plan_target_ids.length || !assignments.length || !unsynced_changes" @click="save_assignments">
           <md-icon>save</md-icon>
           <span>Save assignments</span>
         </md-menu-item>
-        <md-menu-item :disabled="!$can('read', 'irs_tasker') || isLoading('irs_tasker/load_assignments') || !plan_target_ids.length" @click="load_assignments">
+        <md-menu-item :disabled="!$can('read', 'irs_tasker') || $loading.isLoading('irs_tasker/load_assignments') || !plan_target_ids.length" @click="load_assignments">
           <md-icon>group</md-icon>
           <span>Load assignments</span>
         </md-menu-item>
@@ -121,25 +121,25 @@
     methods: {
       // Load plan, and load-and-save assignments
       load_plan() {
-        this.$startLoading('irs_tasker/load_plan')
+        this.$loading.startLoading('irs_tasker/load_plan')
 
         this.$store.dispatch('irs_tasker/get_current_plan')
-          .then(() => { this.$endLoading('irs_tasker/load_plan') })
-          .catch(() => { this.$endLoading('irs_tasker/load_plan') })
+          .then(() => { this.$loading.endLoading('irs_tasker/load_plan') })
+          .catch(() => { this.$loading.endLoading('irs_tasker/load_plan') })
       },
       load_assignments() {
-        this.$startLoading('irs_tasker/load_assignments')
+        this.$loading.startLoading('irs_tasker/load_assignments')
 
         this.$store.dispatch('irs_tasker/load_assignment_plan')
-          .then(() => { this.$endLoading('irs_tasker/load_assignments') })
-          .catch(() => { this.$endLoading('irs_tasker/load_assignments') })
+          .then(() => { this.$loading.endLoading('irs_tasker/load_assignments') })
+          .catch(() => { this.$loading.endLoading('irs_tasker/load_assignments') })
       },
       save_assignments() {
-        this.$startLoading('irs_tasker/save_assignments')
+        this.$loading.startLoading('irs_tasker/save_assignments')
 
         this.$store.dispatch('irs_tasker/save_assignment_plan')
-          .then(() => { this.$endLoading('irs_tasker/save_assignments') })
-          .catch(() => { this.$endLoading('irs_tasker/save_assignments') })
+          .then(() => { this.$loading.endLoading('irs_tasker/save_assignments') })
+          .catch(() => { this.$loading.endLoading('irs_tasker/save_assignments') })
       },
       // Select team and assign
       assign_areas_to_selected_team(area_ids) {
