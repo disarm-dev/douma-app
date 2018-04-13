@@ -69,11 +69,9 @@
     },
     watch: {
       'responses': 'redraw_layers',
-      'options': 'redraw_layers',
       'map_loaded': 'redraw_layers',
-
+      'show_response_points': 'redraw_layers',
       'selected_layer': 'switch_layer',
-      'show_response_points': 'redraw_layers'
     },
     computed: {
       ...mapState({
