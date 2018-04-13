@@ -138,11 +138,15 @@
     },
     async created() {
       // hydrate
-      const personalised_instance_id = this.$store.state.meta.personalised_instance_id
-      const instance = this.$store.state.instance_config.instance.slug
-      this.responses = await responses_controller.read_all_cache({personalised_instance_id, instance})
+      await this.load_responses()
+      await this.load_plan()
     },
     methods: {
+      async load_responses() {
+        const personalised_instance_id = this.$store.state.meta.personalised_instance_id
+        const instance = this.$store.state.instance_config.instance.slug
+        this.responses = await responses_controller.read_all_cache({personalised_instance_id, instance})
+      },
       retrieve_responses() {
         this.$startLoading('irs_monitor/load_responses')
 
