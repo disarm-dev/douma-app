@@ -134,17 +134,17 @@ export class ResponseController {
     // update the most recent 'form_completed_at' timestamp
     response.most_recent_form_completed_time = new Date()
 
-    await controller.create_local(response)
+    await this.create_local(response)
   }
 
-  async create_response_local(response) {
+  async update_response_local(response) {
     // Log an unusual error
     if (Object.keys(response.location.coords).length === 0) Raven.captureException(new Error('Coords is empty'))
 
     // update the most recent 'form_completed_at' timestamp
     response.most_recent_form_completed_time = new Date()
 
-    await controller.update_local(response)
+    await this.update_local(response)
   }
 
   async guess_locations(responses) {
