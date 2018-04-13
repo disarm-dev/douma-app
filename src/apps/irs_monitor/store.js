@@ -19,7 +19,6 @@ export default {
   unpersisted_state_keys: ['responses'],
   state: {
     ui: {
-
     },
     // State
     map_options: {
