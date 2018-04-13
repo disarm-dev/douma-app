@@ -11,6 +11,9 @@ let store
 export {store}
 
 export function create_store(instance_config, instance_stores) {
+  // delete location_selection
+  delete instance_config.location_selection
+
   // use vuex
   Vue.use(Vuex)
 
@@ -41,6 +44,9 @@ export function create_store(instance_config, instance_stores) {
 
     },
     mutations: {
+      'root:set_instance_config': (state, instance_config) => {
+        state.instance_config = instance_config
+      },
       'root:set_snackbar': (state, snackbar) => {
         state.snackbar = snackbar // Need to have a {message: "Like this"}
       },
