@@ -6,6 +6,8 @@
         <md-list-item v-for="plan in plan_list">
           <span>
             {{(new Date(plan.date)).toLocaleString()}}
+            -
+            {{plan.targets}} targets
           </span>
           <span>
             <md-button flat @click="update(plan)">update</md-button>

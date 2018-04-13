@@ -7,7 +7,8 @@
         <md-list>
         <md-list-item v-for="plan in plan_list" @click="load_plan_detail(plan._id)" :key="plan._id">
           <span>
-            {{(new Date(plan.date)).toLocaleDateString()}}
+            {{(new Date(plan.date)).toLocaleString()}}
+            -
             {{plan.targets}} targets
           </span>
           </md-list-item>
@@ -40,15 +41,12 @@
       </md-button>
 
       <template slot="menu_items">
-        <md-menu-item @click="load_plan" :disabled="!$can('read', 'irs_plan') || isLoading('irs_plan/load_plan')">
-          <md-icon>assignment_turned_in</md-icon>
-          <span>Load plan</span>
-        </md-menu-item>
+
 
         <md-menu-item :disabled="!$can('read', 'irs_plan') || isLoading('irs_plan/load_plan')"
                       @click="toggle_plan_selector">
           <md-icon>assignment_turned_in</md-icon>
-          <span>Select Specific Plan</span>
+          <span>Load Plan</span>
         </md-menu-item>
 
         <!--EDIT MODE-->
