@@ -26,9 +26,6 @@ export default {
     last_id: null, // ObjectID of most recently synced response
     filter: null,
 
-    // Data
-    responses: [],
-
     // Unknown if Data or State
     filters: [],
     guess_selection_ids:{}
@@ -36,7 +33,6 @@ export default {
   mutations: {
     // clear storage (called by meta store)
     clear_data_storage:(state) => {
-      state.responses = []
       state.responses_last_updated_at = null
       state.filters = []
     },
@@ -46,10 +42,6 @@ export default {
 
     set_filter: (state, {filter_name, filter_object}) => {
       const new_filters = set_filter(state.filters, filter_name, filter_object)
-      state.filters = new_filters
-    },
-    unset_filter: (state, filter_to_remove /** string: 'spatial' **/) => {
-      const new_filters = unset_filter(state.filters, filter_to_remove, state.responses)
       state.filters = new_filters
     },
     add_filter: (state, field_filter) => {
