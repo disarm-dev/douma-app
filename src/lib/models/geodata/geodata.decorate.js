@@ -7,7 +7,7 @@ import {generate_location_selections} from 'lib/debug/generate_location_selectio
  * Sets the __disarm_geo_id and __disarm_geo_name directly on the cache
  * @returns {boolean}
  */
-export function decorate_geodata_on_cache () {
+function decorate_geodata_on_cache () {
   if (!geodata_in_cache_and_valid()) return // throw new Error('Invalid geodata')
 
   const level_names = get_all_spatial_hierarchy_level_names()
@@ -27,7 +27,7 @@ export function decorate_geodata_on_cache () {
  * This makes managing geodata easier/possible.
  * @param level_name
  */
-export function decorate_level(level_name) {
+function decorate_level(level_name) {
   const field_name = get_field_name_for_level(level_name)
   const display_name = get_display_name_for_level(level_name)
 
@@ -41,4 +41,6 @@ export function decorate_level(level_name) {
 
   cache.geodata[level_name].features = decorated_level_features
 }
+
+export {decorate_geodata_on_cache, decorate_level}
 

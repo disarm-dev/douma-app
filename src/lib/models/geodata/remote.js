@@ -6,7 +6,6 @@ import {save_geodata_to_idb} from 'lib/models/geodata/local.geodata_store'
 
 /**
  * Simple string-interpolation to generate a URL
- * @param slug
  * @param level_name
  * @returns {string}
  */

@@ -1,5 +1,5 @@
-import {get_planning_level_id_field, get_planning_level_name} from 'lib/instance_data/spatial_hierarchy_helper'
 import cache from 'config/cache'
+import {get_planning_level_id_field, get_planning_level_name} from 'lib/instance_data/spatial_hierarchy_helper'
 
 /**
  * Find polygons from cache
@@ -35,7 +35,7 @@ function extract_polygons(planning_level_ids, planning_level_name, planning_leve
  * @param fn
  * @returns {Array}
  */
-const planning_level_ids_to_features = (planning_level_ids, fn) => {
+function planning_level_ids_to_features (planning_level_ids, fn) {
   const planning_level_name = get_planning_level_name()
   const planning_level_id_field = get_planning_level_id_field()
 
