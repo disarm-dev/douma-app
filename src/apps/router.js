@@ -46,35 +46,34 @@ export function create_router(instance_routes, store) {
   })
 
   // Redirect to get geodata if needed
-  router.beforeEach((to, from, next) => {
+  router.beforeEach(async (to, from, next) => {
 
     // check if any applets require geodata, or continue
     const decorated_applets = store.getters['meta/decorated_applets']
     const to_applet = decorated_applets.find(applet => applet.name === to.name.split(":")[0])
     const geodata_required = get(to_applet, 'geodata_required', false)
 
-    // if you're on your way to any 'meta' page, then carry on
+    // if there's no need for geodata OR you're on your way to any 'meta' page, then carry on
+    // ...
     if (!geodata_required || to.name.startsWith('meta')) {
       return next()
     }
 
-    // geodata is required by at least one applet. check if it's already valid
-    if (!geodata_in_cache_and_valid()) {
-      console.log('geodata required, NOT already exists && valid - go to a page to start getting geodata')
-      store.commit('meta/set_previous_route', to.path)
-      // try to hydrate geodata from IDB
-      hydrate_geodata_cache_from_idb().then(() => {
-        if (geodata_in_cache_and_valid()) {
-          return next()
-        } else {
-          return next({name: 'meta:geodata'})
-        }
-      })
-    } else {
-      console.log('geodata required, already exists && valid')
+    // ... otherwise geodata is required by at least one applet.
+    // So, check if it's already valid
+    if (geodata_in_cache_and_valid()) {
       return next()
-    }
+    } else {
+      store.commit('meta/set_previous_route', to.path)
 
+      await hydrate_geodata_cache_from_idb()
+
+      if (geodata_in_cache_and_valid()) {
+        return next()
+      } else {
+        return next({name: 'meta:geodata'})
+      }
+    }
   })
 
   return router
