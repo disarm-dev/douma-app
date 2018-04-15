@@ -19,9 +19,6 @@ Vue.use(ClientTable)
 import TreeView from 'vue-json-tree-view'
 Vue.use(TreeView)
 
-import VueShortkey from 'vue-shortkey'
-Vue.use(VueShortkey)
-
 // VueMaterial
 import VueMaterial from 'vue-material'
 Vue.use(VueMaterial)
