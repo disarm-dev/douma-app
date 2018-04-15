@@ -1,6 +1,6 @@
 import test from 'ava'
 import cache from 'config/cache'
-import {get_geodata_for_level_name} from "lib/helpers/geodata_helpers"
+import {get_geodata_for_level_name} from "lib/models/geodata/geodata_helpers"
 
 test('get_geodata_for_level_name should return geodata', t => {
   const level_name = 'name'

@@ -2,7 +2,7 @@ import which_polygon from 'which-polygon'
 import {nest} from 'd3-collection'
 import {cloneDeep, get, set} from 'lodash'
 
-import {get_geodata_for_level_name} from "lib/helpers/geodata_helpers"
+import {get_geodata_for_level_name} from "lib/models/geodata/geodata_helpers"
 import {
   get_all_spatial_hierarchy_level_names,
   get_field_name_for_level
