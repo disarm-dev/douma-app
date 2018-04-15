@@ -42,5 +42,5 @@ function decorate_level(level_name) {
   cache.geodata[level_name].features = decorated_level_features
 }
 
-export {decorate_geodata_on_cache, decorate_level}
+export {decorate_geodata_on_cache}
 
