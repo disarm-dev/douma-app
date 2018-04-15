@@ -4,7 +4,7 @@ import {get} from 'lodash'
 import {get_all_spatial_hierarchy_level_names, get_data_version} from 'lib/instance_data/spatial_hierarchy_helper'
 import cache from 'config/cache'
 import geojson_validation from 'geojson-validation'
-import {versions_match} from "lib/models/geodata/geodata.versions"
+import {versions_match} from 'lib/models/geodata/geodata.versions'
 
 /**
  * @returns {boolean}
@@ -87,7 +87,7 @@ function geodata_level_version_matches_instance_config(level_name) {
  * @param required_version
  * @returns {boolean}
  */
-function geodata_versions_correct (geodata, required_version) {
+function geodata_versions_correct(geodata, required_version) {
   const levels = Object.keys(geodata)
 
   return levels.every(level_name => {
@@ -97,4 +97,10 @@ function geodata_versions_correct (geodata, required_version) {
   })
 }
 
-export {geodata_in_cache_and_valid, geodata_has_all_levels, geodata_has_level, geodata_versions_correct, geodata_level_version_matches_instance_config}
+export {
+  geodata_in_cache_and_valid,
+  geodata_has_all_levels,
+  geodata_has_level,
+  geodata_versions_correct,
+  geodata_level_version_matches_instance_config
+}
