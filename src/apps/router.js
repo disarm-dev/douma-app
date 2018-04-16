@@ -1,5 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+Vue.use(VueRouter)
+
 import {get} from 'lodash'
 
 import {has_permission} from 'lib/models/user/permission_helper.js'
@@ -10,7 +12,6 @@ let router
 export {router}
 
 export function create_router(instance_routes, store) {
-  Vue.use(VueRouter)
 
   // Configure routes for all Applets
   const routes = [

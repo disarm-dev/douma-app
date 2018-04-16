@@ -1,17 +1,27 @@
 import Vue from 'vue'
 
+import VueRouter from 'vue-router'
+Vue.use(VueRouter)
+
+import Vuex from 'vuex'
+Vue.use(Vuex)
+
 // Components
 import {ClientTable} from 'vue-tables-2'
+
 Vue.use(ClientTable)
 
-import TreeView from "vue-json-tree-view"
+import TreeView from 'vue-json-tree-view'
+
 Vue.use(TreeView)
 
 import VueShortkey from 'vue-shortkey'
+
 Vue.use(VueShortkey)
 
 // VueMaterial
 import VueMaterial from 'vue-material'
+
 Vue.use(VueMaterial)
 
 
@@ -29,21 +39,41 @@ import {need_to_update} from 'lib/remote/check-application-version'
 import {set_raven_user_context} from 'config/error_tracking.js'
 import {instantiate_axios_instance} from 'lib/remote/axios_instance'
 import BUILD_TIME from 'config/build-time'
-import {clean_up_local_dbs} from "lib/local_db"
-import {setup_acl} from "lib/acess-control-list"
+import {clean_up_local_dbs} from 'lib/local_db'
+import {setup_acl} from 'lib/acess-control-list'
+import {router} from 'apps/router'
 
+// Shell
+import Shell from '../shell/components/shell'
+import shell_routes from '../shell/routes'
+import shell_store from '../shell/store'
 
 
 export function launch_shell_application() {
-  const router = new Router()
+  // Configure routes for all Applets
+  const routes = [...shell_routes]
+
+  // Configure store
+  const store = new Vuex.Store({
+    modules: {shell: shell_store}
+  })
+
+  // Instantiate `router`
+  const router = new VueRouter({
+    routes,
+    mode: 'history'
+  })
+
   const douma_app = new Vue({
     el: '#douma',
+    router,
+    store,
     render: createElement => createElement(Shell),
   })
 }
 
 
-export function configure_application (instance_config) {
+export function configure_application(instance_config) {
   // Configure spatial_helpers to use instance_config
   // We need to do this before we create the store, the store relies on some of the function in spatial_hierarchy_helpers
   configure_spatial_helpers(instance_config)
@@ -140,7 +170,7 @@ export function boot_app() {
   // This is only enought to get the application launching without any errors
   // We need a lot of stuff from the function above
 
-  const config_for_boot = { applets: { meta: {} }, instance: {title: 'instance'} }
+  const config_for_boot = {applets: {meta: {}}, instance: {title: 'instance'}}
   const instance_applets_stores_and_routes = get_instance_stores_and_routes(config_for_boot)
 
   const store = create_store(config_for_boot, instance_applets_stores_and_routes.stores)
