@@ -33,11 +33,16 @@ import {clean_up_local_dbs} from "lib/local_db"
 import {setup_acl} from "lib/acess-control-list"
 
 
-/**
- * Build a 'douma_app' instance
- * @param instance_config
- * @returns {Vue}
- */
+
+export function launch_shell_application() {
+  const router = new Router()
+  const douma_app = new Vue({
+    el: '#douma',
+    render: createElement => createElement(Shell),
+  })
+}
+
+
 export function configure_application (instance_config) {
   // Configure spatial_helpers to use instance_config
   // We need to do this before we create the store, the store relies on some of the function in spatial_hierarchy_helpers
@@ -137,7 +142,7 @@ export function boot_app() {
 
   const config_for_boot = { applets: { meta: {} }, instance: {title: 'instance'} }
   const instance_applets_stores_and_routes = get_instance_stores_and_routes(config_for_boot)
-  
+
   const store = create_store(config_for_boot, instance_applets_stores_and_routes.stores)
   store.commit('root:set_instance_config', config_for_boot)
   const router = create_router(instance_applets_stores_and_routes.routes, store)

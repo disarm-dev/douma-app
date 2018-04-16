@@ -11,16 +11,14 @@ import 'vue-multiselect/dist/vue-multiselect.min.css'
 // Imports
 import {configure_service_worker} from './config/service_worker_client'
 import {configure_error_tracking} from 'config/error_tracking.js'
-import {get_instance_config} from 'config/load_instance_config.js'
-import {configure_application} from 'config/configure_application.js'
+import {launch_shell_application} from 'config/configure_application'
 
 // Configure service_worker
-configure_service_worker()
+console.warn('DEBUG: serviceWorker disabled')
+// configure_service_worker()
 
 // configure_error_tracking!!
 configure_error_tracking()
 
-get_instance_config()
-  .then(instance_config => {
-    configure_application(instance_config)
-  })
+// configure and launch the application
+launch_shell_application()
