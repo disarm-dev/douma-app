@@ -15,7 +15,7 @@
 
     <!-- <instance_selector></instance_selector> -->
 
-    <span>Version: {{commit_hash}}</span>
+    <span class='version'>Version: {{commit_hash}}</span>
     <a class='licenses_link' href="/static/3rdpartylicenses.txt"><span>Licenses</span></a>
   </div>
 </template>
@@ -73,6 +73,10 @@
 
   .licenses_link {
     float: right;
+  }
+
+  .version {
+    color: #969696;
   }
 
 </style>
