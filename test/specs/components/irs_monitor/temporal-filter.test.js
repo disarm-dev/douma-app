@@ -16,59 +16,10 @@ const responses = [
   }
 ]
 
-test('should render with no responses', t => {
-  const wrapper = shallow(TemporalFilters)
+test('should render', t => {
+  shallow(TemporalFilters)
 
-  t.notThrows(wrapper.vm.set_start_and_end_dates)
-})
-
-test('should render with responses', t => {
-  const wrapper = shallow(TemporalFilters, {propsData: {responses}})
-
-  t.notThrows(wrapper.vm.set_start_and_end_dates)
-})
-
-test.cb('should set start and end when responses change from no responses to some responses', t => {
-  const wrapper = shallow(TemporalFilters)
-  wrapper.setProps({responses})
-
-  t.deepEqual(wrapper.vm.responses, responses)
-  t.is(wrapper.vm.responses.length, 3)
-
-  wrapper.vm.$nextTick(() => {
-    const actual_start = wrapper.vm.start
-    t.not(actual_start, null)
-    t.true(actual_start instanceof Date)
-
-    const actual_end = wrapper.vm.end
-    t.not(actual_end, null)
-    t.true(actual_end instanceof Date)
-
-    t.end()
-  })
-
-})
-
-
-test('should set the start date to the earliest date from the responses', t => {
-  const wrapper = shallow(TemporalFilters, {
-    propsData: {responses}
-  })
-
-  const expected = new Date(responses[0].recorded_on).getTime()
-  const actual = wrapper.vm.start.getTime()
-
-  t.is(expected, actual)
-})
-
-test('should set the end date to the latest date from the responses', t => {
-  const wrapper = shallow(TemporalFilters, {
-    propsData: {responses}
-  })
-
-  const expected = new Date(responses[2].recorded_on).getTime()
-  const actual = wrapper.vm.end.getTime()
-  t.is(expected, actual)
+  t.pass()
 })
 
 test('should reset start and end dates when calling set_start_and_end_dates()', t => {
@@ -111,7 +62,7 @@ test('should emit 2 valid temporal filters when adding the temporal filter', t =
   })
 
   sinon.spy(wrapper.vm, '$emit')
-
+  wrapper.vm.set_start_and_end_dates()
   wrapper.vm.add_temporal_filter()
 
   const expected_start = {name: 'recorded_on', comparator: '>', value: new Date(responses[0].recorded_on).getTime(), display_value: 'Sep 1st 2017'}
@@ -124,12 +75,4 @@ test('should emit 2 valid temporal filters when adding the temporal filter', t =
   t.deepEqual(expected_end, actual_end)
 })
 
-test('should not emit a filter when there are no responses', t => {
-  const wrapper = shallow(TemporalFilters)
 
-  sinon.spy(wrapper.vm, '$emit')
-
-  wrapper.vm.add_temporal_filter()
-
-  t.is(wrapper.vm.$emit.called, false)
-})

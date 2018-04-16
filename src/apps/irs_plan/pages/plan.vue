@@ -1,5 +1,34 @@
 <template>
   <div>
+    <md-dialog md-open-from="#custom" md-close-to="#custom" ref="select_plan_dialog">
+      <md-dialog-title>Select a plan</md-dialog-title>
+
+      <md-dialog-content>
+        <md-list>
+        <md-list-item v-for="plan in plan_list" @click="load_plan_detail(plan._id)" :key="plan._id">
+          <span>
+            {{(new Date(plan.date)).toLocaleString()}}
+            -
+            {{plan.targets}} targets
+          </span>
+          </md-list-item>
+        </md-list>
+      </md-dialog-content>
+
+      <md-dialog-actions>
+        <md-button class="md-primary" @click="close_dialog('select_plan_dialog')">Cancel</md-button>
+      </md-dialog-actions>
+    </md-dialog>
+
+    <save_plan
+      :plan_list="plan_list"
+      :show="show_save_plan"
+      @create="create_plan"
+      @cancel="show_save_plan=false"
+      @update="update_plan"
+      @clear="delete_plan"
+    ></save_plan>
+
     <controls>
       <md-button
         slot="primary_action"
@@ -12,13 +41,17 @@
       </md-button>
 
       <template slot="menu_items">
-        <md-menu-item @click="load_plan" :disabled="!$can('read', 'irs_plan') || isLoading('irs_plan/load_plan')">
+
+
+        <md-menu-item :disabled="!$can('read', 'irs_plan') || isLoading('irs_plan/load_plan')"
+                      @click="toggle_plan_selector">
           <md-icon>assignment_turned_in</md-icon>
-          <span>Load plan</span>
+          <span>Load Plan</span>
         </md-menu-item>
 
         <!--EDIT MODE-->
-        <md-menu-item :disabled="!$can('write', 'irs_plan') || !unsaved_changes" @click="save_plan">
+        <md-menu-item :disabled="!$can('write', 'irs_plan') || !unsaved_changes"
+                      @click="show_save_plan = true">
           <md-icon>save</md-icon>
           <span>Save plan</span>
         </md-menu-item>
@@ -46,7 +79,7 @@
         <!--PLAN MAP-->
         <md-card>
           <md-card-content>
-            <plan_calculator ></plan_calculator>
+            <plan_calculator></plan_calculator>
             <plan_map
               :edit_mode="edit_mode"
               :selected_filter_area_id="selected_filter_area_id"
@@ -57,9 +90,11 @@
 
 
         <!--PLAN SUMMARY-->
-        <md-card class="card"><md-card-content>
-          <plan_summary></plan_summary>
-        </md-card-content></md-card>
+        <md-card class="card">
+          <md-card-content>
+            <plan_summary></plan_summary>
+          </md-card-content>
+        </md-card>
 
       </div>
 
@@ -89,21 +124,29 @@
   import plan_summary from './plan-summary.vue'
   import plan_map from './plan-map.vue'
   import plan_calculator from './plan-calculator.vue'
+  import save_plan from './save-plan'
   import cache from 'config/cache.js'
   import {Plan} from 'lib/models/plan/model.js'
   import {get_geodata} from 'lib/models/geodata/remote'
 
-  import {get_planning_level_name, get_next_level_up_from_planning_level} from 'lib/instance_data/spatial_hierarchy_helper'
+  import {
+    get_planning_level_name,
+    get_next_level_up_from_planning_level
+  } from 'lib/instance_data/spatial_hierarchy_helper'
   import {target_areas_inside_focus_filter_area} from '../helpers/target_areas_helper.js'
   import {geodata_in_cache_and_valid} from '../../../lib/models/geodata/geodata.valid'
 
   export default {
     name: 'Plan',
-    components: {controls, plan_filter, plan_summary, plan_map, plan_calculator},
+    components: {controls, plan_filter, plan_summary, plan_map, plan_calculator, save_plan},
     data() {
       return {
         edit_mode: false,
-        edit_disabled: true
+        edit_disabled: true,
+        select_plan_dialog: false,
+        show_save_plan: false,
+        plan_list: [],
+        _plan_thing: 'ting'
       }
     },
     computed: {
@@ -113,7 +156,7 @@
         current_plan: state => state.irs_plan.current_plan,
         selected_filter_area_id: state => get(state, 'irs_plan.selected_filter_area_option.id', null),
         unsaved_changes: state => state.irs_plan.unsaved_changes,
-        current_plan_date: state =>  {
+        current_plan_date: state => {
           if (state.irs_plan.current_plan) {
             return moment(state.irs_plan.current_plan.planned_at).format('hh:mm a DD MMM YYYY')
           }
@@ -141,24 +184,121 @@
         if (!this.edit_mode) return "View"
         if (this.edit_mode && !this.current_plan_date) return "Create"
         if (this.edit_mode && this.current_plan_date) return "Edit"
-       },
+      },
       can_clear() {
         return this.selected_target_area_ids.length !== 0
       }
     },
     created() {
+      this.$store.dispatch('irs_plan/get_network_plan_list')
+        .then(plan_list => this.plan_list = plan_list)
+      console.log('Plan  page created')
       if (!geodata_in_cache_and_valid()) {
         this.$store.commit('meta/set_snackbar', {message: 'Message from PLAN: Problem with geodata'})
         this.$router.push({name: 'meta:geodata'})
       }
     },
     methods: {
+      create_plan(event) {
+        this.save_plan();
+        this.show_save_plan = false
+      },
+      update_plan(event) {
+        let focus_filter_area
+        let selected_target_area_ids
+        this.show_save_plan = false
+
+
+        if (!this.selected_filter_area) {
+          // Default values if no selected filter area
+          focus_filter_area = null
+          selected_target_area_ids = this.selected_target_area_ids
+
+        } else {
+          // Modify plan if there is a selected_filter_area
+          // TODO: @feature Make it obvious to the user that they need to select a filter_area before they can save.
+          focus_filter_area = {
+            id: this.selected_filter_area.properties[this.next_level_up_from_planning_level.field_name]
+          }
+
+          selected_target_area_ids = target_areas_inside_focus_filter_area({
+            area_ids: this.selected_target_area_ids,
+            selected_filter_area: this.selected_filter_area
+          })
+        }
+
+        const plan = new Plan().create({
+          instance_config: this.instance_config,
+          focus_filter_area,
+          selected_target_area_ids
+        })
+
+        const _id = event._id
+
+        this.$startLoading('irs_plan/save_plan')
+        this.$store.dispatch('irs_plan/update_plan', {plan, _id})
+          .then(() => {
+            this.$store.commit('root:set_snackbar', {message: 'Successful save'})
+            this.$endLoading('irs_plan/save_plan')
+            this.$store.dispatch('irs_plan/get_network_plan_list')
+              .then(plan_list => this.plan_list = plan_list)
+          })
+          .catch((e) => {
+            if (e.response.status !== 401) {
+              this.$store.commit('root:set_snackbar', {message: 'Not saved. Something wrong.'})
+            }
+            this.$endLoading('irs_plan/save_plan')
+          })
+      },
+      delete_plan(event) {
+        this.show_save_plan = false
+        this.$startLoading('irs_plan/save_plan')
+        this.$store.dispatch('irs_plan/delete_plan', event._id)
+          .then(() => {
+            this.$store.commit('root:set_snackbar', {message: 'Successful save'})
+            this.$endLoading('irs_plan/save_plan')
+            this.$store.dispatch('irs_plan/get_network_plan_list')
+              .then(plan_list => this.plan_list = plan_list)
+          })
+          .catch((e) => {
+            if (e.response.status !== 401) {
+              this.$store.commit('root:set_snackbar', {message: 'Not deleted. Something wrong.'})
+            }
+            this.$endLoading('irs_plan/save_plan')
+          })
+      },
+      open_dialog(ref) {
+        this.$refs[ref].open();
+      },
+      close_dialog(ref) {
+        this.$refs[ref].close();
+      },
+      toggle_plan_selector() {
+        this.open_dialog('select_plan_dialog')
+      },
+      load_plan_detail(plan_id) {
+        console.log('load plan detail ', plan_id)
+        this.close_dialog('select_plan_dialog')
+        this.$startLoading('irs_plan/load_plan_detail')
+
+        this.$store.dispatch('irs_plan/get_network_plan_detail', plan_id)
+          .then(() => {
+            this.$endLoading('irs_plan/load_plan_detail')
+          })
+          .catch(() => {
+            this.$endLoading('irs_plan/load_plan_detail')
+          })
+      },
       load_plan() {
         this.$startLoading('irs_plan/load_plan')
 
         this.$store.dispatch('irs_plan/get_network_plan')
-          .then(() => { this.$endLoading('irs_plan/load_plan') })
-          .catch(() => { this.$endLoading('irs_plan/load_plan') })
+          .then(() => {
+            this.$endLoading('irs_plan/load_plan')
+          })
+          .catch(() => {
+            this.$endLoading('irs_plan/load_plan')
+          })
 
       },
       save_plan() {
@@ -167,7 +307,7 @@
 
 
         if (!this.selected_filter_area) {
-           // Default values if no selected filter area
+          // Default values if no selected filter area
           focus_filter_area = null
           selected_target_area_ids = this.selected_target_area_ids
 
@@ -195,6 +335,8 @@
           .then(() => {
             this.$store.commit('root:set_snackbar', {message: 'Successful save'})
             this.$endLoading('irs_plan/save_plan')
+            this.$store.dispatch('irs_plan/get_network_plan_list')
+              .then(plan_list => this.plan_list = plan_list)
           })
           .catch((e) => {
             // Check if 401 (will already have displayed snackbar)
@@ -219,6 +361,5 @@
   .centred {
     margin: 0 auto;
   }
-
 
 </style>

@@ -6,10 +6,17 @@
           <md-icon>assignment_turned_in</md-icon>
           <span>Load plan</span>
         </md-menu-item>
+
+        <md-menu-item :disabled="!$can('read', 'irs_tasker') || isLoading('irs_tasker/load_plan')" @click="toggle_plan_selector">
+          <md-icon>assignment_turned_in</md-icon>
+          <span>Select Specific Plan</span>
+        </md-menu-item>
+
         <md-menu-item :disabled="!$can('write', 'irs_tasker') || isLoading('irs_tasker/save_assignments') || !plan_target_ids.length || !assignments.length || !unsynced_changes" @click="save_assignments">
           <md-icon>save</md-icon>
           <span>Save assignments</span>
         </md-menu-item>
+
         <md-menu-item :disabled="!$can('read', 'irs_tasker') || isLoading('irs_tasker/load_assignments') || !plan_target_ids.length" @click="load_assignments">
           <md-icon>group</md-icon>
           <span>Load assignments</span>
@@ -120,6 +127,9 @@
     },
     methods: {
       // Load plan, and load-and-save assignments
+      toggle_plan_selector(){
+
+      },
       load_plan() {
         this.$startLoading('irs_tasker/load_plan')
 

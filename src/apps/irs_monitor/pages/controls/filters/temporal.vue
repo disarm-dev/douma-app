@@ -31,11 +31,8 @@ export default {
       end: null,
     }
   },
-  created() {
+  mounted() {
     this.set_start_and_end_dates()
-  },
-  watch: {
-    'responses': 'set_start_and_end_dates'
   },
   methods: {
     set_start_and_end_dates() {
@@ -47,8 +44,6 @@ export default {
       this.end = new Date(Math.max(...dates))
     },
     add_temporal_filter() {
-      if (!this.responses || !this.responses.length) return
-
       // emit start
       this.$emit('change', {
         name: 'recorded_on',

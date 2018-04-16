@@ -18,14 +18,13 @@ export default {
   namespaced: true,
   unpersisted_state_keys: ['responses'],
   state: {
-    ui: {
-
-    },
+    ui: {},
     responses: [],
     responses_last_updated_at: null,
     last_id: null, // ObjectID of most recently synced response
     filters: [],
     plan: null,
+    plans: [],
     filter: null,
     map_options: {
       show_response_points: true,
@@ -39,11 +38,11 @@ export default {
       limit_to_plan: true,
       limit_to: ''
     },
-    guess_selection_ids:{}
+    guess_selection_ids: {}
   },
   mutations: {
     // clear storage (called by meta store)
-    clear_data_storage:(state) => {
+    clear_data_storage: (state) => {
       state.responses = []
       state.responses_last_updated_at = null
       state.filters = []
@@ -53,12 +52,15 @@ export default {
     set_responses: (state, responses) => {
       state.responses = responses
     },
-    update_responses_last_updated_at:(state) => {
+    update_responses_last_updated_at: (state) => {
       state.responses_last_updated_at = new Date
     },
     // set plan
     set_plan: (state, plan) => {
       state.plan = plan
+    },
+    set_all_plans: (state, plans) => {
+      state.plans = plans
     },
     set_filter: (state, {filter_name, filter_object}) => {
       const new_filters = set_filter(state.filters, filter_name, filter_object)
@@ -71,9 +73,17 @@ export default {
     add_filter: (state, field_filter) => {
 
       const filter_present = state.filters.some(f => isEqual(f, field_filter))
-
       if (filter_present) return
 
+      // we replace temporal filters with the same comparator
+      if (field_filter.name === 'recorded_on') {
+        const filter_index = state.filters.findIndex(f => isEqual(f.name, field_filter.name) && isEqual(f.comparator, field_filter.comparator))
+        if (filter_index >= 0) {
+          state.filters.splice(filter_index, 1, field_filter)
+          return
+        }
+      } 
+        
       state.filters.push(field_filter)
     },
     remove_filter: (state, field_filter) => {
@@ -81,7 +91,9 @@ export default {
       state.filters.splice(index, 1)
     },
 
-    set_ui: (state, ui) => {state.ui = ui},
+    set_ui: (state, ui) => {
+      state.ui = ui
+    },
     set_dashboard_options: (state, options) => {
       state.dashboard_options = options
     },
@@ -101,7 +113,7 @@ export default {
   getters: {
     // Return all the targets from the plan
     targets(state, getters) {
-      if(!state.plan) return []
+      if (!state.plan) return []
 
       const spatial_aggregation_level = state.dashboard_options.spatial_aggregation_level
       return get_targets(state.plan.targets, spatial_aggregation_level)
@@ -150,7 +162,7 @@ export default {
     },
     get_all_records: async (context) => {
       const last_id = context.state.last_id
-      if(last_id == null){
+      if (last_id == null) {
         store.commit('irs_record_point/clear_responses_not_inVillage')
         store.commit('irs_record_point/clear_guessed_responses')
       }
@@ -182,6 +194,44 @@ export default {
             console.log(e)
           }
         })
+    },
+
+    load_all_plans: (context) => {
+      return plan_controller.read_plans()
+        .then(plans => {
+          context.commit('set_all_plans', plans)
+        })
+    },
+    get_network_plan_detail: (context, plan_id) => {
+      return plan_controller.read_plan_detail_network(plan_id).then(plan_json => {
+        if (Object.keys(plan_json).length === 0) {
+          return context.commit('root:set_snackbar', {message: 'There is no remote plan. Please create one.'}, {root: true})
+        }
+
+        try {
+          new Plan().validate(plan_json)
+
+          let target_areas = plan_json.targets.map(area => {
+            return area.id
+          })
+
+          context.commit('set_plan', plan_json)
+          //TODO: Load responses for this plan
+        } catch (e) {
+          console.error(e)
+          context.commit('root:set_snackbar', {message: 'ERROR: Plan is not valid'}, {root: true})
+        }
+
+      })
+    },
+    get_network_plan_list: (context) => {
+      return plan_controller.read_plan_list_network().then(plan_json => {
+        if (Object.keys(plan_json).length === 0) {
+          return context.commit('root:set_snackbar', {message: 'There is no remote plan. Please create one.'}, {root: true})
+        }
+        context.commit('set_all_plans', plan_json)
+        return plan_json
+      })
     }
   }
 }
