@@ -36,6 +36,10 @@ export function retrieve_stored_param(key) {
   return localStorage.getItem(localStorage_key)
 }
 
+/**
+ * Remove a parameter from localStorage
+ * @param key
+ */
 export function remove_param(key) {
   const localStorage_key = key_to_localStorage_key(key)
   return localStorage.removeItem(localStorage_key)
