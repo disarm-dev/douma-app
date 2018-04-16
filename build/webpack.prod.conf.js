@@ -11,6 +11,7 @@ var OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 var LicenseWebpackPlugin = require('license-webpack-plugin')
 var SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin')
 var Visualizer = require('webpack-visualizer-plugin');
+var UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
 var env = config.build.env
 
@@ -33,10 +34,7 @@ var webpackConfig = merge(baseWebpackConfig, {
     new webpack.DefinePlugin({
       'process.env': env
     }),
-    new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        warnings: false
-      },
+    new UglifyJsPlugin({
       sourceMap: true
     }),
     // extract css into its own file
