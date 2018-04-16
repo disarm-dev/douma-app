@@ -113,7 +113,7 @@
         this.success.decorated_geodata = result
       },
       create_location_selection() {
-        const result = generate_location_selections()
+        const result = generate_location_selections(cache.geodata)
 
         const content = JSON.stringify(result)
         const date = moment().format('YYYY-MM-DD_HHmm')

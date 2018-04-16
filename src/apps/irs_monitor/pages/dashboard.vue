@@ -2,9 +2,10 @@
   <div>
     <!--  SUMMARY, LOAD, DOWNLOAD (DUMPING GROUND) -->
     <dashboard_summary
-        :responses='responses'
+        :responses='filtered_responses'
         :filters='filters'
-        @load_responses="load_responses"
+        :plan="plan"
+        @load_responses="retrieve_responses"
         @force_load_responses="force_load_responses"
         @load_plan="load_plan"
     ></dashboard_summary>
@@ -12,19 +13,20 @@
     <div class='applet_container'>
 
       <!--DASHBOARD CONTROLS-->
-      <controls :responses="responses" :targets="targets"></controls>
+      <controls :responses="filtered_responses" :targets="targets"></controls>
 
       <!--MAP-->
       <dashboard_map
-        :responses="responses"
+        :responses="filtered_responses"
         :targets="targets"
         :aggregations="aggregations"
+        :plan_target_area_ids="plan_target_area_ids"
         :options="with_dashboard_options(map_options)">
       </dashboard_map>
 
       <!--TABLE-->
       <dashboard_table
-        :responses="responses"
+        :responses="filtered_responses"
         :targets="targets"
         :aggregations="aggregations"
         :options="with_dashboard_options(table_options)">
@@ -33,7 +35,7 @@
       <!-- CUSTOM STATIC-DATA CHARTS, etc -->
       <charts
         v-if="chart_configs"
-        :responses="responses"
+        :responses="filtered_responses"
         :targets="targets"
         :aggregations="aggregations"
         :options="with_dashboard_options(chart_configs)"></charts>
@@ -43,9 +45,7 @@
 
 <script>
   import {mapState, mapGetters} from 'vuex'
-  import {cloneDeep as clone_deep} from 'lodash'
-
-  import {get_geodata} from 'lib/models/geodata/remote.js'
+  import {get, cloneDeep as clone_deep} from 'lodash'
 
   // Components
   import dashboard_summary from './dashboard-summary.vue'
@@ -53,7 +53,17 @@
   import dashboard_map from './map/dashboard-map.vue'
   import dashboard_table from './table/dashboard-table.vue'
   import charts from './charts/dashboard-charts.vue'
-  import {geodata_in_cache_and_valid} from '../../../lib/models/geodata/geodata.valid'
+
+  import {get_geodata} from 'lib/models/geodata/remote.js'
+  import {ResponseController} from 'lib/models/response/controller'
+  import {PlanController} from 'lib/models/plan/controller'
+  import {Plan} from 'lib/models/plan/model'
+  import {get_targets} from 'apps/irs_monitor/lib/aggregate_targets'
+  import {filter_responses} from 'apps/irs_monitor/lib/filters'
+
+  const applet_name = 'monitor'
+  const responses_controller = new ResponseController(applet_name)
+  const plan_controller = new PlanController(applet_name)
 
   export default {
     name: 'Dashboard',
@@ -63,6 +73,12 @@
       dashboard_map,
       dashboard_table,
       charts,
+    },
+    data() {
+      return {
+        responses: [],
+        plan: null
+      }
     },
     computed: {
       ...mapState({
@@ -79,50 +95,116 @@
         table_options: state => state.instance_config.applets.irs_monitor.table,
         map_options: state => state.instance_config.applets.irs_monitor.map,
         chart_configs: state => state.instance_config.applets.irs_monitor.charts,
+
+        // responses metadata
+        last_id: state => state.irs_monitor.last_id
       }),
-      ...mapGetters({
-        responses: 'irs_monitor/filtered_responses',
-        targets: 'irs_monitor/targets',
-      }),
+      // ...mapGetters({
+      //   targets: 'irs_monitor/targets',
+      // }),
+      filtered_responses() {
+        const responses = this.responses
+        if (!responses.length) return []
+
+        const dashboard_options = this.dashboard_options
+        const plan_target_area_ids = this.plan_target_area_ids
+
+        // limit to plan if 'dashboard_options.limit_to_plan' is true
+        const limited_to_plan = responses.filter(r => {
+          if (!dashboard_options.limit_to_plan) return true
+
+          const id = get(r, 'location.selection.id', false)
+          if (id) {
+            return plan_target_area_ids.includes(id)
+          } else {
+            return false
+          }
+        })
+
+        const filtered = filter_responses(limited_to_plan, this.$store.state.irs_monitor.filters)
+
+        return filtered
+      },
+      targets() {
+        if(!this.plan) return []
+
+        const spatial_aggregation_level = this.dashboard_options.spatial_aggregation_level
+        return get_targets(this.plan.targets, spatial_aggregation_level)
+      },
+      plan_target_area_ids() {
+        if (this.plan && this.plan.targets) {
+          return this.plan.targets.map(target => target.id)
+        } else {
+          return []
+        }
+      }
     },
-    created() {
+    async created() {
       // hydrate
-      this.$store.dispatch('irs_monitor/get_responses_local')
+      await this.load_responses()
+      await this.load_plan()
     },
     methods: {
-      load_responses() {
-        this.$startLoading('irs_monitor/load_responses')
+      async load_responses() {
+        const personalised_instance_id = this.$store.state.meta.personalised_instance_id
+        const instance = this.$store.state.instance_config.instance.slug
+        this.responses = await responses_controller.read_all_cache({personalised_instance_id, instance})
+      },
+      async retrieve_responses() {
+        this.$loading.startLoading('irs_monitor/load_responses')
 
-        this.$store.dispatch('irs_monitor/get_all_records')
-          .then((responses) => {
-            this.$endLoading('irs_monitor/load_responses')
-            let message
-            if (responses.length > 0) {
-              message = `Successfully retrieved responses`
-            } else {
-              message = 'Successful retrieve, zero records found.'
-            }
-            this.$store.commit('root:set_snackbar', {message})
-          })
-          .catch(e => {
-            this.$endLoading('irs_monitor/load_responses')
-          })
+        const last_id = this.last_id
+
+        // Guessing
+        if (last_id == null) {
+          console.log('🚒 what is happening with guessing stuff')
+          // store.commit('irs_record_point/clear_responses_not_inVillage')
+          // store.commit('irs_record_point/clear_guessed_responses')
+        }
+        const remote_responses_batch = await responses_controller.read_new_network_write_local(last_id)
+
+        if (remote_responses_batch.length) {
+          const updated_last_id = remote_responses_batch[remote_responses_batch.length - 1]._id
+          this.$store.commit('irs_monitor/set_last_id', updated_last_id)
+          this.$store.commit('root:set_snackbar', {message: 'Retrieving more records.'})
+          this.$store.commit('irs_monitor/update_responses_last_updated_at')
+          return this.retrieve_responses()
+        } else {
+          this.$store.commit('root:set_snackbar', {message: 'Completed retrieving records. Updated map, table, charts.'})
+          await this.load_responses()
+
+          let message
+          if (this.responses.length > 0) {
+            message = `Successfully retrieved responses`
+          } else {
+            message = 'Successful retrieve, zero records found.'
+          }
+          this.$store.commit('root:set_snackbar', {message})
+          this.$loading.endLoading('irs_monitor/load_responses')
+        }
       },
       force_load_responses() {
         this.$store.commit('irs_monitor/set_last_id', null)
-        this.load_responses()
+        this.retrieve_responses()
       },
-      load_plan() {
-        this.$startLoading('irs_monitor/load_plan')
+      async load_plan() {
+        this.$loading.startLoading('irs_monitor/load_plan')
 
-        this.$store.dispatch('irs_monitor/get_current_plan')
-          .then(() => {
-            this.$endLoading('irs_monitor/load_plan')
-            this.$store.commit('root:set_snackbar', {message: 'Successfully retrieved plan'})
-          })
-          .catch(e => {
-            this.$endLoading('irs_monitor/load_plan')
-          })
+        const plan_json = await plan_controller.read_plan_current_network()
+
+        if (Object.keys(plan_json).length === 0) {
+          return this.$store.commit('root:set_snackbar', {message: 'No plan loaded.'})
+        }
+
+        try {
+          new Plan().validate(plan_json)
+          this.plan = plan_json
+          this.$loading.endLoading('irs_monitor/load_plan')
+          this.$store.commit('root:set_snackbar', {message: 'Successfully retrieved plan'})
+        } catch (e) {
+          console.log(e)
+          this.$loading.endLoading('irs_monitor/load_plan')
+        }
       },
       with_dashboard_options(options) {
         if (Array.isArray(options)) {

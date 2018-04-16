@@ -29,7 +29,7 @@
   import clonedeep from 'lodash.clonedeep'
 
   export default {
-    name: 'form',
+    name: 'record-form',
     props: ['initial_form_data', 'response_is_valid', 'validations', 'current_view'],
     data() {
       return {

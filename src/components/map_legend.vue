@@ -22,7 +22,7 @@
 <script>
 export default {
   props: ['entries', 'selected_entry', 'title'],
-  name: 'legend',
+  name: 'dashboard-map-legend',
   methods: {
     select(text) {
       this.$emit('select', text)

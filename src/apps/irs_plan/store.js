@@ -12,20 +12,20 @@ export default {
   namespaced: true,
   unpersisted_state_keys: [],
   state: {
-    // Actual data
-    current_plan: null, // Instance of plan model
+    // State
+    selected_filter_area_option: null, // map
+    unsaved_changes: false,
+    show_lowest_spatial_level: true, // i.e. clusters but not clusters - WTF?!
 
-    // Kind of data
+    // kind of data - want to persist, but is not really a record yet.
+    // could see it as a 'local record' that is not yet synced
+    // as they're just IDs, fine for now
     areas_included_by_click: [],
     areas_excluded_by_click: [],
     bulk_selected_ids: [],
 
-    // Map
-    selected_filter_area_option: null,
-
-    // UI
-    unsaved_changes: false,
-    show_lowest_spatial_level: true // i.e. clusters but not clusters
+    // definitely DATA - get this out
+    current_plan: null, // Instance of plan model
   },
   getters: {
     'all_selected_area_ids': (state) => {
