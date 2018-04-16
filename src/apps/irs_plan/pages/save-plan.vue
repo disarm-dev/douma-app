@@ -3,7 +3,7 @@
     <md-dialog-title>Save Plan</md-dialog-title>
     <md-dialog-content>
       <md-list>
-        <md-list-item v-for="plan in plan_list">
+        <md-list-item v-for="plan in plan_list" :key="plan.date">
           <span>
             {{(new Date(plan.date)).toLocaleString()}}
             -
