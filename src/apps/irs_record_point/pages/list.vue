@@ -18,6 +18,9 @@
 
       </template>
 
+      <!--<div v-if="$loading.isLoading('responses')" slot="text">Loading responses...</div>-->
+      <div v-if="$loading.anyLoading" slot="text">Loading...</div>
+
       <div v-if="!online" slot="text">
         Offline - unable to sync
       </div>
@@ -70,7 +73,7 @@
   import virtual_list from 'vue-virtual-scroll-list'
   import download from 'downloadjs'
   import moment from 'moment-mini'
-  import {mapState} from 'vuex'
+  import {mapState, mapGetters} from 'vuex'
   import {flatten, get} from 'lodash'
 
   import controls from 'components/controls.vue'
@@ -117,10 +120,12 @@
     },
     methods: {
       async load_responses() {
+        this.$loading.startLoading('responses')
         const personalised_instance_id = this.$store.state.meta.personalised_instance_id
         const instance = this.$store.state.instance_config.instance.slug
 
         this.responses = await controller.read_all_cache({personalised_instance_id, instance})
+        this.$loading.endLoading('responses')
       },
       format_response(response) {
         const id = this.short_id(get(response, 'id', 'no id'))
@@ -137,7 +142,7 @@
       },
       async sync() {
         // Really is UI
-        this.$startLoading('irs_record_point/sync')
+        this.$loading.startLoading('irs_record_point/sync')
         this.syncing = true
 
         try {
@@ -146,7 +151,7 @@
           const last_successful_sync_count = flatten(results.pass).length
           const last_failed_sync_count = flatten(results.fail).length
 
-          this.$endLoading('irs_record_point/sync')
+          this.$loading.endLoading('irs_record_point/sync')
           this.syncing = false
 
           // did any responses sync?
@@ -163,7 +168,7 @@
           if (e.response && e.response.status !== 401) {
             this.$store.commit('root:set_snackbar', {message: `Problem syncing responses`})
           }
-          this.$endLoading('irs_record_point/sync')
+          this.$loading.endLoading('irs_record_point/sync')
           this.syncing = false
         }
 

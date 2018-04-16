@@ -53,18 +53,8 @@ export default {
   },
   instances: {
     list: ['foci', 'struc_demo', 'make', 'bwa', 'nam', 'swz', 'zwe-mats', 'zwe-matn', 'rsa', 'mwi-schisto'],
-    // TODO: @refac This required_instance_files list is only relevant for the IRS modules.
-    required_instance_files: ['instance', 'form', 'location_selection', 'aggregations', 'fake_form', 'validations', 'presenters', 'decorators']
   },
   remote: {
     max_records_batch_size: 100
-  },
-  vuex_loader_options: {
-    // The Vuex module name, 'loading' by default.
-    moduleName: 'loading',
-    // The Vue component name, 'v-loading' by default.
-    componentName: 'v-loading',
-    // Vue component class name, 'v-loading' by default.
-    className: 'v-loading',
   }
 }
