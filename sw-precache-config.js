@@ -20,6 +20,7 @@ module.exports = {
       handler: 'cacheFirst'
     }
   ],
+  clientsClaims: true,
   skipWaiting: true
 }
 
