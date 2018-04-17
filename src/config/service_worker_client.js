@@ -20,7 +20,9 @@ export function configure_service_worker () {
   return new Promise((resolve, reject) => {
     navigator.serviceWorker.register('/service-worker.js')
       .then((registration) => {
-
+        // ask the SW to update itself
+        registration.update()
+        
         // parsed, installing, installed, activating, activated, and redundant
         registration.onupdatefound = () => {
           var installingWorker = registration.installing
