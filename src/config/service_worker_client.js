@@ -7,12 +7,10 @@ import BUILD_TIME from 'config/build-time'
 //
 if (!BUILD_TIME.DOUMA_PRODUCTION_MODE) {
   console.warn('DOUMA ServiceWorker disabled in development')
-  return Promise.resolve()
 }
 
 if (!('serviceWorker' in navigator)) {
   console.log('ServiceWorker not available in this browser')
-  return Promise.resolve()
 }
 
 navigator.serviceWorker.register('/service-worker.js')
@@ -32,10 +30,6 @@ navigator.serviceWorker.register('/service-worker.js')
         pubsubcache.publish('service_worker/onupdatefound/onstatechange', installingWorker.state)
       }
     }
-    resolve()
-  }).catch(e => {
-  console.error(e)
-  reject(e)
 })
 
 
