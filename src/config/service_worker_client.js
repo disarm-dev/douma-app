@@ -6,9 +6,9 @@ import BUILD_TIME from 'config/build-time'
 // SERVICE WORKER
 //
 
-export function configure_service_worker () {
+export function configure_service_worker() {
   if (!BUILD_TIME.DOUMA_PRODUCTION_MODE) {
-    console.warn("DOUMA ServiceWorker disabled in development")
+    console.warn('DOUMA ServiceWorker disabled in development')
     return Promise.resolve()
   }
 
@@ -17,22 +17,20 @@ export function configure_service_worker () {
     return Promise.resolve()
   }
 
-  return new Promise((resolve, reject) => {
-    navigator.serviceWorker.register('/service-worker.js')
-      .then((registration) => {
+  navigator.serviceWorker.register('/service-worker.js')
+    .then((registration) => {
 
-        // parsed, installing, installed, activating, activated, and redundant
-        registration.onupdatefound = () => {
-          var installingWorker = registration.installing
+      // parsed, installing, installed, activating, activated, and redundant
+      registration.onupdatefound = () => {
+        var installingWorker = registration.installing
 
-          installingWorker.onstatechange = () => {
-            pubsubcache.publish('service_worker/onstatechange', installingWorker.state)
-          }
+        installingWorker.onstatechange = () => {
+          pubsubcache.publish('service_worker/onstatechange', installingWorker.state)
         }
-        resolve()
-      }).catch(e => {
-        console.error(e)
-        reject(e)
-      })
+      }
+      resolve()
+    }).catch(e => {
+    console.error(e)
+    reject(e)
   })
 }
