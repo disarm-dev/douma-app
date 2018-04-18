@@ -9,7 +9,12 @@ let subUid = -1
 let cache = {};//sw: ['args', 'args2']}
 
 export default {
-
+  /**
+   * Add subscriber
+   * @param topic
+   * @param func - receives (topic, args)
+   * @returns {string}
+   */
   subscribe: (topic, func) => {
     if (!topics[topic]) {
       topics[topic] = []
