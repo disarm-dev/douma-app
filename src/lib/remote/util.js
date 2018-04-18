@@ -1,5 +1,4 @@
 import {request_handler} from './request-handler'
-import CONFIG from 'config/common'
 
 export function try_reconnect() {
   return request_handler({url_suffix: ''})
