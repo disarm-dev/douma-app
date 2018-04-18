@@ -99,8 +99,7 @@ var webpackConfig = merge(baseWebpackConfig, {
       abortOnUnacceptableLicense: false,
       filename: 'static/3rdpartylicenses.txt'
     }),
-    new SWPrecacheWebpackPlugin(require('../sw-precache-config.js')),
-    new Visualizer()
+    new SWPrecacheWebpackPlugin(require('../sw-precache-config.js'))
   ]
 })
 
