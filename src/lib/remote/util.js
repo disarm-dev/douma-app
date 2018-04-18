@@ -8,7 +8,7 @@ export function try_reconnect() {
 export function get_version() {
   const options = {
     url: '/VERSION',
-    timeout: 2000
+    timeout: 5000
   }
   return request_handler(options)
 }
