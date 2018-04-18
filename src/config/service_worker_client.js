@@ -20,12 +20,18 @@ export function configure_service_worker() {
   navigator.serviceWorker.register('/service-worker.js')
     .then((registration) => {
 
+      if (registration.installing) {
+        registration.installing.addEventListener('statechange', function (e) {
+          pubsubcache.publish('registration.installing.onstatechange', e.target.state);
+        })
+      }
+
       // parsed, installing, installed, activating, activated, and redundant
       registration.onupdatefound = () => {
         var installingWorker = registration.installing
 
         installingWorker.onstatechange = () => {
-          pubsubcache.publish('service_worker/onstatechange', installingWorker.state)
+          pubsubcache.publish('service_worker/onupdatefound/onstatechange', installingWorker.state)
         }
       }
       resolve()
@@ -34,3 +40,5 @@ export function configure_service_worker() {
     reject(e)
   })
 }
+
+
