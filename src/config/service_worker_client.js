@@ -1,4 +1,3 @@
-import pubsubcache from 'lib/helpers/pubsubcache'
 import BUILD_TIME from 'config/build-time'
 
 if (!BUILD_TIME.DOUMA_PRODUCTION_MODE) {
@@ -11,21 +10,20 @@ if (!('serviceWorker' in navigator)) {
 
 navigator.serviceWorker.register('/service-worker.js')
   .then((registration) => {
+    const installingWorker = registration.installing
 
-    if (registration.installing) {
-      registration.installing.addEventListener('statechange', function (e) {
-        console.log('registration.installing.onstatechange', e.target.state);
-        pubsubcache.publish('registration.installing.onstatechange', e.target.state);
+    // starting install
+    if (installingWorker) {
+      console.log('[sw] start registration.installing')
+      installingWorker.addEventListener('statechange', function (e) {
+        console.log(`[sw] ${e.target.state}`)
       })
     }
 
     // parsed, installing, installed, activating, activated, and redundant
     registration.onupdatefound = () => {
-      var installingWorker = registration.installing
-
       installingWorker.onstatechange = () => {
-        console.log('service_worker/onupdatefound/onstatechange', installingWorker.state)
-        pubsubcache.publish('service_worker/onupdatefound/onstatechange', installingWorker.state)
+        console.log(`[sw] state: ${installingWorker.state}`)
       }
     }
 })

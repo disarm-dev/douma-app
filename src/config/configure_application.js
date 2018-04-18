@@ -25,7 +25,7 @@ import {configure_spatial_helpers} from 'lib/instance_data/spatial_hierarchy_hel
 import {try_reconnect} from 'lib/remote/util'
 import {add_network_status_watcher} from 'lib/helpers/network_status.js'
 import pubsubcache from 'lib/helpers/pubsubcache'
-import {need_to_update} from 'lib/remote/check-application-version'
+import {check_need_to_update} from 'lib/remote/check-application-version'
 import {set_raven_user_context} from 'config/error_tracking.js'
 import {instantiate_axios_instance} from 'lib/remote/axios_instance'
 import BUILD_TIME from 'config/build-time'
@@ -103,22 +103,7 @@ export function configure_application (instance_config) {
   set_common_analytics(douma_app)
 
   // Configure application update
-  need_to_update().then((can_update) => {
-    const update_available = (can_update.status === 'CAN_UPDATE')
-
-    // Make sure we can catch any messages passed from ServiceWorker
-    pubsubcache.subscribe('service_worker/onstatechange', (topic, args) => {
-
-      const new_service_worker_activated = (args === 'activated')
-      if (update_available && new_service_worker_activated) {
-        douma_app.$store.commit('root:set_sw_update_available', true)
-      } else {
-        douma_app.$store.commit('root:set_sw_update_available', false)
-      }
-
-      console.log('service_worker/onstatechange message:', args)
-    })
-  })
+  check_need_to_update()
 
   // Add extra info to error logging
   set_raven_user_context(douma_app.$store.state)

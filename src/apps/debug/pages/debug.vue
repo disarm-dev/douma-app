@@ -78,7 +78,7 @@
   import get from 'lodash.get'
 
   import {get_version, try_reconnect} from 'lib/remote/util'
-  import {need_to_update} from 'lib/remote/check-application-version'
+  import {check_need_to_update} from 'lib/remote/check-application-version'
 
   import cache from 'config/cache.js'
 
@@ -132,7 +132,7 @@
       },
       check_if_update_available() {
         this.update_status = 'CHECKING'
-        need_to_update().then(need_update => {
+        check_need_to_update().then(need_update => {
           this.update_status = need_update.status
         })
       },

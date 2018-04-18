@@ -5,7 +5,7 @@ import BUILD_TIME from 'config/build-time'
  * Returns object containing {status: ['CAN_UPDATE', 'ON_LATEST' or 'NO_RESPONSE'], local_version: version, remote_version: version}
  * @returns
  */
-const need_to_update = async () => {
+const check_need_to_update = async () => {
   try {
     const remote_version = get_version()
     if (rcemote_version && (remote_version !== BUILD_TIME.VERSION_COMMIT_HASH_SHORT)) {
@@ -21,4 +21,4 @@ const need_to_update = async () => {
   }
 }
 
-export {need_to_update}
+export {check_need_to_update}
