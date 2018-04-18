@@ -105,10 +105,6 @@ export function configure_application (instance_config) {
   // Configure application update
   check_need_to_update()
 
-  pubsubcache.subscribe('sw', (topic, args) => {
-    console.log('client could response here to a message from SW registration: topic:', topic, 'args: ', args)
-  })
-
   // Add extra info to error logging
   set_raven_user_context(douma_app.$store.state)
 
