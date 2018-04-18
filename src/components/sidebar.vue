@@ -22,42 +22,53 @@
       </div>
     </md-toolbar>
 
-    <!--Sidebar: LOGGED IN-->
-    <md-list v-if="user">
-      <md-list-item v-for='applet in decorated_applets' :key='applet.name' @click="navigate(applet.name)">
-        <md-icon>{{applet.icon}}</md-icon><span class="applet-item">{{applet.title}}</span>
-      </md-list-item>
+    <md-list>
+      <!--Sidebar: LOGGED IN-->
+      <template v-if="user">
+        <md-list-item v-for='applet in decorated_applets' :key='applet.name' @click="navigate(applet.name)">
+          <md-icon>{{applet.icon}}</md-icon>
+          <span class="applet-item">{{applet.title}}</span>
+        </md-list-item>
 
-      <md-divider class="md-inset"></md-divider>
+        <md-divider class="md-inset"></md-divider>
 
-      <md-list-item @click="navigate('meta:home')">
-        <md-icon>person</md-icon><span>User</span>
-      </md-list-item>
+        <md-list-item @click="navigate('meta:home')">
+          <md-icon>person</md-icon>
+          <span>User</span>
+        </md-list-item>
 
-      <md-list-item class='md-primary' @click="toggle_help">
-        <md-icon>help</md-icon><span>Help</span>
-      </md-list-item>
+        <md-list-item class='md-primary' @click="toggle_help">
+          <md-icon>help</md-icon>
+          <span>Help</span>
+        </md-list-item>
 
-      <md-divider class="md-inset"></md-divider>
+        <md-divider class="md-inset"></md-divider>
 
-      <md-list-item class='md-accent' @click="navigate('meta:logout')">
-        <md-icon>exit_to_app</md-icon><span>Logout</span>
-      </md-list-item>
+        <md-list-item class='md-accent' @click="navigate('meta:logout')">
+          <md-icon>exit_to_app</md-icon>
+          <span>Logout</span>
+        </md-list-item>
+
+      </template>
+
+      <!--Sidebar: LOGGED OUT-->
+      <template v-else>
+        <md-list-item class='md-primary' @click="toggle_help">
+          <md-icon>help</md-icon>
+          <span>Help</span>
+        </md-list-item>
+
+        <md-list-item class='md-accent' @click="navigate('meta:login')">
+          <md-icon>exit_to_app</md-icon>
+          <span>Login</span>
+        </md-list-item>
+      </template>
 
       <md-list-item @click="check_for_update">
-        <md-icon :class="{'md-warn': can_update}">refresh</md-icon><span>Check for update</span>
-      </md-list-item>
-    </md-list>
-
-    <!--Sidebar: LOGGED OUT-->
-    <md-list v-else>
-      <md-list-item class='md-primary' @click="toggle_help">
-        <md-icon>help</md-icon><span>Help</span>
+        <md-icon :class="{'md-warn': can_update}">refresh</md-icon>
+        <span>Check for update</span>
       </md-list-item>
 
-      <md-list-item class='md-accent' @click="navigate('meta:login')">
-        <md-icon>exit_to_app</md-icon><span>Login</span>
-      </md-list-item>
     </md-list>
 
   </md-sidenav>
@@ -67,6 +78,7 @@
   import {mapState, mapGetters} from 'vuex'
   import {need_to_update} from 'lib/remote/check-application-version'
   import BUILD_TIME from 'config/build-time'
+
   export default {
     name: 'sidebar',
     data() {
@@ -105,10 +117,10 @@
         need_to_update().then(need_update => {
           if (need_update.status === 'CAN_UPDATE') {
             this.can_update = true
-            this.$store.commit("root:set_sw_message", {
+            this.$store.commit('root:set_sw_message', {
               title: `Updated version of DiSARM is available`,
-              message: "You may need to reload TWICE to refresh and start using the newer version. " +
-              "You may lose unsaved work. Click 'Cancel' and then save if you prefer."
+              message: 'You may need to reload TWICE to refresh and start using the newer version. ' +
+              'You may lose unsaved work. Click \'Cancel\' and then save if you prefer.'
             })
           }
         })
