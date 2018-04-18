@@ -5,40 +5,37 @@ import BUILD_TIME from 'config/build-time'
 //
 // SERVICE WORKER
 //
-
-export function configure_service_worker() {
-  if (!BUILD_TIME.DOUMA_PRODUCTION_MODE) {
-    console.warn('DOUMA ServiceWorker disabled in development')
-    return Promise.resolve()
-  }
-
-  if (!('serviceWorker' in navigator)) {
-    console.log('ServiceWorker not available in this browser')
-    return Promise.resolve()
-  }
-
-  navigator.serviceWorker.register('/service-worker.js')
-    .then((registration) => {
-
-      if (registration.installing) {
-        registration.installing.addEventListener('statechange', function (e) {
-          pubsubcache.publish('registration.installing.onstatechange', e.target.state);
-        })
-      }
-
-      // parsed, installing, installed, activating, activated, and redundant
-      registration.onupdatefound = () => {
-        var installingWorker = registration.installing
-
-        installingWorker.onstatechange = () => {
-          pubsubcache.publish('service_worker/onupdatefound/onstatechange', installingWorker.state)
-        }
-      }
-      resolve()
-    }).catch(e => {
-    console.error(e)
-    reject(e)
-  })
+if (!BUILD_TIME.DOUMA_PRODUCTION_MODE) {
+  console.warn('DOUMA ServiceWorker disabled in development')
+  return Promise.resolve()
 }
+
+if (!('serviceWorker' in navigator)) {
+  console.log('ServiceWorker not available in this browser')
+  return Promise.resolve()
+}
+
+navigator.serviceWorker.register('/service-worker.js')
+  .then((registration) => {
+
+    if (registration.installing) {
+      registration.installing.addEventListener('statechange', function (e) {
+        pubsubcache.publish('registration.installing.onstatechange', e.target.state);
+      })
+    }
+
+    // parsed, installing, installed, activating, activated, and redundant
+    registration.onupdatefound = () => {
+      var installingWorker = registration.installing
+
+      installingWorker.onstatechange = () => {
+        pubsubcache.publish('service_worker/onupdatefound/onstatechange', installingWorker.state)
+      }
+    }
+    resolve()
+  }).catch(e => {
+  console.error(e)
+  reject(e)
+})
 
 
