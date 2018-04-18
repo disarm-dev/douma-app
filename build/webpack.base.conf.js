@@ -16,6 +16,7 @@ function resolve (dir) {
 module.exports = {
   entry: {
     app: ['babel-polyfill', './src/index.js'],
+    register_service_worker: ['./src/config/service_worker_client.js']
   },
   output: {
     path: config.build.assetsRoot,

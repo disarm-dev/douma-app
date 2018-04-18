@@ -18,7 +18,7 @@
           </span>
       </h2>
 
-      <md-button v-if="update_chip_visible" @click="close_update_chip" class="md-raised md-accent">Update available</md-button>
+      <md-button v-if="update_chip_visible" @click="reload" class="md-raised md-accent">Update available</md-button>
 
       <!-- OFFLINE , TRY RECONNECT-->
       <md-button v-if="!online" @click="try_reconnect" class="md-icon-button md-dense md-warn">
@@ -91,13 +91,9 @@
       show_update_chip() {
         this.update_chip_visible = true
       },
-      close_update_chip() {
-        this.update_chip_visible = false
-        this.$store.commit("root:set_sw_message", {
-          title: `Updated version of DiSARM is available`,
-          message: "Please click 'Reload' (or reload browser) to refresh and start using the newer version. " +
-          "You may lose unsaved work. Click 'Cancel' and then save if you prefer."
-        })
+      reload() {
+        console.log('trigger location.reload()')
+        location.reload()
       }
     }
   }
