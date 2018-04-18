@@ -1,10 +1,6 @@
 import pubsubcache from 'lib/helpers/pubsubcache'
-
 import BUILD_TIME from 'config/build-time'
 
-//
-// SERVICE WORKER
-//
 if (!BUILD_TIME.DOUMA_PRODUCTION_MODE) {
   console.warn('DOUMA ServiceWorker disabled in development')
 }
@@ -18,6 +14,7 @@ navigator.serviceWorker.register('/service-worker.js')
 
     if (registration.installing) {
       registration.installing.addEventListener('statechange', function (e) {
+        console.log('registration.installing.onstatechange', e.target.state);
         pubsubcache.publish('registration.installing.onstatechange', e.target.state);
       })
     }
@@ -27,6 +24,7 @@ navigator.serviceWorker.register('/service-worker.js')
       var installingWorker = registration.installing
 
       installingWorker.onstatechange = () => {
+        console.log('service_worker/onupdatefound/onstatechange', installingWorker.state)
         pubsubcache.publish('service_worker/onupdatefound/onstatechange', installingWorker.state)
       }
     }
