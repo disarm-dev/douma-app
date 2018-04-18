@@ -64,11 +64,6 @@
         </md-list-item>
       </template>
 
-      <md-list-item @click="check_for_update">
-        <md-icon :class="{'md-warn': can_update}">refresh</md-icon>
-        <span>Check for update</span>
-      </md-list-item>
-
     </md-list>
 
   </md-sidenav>
@@ -76,7 +71,6 @@
 
 <script>
   import {mapState, mapGetters} from 'vuex'
-  import {need_to_update} from 'lib/remote/check-application-version'
   import BUILD_TIME from 'config/build-time'
 
   export default {
@@ -112,18 +106,6 @@
       },
       toggle_help() {
         this.$store.commit('root:trigger_help_visible')
-      },
-      check_for_update() {
-        need_to_update().then(need_update => {
-          if (need_update.status === 'CAN_UPDATE') {
-            this.can_update = true
-            this.$store.commit('root:set_sw_message', {
-              title: `Updated version of DiSARM is available`,
-              message: 'You may need to reload TWICE to refresh and start using the newer version. ' +
-              'You may lose unsaved work. Click \'Cancel\' and then save if you prefer.'
-            })
-          }
-        })
       }
     },
   }
