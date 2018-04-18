@@ -22,8 +22,9 @@ navigator.serviceWorker.register('/service-worker.js')
 
     // parsed, installing, installed, activating, activated, and redundant
     registration.onupdatefound = () => {
-      installingWorker.onstatechange = () => {
-        console.log(`[sw] state: ${installingWorker.state}`)
+      // registration.installing might not already exist when callback called
+      registration.installing.onstatechange = () => {
+        console.log(`[sw] state: ${registration.installing.state}`)
       }
     }
 })
