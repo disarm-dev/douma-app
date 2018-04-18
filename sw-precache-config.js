@@ -12,10 +12,6 @@ module.exports = {
   ],
   runtimeCaching: [
     {
-      urlPattern: /\/static\/?(?:[^\/]+\/?)*$/,
-      handler: 'networkFirst'
-    },
-    {
       urlPattern: /(api|tiles)\.mapbox\.com/,
       handler: 'cacheFirst'
     }
