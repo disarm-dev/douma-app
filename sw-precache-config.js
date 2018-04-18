@@ -6,7 +6,7 @@ module.exports = {
   importScripts: ['offline-analytics.js'],
   staticFileGlobsIgnorePatterns: [
     /\.map$/,
-    /\/static\/?(?:[^\/]+\/?)*$/,
+    /\.json$/,
     /VERSION/,
     /COMMITHASH/
   ],
