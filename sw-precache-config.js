@@ -15,6 +15,7 @@ module.exports = {
       urlPattern: /(api|tiles)\.mapbox\.com/,
       handler: 'cacheFirst'
     }
-  ]
+  ],
+  skipWaiting: false
 }
 
