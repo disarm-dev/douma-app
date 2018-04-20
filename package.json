@@ -12,7 +12,7 @@
     "unit-watch": "env BABEL_ENV=test NODE_ENV=production NODE_PATH=src ava --watch",
     "e2e": "./node_modules/.bin/testcafe chrome test/e2e/",
     "test": "npm run unit-cov",
-    "heroku-postbuild": "npm run build"
+    "heroku-postbuild": "echo 'definitely this'; npm run build"
   },
   "dependencies": {
     "@locational/application-registry-validation": "^2.4.1",
