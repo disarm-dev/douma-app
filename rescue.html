@@ -25,14 +25,6 @@
             height: 80px;
         ">
     <script>
-      var registerSW = function () {
-        console.log('[sw] debug register SW')
-        navigator.serviceWorker.register('/service-worker.js')
-          .then(() => {
-            console.log('[sw] debug install "service-worker.js"')
-          })
-      }
-
       var unregisterSW = function () {
         console.log('[sw] unregister all starting')
 
@@ -56,7 +48,6 @@
         display: none
       }
     </style>
-    <button onclick="registerSW()">registerSW</button>
     <div style='font-family: sans-serif; color: grey; text-align: center; margin: 0 auto; width: 80%'>
       <div>Click the button below to reset the offline mode. You will not lose any data already saved.</div>
       <div style="text-align: center; padding-top: 3em; font-size: 1.5em; cursor: pointer; color: orange;">
