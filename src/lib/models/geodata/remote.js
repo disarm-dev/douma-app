@@ -15,12 +15,12 @@ function geodata_url_for(level_name) {
   return `/geodata/${slug}/${level_name}`
 }
 
-function get_geodata_for(level_name, update_progress) {
-  const request = _get_geodata_for(level_name, update_progress)
+function get_geodata_for(level_name) {
+  const request = _get_geodata_for(level_name)
   return request_handler(request)
 }
 
-function _get_geodata_for(level_name, update_progress) {
+function _get_geodata_for(level_name) {
   const data_version = get_data_version()
 
   const url_suffix = geodata_url_for(level_name)
@@ -33,10 +33,6 @@ function _get_geodata_for(level_name, update_progress) {
     },
     data: {
       level_name
-    },
-    onDownloadProgress: (progress_event) => {
-      const extended_progress_event = merge(progress_event, {level_name})
-      return update_progress(extended_progress_event)
     }
   }
 }
@@ -49,8 +45,8 @@ function store_geodata({level_name, level_geodata}) {
  * retrieve from remote and store on IndexedDB
  * @param level_name
  */
-export function get_and_store_locally_geodata_for(level_name, update_progress) {
-  return get_geodata_for(level_name, update_progress)
+export function get_and_store_locally_geodata_for(level_name) {
+  return get_geodata_for(level_name)
     .then((response) => {
       const level_geodata = response.geodata_data
       return store_geodata({level_name, level_geodata})
