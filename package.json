@@ -14,7 +14,7 @@
     "test": "npm run unit-cov"
   },
   "dependencies": {
-    "@locational/application-registry-validation": "^2.4.1",
+    "@locational/application-registry-validation": "^2.4.2",
     "@mapbox/geo-viewport": "^0.2.2",
     "@mapbox/mapbox-gl-draw": "^1.0.1",
     "@turf/bbox": "^4.4.0",
