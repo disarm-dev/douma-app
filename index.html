@@ -43,9 +43,9 @@
           <script>
             Pace.on('done', function() {
               setTimeout(function (){
-                console.log(`Waiting too long to load application. Display reset_offline link`)
                 var el = document.getElementById('rescue_info')
                   if (el && el.hasOwnProperty('style')) {
+                    console.log(`Waiting too long to load application. Display reset_offline link`)
                     el.style.display = 'inherit'
                   }
               }, 2500)
