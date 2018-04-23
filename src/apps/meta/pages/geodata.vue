@@ -23,8 +23,6 @@
           <span>
             <md-chip v-if="loading_progress[level].status === 'update_available'" class="md-warn"> update available</md-chip>
             {{level}}
-            <span v-if="loading_progress[level].total">{{loading_progress[level].total}}</span>
-            <span v-if="loading_progress[level].progress">{{loading_progress[level].progress}}</span>
           </span>
 
 
