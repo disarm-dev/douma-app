@@ -44,8 +44,11 @@
             Pace.on('done', function() {
               setTimeout(function (){
                 console.log(`Waiting too long to load application. Display reset_offline link`)
-                document.getElementById('rescue_info').style.display = 'inherit'
-              }, 25.00)
+                var el = document.getElementById('rescue_info')
+                  if (el && el.hasOwnProperty('style')) {
+                    el.style.display = 'inherit'
+                  }
+              }, 2500)
             })
           </script>
           <div id="rescue_info" style="display: none; text-align: center; padding-top: 3em; font-size: 1.5em; cursor: pointer; color: orange;">
