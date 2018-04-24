@@ -26,6 +26,7 @@
       label="name"
       :internal-search="false"
       @search-change="search"
+      @input="update_value"
     >
       <span slot="noResult">Oops! No elements found. Consider changing the search query.</span>
     </multiselect>
@@ -57,8 +58,7 @@
         _all_locations: [],
         _custom_location_selection: '',
         use_custom_location: false,
-
-        _sub_area: null
+        sub_area: null
       }
     },
     computed: {
@@ -71,17 +71,6 @@
           this.$store.commit('irs_record_point/set_persisted_metadata', {name: 'area', value: area_string})
         }
       },
-      // secondary area selector
-      sub_area: {
-        get() {
-          return this._sub_area
-        },
-        set(sub_area_object) {
-          this._sub_area = sub_area_object
-          this.$emit('change', sub_area_object)
-        }
-      },
-
       categories() {
         const all_categories = this._all_locations.map(loc => {
           return loc.category
@@ -136,6 +125,9 @@
       }
     },
     methods: {
+      update_value() {
+        this.$emit('change', this.sub_area)
+      },
       prepare_fuse() {
         this._all_locations = get_record_location_selection()
 
