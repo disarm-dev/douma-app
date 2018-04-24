@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" style='background: white'>
+<head>
+  <meta charset="utf-8">
+  <meta name=viewport
+        content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#E91E63">
+
+  <link rel="manifest" href="/manifest.json">
+  <link rel="shortcut icon" href="/static/favicon.ico?v3">
+  <link rel="icon" type="image/png" sizes="96x96" href="/static/favicon-96x96.png">
+
+</head>
+
+<body style='background: white'>
+<div id="douma">
+  <div style="
+          float: none;
+          padding-top: 144px;
+      ">
+    <img src="/static/loading-logo.png" style="
+            margin-left: auto;
+            margin-right: auto;
+            display: block;
+            height: 80px;
+        ">
+
+    <script>
+      var unregisterSW = function () {
+        console.log('[sw] unregister all starting')
+
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.getRegistrations()
+            .then(function (registrations) {
+              var allUnregisters = registrations.map(r => r.unregister())
+              return Promise.all(allUnregisters)
+                .then(function (result) {
+                  console.log(`[sw] unregister all complete (${result.length} ServiceWorkers unregistered)`)
+                  document.getElementById('done').classList.remove('invisible')
+                  document.getElementById('do').classList.add('invisible')
+                })
+                .catch((e) => {
+                  console.error(errors)
+                  document.getElementById('errors').classList.remove('invisible')
+                })
+            })
+        } else {
+          console.log('[sw] ServiceWorker not available in this browser. Cannot remove')
+          document.getElementById('errors').classList.remove('invisible')
+
+        }
+      }
+    </script>
+    <style>
+      .invisible {
+        display: none
+      }
+      .reset-button {
+        font-size: 1em;
+        border-radius: 3px;
+        border-width: 0px;
+        background: orange;
+        color: white;
+        box-shadow: 2px 2px 5px #e2e2e2;
+        text-decoration: none;
+        padding: 1px 7px 1px;
+      }
+    </style>
+    <div style="font-family: sans-serif; text-align: center; padding-top: 3em; font-size: 1.5em; color: orange; margin: 0 auto; width: 80%">
+      <span id="do">
+        <div><button onclick="unregisterSW()" class="reset-button">Reset offline mode</button></div>
+        <div>You will not lose any stored data.</div>
+      </span>
+      <span id="done" class="invisible">
+        <div>Offline mode was reset successfully. </div>
+        <div><a href='/' class="reset-button">Restart application</a></div>
+      </span>
+      <div id="errors" class="invisible" style="color: red;">Error removing offline functionality. Please check browser console.</a></div>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>

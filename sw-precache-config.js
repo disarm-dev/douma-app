@@ -3,10 +3,10 @@ module.exports = {
   root: 'dist',
   maximumFileSizeToCacheInBytes: 14194304,
   navigateFallback: 'index.html',
-  navigateFallbackWhitelist: [/^\/(?!reset_offline)./],
+  navigateFallbackWhitelist: [/^\/(?!reset)./],
   importScripts: ['offline-analytics.js'],
   staticFileGlobsIgnorePatterns: [
-    /\/reset_offline\.html/,
+    /\/reset\.html/,
     /\.map$/,
     /\.json$/,
     /VERSION/,

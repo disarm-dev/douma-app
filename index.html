@@ -38,25 +38,8 @@
         <div style='font-family: sans-serif; color: grey; text-align: center;'>
           version <%= __VERSION_COMMIT_HASH_SHORT %>
         </div>
-
-        <div style='font-family: sans-serif; color: grey; text-align: center; margin: 0 auto; width: 80%'>
-          <script>
-            Pace.on('done', function() {
-              setTimeout(function (){
-                var el = document.getElementById('rescue_info')
-                  if (el && el.hasOwnProperty('style')) {
-                    console.log(`Waiting too long to load application. Display reset_offline link`)
-                    el.style.display = 'inherit'
-                  }
-              }, 2500)
-            })
-          </script>
-          <div id="rescue_info" style="display: none; text-align: center; padding-top: 3em; font-size: 1.5em; cursor: pointer; color: orange;">
-            <div>
-              There may be a problem loading the application. Please reload this page or
-              <a href="/reset_offline.html">click here</a> to reset offline mode.
-            </div>
-          </div>
+        <div style='font-family: sans-serif; color: grey; text-align: center;'>
+          <a href="/reset.html" style="color: grey;">Reset offline</a>
         </div>
       </div>
     </div>
