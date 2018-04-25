@@ -53,6 +53,10 @@ export function configure_application (instance_config) {
   // (Required for the app)
   const store = create_store(instance_config, instance_applets_stores_and_routes.stores)
   store.commit('root:set_instance_config', instance_config)
+  
+  document.addEventListener("show-update-available", e => {
+    store.commit("root:set_sw_update_available", true)
+  })
 
   // Create Vue#$router from what you got
   // (Required for the app)
