@@ -15,13 +15,18 @@ export function create_router(instance_routes, store) {
   // Configure routes for all Applets
   const routes = [
     {
-      path: '/',
-      redirect: '/meta',
+      path: '/:id/',
+      redirect: '/:id/meta',
+      children: [
+        ...instance_routes,
+        {
+          path: '*',
+          redirect: '/'
+        }
+      ]
     }
-  ].concat(...instance_routes, {
-    path: '*',
-    redirect: '/'
-  })
+  ]
+
 
   // Instantiate `router`
   router = new VueRouter({
@@ -50,7 +55,7 @@ export function create_router(instance_routes, store) {
 
     // check if any applets require geodata, or continue
     const decorated_applets = store.getters['meta/decorated_applets']
-    const to_applet = decorated_applets.find(applet => applet.name === to.name.split(":")[0])
+    const to_applet = decorated_applets.find(applet => applet.name === to.name.split(':')[0])
     const geodata_required = get(to_applet, 'geodata_required', false)
 
     // if you're on your way to any 'meta' page, then carry on

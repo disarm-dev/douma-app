@@ -16,7 +16,7 @@ import {configure_application} from 'config/configure_application.js'
 // configure_error_tracking!!
 configure_error_tracking()
 
-get_instance_config()
+get_instance_config('bwa')
   .then(instance_config => {
     configure_application(instance_config)
   })
