@@ -68,9 +68,6 @@ export function configure_application (instance_config) {
 
   // BEFORE VUE APP IS CREATED (USING store OR router)
 
-
-  console.log('TODO: @idea 🤔 Can we start getting the tile-cover thing going here, to cache all needed vector tiles? https://github.com/mapbox/tile-cover')
-
   // Configure standard_handler for remote requests
   // Also trigger a ping to API, for lots of reasons, mostly that the API seems to take ages to wake up
   // (Loads of components use network requests when they are created/mounted)
