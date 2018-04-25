@@ -1,23 +1,26 @@
 import BUILD_TIME from 'config/build-time'
+import {register} from 'register-service-worker'
 
-if (!BUILD_TIME.DOUMA_PRODUCTION_MODE) {
-  console.warn('DOUMA ServiceWorker disabled in development')
-}
-
-if (('serviceWorker' in navigator)) {
-  navigator.serviceWorker.register('/service-worker.js')
-    .then((registration) => {
-      const installingWorker = registration.installing
-
-      // starting install
-      if (installingWorker) {
-        console.log('[sw] start registration.installing')
-        installingWorker.addEventListener('statechange', function (e) {
-          console.log(`[sw] ${e.target.state}`)
-        })
-      }
-    })
+if (BUILD_TIME.DOUMA_PRODUCTION_MODE) {
+  register('/service-worker.js', {
+    ready() {
+      console.log('[sw] Service worker is active.');
+    },
+    cached() {
+      console.log('[sw] Content has been cached for offline use.');
+    },
+    updated() {
+      document.dispatchEvent(new Event('show-update-available'))
+      console.log('[sw] New content is available; please refresh.');
+    },
+    offline() {
+      console.log('[sw] No internet connection found. App is running in offline mode.');
+    },
+    error(error) {
+      console.error('[sw] Error during service worker registration:', error);
+    }
+  });
 } else {
-  console.log('ServiceWorker not available in this browser')
+  console.warn('DOUMA ServiceWorker disabled in development')
 }
 
