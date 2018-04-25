@@ -106,25 +106,29 @@
     },
     created() {
       this.prepare_fuse()
-
-      if (this.initial_location_selection) {
-        this.$emit('change', this.initial_location_selection)
-
-        if (Object.prototype.hasOwnProperty.call(this.initial_location_selection, 'id')) {
-          // initial_location_selection is an object for the multiselect
-          this.sub_area = this.initial_location_selection
-          this.area = this.find_area_for_sub_area(this.sub_area)
-        } else {
-          // it is a custom text property, use text input
-          this.use_custom_location = true
-          this.custom_location_selection = this.initial_location_selection.name
-        }
-
-      } else {
-        this.$emit('change', this.sub_area)
-      }
+    },
+    watch: {
+      'initial_location_selection': 'setup_initial_location_selection'
     },
     methods: {
+      setup_initial_location_selection() {
+        if (this.initial_location_selection) {
+          this.$emit('change', this.initial_location_selection)
+
+          if (Object.prototype.hasOwnProperty.call(this.initial_location_selection, 'id')) {
+            // initial_location_selection is an object for the multiselect
+            this.sub_area = this.initial_location_selection
+            this.area = this.find_area_for_sub_area(this.sub_area)
+          } else {
+            // it is a custom text property, use text input
+            this.use_custom_location = true
+            this.custom_location_selection = this.initial_location_selection.name
+          }
+
+        } else {
+          this.$emit('change', this.sub_area)
+        }
+      },
       update_value() {
         this.$emit('change', this.sub_area)
       },
