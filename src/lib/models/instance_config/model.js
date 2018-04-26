@@ -3,7 +3,7 @@ import { read_instance_config } from './remote'
 
 const local_config_db = new InstanceConfigLocal()
 
-export async function read_instance_congfiguration_for(config_id) {
+export async function read_instance_configuration_for(config_id) {
   try {
     const remote_instance_config = await retrieve_and_store_remote_config(config_id)
     if (remote_instance_config) return remote_instance_config
@@ -14,7 +14,7 @@ export async function read_instance_congfiguration_for(config_id) {
       throw new Error("Cannot retrieve configuration from remote or local")
     }
   } catch (e) {
-    alert("Cannot load configuration. Please try reloading the page.")
+    return null
   }
 }
 

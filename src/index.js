@@ -18,5 +18,9 @@ configure_error_tracking()
 
 get_instance_config()
   .then(instance_config => {
-    configure_application(instance_config)
+    if (instance_config) {
+      configure_application(instance_config)
+    } else {
+      console.error("DEBUG: Screetching stop. No instance_config")
+    }
   })
