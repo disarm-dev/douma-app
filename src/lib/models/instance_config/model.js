@@ -11,7 +11,7 @@ export async function read_instance_configuration_for(config_id) {
     if (local_instance_config) {
       return local_instance_config
     } else {
-      throw new Error("Cannot retrieve configuration from remote or local")
+      alert("Cannot retrieve configuration from remote or local. Please try reloading the page.")
     }
   } catch (e) {
     return null

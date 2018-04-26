@@ -62,7 +62,7 @@ export async function get_instance_config() {
   const instance_slug = determine_instance()
   try {
     const instance_config = await read_instance_configuration_for(instance_slug)
-    if (!instance_slug) return null
+    if (!instance_config) return null;
     
     // TODO: @refac fix this
     if (instance_config.aggregations) {
