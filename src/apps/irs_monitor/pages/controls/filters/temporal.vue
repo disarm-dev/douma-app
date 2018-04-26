@@ -23,7 +23,7 @@ import moment from 'moment-mini'
 
 export default {
   name: 'temporal',
-  props: ['responses'],
+  props: ['responses', 'filters'],
   components: {DatePicker},
   data () {
     return {
@@ -44,6 +44,8 @@ export default {
       this.end = new Date(Math.max(...dates))
     },
     add_temporal_filter() {
+      this.remove_other_temporal_filters()
+
       // emit start
       this.$emit('change', {
         name: 'recorded_on',
@@ -59,6 +61,17 @@ export default {
         value: new Date(this.end).getTime(),
         display_value: moment(new Date(this.end)).format("MMM Do YYYY")
       })
+    },
+    // TODO: remove this, not component-y
+    remove_other_temporal_filters() {
+      if (!this.filters) return 
+      
+      this.filters
+        .filter(f => f.name === 'recorded_on')
+        .forEach(f => {
+          this.$store.commit('irs_monitor/remove_filter', f)
+        })
+
     }
   }
 };
