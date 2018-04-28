@@ -1,24 +1,20 @@
 <template>
-  <div>
-    <h4>All fields</h4>
+  <div class="filter_fields">
+    <md-input-container class="filter_field">
+      <md-select v-model="filter_name" class="select" :disabled="!field_names.length" placeholder="Form field">
+        <md-option v-for="field_name in field_names" :key='field_name' :value="field_name">{{field_name}}</md-option>
+      </md-select>
 
-    <div class="filter_fields">
-      <md-input-container class="filter_field">
-        <md-select v-model="filter_name" class="select" :disabled="!field_names.length">
-          <md-option v-for="field_name in field_names" :key='field_name' :value="field_name">{{field_name}}</md-option>
-        </md-select>
+      <md-select v-model="filter_comparator" class="select" disabled>
+        <md-option v-for="comparator in comparators" :key="comparator" :value="comparator">{{comparator}}</md-option>
+      </md-select>
 
-        <md-select v-model="filter_comparator" class="select" disabled>
-          <md-option v-for="comparator in comparators" :key="comparator" :value="comparator">{{comparator}}</md-option>
-        </md-select>
+      <md-select v-model="filter_value" class="select" :disabled="!field_values.length" placeholder="Value">
+        <md-option v-for="value in field_values" :key="value" :value="value">{{value}}</md-option>
+      </md-select>
+    </md-input-container>
 
-        <md-select v-model="filter_value" class="select" :disabled="!field_values.length">
-          <md-option v-for="value in field_values" :key="value" :value="value">{{value}}</md-option>
-        </md-select>
-      </md-input-container>
-
-      <md-button :disabled='add_disabled' @click="add_filter()">Add filter</md-button>
-    </div>
+    <md-button :disabled='add_disabled' @click="add_filter()">Add filter</md-button>
   </div>
 </template>
 
@@ -47,6 +43,9 @@
       }
     },
     computed: {
+      ...mapState({
+        filters: state => state.irs_monitor.filters,
+      }),
       add_disabled() {
         const can_add = (this.filter_name && this.filter_comparator && this.filter_value)
         return !can_add
@@ -123,7 +122,7 @@
         return Object.keys(result);
       },
       add_filter() {
-        this.$emit('change', this.filter)
+        this.$store.commit('irs_monitor/add_filter', filter)
         this.reset_inputs()
       }
     }

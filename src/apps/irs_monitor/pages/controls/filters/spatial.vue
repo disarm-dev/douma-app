@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h4>Spatial filter</h4>
     <span v-if="area_filter_set">Spatial filter already set. Please remove the spatial filter before adding a new one.</span>
 
     <multiselect
@@ -113,12 +112,13 @@
         }
       },
       add_category() {
-        this.$emit('change', {name: 'location.selection.category', comparator: '==', value: this.area})
+        const filter = {name: 'location.selection.category', comparator: '==', value: this.area}
+        this.$store.commit('irs_monitor/add_filter', filter)
       },
 
       add_area() {
         const filter = {name: 'location.selection.id', comparator: '==', value: this.sub_area.id, display_value: this.sub_area.name}
-        this.$emit('change', filter)
+        this.$store.commit('irs_monitor/add_filter', filter)
       }
     }
   }

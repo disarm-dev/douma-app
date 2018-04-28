@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h4>Temporal filter</h4>
     <div class="date-input">
       <b>From</b>
       <date-picker v-model="start"></date-picker>
@@ -46,26 +45,28 @@ export default {
     add_temporal_filter() {
       this.remove_other_temporal_filters()
 
-      // emit start
-      this.$emit('change', {
+      const start_filter = {
         name: 'recorded_on',
         comparator: '>',
         value: new Date(this.start).getTime(),
         display_value: moment(new Date(this.start)).format("MMM Do YYYY")
-      })
+      }
 
-      //emit end
-      this.$emit('change', {
+      this.$store.commit('irs_monitor/add_filter', start_filter)
+
+      const end_filter = {
         name: 'recorded_on',
         comparator: '<',
         value: new Date(this.end).getTime(),
         display_value: moment(new Date(this.end)).format("MMM Do YYYY")
-      })
+      }
+
+      this.$store.commit('irs_monitor/add_filter', end_filter)
     },
     // TODO: remove this, not component-y
     remove_other_temporal_filters() {
-      if (!this.filters) return 
-      
+      if (!this.filters) return
+
       this.filters
         .filter(f => f.name === 'recorded_on')
         .forEach(f => {
