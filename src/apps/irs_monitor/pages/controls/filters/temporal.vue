@@ -47,7 +47,7 @@ export default {
 
       const start_filter = {
         name: 'recorded_on',
-        comparator: '>',
+        comparator: '>=',
         value: new Date(this.start).getTime(),
         display_value: moment(new Date(this.start)).format("MMM Do YYYY")
       }
@@ -56,7 +56,7 @@ export default {
 
       const end_filter = {
         name: 'recorded_on',
-        comparator: '<',
+        comparator: '<=',
         value: new Date(this.end).getTime(),
         display_value: moment(new Date(this.end)).format("MMM Do YYYY")
       }
