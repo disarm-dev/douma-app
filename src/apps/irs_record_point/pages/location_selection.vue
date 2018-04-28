@@ -26,6 +26,7 @@
       label="name"
       :internal-search="false"
       @search-change="search"
+      @input="update_value"
     >
       <span slot="noResult">Oops! No elements found. Consider changing the search query.</span>
     </multiselect>
@@ -57,8 +58,7 @@
         _all_locations: [],
         _custom_location_selection: '',
         use_custom_location: false,
-
-        _sub_area: null
+        sub_area: null
       }
     },
     computed: {
@@ -71,17 +71,6 @@
           this.$store.commit('irs_record_point/set_persisted_metadata', {name: 'area', value: area_string})
         }
       },
-      // secondary area selector
-      sub_area: {
-        get() {
-          return this._sub_area
-        },
-        set(sub_area_object) {
-          this._sub_area = sub_area_object
-          this.$emit('change', sub_area_object)
-        }
-      },
-
       categories() {
         const all_categories = this._all_locations.map(loc => {
           return loc.category
@@ -117,25 +106,32 @@
     },
     created() {
       this.prepare_fuse()
-
-      if (this.initial_location_selection) {
-        this.$emit('change', this.initial_location_selection)
-
-        if (Object.prototype.hasOwnProperty.call(this.initial_location_selection, 'id')) {
-          // initial_location_selection is an object for the multiselect
-          this.sub_area = this.initial_location_selection
-          this.area = this.find_area_for_sub_area(this.sub_area)
-        } else {
-          // it is a custom text property, use text input
-          this.use_custom_location = true
-          this.custom_location_selection = this.initial_location_selection.name
-        }
-
-      } else {
-        this.$emit('change', this.sub_area)
-      }
+    },
+    watch: {
+      'initial_location_selection': 'setup_initial_location_selection'
     },
     methods: {
+      setup_initial_location_selection() {
+        if (this.initial_location_selection) {
+          this.$emit('change', this.initial_location_selection)
+
+          if (Object.prototype.hasOwnProperty.call(this.initial_location_selection, 'id')) {
+            // initial_location_selection is an object for the multiselect
+            this.sub_area = this.initial_location_selection
+            this.area = this.find_area_for_sub_area(this.sub_area)
+          } else {
+            // it is a custom text property, use text input
+            this.use_custom_location = true
+            this.custom_location_selection = this.initial_location_selection.name
+          }
+
+        } else {
+          this.$emit('change', this.sub_area)
+        }
+      },
+      update_value() {
+        this.$emit('change', this.sub_area)
+      },
       prepare_fuse() {
         this._all_locations = get_record_location_selection()
 

@@ -14,7 +14,7 @@
     "test": "npm run unit-cov"
   },
   "dependencies": {
-    "@locational/application-registry-validation": "^2.4.2",
+    "@locational/application-registry-validation": "^2.4.3",
     "@mapbox/geo-viewport": "^0.2.2",
     "@mapbox/mapbox-gl-draw": "^1.0.1",
     "@turf/bbox": "^4.4.0",
@@ -78,6 +78,7 @@
     "random-points-on-polygon": "0.0.4",
     "raven-js": "^3.15.0",
     "rbush": "^2.0.1",
+    "register-service-worker": "^1.2.0",
     "require-extension-hooks-babel": "^0.1.1",
     "require-extension-hooks-vue": "^0.4.1",
     "serve-static": "^1.13.2",
@@ -173,7 +174,7 @@
     "last 2 versions",
     "not ie <= 10"
   ],
-  "version": "1.0.8",
+  "version": "1.0.9",
   "ava": {
     "require": [
       "./test/helpers/setup.js"
