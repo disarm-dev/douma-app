@@ -10,73 +10,73 @@ import instance_config_view from './pages/instance_config_view.vue'
 
 export default [
   {
-    path: '/debug',
+    path: 'debug',
     component: debug,
     name: 'debug',
     meta: {
       can: 'read debug',
-      fail: '/meta/home'
+      fail: 'meta/home'
     }
   }, {
-    path: '/debug/location',
+    path: 'debug/location',
     component: location,
     name: 'debug:location',
     meta: {
       can: 'read debug',
-      fail: '/meta/home'
+      fail: 'meta/home'
     }
   }, {
-    path: '/debug/building',
+    path: 'debug/building',
     component: building,
     name: 'debug:building',
     meta: {
       can: 'read debug',
-      fail: '/meta/home'
+      fail: 'meta/home'
     }
   }, {
-    path: '/debug/validations',
+    path: 'debug/validations',
     component: validations,
     name: 'debug:validations',
     meta: {
       can: 'read debug',
-      fail: '/meta/home'
+      fail: 'meta/home'
     }
   }, {
-    path: '/debug/fake_data',
+    path: 'debug/fake_data',
     component: fake_data,
     name: 'debug:fake_data',
     meta: {
       can: 'read debug',
-      fail: '/meta/home'
+      fail: 'meta/home'
     }
   }, {
-    path: '/debug/check_data_status',
+    path: 'debug/check_data_status',
     component: check_data_status,
     name: 'debug:check_data_status',
 
   }, {
-    path: '/debug/validate_data',
+    path: 'debug/validate_data',
     component: validate_data,
     name: 'debug:validate_data',
     meta: {
       can: 'read debug',
-      fail: '/meta/home'
+      fail: 'meta/home'
     }
   }, {
-    path: '/debug/upload_geodata',
+    path: 'debug/upload_geodata',
     component: upload_geodata,
     name: 'debug:upload_geodata',
     meta: {
       can: 'read debug',
-      fail: '/meta/home'
+      fail: 'meta/home'
     }
   }, {
-    path: '/debug/instance_config_view',
+    path: 'debug/instance_config_view',
     component: instance_config_view,
     name: 'debug:instance_config_view',
     meta: {
       can: 'read debug',
-      fail: '/meta/home'
+      fail: 'meta/home'
     }
   }
 ]
