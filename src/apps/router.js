@@ -1,4 +1,4 @@
-import Vue from 'vue'
+  import Vue from 'vue'
 import VueRouter from 'vue-router'
 import {get} from 'lodash'
 
@@ -6,27 +6,38 @@ import {has_permission} from 'lib/models/user/permission_helper.js'
 import {geodata_in_cache_and_valid} from 'lib/models/geodata/geodata.valid'
 import {hydrate_geodata_cache_from_idb} from 'lib/models/geodata/local.geodata_store'
 
+import Root from './root'
+import MissingInstance from './missing_instance'
+
 let router
 export {router}
 
 export function create_router(instance_routes, store) {
   Vue.use(VueRouter)
 
+  const flat_instance_routes = [].concat(...instance_routes)
+
   // Configure routes for all Applets
   const routes = [
     {
+      path: '',
+      name: 'missing_instance',
+      component: MissingInstance
+    },
+    {
       path: '/:id/',
-      redirect: '/:id/meta',
+      // redirect: '/:id/meta',
+      name: 'root',
+      component: Root,
       children: [
-        ...instance_routes,
-        {
-          path: '*',
-          redirect: '/'
-        }
+        ...flat_instance_routes,
       ]
+    },
+    {
+      path: '*',
+      redirect: ''
     }
   ]
-
 
   // Instantiate `router`
   router = new VueRouter({

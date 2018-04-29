@@ -8,9 +8,9 @@ import fix_personalised_instance_id_record from './pages/fix_personalised_instan
 
 export default [
   {
-    path: '/meta',
+    path: 'meta',
     component: applet,
-    redirect: '/meta/home',
+    redirect: 'meta/home',
     name: 'meta',
     children: [
       {

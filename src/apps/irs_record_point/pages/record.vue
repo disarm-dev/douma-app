@@ -354,19 +354,19 @@
       },
       create_response(response) {
         this.$store.dispatch('irs_record_point/create_response_local', response).then(() => {
-          this.$router.push('/irs/record_point/')
+          this.$router.push({name: 'irs/record_point/'})
         })
       },
       update_response(response) {
         this.$store.dispatch('irs_record_point/update_response_local', response).then(() => {
-          this.$router.push('/irs/record_point/')
+          this.$router.push({name: 'irs/record_point/'})
         })
       },
 
       close_form() {
         // TODO: @refac Check for closing a record without saving in the router instead (and block page changes)
         if (this.response_id) {
-          this.$router.push('/irs/record_point')
+          this.$router.push({name: 'irs/record_point'})
         } else {
           this.$refs.close_form_confirm.open()
         }
@@ -374,7 +374,7 @@
       respond_to_close_form_confirm(type) {
         if (type === 'cancel') {
         } else {
-          this.$router.push('/irs/record_point')
+          this.$router.push({name: 'irs/record_point'})
         }
       },
       field_changed(field) {
