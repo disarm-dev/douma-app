@@ -5,12 +5,11 @@
 
       <md-dialog-content>
         <md-list>
-        <md-list-item v-for="plan in plan_list" @click="load_plan_detail(plan._id)" :key="plan._id">
-          <span>
-            {{(new Date(plan.date)).toLocaleString()}}
-            -
-            {{plan.targets}} targets
-          </span>
+        <md-list-item class="md-double-line" v-for="plan in plan_list" @click="load_plan_detail(plan._id)" :key="plan._id">
+          <div class="md-list-text-container">
+            <span>{{plan.name?plan.name:'No Name'}}</span>
+            <span>{{(new Date(plan.date)).toLocaleString()}}<md-chip>{{plan.targets}} targets</md-chip></span>
+          </div>
           </md-list-item>
         </md-list>
       </md-dialog-content>

@@ -2,24 +2,32 @@
   <md-dialog md-open-from="#custom" md-close-to="#custom" ref="save_plan_dialog">
     <md-dialog-title>Save Plan</md-dialog-title>
     <md-dialog-content>
-      <md-list>
+      <md-list class="md-double-line">
         <md-list-item v-for="plan in plan_list" :key="plan.date">
+          <div class="md-list-text-container">
+            <span>{{plan.name?plan.name:'No Name'}}</span>
+            <span>{{(new Date(plan.date)).toLocaleString()}}-{{plan.targets}} targets</span>
+          </div>
           <span>
-            {{(new Date(plan.date)).toLocaleString()}}
-            -
-            {{plan.targets}} targets
+            <md-button flat @click="update(plan)" >update</md-button>
           </span>
           <span>
-            <md-button flat @click="update(plan)">update</md-button>
-          </span>
-          <span>
-            <md-button @click="clear(plan)" flat>
+            <md-button @click="clear(plan)" class="md-icon-button md-list-action" flat>
               <md-icon>clear</md-icon>
             </md-button>
           </span>
         </md-list-item>
         <md-list-item>
-          <span>{{new Date().toLocaleString()}} </span>
+          <div class="md-list-text-container">
+              <span>
+             <md-input-container>
+                <label>Plan Name</label>
+                <md-input required></md-input>
+
+             </md-input-container>
+          </span>
+            <span>{{new Date().toLocaleString()}} </span>
+          </div>
           <span><md-button flat @click="create()">Create</md-button></span>
         </md-list-item>
       </md-list>
@@ -50,6 +58,11 @@
         } else {
           this.$refs['save_plan_dialog'].close();
         }
+      }
+    },
+    data(){
+      return {
+        new_plan_name:''
       }
     },
     methods: {
