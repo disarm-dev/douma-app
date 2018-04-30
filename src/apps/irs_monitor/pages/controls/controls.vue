@@ -1,5 +1,5 @@
 <template>
-  <md-card class="card filter_select filter-container">
+  <md-card class="card filter_select">
     <md-card-header>
       <div id="title" class="md-title" @click="show_filters = !show_filters">
         <md-icon v-if="show_filters">keyboard_arrow_down</md-icon>
@@ -10,7 +10,7 @@
     </md-card-header>
 
     <md-card-content v-show="show_filters">
-      <md-tabs class="md-transparent">
+      <md-tabs class="md-transparent filter-container">
 
         <md-tab id="season_plan" md-label="Season/plan">
           <seasons :season_start_dates="season_start_dates"></seasons>
@@ -88,9 +88,11 @@
   #title {
     margin-top: 0;
   }
+</style>
 
-  .filter-container {
-    z-index: 2;
+<style>
+  .filter-container .md-tabs-content {
+    z-index: 1;
     overflow: visible;
   }
 </style>
