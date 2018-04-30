@@ -122,7 +122,7 @@
         return Object.keys(result);
       },
       add_filter() {
-        this.$store.commit('irs_monitor/add_filter', filter)
+        this.$store.commit('irs_monitor/add_filter', this.filter)
         this.reset_inputs()
       }
     }
