@@ -65,6 +65,13 @@
         }
       },
       push_date(){
+        this.error = ""
+
+        if (this.$store.state.instance_config.applets.irs_monitor.season_start_dates.includes(this.new_season_start_date)) {
+          this.error = "That season start date has already been added"
+          return 
+        }
+
         const season_start_dates = [...this.$store.state.instance_config.applets.irs_monitor.season_start_dates, this.new_season_start_date]
         if (this.validate_seasons(season_start_dates)) {
           this.$store.state.instance_config.applets.irs_monitor.season_start_dates.push(this.new_season_start_date)
