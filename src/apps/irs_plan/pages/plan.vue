@@ -144,8 +144,7 @@
         edit_disabled: true,
         select_plan_dialog: false,
         show_save_plan: false,
-        plan_list: [],
-        _plan_thing: 'ting'
+        plan_list: []
       }
     },
     computed: {
@@ -198,8 +197,9 @@
       }
     },
     methods: {
-      create_plan(event) {
-        this.save_plan();
+      create_plan(plan_name) {
+       // console.log(event);
+        this.save_plan(plan_name);
         this.show_save_plan = false
       },
       update_plan(event) {
@@ -300,7 +300,7 @@
           })
 
       },
-      save_plan() {
+      save_plan(plan_name) {
         let focus_filter_area
         let selected_target_area_ids
 
@@ -326,6 +326,7 @@
         const plan = new Plan().create({
           instance_config: this.instance_config,
           focus_filter_area,
+          name:plan_name,
           selected_target_area_ids
         })
 

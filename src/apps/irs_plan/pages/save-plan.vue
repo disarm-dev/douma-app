@@ -22,7 +22,7 @@
               <span>
              <md-input-container>
                 <label>Plan Name</label>
-                <md-input required></md-input>
+                <md-input required v-model="new_plan_name"></md-input>
 
              </md-input-container>
           </span>
@@ -73,7 +73,7 @@
         this.$emit('clear', item)
       },
       create() {
-        this.$emit('create')
+        this.$emit('create',this.new_plan_name)
       },
       cancel() {
         this.$emit('cancel')
