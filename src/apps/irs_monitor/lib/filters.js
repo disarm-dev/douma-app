@@ -20,8 +20,10 @@ function filter_response(response, filters) {
     if (name === 'recorded_on') {
       value_from_response = new Date(value_from_response).getTime()
       const millis_in_a_day = 86400000
+
       let filter_value_in_days = Math.floor(new Date(value).getTime()/millis_in_a_day)
       let value_from_response_in_days = Math.floor(new Date(value_from_response).getTime()/millis_in_a_day)
+
       value_from_filter = filter_value_in_days
       value_from_response = value_from_response_in_days
     }
@@ -34,7 +36,6 @@ function filter_response(response, filters) {
     const expr_string = `value_from_response ${comparator} ${value_from_filter}`
     const variables = { value_from_response }
 
-   
     return Parser.evaluate(expr_string, variables)
   })
 }
