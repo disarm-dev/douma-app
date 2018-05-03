@@ -1,24 +1,13 @@
 import {get} from 'lodash'
 import {Parser} from 'expr-eval'
-export function filter_responses(responses, filters = []) {
-  console.timeStamp('start filter')
-  console.time('filter')
-  const filtered = responses.filter((response) => {
-    return filter_response(response, filters)
-  })
-  console.timeEnd('filter')
-  console.timeStamp('filter')
 
-  console.time('for')
+export function filter_responses(responses, filters = []) {
+  // For loop is faster by 10x than Array#filter
   let output = []
   for (let i = 0; i < responses.length; i++) {
+    let response = responses[i]
     if (filter_response(response, filters)) output.push(response)
   }
-  console.timeEnd('for')
-  console.timeStamp('for')
-
-  console.assert(filtered.length === output.length, "Mismatched result length")
-
   return output
 }
 
