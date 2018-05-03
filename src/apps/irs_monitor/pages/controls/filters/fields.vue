@@ -8,7 +8,7 @@
           <md-option v-for="field_name in field_names" :key='field_name' :value="field_name">{{field_name}}</md-option>
         </md-select>
 
-        <md-select v-model="filter_comparator" class="select" disabled>
+        <md-select v-model="filter_comparator" class="select">
           <md-option v-for="comparator in comparators" :key="comparator" :value="comparator">{{comparator}}</md-option>
         </md-select>
 
@@ -32,18 +32,21 @@
   import map from 'lodash/fp/map'
 
   const EXCLUDE_FIELD_FILTER = f => !f.startsWith('location')
+  const comparators = ['equals', 'not_equals']
+
+  const default_inputs = {
+    filter_name: '',
+    filter_comparator: comparators[0],
+    filter_value: ''
+  }
 
   export default {
     name: 'field-filters',
     props: ['responses'],
     data() {
       return {
-        // see below #reset_inputs for default values
-        filter_name: null,
-        filter_comparator: null,
-        filter_value: null,
-
-        comparators: ['==']
+        ...default_inputs,
+        comparators
       }
     },
     computed: {
@@ -87,15 +90,11 @@
         }
       }
     },
-    created () {
-      this.reset_inputs()
-    },
     methods: {
       reset_inputs() {
-        // TODO: @refac replicating these data definitions === bad
-        this.filter_name = ''
-        this.filter_comparator = '=='
-        this.filter_value = ''
+        this.filter_name = default_inputs.filter_name
+        this.filter_comparator = default_inputs.filter_comparator
+        this.filter_value = default_inputs.filter_value
       },
       extract_nested_keys(data) {
         var result = {};
