@@ -49,7 +49,7 @@ export default {
       // emit start
       this.$emit('change', {
         name: 'recorded_on',
-        comparator: '>',
+        comparator: '>=',
         value: new Date(this.start).getTime(),
         display_value: moment(new Date(this.start)).format("MMM Do YYYY")
       })
@@ -57,15 +57,15 @@ export default {
       //emit end
       this.$emit('change', {
         name: 'recorded_on',
-        comparator: '<',
+        comparator: '<=',
         value: new Date(this.end).getTime(),
         display_value: moment(new Date(this.end)).format("MMM Do YYYY")
       })
     },
     // TODO: remove this, not component-y
     remove_other_temporal_filters() {
-      if (!this.filters) return 
-      
+      if (!this.filters) return
+
       this.filters
         .filter(f => f.name === 'recorded_on')
         .forEach(f => {
