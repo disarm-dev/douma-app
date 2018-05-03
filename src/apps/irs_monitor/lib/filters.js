@@ -24,7 +24,6 @@ export function filter_responses(responses, filters = []) {
   return output
 }
 
-
 function compose_filter_function(filters) {
   const fns = filters.map(filter_function)
 
