@@ -21,13 +21,13 @@ SOURCEMAP_FILES=(./serve/static/js/*.map)
 echo "Uploaded sourcemaps"
 
 
-# Send a useful message back via a Slack webhook
-message=$(git rev-parse --abbrev-ref HEAD)": "
+# Send a useful message back via a webhook
+message=$(git rev-parse --abbrev-ref HEAD)
 message=$message" "$VERSION
-message=$message"    [commit: "$(git log --oneline -n 1)"]"
+message=$message"@"$(git log --oneline -n 1)
 echo "Built $message"
 
-echo $message | tr -d \'\" | xargs -I % curl -X "POST" "https://hooks.slack.com/services/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" \
+echo $message | tr -d \'\" | xargs -I % curl -X "POST" "https://hooks.zapier.com/hooks/catch/138741/fz7fdi/" \
      -H "Content-Type: application/json; charset=utf-8" \
      -d $'{
   "text": "'%'"

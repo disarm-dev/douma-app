@@ -11,6 +11,7 @@ var OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 var LicenseWebpackPlugin = require('license-webpack-plugin')
 var SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin')
 var Visualizer = require('webpack-visualizer-plugin');
+var UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
 var env = config.build.env
 
@@ -33,10 +34,7 @@ var webpackConfig = merge(baseWebpackConfig, {
     new webpack.DefinePlugin({
       'process.env': env
     }),
-    new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        warnings: false
-      },
+    new UglifyJsPlugin({
       sourceMap: true
     }),
     // extract css into its own file
@@ -93,6 +91,7 @@ var webpackConfig = merge(baseWebpackConfig, {
       { from: './src/offline-analytics.js' },
       { from: './index.html', to: '200.html' },
       { from: './src/manifest.json' },
+      { from: './reset.html' },
       { from: './node_modules/sw-offline-google-analytics/build/offline-google-analytics-import.min.js' },
     ]),
     new LicenseWebpackPlugin({
@@ -101,8 +100,7 @@ var webpackConfig = merge(baseWebpackConfig, {
       abortOnUnacceptableLicense: false,
       filename: 'static/3rdpartylicenses.txt'
     }),
-    new SWPrecacheWebpackPlugin(require('../sw-precache-config.js')),
-    new Visualizer()
+    new SWPrecacheWebpackPlugin(require('../sw-precache-config.js'))
   ]
 })
 

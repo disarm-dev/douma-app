@@ -10,6 +10,11 @@
         <span>Load plan</span>
       </md-menu-item>
 
+      <md-menu-item :disabled="!$can('read', 'irs_monitor') || $loading.isLoading('irs_monitor/load_all_plans')" @click="load_all_plans">
+        <md-icon>file_download</md-icon>
+        <span>Load all plans</span>
+      </md-menu-item>
+
       <md-menu-item :disabled="!$can('read', 'irs_monitor') || $loading.isLoading('irs_monitor/load_responses')" @click="load_responses">
         <md-icon>file_download</md-icon>
         <span>Retrieve responses</span>
@@ -89,6 +94,9 @@
       },
       load_plan() {
         this.$emit('load_plan')
+      },
+      load_all_plans() {
+        this.$emit('load_all_plans')
       },
       download_responses() {
         if(!this.responses.length) return

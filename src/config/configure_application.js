@@ -13,7 +13,7 @@ import VueLoading from 'vuex-loading'
 Vue.use(VueLoading)
 
 // Components
-import {ClientTable} from 'vue-tables-2'
+import { ClientTable } from 'vue-tables-2'
 Vue.use(ClientTable)
 
 import TreeView from 'vue-json-tree-view'
@@ -28,24 +28,23 @@ Vue.use(VueMaterial)
 
 
 import DoumaComponent from 'components/app.vue'
-import {create_router} from '../apps/router'
-import {create_store} from '../apps/store'
-import {get_instance_stores_and_routes} from './applet_stores_and_routes'
-import {configure_theme} from './theme'
-import {instantiate_analytics, set_common_analytics} from 'config/analytics'
-import {configure_spatial_helpers} from 'lib/instance_data/spatial_hierarchy_helper'
-import {try_reconnect} from 'lib/remote/util'
-import {add_network_status_watcher} from 'lib/helpers/network_status.js'
-import pubsubcache from 'lib/helpers/pubsubcache'
-import {need_to_update} from 'lib/remote/check-application-version'
-import {set_raven_user_context} from 'config/error_tracking.js'
-import {instantiate_axios_instance} from 'lib/remote/axios_instance'
+import { create_router } from '../apps/router'
+import { create_store } from '../apps/store'
+import { get_instance_stores_and_routes } from './applet_stores_and_routes'
+import { configure_theme } from './theme'
+import { instantiate_analytics, set_common_analytics } from 'config/analytics'
+import { configure_spatial_helpers } from 'lib/instance_data/spatial_hierarchy_helper'
+import { try_reconnect } from 'lib/remote/util'
+import { add_network_status_watcher } from 'lib/helpers/network_status.js'
+import { check_need_to_update } from 'lib/remote/check-application-version'
+import { set_raven_user_context } from 'config/error_tracking.js'
+import { instantiate_axios_instance } from 'lib/remote/axios_instance'
 import BUILD_TIME from 'config/build-time'
-import {clean_up_local_dbs} from 'lib/local_db'
-import {setup_acl} from 'lib/acess-control-list'
-import {hydrate_geodata_cache_from_idb} from 'lib/models/geodata/local.geodata_store'
+import { clean_up_local_dbs } from 'lib/local_db'
+import { setup_acl } from 'lib/acess-control-list'
+import { hydrate_geodata_cache_from_idb } from 'lib/models/geodata/local.geodata_store'
 import CONFIG from 'config/common'
-import {createVuexLoader} from 'vuex-loading'
+import { createVuexLoader } from 'vuex-loading'
 
 
 /**
@@ -54,7 +53,9 @@ import {createVuexLoader} from 'vuex-loading'
  * @returns {Vue}
  */
 export async function configure_application(instance_config) {
-
+  // Configure spatial_helpers to use instance_config
+  // We need to do this before we create the store, the store relies on some of the function in spatial_hierarchy_helpers
+  configure_spatial_helpers(instance_config)
 
   // CREATE REQUIRED OBJECTS FOR APP (store AND router)
 
@@ -68,6 +69,10 @@ export async function configure_application(instance_config) {
   const store = create_store(instance_config, instance_applets_stores_and_routes.stores)
   store.commit('root:set_instance_config', instance_config)
 
+  document.addEventListener("show-update-available", e => {
+    store.commit("root:set_sw_update_available", true)
+  })
+
   // Create Vue#$router from what you got
   // (Required for the app)
   const router = create_router(instance_applets_stores_and_routes.routes, store)
@@ -77,11 +82,6 @@ export async function configure_application(instance_config) {
 
 
   // BEFORE VUE APP IS CREATED (USING store OR router)
-
-
-  // Configure spatial_helpers to use instance_config
-  configure_spatial_helpers(instance_config)
-  console.log('TODO: @idea 🤔 Can we start getting the tile-cover thing going here, to cache all needed vector tiles? https://github.com/mapbox/tile-cover')
 
   // Configure standard_handler for remote requests
   // Also trigger a ping to API, for lots of reasons, mostly that the API seems to take ages to wake up
@@ -98,7 +98,7 @@ export async function configure_application(instance_config) {
   await hydrate_geodata_cache_from_idb()
 
   setup_acl()
-  // CREATE VUE APP
+    // CREATE VUE APP
 
   // Instantiate Vue app with store and router
   const douma_app = new Vue({
@@ -120,22 +120,7 @@ export async function configure_application(instance_config) {
   set_common_analytics(douma_app)
 
   // Configure application update
-  need_to_update().then((can_update) => {
-    const update_available = (can_update.status === 'CAN_UPDATE')
-
-    // Make sure we can catch any messages passed from ServiceWorker
-    pubsubcache.subscribe('service_worker/onstatechange', (topic, args) => {
-
-      const new_service_worker_activated = (args === 'activated')
-      if (update_available && new_service_worker_activated) {
-        douma_app.$store.commit('root:set_sw_update_available', true)
-      } else {
-        douma_app.$store.commit('root:set_sw_update_available', false)
-      }
-
-      console.log('service_worker/onstatechange message:', args)
-    })
-  })
+  check_need_to_update()
 
   // Add extra info to error logging
   set_raven_user_context(douma_app.$store.state)

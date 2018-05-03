@@ -7,14 +7,15 @@ const fields = {
     responses: 'id, [personalised_instance_id+instance_slug]',
     plan: 'id',
     assignment_plan: 'id',
+  },
+  v2: {
     case_clusters: '_id',
     case_locations: '_id'
   }
 }
 
 db.version(1).stores({
-  instance_config: 'config_id',
-  geodata_collection: `disarm_geodata_key, geodata`, // geodata_collection has two columns, called 'disarm_geodata_key' and 'geodata'
+  geodata_collection: 'disarm_geodata_key, geodata', // geodata_collection has two columns, called 'disarm_geodata_key' and 'geodata'
 
   "monitor/responses": fields.v1.responses,
   "record/responses": fields.v1.responses,
@@ -24,40 +25,14 @@ db.version(1).stores({
 
   "monitor/plan": fields.v1.plan,
   "plan/plan": fields.v1.plan,
-  "foci/case_clusters": fields.v1.case_clusters,
-  "foci/case_locations": fields.v1.case_locations,
 })
 
-// db.version(2)
-//   .stores({
-//     geodata_collection: `disarm_geodata_key, geodata`, // geodata_collection has two columns, called 'disarm_geodata_key' and 'geodata'
-//     responses: 'id',
-//
-//     "monitor/responses": 'id',
-//     "monitor/plan": 'id',
-//     "monitor/assignment_plan": 'id',
-//
-//     "record/responses": 'id',
-//
-//     "plan/plan": 'id',
-//
-//     "tasker/assignment_plan": 'id',
-//   })
-//   .upgrade((db) => {
-//     const a = {
-//       "monitor/responses": upgrade_responses,
-//       "record/responses": upgrade_responses
-//     }
-//
-//     a.forEach(key, line => db[line].toCollection().modify(a[key]))
-//
-//
-//     function upgrade_responses(friend) {
-//       friend.birthdate = new Date(Date.now() - (friend.age * YEAR));
-//       delete friend.age;
-//     }
-//
-//   })
+db.version(2).stores({
+  'instance_config': 'config_id',
+  "foci/case_clusters": fields.v2.case_clusters,
+  "foci/case_locations": fields.v2.case_locations,
+})
+
 
 async function clean_up_local_dbs() {
   const db_name = 'disarm_geodata'
@@ -71,4 +46,5 @@ async function clean_up_local_dbs() {
 }
 
 export {db, clean_up_local_dbs}
+
 

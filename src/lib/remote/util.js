@@ -1,5 +1,4 @@
 import {request_handler} from './request-handler'
-import CONFIG from 'config/common'
 
 export function try_reconnect() {
   return request_handler({url_suffix: ''})
@@ -8,7 +7,7 @@ export function try_reconnect() {
 export function get_version() {
   const options = {
     url: '/VERSION',
-    timeout: 2000
+    timeout: 5000
   }
   return request_handler(options)
 }

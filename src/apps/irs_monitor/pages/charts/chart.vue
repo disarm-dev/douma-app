@@ -10,7 +10,7 @@
     <div :id="chart_id"></div>
 
     <md-card-content v-if="!has_responses">
-      <div><em>Not enough data to display chart (and who likes empty charts anyway?)</em></div>
+      <div><em>Not enough data to display chart</em></div>
     </md-card-content>
 
   </div>

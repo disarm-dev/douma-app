@@ -23,7 +23,7 @@ import moment from 'moment-mini'
 
 export default {
   name: 'temporal',
-  props: ['responses'],
+  props: ['responses', 'filters'],
   components: {DatePicker},
   data () {
     return {
@@ -31,11 +31,8 @@ export default {
       end: null,
     }
   },
-  created() {
+  mounted() {
     this.set_start_and_end_dates()
-  },
-  watch: {
-    'responses': 'set_start_and_end_dates'
   },
   methods: {
     set_start_and_end_dates() {
@@ -47,12 +44,12 @@ export default {
       this.end = new Date(Math.max(...dates))
     },
     add_temporal_filter() {
-      if (!this.responses || !this.responses.length) return
+      this.remove_other_temporal_filters()
 
       // emit start
       this.$emit('change', {
         name: 'recorded_on',
-        comparator: '>',
+        comparator: '>=',
         value: new Date(this.start).getTime(),
         display_value: moment(new Date(this.start)).format("MMM Do YYYY")
       })
@@ -60,10 +57,21 @@ export default {
       //emit end
       this.$emit('change', {
         name: 'recorded_on',
-        comparator: '<',
+        comparator: '<=',
         value: new Date(this.end).getTime(),
         display_value: moment(new Date(this.end)).format("MMM Do YYYY")
       })
+    },
+    // TODO: remove this, not component-y
+    remove_other_temporal_filters() {
+      if (!this.filters) return
+
+      this.filters
+        .filter(f => f.name === 'recorded_on')
+        .forEach(f => {
+          this.$store.commit('irs_monitor/remove_filter', f)
+        })
+
     }
   }
 };

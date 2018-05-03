@@ -62,3 +62,26 @@ test('should not add a filter that is already in the filters array', t => {
 
   t.is(store.state.filters.length, 3)
 })
+
+test('should replace a temporal filter in filters array', t => {
+  const filters = [
+    { name: 'recorded_on', comparator: '>', value: 1 },
+    { name: 'recorded_on', comparator: '<', value: 1 },
+  ]
+
+  const monitor_store_clone = cloneDeep(irs_monitor_store)
+
+  monitor_store_clone.state.filters = filters
+
+  const store = new Vuex.Store(monitor_store_clone)
+
+  const filter_to_add_one = { name: 'recorded_on', comparator: '>', value: 2 }
+  store.commit('add_filter', filter_to_add_one)
+  t.is(store.state.filters[0].value, 2)
+
+  const filter_to_add_two = { name: 'recorded_on', comparator: '<', value: 2 }
+  store.commit('add_filter', filter_to_add_two)
+  t.is(store.state.filters[1].value, 2)
+
+
+})

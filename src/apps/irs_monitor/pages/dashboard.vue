@@ -8,6 +8,7 @@
         @load_responses="retrieve_responses"
         @force_load_responses="force_load_responses"
         @load_plan="load_plan"
+        @load_all_plans="load_all_plans"
     ></dashboard_summary>
 
     <div class='applet_container'>
@@ -186,6 +187,18 @@
       force_load_responses() {
         this.$store.commit('irs_monitor/set_last_id', null)
         this.retrieve_responses()
+      },
+      load_all_plans() {
+        this.$loading.startLoading('irs_monitor/load_all_plans')
+
+        this.$store.dispatch('irs_monitor/get_network_plan_list')
+          .then(() => {
+            this.$loading.endLoading('irs_monitor/load_all_plans')
+            this.$store.commit('root:set_snackbar', {message: 'Successfully retrieved all plans'})
+          })
+          .catch(e => {
+            this.$loading.endLoading('irs_monitor/load_all_plans')
+          })
       },
       async load_plan() {
         this.$loading.startLoading('irs_monitor/load_plan')

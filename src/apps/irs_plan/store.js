@@ -1,10 +1,10 @@
 import array_unique from 'array-unique'
 
-import {Plan} from 'lib/models/plan/model'
-import {get_next_level_up_from_planning_level} from 'lib/instance_data/spatial_hierarchy_helper'
+import { Plan } from 'lib/models/plan/model'
+import { get_next_level_up_from_planning_level } from 'lib/instance_data/spatial_hierarchy_helper'
 import cache from 'config/cache'
-import {geodata_in_cache_and_valid} from 'lib/models/geodata/geodata.valid'
-import {PlanController} from 'lib/models/plan/controller'
+import { geodata_in_cache_and_valid } from 'lib/models/geodata/geodata.valid'
+import { PlanController } from 'lib/models/plan/controller'
 
 const controller = new PlanController('plan')
 
@@ -16,6 +16,8 @@ export default {
     selected_filter_area_option: null, // map
     unsaved_changes: false,
     show_lowest_spatial_level: true, // i.e. clusters but not clusters - WTF?!
+
+    plan_list: [],
 
     // kind of data - want to persist, but is not really a record yet.
     // could see it as a 'local record' that is not yet synced
@@ -63,7 +65,7 @@ export default {
     set_show_lowest_spatial_level: (state, show_lowest_spatial_level) => {
       state.show_lowest_spatial_level = show_lowest_spatial_level
     },
-    clear_data_storage:(state) => {
+    clear_data_storage: (state) => {
       state.current_plan = null
       state.areas_included_by_click = []
       state.areas_excluded_by_click = []
@@ -86,7 +88,7 @@ export default {
         state.areas_excluded_by_click.splice(index, 1)
 
 
-      } else if (state.bulk_selected_ids.includes(target_area_id)){
+      } else if (state.bulk_selected_ids.includes(target_area_id)) {
         // add to excluded by click
         state.areas_excluded_by_click.push(target_area_id)
 
@@ -136,10 +138,23 @@ export default {
           context.commit('set_unsaved_changes', false)
         })
     },
+    'update_plan': (context, { plan, _id }) => {
+      return controller.update_plan({ plan, _id })
+        .then(() => {
+          context.commit('set_plan', plan)
+          context.commit('set_unsaved_changes', false)
+        })
+    },
+    'delete_plan': (context, plan) => {
+      return controller.delete_plan(plan)
+        .then(() => {
+          console.log('Deleted Plan')
+        })
+    },
     'get_network_plan': (context) => {
       return controller.read_plan_current_network().then(plan_json => {
         if (Object.keys(plan_json).length === 0) {
-          return context.commit('root:set_snackbar', {message: 'There is no remote plan. Please create one.'}, {root: true})
+          return context.commit('root:set_snackbar', { message: 'There is no remote plan. Please create one.' }, { root: true })
         }
 
         try {
@@ -155,9 +170,43 @@ export default {
           context.commit('set_unsaved_changes', false)
         } catch (e) {
           console.error(e)
-          context.commit('root:set_snackbar', {message: 'ERROR: Plan is not valid'}, {root: true})
+          context.commit('root:set_snackbar', { message: 'ERROR: Plan is not valid' }, { root: true })
         }
 
+      })
+    },
+    'get_network_plan_detail': (context, plan_id) => {
+      console.log('store plan id', plan_id)
+      return controller.read_plan_detail_network(plan_id).then(plan_json => {
+        if (Object.keys(plan_json).length === 0) {
+          return context.commit('root:set_snackbar', { message: 'There is no remote plan. Please create one.' }, { root: true })
+        }
+
+        try {
+          new Plan().validate(plan_json)
+
+          let target_areas = plan_json.targets.map(area => {
+            return area.id
+          })
+
+          context.commit('clear_plan')
+          context.commit('set_plan', plan_json)
+          context.commit('add_selected_target_areas', target_areas)
+          context.commit('set_unsaved_changes', false)
+        } catch (e) {
+          console.error(e)
+          context.commit('root:set_snackbar', { message: 'ERROR: Plan is not valid' }, { root: true })
+        }
+
+      })
+    },
+    'get_network_plan_list': (context) => {
+      console.log('Get bnetwork plan list')
+      return controller.read_plan_list_network().then(plan_json => {
+        if (Object.keys(plan_json).length === 0) {
+          return context.commit('root:set_snackbar', { message: 'There is no remote plan. Please create one.' }, { root: true })
+        }
+        return plan_json
       })
     }
   }
