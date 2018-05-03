@@ -1,5 +1,4 @@
 import {get} from 'lodash'
-import {Parser} from 'expr-eval'
 
 export function filter_responses(responses, filters = []) {
   // For loop is faster by 10x than Array#filter
@@ -36,14 +35,27 @@ function filter_response(response, filters) {
       value_from_filter = `'${value_from_filter}'`
     }
 
-    const expr_string = `value_from_response ${comparator} ${value_from_filter}`
-    const variables = { value_from_response }
-
-
-    return Parser.evaluate(expr_string, variables)
+    return filter_function(value_from_response, comparator, value_from_filter)
   })
 }
 
-// function filter_function(value_from_response, comparator, value_from_filter) {
-//   const accepted_comparators = ['==', '>=', '<=', '>', '<', '!=']
-// }
+function filter_function(value_from_response, comparator, value_from_filter) {
+  const accepted_comparators = ['===', '>=', '<=', '>', '<', '!==']
+
+  if (accepted_comparators.indexOf(comparator) === 0) throw new Error(`Unsupported comparator ${comparator}`)
+
+  switch (comparator) {
+    case "===":
+      return value_from_response === value_from_filter
+    case ">=":
+      return value_from_response >= value_from_filter
+    case "<=":
+      return value_from_response <= value_from_filter
+    case "<":
+      return value_from_response < value_from_filter
+    case ">":
+      return value_from_response > value_from_filter
+    case "!==":
+      return value_from_response !== value_from_filter
+  }
+}
