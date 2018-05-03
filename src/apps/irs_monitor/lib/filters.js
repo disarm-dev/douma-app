@@ -1,9 +1,25 @@
 import {get} from 'lodash'
 import {Parser} from 'expr-eval'
 export function filter_responses(responses, filters = []) {
-  return responses.filter((response) => {
+  console.timeStamp('start filter')
+  console.time('filter')
+  const filtered = responses.filter((response) => {
     return filter_response(response, filters)
   })
+  console.timeEnd('filter')
+  console.timeStamp('filter')
+
+  console.time('for')
+  let output = []
+  for (let i = 0; i < responses.length; i++) {
+    if (filter_response(response, filters)) output.push(response)
+  }
+  console.timeEnd('for')
+  console.timeStamp('for')
+
+  console.assert(filtered.length === output.length, "Mismatched result length")
+
+  return output
 }
 
 
@@ -34,9 +50,11 @@ function filter_response(response, filters) {
     const expr_string = `value_from_response ${comparator} ${value_from_filter}`
     const variables = { value_from_response }
 
-   
+
     return Parser.evaluate(expr_string, variables)
   })
 }
 
-
+// function filter_function(value_from_response, comparator, value_from_filter) {
+//   const accepted_comparators = ['==', '>=', '<=', '>', '<', '!=']
+// }
