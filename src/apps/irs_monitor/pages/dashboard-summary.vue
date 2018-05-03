@@ -5,11 +5,6 @@
     </md-button>
 
     <template slot="menu_items">
-      <md-menu-item :disabled="!$can('read', 'irs_monitor') || isLoading('irs_monitor/load_plan')" @click="load_plan">
-        <md-icon>file_download</md-icon>
-        <span>Load plan</span>
-      </md-menu-item>
-
       <md-menu-item :disabled="!$can('read', 'irs_monitor') || isLoading('irs_monitor/load_all_plans')" @click="load_all_plans">
         <md-icon>file_download</md-icon>
         <span>Load all plans</span>
