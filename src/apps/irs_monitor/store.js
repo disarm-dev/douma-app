@@ -98,12 +98,12 @@ export default {
   // TODO: Re-remove everything under here.
   getters: {
     // Return all the targets from the plan
-    targets(state, getters) {
-      if (!state.plan) return []
-
-      const spatial_aggregation_level = state.dashboard_options.spatial_aggregation_level
-      return get_targets(state.plan.targets, spatial_aggregation_level)
-    },
+    // targets(state, getters) {
+    //   if (!state.plan) return []
+    //
+    //   const spatial_aggregation_level = state.dashboard_options.spatial_aggregation_level
+    //   return get_targets(state.plan.targets, spatial_aggregation_level)
+    // },
 
     plan_target_area_ids(state) {
       if (state.plan && state.plan.targets) {
