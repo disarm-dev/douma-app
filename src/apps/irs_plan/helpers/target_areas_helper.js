@@ -1,5 +1,6 @@
 import inside from '@turf/inside'
 import centroid from '@turf/centroid'
+import booleanWithin from '@turf/boolean-overlap'
 
 import cache from 'config/cache'
 import {get_planning_level_name} from 'lib/instance_data/spatial_hierarchy_helper'
@@ -23,7 +24,7 @@ const target_areas_inside_focus_filter_area = ({area_ids, selected_filter_area})
 
     if (!found_area) return false
 
-    return inside(centroid(found_area), selected_filter_area)
+    return inside(centroid(found_area), selected_filter_area) || booleanWithin(found_area, selected_filter_area)
   })
   return result
 }
