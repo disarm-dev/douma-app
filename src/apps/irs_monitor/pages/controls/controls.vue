@@ -89,10 +89,3 @@
     margin-top: 0;
   }
 </style>
-
-<style>
-  .filter-container .md-tabs-content {
-    z-index: 1;
-    overflow: visible;
-  }
-</style>

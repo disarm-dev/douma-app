@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="spatial-container">
     <span v-if="area_filter_set">Spatial filter already set. Please remove the spatial filter before adding a new one.</span>
 
     <multiselect
@@ -123,8 +123,12 @@
     }
   }
 </script>
-<style>
+<style scoped>
   .multiselect {
     margin-top: 0.5em;
+  }
+
+  .spatial-container {
+    min-height: 420px;
   }
 </style>

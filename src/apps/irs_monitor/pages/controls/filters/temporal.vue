@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="temporal-container">
     <div class="date-input">
       <b>From</b>
       <date-picker v-model="start"></date-picker>
@@ -81,5 +81,9 @@ export default {
 <style lang="css" scoped>
   .date-input {
     display: inline-block;
+  }
+
+  .temporal-container {
+    min-height: 330px;
   }
 </style>
