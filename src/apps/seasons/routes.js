@@ -6,7 +6,7 @@ export default [
     component: seasons,
     name: 'seasons',
     meta: {
-      can: 'read irs_tasker',
+      can: 'write seasons',
       fail: '/meta/home'
     }
   }
