@@ -21,7 +21,7 @@ test('should filter responses using an equality filter', t => {
     {name: 3}
   ]
 
-  const filter = {name: 'name', comparator: '==', value: 2}
+  const filter = {name: 'name', comparator: 'equals', value: 2}
 
   const result = filter_responses(responses, [filter])
 

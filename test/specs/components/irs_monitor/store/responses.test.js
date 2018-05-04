@@ -25,7 +25,7 @@ test('should return all responses with no filters', t => {
 
 
 test('should filter responses when filters are present returning 1 response', t => {
-  const filter = {name: 'id', comparator: '==', value: 2}
+  const filter = {name: 'id', comparator: 'equals', value: 2}
   const store_content = cloneDeep(irs_monitor_store)
 
   store_content.state.responses = responses
@@ -37,7 +37,7 @@ test('should filter responses when filters are present returning 1 response', t 
 })
 
 test('should filter responses when filters are present returning more than 1 response', t => {
-  const filter = {name: 'question', comparator: '==', value: 2}
+  const filter = {name: 'question', comparator: 'equals', value: 2}
   const store_content = cloneDeep(irs_monitor_store)
 
   store_content.state.responses = responses
