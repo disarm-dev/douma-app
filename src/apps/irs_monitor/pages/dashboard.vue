@@ -82,6 +82,34 @@
       }
     },
     computed: {
+      filtered_responses() {
+        const responses = this.responses
+        if (!responses.length) return []
+
+        const dashboard_options = this.$store.state.irs_monitor.dashboard_options
+        const plan_target_area_ids = this.plan_target_area_ids
+
+        // limit to plan if 'dashboard_options.limit_to_plan' is true
+        const limited_to_plan = responses.filter(r => {
+          if (!dashboard_options.limit_to_plan) return true
+
+          const id = get(r, 'location.selection.id', false)
+          if (id) {
+            return plan_target_area_ids.includes(id)
+          } else {
+            return false
+          }
+        })
+
+        return filter_responses(limited_to_plan, this.$store.state.irs_monitor.filters)
+      },
+      plan_target_area_ids() {
+        if (this.plan && this.plan.targets) {
+          return this.plan.targets.map(target => target.id)
+        } else {
+          return []
+        }
+      },
       ...mapState({
         instance_config: state => state.instance_config,
 
