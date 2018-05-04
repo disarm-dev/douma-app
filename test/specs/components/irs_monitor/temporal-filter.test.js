@@ -65,12 +65,12 @@ test('should emit 2 valid temporal filters when adding the temporal filter', t =
   wrapper.vm.set_start_and_end_dates()
   wrapper.vm.add_temporal_filter()
 
-  const expected_start = {name: 'recorded_on', comparator: '>', value: new Date(responses[0].recorded_on).getTime(), display_value: 'Sep 1st 2017'}
+  const expected_start = {name: 'recorded_on', comparator: '>=', value: new Date(responses[0].recorded_on).getTime(), display_value: 'Sep 1st 2017'}
   const actual_start = wrapper.vm.$emit.getCall(0).args[1]
   t.deepEqual(expected_start, actual_start)
 
 
-  const expected_end = {name: 'recorded_on', comparator: '<', value: new Date(responses[2].recorded_on).getTime(), display_value: 'Sep 5th 2017'}
+  const expected_end = {name: 'recorded_on', comparator: '<=', value: new Date(responses[2].recorded_on).getTime(), display_value: 'Sep 5th 2017'}
   const actual_end = wrapper.vm.$emit.getCall(1).args[1]
   t.deepEqual(expected_end, actual_end)
 })

@@ -166,6 +166,9 @@
         isLoading: 'loading/isLoading'
       }),
       must_focus_planning() {
+        if (this.instance_config.spatial_hierarchy.hasOwnProperty('ignore_planning_level_restriction') && this.instance_config.spatial_hierarchy.ignore_planning_level_restriction) {
+          return false
+        }
         // TODO: @refac Improve checking if planning can be focused
         return get_next_level_up_from_planning_level()
       },
