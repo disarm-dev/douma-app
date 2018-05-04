@@ -131,29 +131,7 @@
       // ...mapGetters({
       //   targets: 'irs_monitor/targets',
       // }),
-      filtered_responses() {
-        const responses = this.responses
-        if (!responses.length) return []
 
-        const dashboard_options = this.dashboard_options
-        const plan_target_area_ids = this.plan_target_area_ids
-
-        // limit to plan if 'dashboard_options.limit_to_plan' is true
-        const limited_to_plan = responses.filter(r => {
-          if (!dashboard_options.limit_to_plan) return true
-
-          const id = get(r, 'location.selection.id', false)
-          if (id) {
-            return plan_target_area_ids.includes(id)
-          } else {
-            return false
-          }
-        })
-
-        const filtered = filter_responses(limited_to_plan, this.$store.state.irs_monitor.filters)
-
-        return filtered
-      },
       targets() {
         if(!this.plan) return []
 
@@ -179,6 +157,98 @@
         const instance = this.$store.state.instance_config.instance.slug
         this.responses = await responses_controller.read_all_cache({personalised_instance_id, instance})
       },
+      //Start from store
+      //start gettters
+
+    },
+    //endof getters
+    //Startof actions
+    get_responses_local: (context) => {
+      const personalised_instance_id = this.$store.meta.personalised_instance_id
+      const instance = this.$store.instance_config.instance.slug
+      return response_controller.read_all_cache({ personalised_instance_id, instance }).then(responses => {
+        this.responses = responses
+      })
+    },
+    get_all_records: async(context) => {
+      const last_id = this.last_id
+      if (last_id == null) {
+        this.$store.commit('irs_record_point/clear_responses_not_inVillage')
+        this.$store.commit('irs_record_point/clear_guessed_responses')
+      }
+      const responses = await response_controller.read_new_network_write_local(last_id)
+
+      if (responses.length) {
+        const updated_last_id = responses[responses.length - 1]._id
+        this.last_id = updated_last_id
+        this.$store.commit('root:set_snackbar', { message: 'Retrieving more records.' }, { root: true })
+        this.$store.commit('update_responses_last_updated_at')
+        return this.get_all_records()
+      } else {
+        context.commit('root:set_snackbar', { message: 'Completed retrieving records. Updated map, table, charts.' }, { root: true })
+        return this.get_responses_local()
+      }
+
+    },
+    get_current_plan () {
+      return plan_controller.read_plan_current_network()
+        .then(plan_json => {
+          if (Object.keys(plan_json).length === 0) {
+            return this.$store.commit('root:set_snackbar', { message: 'No plan loaded.' }, { root: true })
+          }
+
+          try {
+            new Plan().validate(plan_json)
+            this.plan = plan_json
+          } catch (e) {
+            console.log(e)
+          }
+        })
+    },
+
+    load_all_plans () {
+      return plan_controller.read_plans()
+        .then(plans => {
+          this.plans =  plans
+        })
+    },
+    get_network_plan_detail: (context, plan_id) => {
+      return plan_controller.read_plan_detail_network(plan_id).then(plan_json => {
+        if (Object.keys(plan_json).length === 0) {
+          return context.commit('root:set_snackbar', { message: 'There is no remote plan. Please create one.' }, { root: true })
+        }
+
+        try {
+          new Plan().validate(plan_json)
+
+          let target_areas = plan_json.targets.map(area => {
+            return area.id
+          })
+
+          context.commit('set_plan', plan_json)
+          //TODO: Load responses for this plan
+        } catch (e) {
+          console.error(e)
+          context.commit('root:set_snackbar', { message: 'ERROR: Plan is not valid' }, { root: true })
+        }
+
+      })
+    },
+    get_network_plan_list: (context) => {
+      return plan_controller.read_plan_list_network().then(plan_json => {
+        if (Object.keys(plan_json).length === 0) {
+          return context.commit('root:set_snackbar', { message: 'There is no remote plan. Please create one.' }, { root: true })
+        }
+        context.commit('set_all_plans', plan_json)
+        return plan_json
+      })
+    }
+
+    //Endof actions
+
+    //Endof from store
+
+
       async retrieve_responses() {
         this.$loading.startLoading('irs_monitor/load_responses')
 
