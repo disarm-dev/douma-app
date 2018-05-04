@@ -7,7 +7,7 @@ import {PlanSchema} from './schemas/schema'
 export class Plan {
   model;
 
-  create({instance_config, selected_target_area_ids, focus_filter_area}) {
+  create({instance_config, selected_target_area_ids, focus_filter_area, name}) {
     const decorated_targets = this._decorate_targets({selected_target_area_ids, instance_config})
     const country = instance_config.instance.slug
 
@@ -15,6 +15,7 @@ export class Plan {
       focus_filter_area,
       targets: decorated_targets,
       country: country,
+      name:name,
       id: uuid()
     }
 
