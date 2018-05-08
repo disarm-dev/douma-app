@@ -2,7 +2,7 @@ import test from 'ava'
 import {shallow, createLocalVue} from 'vue-test-utils'
 import Vuex from 'vuex'
 import sinon from 'sinon'
-import Seasons from 'apps/seasons/seasons.vue'
+import Config from 'apps/config/config.vue'
 
 // UI
 test('should render', t => {
@@ -18,7 +18,7 @@ test('should render', t => {
     }
   }
 
-  const wrapper = shallow(Seasons, {
+  const wrapper = shallow(Config, {
     mocks: {
       $store: mock_store
     }
@@ -44,7 +44,7 @@ test('should render the correct number of items', t => {
     }
   }
 
-  const wrapper = shallow(Seasons, {
+  const wrapper = shallow(Config, {
     mocks: {
       $store: mock_store
     }
@@ -74,7 +74,7 @@ test('renders a remove button for each list item', t => {
     }
   }
 
-  const wrapper = shallow(Seasons,{
+  const wrapper = shallow(Config,{
     mocks:{
       $store:mock_store
     }
@@ -104,7 +104,7 @@ test('shows an error if error',t => {
     }
   }
 
-  const wrapper = shallow(Seasons,{
+  const wrapper = shallow(Config,{
     mocks:{
       $store:mock_store
     }
@@ -128,7 +128,7 @@ test('renders an add button', t => {
     }
   }
 
-  const wrapper = shallow(Seasons,{
+  const wrapper = shallow(Config,{
     mocks:{
       $store:mock_store
     }
@@ -153,7 +153,7 @@ test('clicking add new season should call push_date', t => {
 
   const spy = sinon.spy()
 
-  const wrapper = shallow(Seasons, {
+  const wrapper = shallow(Config, {
     mocks: {
       $store: mock_store
     },
@@ -188,7 +188,7 @@ test('clicking remove season should call remove_season', t => {
   }
 
 
-  const wrapper = shallow(Seasons, {
+  const wrapper = shallow(Config, {
     mocks: {
       $store: mock_store
     },
