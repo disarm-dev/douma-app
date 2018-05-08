@@ -31,7 +31,7 @@
 
   export default {
     name: 'field-filters',
-    props: ['responses', 'fields'],
+    props: ['responses'],
     data() {
       return {
         // see below #reset_inputs for default values
