@@ -9,7 +9,7 @@ export default {
   namespaced: true,
   state: {
     ui: {},
-    last_id: null, // ObjectID of most recently synced response
+    last_id: null, // ObjectID of most recently synced response, should be kept in store for persistence
     filter: null,
     map_options: {
       show_response_points: true,
@@ -26,16 +26,16 @@ export default {
     },
 
     // Probably data
-    plan: null,
-    plans: [],
+   // plan: null,
+   // plans: [],
     filters: [],
-    responses: [],
-    guess_selection_ids: {}
+  //  responses: [],
+    guess_selection_ids: {} //Is this used?
   },
   mutations: {
     // clear storage (called by meta store)
     clear_data_storage: (state) => {
-      state.responses = [] // TODO: Remove
+     // state.responses = [] // TODO: Remove
       state.responses_last_updated_at = null
       state.filters = []
     },
@@ -43,12 +43,12 @@ export default {
       state.responses_last_updated_at = new Date
     },
     // set plan
-    set_plan: (state, plan) => {
+    /*set_plan: (state, plan) => {
       state.plan = plan
     },
     set_all_plans: (state, plans) => {
       state.plans = plans
-    },
+    },*/
     set_filter: (state, { filter_name, filter_object }) => {
       const new_filters = set_filter(state.filters, filter_name, filter_object)
       state.filters = new_filters
@@ -105,7 +105,7 @@ export default {
     //   return get_targets(state.plan.targets, spatial_aggregation_level)
     // },
 
-    plan_target_area_ids(state) {
+   /* plan_target_area_ids(state) {
       if (state.plan && state.plan.targets) {
         return state.plan.targets.map(target => target.id)
       } else {
@@ -135,11 +135,11 @@ export default {
       const filtered = filter_responses(limited_to_plan, state.filters)
 
       return filtered
-    },
+    },*/
 
   },
   actions: {
-    get_responses_local: (context) => {
+  /*  get_responses_local: (context) => {
       const personalised_instance_id = context.rootState.meta.personalised_instance_id
       const instance = context.rootState.instance_config.instance.slug
       return response_controller.read_all_cache({ personalised_instance_id, instance }).then(responses => {
@@ -166,7 +166,7 @@ export default {
       }
 
     },
-    get_current_plan: (context) => {
+   /* get_current_plan: (context) => {
       return plan_controller.read_plan_current_network()
         .then(plan_json => {
           if (Object.keys(plan_json).length === 0) {
@@ -180,7 +180,7 @@ export default {
             console.log(e)
           }
         })
-    },
+    }
 
     load_all_plans: (context) => {
       return plan_controller.read_plans()
@@ -218,6 +218,6 @@ export default {
         context.commit('set_all_plans', plan_json)
         return plan_json
       })
-    }
+    }*/
   }
 }

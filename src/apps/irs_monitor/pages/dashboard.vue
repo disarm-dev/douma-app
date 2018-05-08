@@ -2,19 +2,19 @@
   <div>
     <!--  SUMMARY, LOAD, DOWNLOAD (DUMPING GROUND) -->
     <dashboard_summary
-        :responses='filtered_responses'
-        :filters='filters'
-        :plan="plan"
-        @load_responses="retrieve_responses"
-        @force_load_responses="force_load_responses"
-        @load_plan="load_plan"
-        @load_all_plans="load_all_plans"
+      :responses='filtered_responses'
+      :filters='filters'
+      :plan="plan"
+      @load_responses="retrieve_responses"
+      @force_load_responses="force_load_responses"
+      @load_plan="load_plan"
+      @load_all_plans="load_all_plans"
     ></dashboard_summary>
 
     <div class='applet_container'>
 
       <!--DASHBOARD CONTROLS-->
-      <controls :responses="filtered_responses" :targets="targets"></controls>
+      <controls :responses="filtered_responses" :plans="plans" @get_plan="" :targets="targets"></controls>
 
       <!--MAP-->
       <dashboard_map
@@ -62,6 +62,8 @@
   import {get_targets} from 'apps/irs_monitor/lib/aggregate_targets'
   import {filter_responses} from 'apps/irs_monitor/lib/filters'
 
+  //import { isEqual, get } from 'lodash'
+
   const applet_name = 'monitor'
   const responses_controller = new ResponseController(applet_name)
   const plan_controller = new PlanController(applet_name)
@@ -78,7 +80,8 @@
     data() {
       return {
         responses: [],
-        plan: null
+        plan: null,
+        plans: []
       }
     },
     computed: {
@@ -133,7 +136,7 @@
       // }),
 
       targets() {
-        if(!this.plan) return []
+        if (!this.plan) return []
 
         const spatial_aggregation_level = this.dashboard_options.spatial_aggregation_level
         return get_targets(this.plan.targets, spatial_aggregation_level)
@@ -150,6 +153,7 @@
       // hydrate
       await this.load_responses()
       await this.load_plan()
+      this.load_all_plans()
     },
     methods: {
       async load_responses() {
@@ -160,94 +164,90 @@
       //Start from store
       //start gettters
 
-    },
-    //endof getters
-    //Startof actions
-    get_responses_local: (context) => {
-      const personalised_instance_id = this.$store.meta.personalised_instance_id
-      const instance = this.$store.instance_config.instance.slug
-      return response_controller.read_all_cache({ personalised_instance_id, instance }).then(responses => {
-        this.responses = responses
-      })
-    },
-    get_all_records: async(context) => {
-      const last_id = this.last_id
-      if (last_id == null) {
-        this.$store.commit('irs_record_point/clear_responses_not_inVillage')
-        this.$store.commit('irs_record_point/clear_guessed_responses')
-      }
-      const responses = await response_controller.read_new_network_write_local(last_id)
+      //endof getters
+      //Startof actions
+      get_responses_local: (context) => {
+        const personalised_instance_id = this.$store.meta.personalised_instance_id
+        const instance = this.$store.instance_config.instance.slug
+        return response_controller.read_all_cache({personalised_instance_id, instance}).then(responses => {
+          this.responses = responses
+        })
+      },
+      get_all_records: async (context) => {
+        const last_id = this.last_id
+        if (last_id == null) {
+          this.$store.commit('irs_record_point/clear_responses_not_inVillage') //TODO Possibly refactor irs_record_point
+          this.$store.commit('irs_record_point/clear_guessed_responses')
+        }
+        const responses = await response_controller.read_new_network_write_local(last_id)
 
-      if (responses.length) {
-        const updated_last_id = responses[responses.length - 1]._id
-        this.last_id = updated_last_id
-        this.$store.commit('root:set_snackbar', { message: 'Retrieving more records.' }, { root: true })
-        this.$store.commit('update_responses_last_updated_at')
-        return this.get_all_records()
-      } else {
-        context.commit('root:set_snackbar', { message: 'Completed retrieving records. Updated map, table, charts.' }, { root: true })
-        return this.get_responses_local()
-      }
+        if (responses.length) {
+          const updated_last_id = responses[responses.length - 1]._id
+          this.last_id = updated_last_id
+          this.$store.commit('root:set_snackbar', {message: 'Retrieving more records.'}, {root: true})
+          this.$store.commit('update_responses_last_updated_at') //TODO This is used in irs_monitor, may
+          return this.get_all_records()
+        } else {
+          this.$store.commit('root:set_snackbar', {message: 'Completed retrieving records. Updated map, table, charts.'}, {root: true})
+          return this.get_responses_local()
+        }
 
-    },
-    get_current_plan () {
-      return plan_controller.read_plan_current_network()
-        .then(plan_json => {
+      },
+      get_current_plan() {
+        return plan_controller.read_plan_current_network()
+          .then(plan_json => {
+            if (Object.keys(plan_json).length === 0) {
+              return this.$store.commit('root:set_snackbar', {message: 'No plan loaded.'}, {root: true})
+            }
+
+            try {
+              new Plan().validate(plan_json)
+              this.plan = plan_json
+            } catch (e) {
+              console.log(e)
+            }
+          })
+      },
+
+     /* load_all_plans() {
+        return plan_controller.read_plans()
+          .then(plans => {
+            console.log('Loaded all plans',plans)
+            this.plans = plansf
+          })
+      },*/
+      get_network_plan_detail: (context, plan_id) => {
+        return plan_controller.read_plan_detail_network(plan_id).then(plan_json => {
           if (Object.keys(plan_json).length === 0) {
-            return this.$store.commit('root:set_snackbar', { message: 'No plan loaded.' }, { root: true })
+            return this.$store.commit('root:set_snackbar', {message: 'There is no remote plan. Please create one.'}, {root: true})
           }
 
           try {
             new Plan().validate(plan_json)
+
+            let target_areas = plan_json.targets.map(area => {
+              return area.id
+            })
+
             this.plan = plan_json
+            //TODO: Load responses for this plan
           } catch (e) {
-            console.log(e)
+            console.error(e)
+            this.$store.commit('root:set_snackbar', {message: 'ERROR: Plan is not valid'}, {root: true})
           }
+
         })
-    },
-
-    load_all_plans () {
-      return plan_controller.read_plans()
-        .then(plans => {
-          this.plans =  plans
+      },
+      get_network_plan_list: (context) => {
+        return plan_controller.read_plan_list_network().then(plan_json => {
+          if (Object.keys(plan_json).length === 0) {
+            return this.$store.commit('root:set_snackbar', {message: 'There is no remote plan. Please create one.'}, {root: true})
+          }
+          console.log('Loaded all plans')
+          this.plans = plan_json
+          return plan_json
         })
-    },
-    get_network_plan_detail: (context, plan_id) => {
-      return plan_controller.read_plan_detail_network(plan_id).then(plan_json => {
-        if (Object.keys(plan_json).length === 0) {
-          return context.commit('root:set_snackbar', { message: 'There is no remote plan. Please create one.' }, { root: true })
-        }
-
-        try {
-          new Plan().validate(plan_json)
-
-          let target_areas = plan_json.targets.map(area => {
-            return area.id
-          })
-
-          context.commit('set_plan', plan_json)
-          //TODO: Load responses for this plan
-        } catch (e) {
-          console.error(e)
-          context.commit('root:set_snackbar', { message: 'ERROR: Plan is not valid' }, { root: true })
-        }
-
-      })
-    },
-    get_network_plan_list: (context) => {
-      return plan_controller.read_plan_list_network().then(plan_json => {
-        if (Object.keys(plan_json).length === 0) {
-          return context.commit('root:set_snackbar', { message: 'There is no remote plan. Please create one.' }, { root: true })
-        }
-        context.commit('set_all_plans', plan_json)
-        return plan_json
-      })
-    }
-
-    //Endof actions
-
-    //Endof from store
-
+      },
 
       async retrieve_responses() {
         this.$loading.startLoading('irs_monitor/load_responses')
@@ -264,9 +264,9 @@
 
         if (remote_responses_batch.length) {
           const updated_last_id = remote_responses_batch[remote_responses_batch.length - 1]._id
-          this.$store.commit('irs_monitor/set_last_id', updated_last_id)
+          this.$store.commit('irs_monitor/set_last_id', updated_last_id) //left in store because it has to be persisted
           this.$store.commit('root:set_snackbar', {message: 'Retrieving more records.'})
-          this.$store.commit('irs_monitor/update_responses_last_updated_at')
+          this.$store.commit('irs_monitor/update_responses_last_updated_at') //Left in store because it has to b persisted
           return this.retrieve_responses()
         } else {
           this.$store.commit('root:set_snackbar', {message: 'Completed retrieving records. Updated map, table, charts.'})
@@ -289,10 +289,11 @@
       load_all_plans() {
         this.$loading.startLoading('irs_monitor/load_all_plans')
 
-        this.$store.dispatch('irs_monitor/get_network_plan_list')
-          .then(() => {
+        this.get_network_plan_list()
+          .then((plans) => {
             this.$loading.endLoading('irs_monitor/load_all_plans')
             this.$store.commit('root:set_snackbar', {message: 'Successfully retrieved all plans'})
+            this.plans = plans
           })
           .catch(e => {
             this.$loading.endLoading('irs_monitor/load_all_plans')

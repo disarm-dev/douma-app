@@ -144,7 +144,6 @@
         select_plan_dialog: false,
         show_save_plan: false,
         plan_list: [],
-        _plan_thing: 'ting'
       }
     },
     computed: {

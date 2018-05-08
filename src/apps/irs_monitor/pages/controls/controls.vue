@@ -11,7 +11,7 @@
 
     <md-card-content v-show="show_filters">
       <seasons :season_start_dates="season_start_dates"></seasons>
-      <plans :plans="plans"></plans>
+      <plans :plans="plans" @get_plan="get_plan"></plans>
       <filters :responses="responses"></filters>
       <aggregation_settings :responses="responses" :targets="targets"></aggregation_settings>
       <limit_to :responses="responses" :targets="targets"></limit_to>
@@ -33,11 +33,11 @@
   export default {
     name: 'controls',
     components: {filters, aggregation_settings, limit_to, guess_locations, plans, seasons},
-    props: ['responses', 'targets'],
+    props: ['responses', 'targets','plans'],
     computed: {
       ...mapState({
         filters: state => state.irs_monitor.filters,
-        plans: state => state.irs_monitor.plans,
+        //plans: state => state.irs_monitor.plans,
         season_start_dates: state => state.instance_config.applets.irs_monitor.season_start_dates.sort((a,b)=>a<b)
       }),
       show_filters: {
@@ -49,6 +49,11 @@
         }
       }
     },
+    methods:{
+      get_plan(_id){
+        this.$emit('get_plan',_id)
+      }
+    }
   }
 </script>
 
