@@ -31,7 +31,7 @@
 
   export default {
     name: 'field-filters',
-    props: ['responses'],
+    props: ['responses', 'fields'],
     data() {
       return {
         // see below #reset_inputs for default values
@@ -43,9 +43,6 @@
       }
     },
     computed: {
-      ...mapState({
-        filters: state => state.irs_monitor.filters,
-      }),
       add_disabled() {
         const can_add = (this.filter_name && this.filter_comparator && this.filter_value)
         return !can_add

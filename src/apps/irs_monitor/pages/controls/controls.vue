@@ -18,7 +18,7 @@
         </md-tab>
 
         <md-tab id="form_field_filters" md-label="form Fields">
-          <fields_filters :responses="responses"></fields_filters>
+          <fields_filters :responses="responses" :filters="filters"></fields_filters>
         </md-tab>
 
         <md-tab id="temporal_filters" md-label="temporal filter">
