@@ -22,6 +22,7 @@ test('should render', t => {
   t.pass()
 })
 
+
 test('should reset start and end dates when calling set_start_and_end_dates()', t => {
   const wrapper = shallow(TemporalFilters, {
     propsData: {responses}
@@ -45,33 +46,46 @@ test('should reset start and end dates when calling set_start_and_end_dates()', 
 })
 
 test('should emit 2 change events when adding the temporal filter', t => {
+  const spy = sinon.spy()
+  const mock_store = {
+    commit: spy
+  }
+
   const wrapper = shallow(TemporalFilters, {
+    mocks: {
+      $store: mock_store
+    },
     propsData: {responses}
   })
-
-  sinon.spy(wrapper.vm, '$emit')
 
   wrapper.vm.add_temporal_filter()
 
-  t.is(wrapper.vm.$emit.calledTwice, true)
+  t.is(spy.calledTwice, true)
 })
 
 test('should emit 2 valid temporal filters when adding the temporal filter', t => {
+  const spy = sinon.spy()
+  const mock_store = {
+    commit: spy
+  }
+
   const wrapper = shallow(TemporalFilters, {
+    mocks: {
+      $store: mock_store
+    },
     propsData: {responses}
   })
 
-  sinon.spy(wrapper.vm, '$emit')
   wrapper.vm.set_start_and_end_dates()
   wrapper.vm.add_temporal_filter()
 
   const expected_start = {name: 'recorded_on', comparator: '>=', value: new Date(responses[0].recorded_on).getTime(), display_value: 'Sep 1st 2017'}
-  const actual_start = wrapper.vm.$emit.getCall(0).args[1]
+  const actual_start = spy.getCall(0).args[1]
   t.deepEqual(expected_start, actual_start)
 
 
   const expected_end = {name: 'recorded_on', comparator: '<=', value: new Date(responses[2].recorded_on).getTime(), display_value: 'Sep 5th 2017'}
-  const actual_end = wrapper.vm.$emit.getCall(1).args[1]
+  const actual_end = spy.getCall(1).args[1]
   t.deepEqual(expected_end, actual_end)
 })
 
