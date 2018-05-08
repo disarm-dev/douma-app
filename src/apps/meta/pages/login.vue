@@ -142,6 +142,12 @@
           this.$ga.set("user", `${this.$store.state.meta.user.username}/${this.$store.state.meta.user.name}`)
           this.$endLoading('meta/login')
           this.login_disabled = false
+
+
+          if (this.$store.state.meta.user.instance_slug === 'all' && BUILD_TIME.DOUMA_PRODUCTION_MODE) {
+            alert('You are logging in without an instance id. If you are testing, you should logout and set a personalised instance ID. If you know what you are doing, you can ignore this message.')
+          }
+
           this.continue()
         })
         .catch(e => {
