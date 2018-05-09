@@ -22,7 +22,6 @@ import {get_instance_stores_and_routes} from './applet_stores_and_routes'
 import {configure_theme} from './theme'
 import {instantiate_analytics, set_common_analytics} from 'config/analytics'
 import {configure_spatial_helpers} from 'lib/instance_data/spatial_hierarchy_helper'
-import {try_reconnect} from 'lib/remote/util'
 import {add_network_status_watcher} from 'lib/helpers/network_status.js'
 import {check_need_to_update} from 'lib/remote/check-application-version'
 import {set_raven_user_context} from 'config/error_tracking.js'
@@ -67,11 +66,6 @@ export function configure_application (instance_config) {
 
 
   // BEFORE VUE APP IS CREATED (USING store OR router)
-
-  // Configure standard_handler for remote requests
-  // Also trigger a ping to API, for lots of reasons, mostly that the API seems to take ages to wake up
-  // (Loads of components use network requests when they are created/mounted)
-  try_reconnect()
 
   // Analytics 1/2: instantiate analytics before you create the application
   // (Vue injects $ga in every component)
