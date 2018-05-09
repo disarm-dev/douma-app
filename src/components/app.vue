@@ -3,9 +3,6 @@
     <!-- Toolbar -->
     <toolbar></toolbar>
 
-    <!-- Sidenav -->
-    <sidebar></sidebar>
-
     <!-- Notifications (snackbar and serviceWorker dialog) -->
     <notifications></notifications>
 
@@ -20,12 +17,11 @@
 <script>
   import toolbar from 'components/toolbar.vue'
   import notifications from 'components/notifications.vue'
-  import sidebar from 'components/sidebar.vue'
   import help from 'components/help.vue'
 
   export default {
     name: 'DOUMA',
-    components: {toolbar, sidebar, notifications, help}
+    components: {toolbar, notifications, help}
   }
 </script>
 

@@ -1,49 +1,53 @@
 <template>
-  <div class="douma-toolbar">
-    <md-toolbar class="md-whiteframe-1dp md-dense">
-      <md-button class="md-icon-button" @click.native="toggle_sidebar">
-        <md-icon>menu</md-icon>
-      </md-button>
+  <div>
+    <div class="douma-toolbar">
+      <md-toolbar class="md-whiteframe-1dp md-dense">
+        <md-button class="md-icon-button" @click.native="toggle_sidebar">
+          <md-icon>menu</md-icon>
+        </md-button>
 
-      <!-- BREADCRUMBS -->
-      <h2 class="md-title" style="flex: 1">
-          <!--Display custom applet header if exists -->
-          <span v-if="current_applet_header">
-            <md-icon>{{current_applet_header.icon}}</md-icon>
-            {{current_applet_header.title}}
-          </span>
+        <!-- BREADCRUMBS -->
+        <h2 class="md-title" style="flex: 1">
+            <!--Display custom applet header if exists -->
+            <span v-if="current_applet_header">
+              <md-icon>{{current_applet_header.icon}}</md-icon>
+              {{current_applet_header.title}}
+            </span>
 
-          <span v-else>
-            {{instance_title}}
-          </span>
-      </h2>
+            <span v-else>
+              {{instance_title}}
+            </span>
+        </h2>
 
-      <md-button v-if="update_chip_visible" @click="reload" class="md-raised md-accent">Update available</md-button>
+        <md-button v-if="update_chip_visible" @click="reload" class="md-raised md-accent">Update available</md-button>
 
-      <!-- OFFLINE , TRY RECONNECT-->
-      <md-button v-if="!online" @click="try_reconnect" class="md-icon-button md-dense md-warn">
-        <md-icon>signal_wifi_off</md-icon>
-      </md-button>
+        <!-- OFFLINE , TRY RECONNECT-->
+        <md-button v-if="!online" @click="try_reconnect" class="md-icon-button md-dense md-warn">
+          <md-icon>signal_wifi_off</md-icon>
+        </md-button>
 
-      <!--HELP ICON-->
-      <md-button class="md-icon-button md-dense" @click.native="toggle_help_visible">
-        <md-icon>help</md-icon>
-      </md-button>
+        <!--HELP ICON-->
+        <md-button class="md-icon-button md-dense" @click.native="toggle_help_visible">
+          <md-icon>help</md-icon>
+        </md-button>
 
-    </md-toolbar>
+      </md-toolbar>
 
+    </div>
+    <div>
+      <sidebar></sidebar>
+    </div>
   </div>
-
 </template>
 
 <script>
   import {mapState, mapGetters} from 'vuex'
   import {try_reconnect} from 'lib/remote/util'
+  import sidebar from 'components/sidebar.vue'
 
   export default {
     name: 'toolbar',
-    mounted() {
-    },
+    components: {sidebar},
     data() {
       return {
         update_chip_visible: false
