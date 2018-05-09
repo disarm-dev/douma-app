@@ -64,6 +64,8 @@
 
   //import { isEqual, get } from 'lodash'
 
+  let cached_responses = []
+  
   const applet_name = 'monitor'
   const responses_controller = new ResponseController(applet_name)
   const plan_controller = new PlanController(applet_name)
@@ -79,6 +81,7 @@
     },
     data() {
       return {
+        updated_responses:0,
         responses: [],
         plan: null,
         plans: []
@@ -86,7 +89,7 @@
     },
     computed: {
       filtered_responses() {
-        const responses = this.responses
+        const responses = this.updated_responses?cached_responses:[]//this.responses
         if (!responses.length) return []
 
         const dashboard_options = this.$store.state.irs_monitor.dashboard_options
@@ -159,18 +162,24 @@
       async load_responses() {
         const personalised_instance_id = this.$store.state.meta.personalised_instance_id
         const instance = this.$store.state.instance_config.instance.slug
-        this.responses = await responses_controller.read_all_cache({personalised_instance_id, instance})
+        this.cache_responses(await responses_controller.read_all_cache({personalised_instance_id, instance}))
+      //  debugger
       },
-      //Start from store
-      //start gettters
 
+      cache_responses(responsed){
+        console.log('Caching responses',responsed.length)
+        cached_responses = responsed
+        this.updated_responses = this.updated_responses+1;
+
+      },
       //endof getters
       //Startof actions
       get_responses_local: (context) => {
         const personalised_instance_id = this.$store.meta.personalised_instance_id
         const instance = this.$store.instance_config.instance.slug
         return response_controller.read_all_cache({personalised_instance_id, instance}).then(responses => {
-          this.responses = responses
+          this.cache_responses(responses)
+          debugger
         })
       },
       get_all_records: async (context) => {
@@ -273,7 +282,7 @@
           await this.load_responses()
 
           let message
-          if (this.responses.length > 0) {
+          if (cached_responses.length > 0) {
             message = `Successfully retrieved responses`
           } else {
             message = 'Successful retrieve, zero records found.'
