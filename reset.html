@@ -29,6 +29,7 @@
       var unregisterSW = function () {
         console.log('[sw] unregister all starting')
         localStorage.clear()
+        
 
         if ('serviceWorker' in navigator) {
           navigator.serviceWorker.getRegistrations()
