@@ -30,7 +30,7 @@
     },
     filters: {
       format_date(date_int) {
-        return moment(date_int).format('DD MMMM YYYY')
+        return (new Date(date_int)).toLocaleString()
       }
     },
     methods:{
