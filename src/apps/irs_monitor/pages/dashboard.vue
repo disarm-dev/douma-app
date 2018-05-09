@@ -65,7 +65,7 @@
   //import { isEqual, get } from 'lodash'
 
   let cached_responses = []
-  
+
   const applet_name = 'monitor'
   const responses_controller = new ResponseController(applet_name)
   const plan_controller = new PlanController(applet_name)
@@ -81,15 +81,14 @@
     },
     data() {
       return {
-        updated_responses:0,
-        responses: [],
+        responses_length:0,
         plan: null,
         plans: []
       }
     },
     computed: {
       filtered_responses() {
-        const responses = this.updated_responses?cached_responses:[]//this.responses
+        const responses = this.responses_length?cached_responses:[]//this.responses
         if (!responses.length) return []
 
         const dashboard_options = this.$store.state.irs_monitor.dashboard_options
@@ -166,10 +165,9 @@
       //  debugger
       },
 
-      cache_responses(responsed){
-        console.log('Caching responses',responsed.length)
-        cached_responses = responsed
-        this.updated_responses = this.updated_responses+1;
+      cache_responses(response_list){
+        cached_responses = response_list
+        this.responses_length = cached_responses.length;
 
       },
       //endof getters
