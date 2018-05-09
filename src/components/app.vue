@@ -1,6 +1,6 @@
 <template>
   <div>
-    <!-- Toolbar -->
+    <!-- Toolbar & Sidebar -->
     <toolbar></toolbar>
 
     <!-- Notifications (snackbar and serviceWorker dialog) -->
