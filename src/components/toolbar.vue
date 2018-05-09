@@ -35,7 +35,7 @@
 
     </div>
     <div>
-      <sidebar></sidebar>
+      <sidebar :show_sidebar="show_sidebar"></sidebar>
     </div>
   </div>
 </template>
@@ -50,7 +50,8 @@
     components: {sidebar},
     data() {
       return {
-        update_chip_visible: false
+        update_chip_visible: false,
+        show_sidebar: true
       }
     },
     computed: {
@@ -83,7 +84,7 @@
     },
     methods: {
       toggle_sidebar() {
-        this.$store.commit('root:toggle_sidebar')
+        this.show_sidebar = !this.show_sidebar
       },
       // Help
       toggle_help_visible() {
