@@ -57,6 +57,13 @@ export function configure_application (instance_config) {
     store.commit("root:set_sw_update_available", true)
   })
 
+  document.addEventListener("show-content-available-offline", e => {
+    store.commit("root:set_sw_message", {
+      title: 'Offline mode ready',
+      message: 'After you are logged in and have downloaded the geodata, the app will work offline'
+    })
+  })
+
   // Create Vue#$router from what you got
   // (Required for the app)
   const router = create_router(instance_applets_stores_and_routes.routes, store)
