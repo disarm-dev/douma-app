@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h4>Plan</h4>
     <md-input-container>
       <label v-if="plans.length === 0">No plans loaded - create a Plan then click 'Load plans' in menu above</label>
       <label v-else>Select plan</label>

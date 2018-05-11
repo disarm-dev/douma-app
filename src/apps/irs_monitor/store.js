@@ -18,7 +18,9 @@ export default {
   namespaced: true,
   unpersisted_state_keys: ['responses'],
   state: {
-    ui: {},
+    ui: { 
+      show_filters: true 
+    },
     responses: [],
     responses_last_updated_at: null,
     last_id: null, // ObjectID of most recently synced response

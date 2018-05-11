@@ -8,7 +8,8 @@
 </template>
 
 <script>
-    import {cloneDeep} from 'lodash'
+  import {cloneDeep} from 'lodash'
+
   export default {
     name: 'filter-summary',
     props: ['filters'],
@@ -31,7 +32,7 @@
     },
     methods: {
       on_delete(filter) {
-        this.$emit('remove_filter', filter)
+        this.$store.commit('irs_monitor/remove_filter', filter)
       }
     }
   }

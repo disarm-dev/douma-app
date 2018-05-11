@@ -18,7 +18,13 @@ test('should accept filters as a prop', t => {
 })
 
 test('should emit remove_filter event when removing a filter', t => {
+  const spy = sinon.spy()
+  const mock_store = {
+    commit: spy
+  }
+
   const wrapper = shallow(Summary, {
+    mocks: {$store: mock_store},
     propsData: {filters}
   })
 
@@ -26,8 +32,8 @@ test('should emit remove_filter event when removing a filter', t => {
 
   wrapper.vm.on_delete(filters[0])
 
-  t.true(wrapper.vm.$emit.calledOnce)
+  t.true(spy.calledOnce)
 
-  t.deepEqual(wrapper.vm.$emit.getCall(0).args[0], 'remove_filter')
-  t.deepEqual(wrapper.vm.$emit.getCall(0).args[1], filters[0])
+  t.deepEqual(spy.getCall(0).args[0], 'irs_monitor/remove_filter')
+  t.deepEqual(spy.getCall(0).args[1], filters[0])
 })
