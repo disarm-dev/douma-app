@@ -37,11 +37,19 @@ import {setup_acl} from "lib/acess-control-list"
  * @returns {Vue}
  */
 export function configure_application (instance_config) {
+  //
+  // BEFORE router or store
+  //
+
+
   // Configure spatial_helpers to use instance_config
   // We need to do this before we create the store, the store relies on some of the function in spatial_hierarchy_helpers
   configure_spatial_helpers(instance_config)
 
-  // CREATE REQUIRED OBJECTS FOR APP (store AND router)
+
+  //
+  // CREATE router and store
+  //
 
 
   // Collect stores and routes for applets ONLY in this instance {stores: {}, routes: []}
@@ -64,19 +72,23 @@ export function configure_application (instance_config) {
   // Configure theme, either from default or instance_config
   configure_theme(instance_config)
 
+  //
+  // AFTER router and store, BEFORE app
+  //
 
-  // BEFORE VUE APP IS CREATED (USING store OR router)
-
-  // Analytics 1/2: instantiate analytics before you create the application
-  // (Vue injects $ga in every component)
-  instantiate_analytics(router)
+  // Analytics (injects $ga in every component)
+  instantiate_analytics(router, store)
 
   // Clean up old dbs, do migrations/upgrades here in the future
   clean_up_local_dbs()
 
-
+  // Configure permissions
   setup_acl()
+
+
+  //
   // CREATE VUE APP
+  //
 
   // Instantiate Vue app with store and router
   const douma_app = new Vue({
@@ -90,11 +102,6 @@ export function configure_application (instance_config) {
 
 
   // AFTER VUE APP IS CREATED (first page has rendered)
-
-
-  // Analytics 2/2: set common properties (e.g. user) for every event
-  // (App needs to be running to send the first requests setting user props, etc)
-  set_common_analytics(douma_app)
 
   // Configure application update
   check_need_to_update()
