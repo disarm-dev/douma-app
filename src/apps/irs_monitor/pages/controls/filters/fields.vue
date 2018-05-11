@@ -23,6 +23,7 @@
   import {get, sort} from 'lodash'
   import flow from 'lodash/fp/flow'
   import flatten from 'lodash/fp/flatten'
+  import filter from 'lodash/fp/filter'
   import uniq from 'lodash/fp/uniq'
   import sortBy from 'lodash/fp/sortBy'
   import map from 'lodash/fp/map'
@@ -71,6 +72,9 @@
         if (!this.filter_name) return []
 
         return flow(
+          filter(r => {
+            return get(r, this.filter_name) !== undefined
+          }),
           map(r => {
             return get(r, this.filter_name)
           }),
