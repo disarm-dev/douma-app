@@ -14,6 +14,7 @@ Vue.use(VueShortkey)
 import VueMaterial from 'vue-material'
 Vue.use(VueMaterial)
 
+import get from 'lodash.get'
 
 import DoumaComponent from 'components/app.vue'
 import {create_router} from '../apps/router'
@@ -41,6 +42,9 @@ export function configure_application (instance_config) {
   // BEFORE router or store
   //
 
+  // Set page title
+  const title = get(instance_config, 'instance.title', '')
+  document.title = `DiSARM ${title}`
 
   // Configure spatial_helpers to use instance_config
   // We need to do this before we create the store, the store relies on some of the function in spatial_hierarchy_helpers
