@@ -43,7 +43,7 @@ export function configure_application (instance_config) {
   //
 
   // Set page title
-  const title = get(instance_config, 'instance.title')
+  const title = get(instance_config, 'instance.title', '')
   document.title = `DiSARM ${title}`
 
   // Configure spatial_helpers to use instance_config
