@@ -2,12 +2,12 @@
   <div class="temporal-container">
     <div class="date-input">
       <b>From</b>
-      <date-picker v-model="start"></date-picker>
+      <date-picker v-model="start" :disabledDates="{from: end}"></date-picker>
     </div>
 
     <div class="date-input">
       <b>To</b>
-      <date-picker v-model="end"></date-picker>
+      <date-picker v-model="end" :disabledDates="{to: start}"></date-picker>
     </div>
 
     <div class="date-input">
