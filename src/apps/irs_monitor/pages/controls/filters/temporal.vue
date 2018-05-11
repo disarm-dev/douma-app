@@ -31,18 +31,7 @@ export default {
       end: null,
     }
   },
-  mounted() {
-    this.set_start_and_end_dates()
-  },
   methods: {
-    set_start_and_end_dates() {
-      if (!this.responses || !this.responses.length) return
-
-      const dates = this.responses.map(record => new Date(record.recorded_on).getTime())
-
-      this.start = new Date(Math.min(...dates))
-      this.end = new Date(Math.max(...dates))
-    },
     add_temporal_filter() {
       this.remove_other_temporal_filters()
 
