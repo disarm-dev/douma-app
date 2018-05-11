@@ -21,11 +21,19 @@
     props: {
       season_start_dates: Array
     },
-    data() {
-      return {
-        selected_start_date: ''
+    computed: {
+      selected_start_date: {
+        get() {
+          return this.$store.state.irs_monitor.dashboard_options.season_start_date
+        },
+        set(val) {
+          this.$store.commit('irs_monitor/set_dashboard_option', {
+            key: 'season_start_date',
+            value: val
+          })
+        }
       }
-    },
+    }, 
     filters: {
       format_date(date_int) {
         return moment(date_int).format('DD MMMM YYYY')
