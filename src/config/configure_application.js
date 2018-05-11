@@ -40,7 +40,7 @@ export function configure_application (instance_config) {
   //
   // BEFORE router or store
   //
-
+  document.title = `DiSARM - ${instance_config.instance.title}`
 
   // Configure spatial_helpers to use instance_config
   // We need to do this before we create the store, the store relies on some of the function in spatial_hierarchy_helpers
