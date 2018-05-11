@@ -7,7 +7,7 @@ import Seasons from 'apps/irs_monitor/pages/controls/seasons.vue'
 
 test('it renders', async t => {
   const mock_store = {
-    $commit() { },
+    commit() { },
     state: { irs_monitor: { dashboard_options: { season_start_date: '' } } }
   }
   const wrapper = shallow(Seasons, {
@@ -18,7 +18,7 @@ test('it renders', async t => {
 
 test('is renders an option for each start date', async t => {
   const mock_store = {
-    $commit() { },
+    commit() { },
     state: { irs_monitor: { dashboard_options: { season_start_date: '' } } }
   }
   const wrapper = shallow(Seasons, {
@@ -36,9 +36,27 @@ test('is renders an option for each start date', async t => {
   t.true(options.at(1).exists())
 })
 
+
+test('setting season_start_date commits to the store', async t => {
+  const spy = sinon.spy()
+  const mock_store = {
+    commit: spy,
+    state: { irs_monitor: { dashboard_options: { season_start_date: '' } } }
+  }
+  const wrapper = shallow(Seasons, {
+    mocks: { $store: mock_store }
+  })
+  
+  wrapper.vm.selected_start_date = '2018-01-01'
+
+  t.true(spy.called)
+  t.is(spy.getCall(0).args[0], 'irs_monitor/set_dashboard_option')
+  t.deepEqual(spy.getCall(0).args[1], { key: 'season_start_date', value: '2018-01-01'})
+})
+
 test('clicking an option calls add_temporal_filter', async t => {
   const mock_store = {
-    $commit() { },
+    commit() { },
     state: { irs_monitor: { dashboard_options: { season_start_date: '' } } }
   }
   const spy = sinon.spy()
