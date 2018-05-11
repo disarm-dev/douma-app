@@ -1,6 +1,9 @@
 <template>
-  <div style="max-width: 600px; margin: 0 auto;">
+  <div style="max-width: 600px; margin: 2em auto;">
     <md-card>
+      <md-card-header>
+        <h2 class="md-title">Seasons</h2>
+      </md-card-header>
       <md-card-content>
         <span style="color: red;" class="md-error" v-if="error">{{error}}</span>
 
@@ -33,7 +36,7 @@
   import {request_handler} from 'lib/remote/request-handler'
 
   export default {
-    name: "seasons",
+    name: "config",
     data() {
       return {
         new_season_start_date: '',

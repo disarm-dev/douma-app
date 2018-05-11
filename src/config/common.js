@@ -36,7 +36,7 @@ export default {
     'foci': {
       title: 'Foci', icon: 'bubble_chart', geodata_required: false
     },
-    'seasons': {
+    'config': {
       title: 'Seasons', icon: 'bubble_chart', geodata_required: false
     }
   },
