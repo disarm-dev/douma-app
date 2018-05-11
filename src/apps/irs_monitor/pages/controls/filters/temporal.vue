@@ -11,7 +11,7 @@
     </div>
 
     <div class="date-input">
-      <md-button @click="add_temporal_filter">Add filter</md-button>
+      <md-button @click="add_temporal_filter" :disabled="!start && !end">Add filter</md-button>
     </div>
   </div>
 </template>
