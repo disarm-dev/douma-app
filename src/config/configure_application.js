@@ -67,9 +67,6 @@ export function configure_application (instance_config) {
 
   // BEFORE VUE APP IS CREATED (USING store OR router)
 
-  // Analytics 1/2: instantiate analytics before you create the application
-  // (Vue injects $ga in every component)
-  instantiate_analytics(router)
 
   // Clean up old dbs, do migrations/upgrades here in the future
   clean_up_local_dbs()
@@ -92,9 +89,8 @@ export function configure_application (instance_config) {
   // AFTER VUE APP IS CREATED (first page has rendered)
 
 
-  // Analytics 2/2: set common properties (e.g. user) for every event
-  // (App needs to be running to send the first requests setting user props, etc)
-  set_common_analytics(douma_app)
+  // Analytics (injects $ga in every component)
+  instantiate_analytics(router, douma_app)
 
   // Configure application update
   check_need_to_update()
