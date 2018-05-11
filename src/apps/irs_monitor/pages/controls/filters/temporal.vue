@@ -35,23 +35,27 @@ export default {
     add_temporal_filter() {
       this.remove_other_temporal_filters()
 
-      const start_filter = {
-        name: 'recorded_on',
-        comparator: '>=',
-        value: new Date(this.start).getTime(),
-        display_value: moment(new Date(this.start)).format("MMM Do YYYY")
+      if (this.start) {
+        const start_filter = {
+          name: 'recorded_on',
+          comparator: '>=',
+          value: new Date(this.start).getTime(),
+          display_value: moment(new Date(this.start)).format("MMM Do YYYY")
+        }
+
+        this.$store.commit('irs_monitor/add_filter', start_filter)
       }
 
-      this.$store.commit('irs_monitor/add_filter', start_filter)
+      if (this.end) {
+        const end_filter = {
+          name: 'recorded_on',
+          comparator: '<=',
+          value: new Date(this.end).getTime(),
+          display_value: moment(new Date(this.end)).format("MMM Do YYYY")
+        }
 
-      const end_filter = {
-        name: 'recorded_on',
-        comparator: '<=',
-        value: new Date(this.end).getTime(),
-        display_value: moment(new Date(this.end)).format("MMM Do YYYY")
+        this.$store.commit('irs_monitor/add_filter', end_filter)
       }
-
-      this.$store.commit('irs_monitor/add_filter', end_filter)
     },
     // TODO: remove this, not component-y
     remove_other_temporal_filters() {
