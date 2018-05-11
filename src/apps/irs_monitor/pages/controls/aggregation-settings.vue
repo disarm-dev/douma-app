@@ -1,8 +1,7 @@
 <template>
-  <div class="border-line">
-    <h4>Aggregation settings</h4>
-    <p>
-      Spatial aggregation level
+  <div>
+    <div>
+      <h4>Spatial aggregation</h4>
       <md-button-toggle md-single>
         <md-button v-for="level in spatial_level_names" :key="level"
                    @click="set_spatial_aggregation_level(level)"
@@ -11,10 +10,10 @@
           {{level}}
         </md-button>
       </md-button-toggle>
-    </p>
+    </div>
 
-    <p>
-      Temporal aggregatation level
+    <div>
+      <h4>Temporal aggregatation</h4>
       <md-button-toggle md-single>
         <md-button v-for="level in temporal_level_names" :key="level"
                    @click="set_temporal_aggregation_level(level)"
@@ -23,17 +22,7 @@
           {{level}}
         </md-button>
       </md-button-toggle>
-    </p>
-
-
-    <!-- OPTIONS: all, responses, plan -->
-    <!--<limit_to-->
-      <!--:responses="responses"-->
-      <!--:targets="targets"-->
-      <!--:selected_limit="limit_to"-->
-      <!--@change="select_limit"-->
-    <!--&gt;</limit_to>-->
-
+    </div>
   </div>
 </template>
 
@@ -112,7 +101,4 @@
 </script>
 
 <style scoped>
-  .border-line {
-    border-top: 1px solid #ececec;
-  }
 </style>

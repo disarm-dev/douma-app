@@ -36,7 +36,6 @@ export function create_store(instance_config, instance_stores) {
       network_online: false,
 
       // Irrelevant values: only watched for changes
-      trigger_sidebar_visible_irrelevant_value: false,
       trigger_help_visible_irrelevant_value: false, // Beware - don't care whether it true or false, just that it changes
 
     },
@@ -58,10 +57,7 @@ export function create_store(instance_config, instance_stores) {
       },
       'root:trigger_help_visible': (state) => {
         state.trigger_help_visible_irrelevant_value = !state.trigger_help_visible_irrelevant_value
-      },
-      'root:toggle_sidebar': (state) => {
-        state.trigger_sidebar_visible_irrelevant_value= !state.trigger_sidebar_visible_irrelevant_value
-      },
+      }
     },
   })
 

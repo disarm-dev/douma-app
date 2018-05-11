@@ -5,12 +5,11 @@
 
       <md-dialog-content>
         <md-list>
-        <md-list-item v-for="plan in plan_list" @click="load_plan_detail(plan._id)" :key="plan._id">
-          <span>
-            {{(new Date(plan.date)).toLocaleString()}}
-            -
-            {{plan.targets}} targets
-          </span>
+        <md-list-item class="md-double-line" v-for="plan in plan_list" @click="load_plan_detail(plan._id)" :key="plan._id">
+          <div class="md-list-text-container">
+            <span>{{plan.name?plan.name:'No Name'}}</span>
+            <span>{{(new Date(plan.date)).toLocaleString()}}<md-chip>{{plan.targets}} targets</md-chip></span>
+          </div>
           </md-list-item>
         </md-list>
       </md-dialog-content>
@@ -145,8 +144,7 @@
         edit_disabled: true,
         select_plan_dialog: false,
         show_save_plan: false,
-        plan_list: [],
-        _plan_thing: 'ting'
+        plan_list: []
       }
     },
     computed: {
@@ -202,8 +200,9 @@
       }
     },
     methods: {
-      create_plan(event) {
-        this.save_plan();
+      create_plan(plan_name) {
+       // console.log(event);
+        this.save_plan(plan_name);
         this.show_save_plan = false
       },
       update_plan(event) {
@@ -304,7 +303,7 @@
           })
 
       },
-      save_plan() {
+      save_plan(plan_name) {
         let focus_filter_area
         let selected_target_area_ids
 
@@ -330,6 +329,7 @@
         const plan = new Plan().create({
           instance_config: this.instance_config,
           focus_filter_area,
+          name:plan_name,
           selected_target_area_ids
         })
 

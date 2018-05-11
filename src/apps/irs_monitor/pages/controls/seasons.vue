@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h4>Seasons</h4>
     <md-input-container>
       <label>Select season start date</label>
       <md-select :value="selected_start_date">

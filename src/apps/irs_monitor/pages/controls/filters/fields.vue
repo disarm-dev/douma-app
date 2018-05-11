@@ -1,24 +1,20 @@
 <template>
-  <div>
-    <h4>All fields</h4>
+  <div class="filter_fields">
+    <md-input-container class="filter_field">
+      <md-select v-model="filter_name" class="select" :disabled="!field_names.length" placeholder="Form field">
+        <md-option v-for="field_name in field_names" :key='field_name' :value="field_name">{{field_name}}</md-option>
+      </md-select>
 
-    <div class="filter_fields">
-      <md-input-container class="filter_field">
-        <md-select v-model="filter_name" class="select" :disabled="!field_names.length">
-          <md-option v-for="field_name in field_names" :key='field_name' :value="field_name">{{field_name}}</md-option>
-        </md-select>
+      <md-select v-model="filter_comparator" class="select" disabled>
+        <md-option v-for="comparator in comparators" :key="comparator" :value="comparator">{{comparator}}</md-option>
+      </md-select>
 
-        <md-select v-model="filter_comparator" class="select" disabled>
-          <md-option v-for="comparator in comparators" :key="comparator" :value="comparator">{{comparator}}</md-option>
-        </md-select>
+      <md-select v-model="filter_value" class="select" :disabled="!field_values.length" placeholder="Value">
+        <md-option v-for="value in field_values" :key="value" :value="value">{{value}}</md-option>
+      </md-select>
+    </md-input-container>
 
-        <md-select v-model="filter_value" class="select" :disabled="!field_values.length">
-          <md-option v-for="value in field_values" :key="value" :value="value">{{value}}</md-option>
-        </md-select>
-      </md-input-container>
-
-      <md-button :disabled='add_disabled' @click="add_filter()">Add filter</md-button>
-    </div>
+    <md-button :disabled='add_disabled' @click="add_filter()">Add filter</md-button>
   </div>
 </template>
 
@@ -27,23 +23,27 @@
   import {get, sort} from 'lodash'
   import flow from 'lodash/fp/flow'
   import flatten from 'lodash/fp/flatten'
+  import filter from 'lodash/fp/filter'
   import uniq from 'lodash/fp/uniq'
   import sortBy from 'lodash/fp/sortBy'
   import map from 'lodash/fp/map'
 
   const EXCLUDE_FIELD_FILTER = f => !f.startsWith('location')
+  const comparators = ['equals', 'not_equals']
+
+  const default_inputs = {
+    filter_name: '',
+    filter_comparator: comparators[0],
+    filter_value: ''
+  }
 
   export default {
     name: 'field-filters',
     props: ['responses'],
     data() {
       return {
-        // see below #reset_inputs for default values
-        filter_name: null,
-        filter_comparator: null,
-        filter_value: null,
-
-        comparators: ['==']
+        ...default_inputs,
+        comparators
       }
     },
     computed: {
@@ -72,6 +72,9 @@
         if (!this.filter_name) return []
 
         return flow(
+          filter(r => {
+            return get(r, this.filter_name) !== undefined
+          }),
           map(r => {
             return get(r, this.filter_name)
           }),
@@ -87,15 +90,11 @@
         }
       }
     },
-    created () {
-      this.reset_inputs()
-    },
     methods: {
       reset_inputs() {
-        // TODO: @refac replicating these data definitions === bad
-        this.filter_name = ''
-        this.filter_comparator = '=='
-        this.filter_value = ''
+        this.filter_name = default_inputs.filter_name
+        this.filter_comparator = default_inputs.filter_comparator
+        this.filter_value = default_inputs.filter_value
       },
       extract_nested_keys(data) {
         var result = {};
@@ -123,7 +122,7 @@
         return Object.keys(result);
       },
       add_filter() {
-        this.$emit('change', this.filter)
+        this.$store.commit('irs_monitor/add_filter', this.filter)
         this.reset_inputs()
       }
     }

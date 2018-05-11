@@ -48,7 +48,15 @@ test('should list the possible values after selection a field', t => {
 })
 
 test('should emit change when adding a filter', t => {
+  const spy = sinon.spy()
+  const mock_store = {
+    commit: spy
+  }
+
   const wrapper = shallow(Fields, {
+    mocks: {
+      $store: mock_store
+    },
     propsData: {responses}
   })
 
@@ -58,11 +66,20 @@ test('should emit change when adding a filter', t => {
 
   wrapper.vm.add_filter()
 
-  t.true(wrapper.vm.$emit.calledOnce)
+  t.true(spy.calledOnce)
+  t.is(spy.getCall(0).args[0], 'irs_monitor/add_filter')
 })
 
 test('should emit change with a valid filter', t => {
+  const spy = sinon.spy()
+  const mock_store = {
+    commit: spy
+  }
+
   const wrapper = shallow(Fields, {
+    mocks: {
+      $store: mock_store
+    },
     propsData: {responses}
   })
 
@@ -78,7 +95,7 @@ test('should emit change with a valid filter', t => {
 
   wrapper.vm.add_filter()
 
-  t.is(wrapper.vm.$emit.getCall(0).args[0], 'change')
-  t.deepEqual(wrapper.vm.$emit.getCall(0).args[1], expected)
+  t.is(spy.getCall(0).args[0], 'irs_monitor/add_filter')
+  t.deepEqual(spy.getCall(0).args[1], expected)
 })
 
