@@ -49,6 +49,22 @@
       ref="local_personalised_instance_id">
     </md-dialog-prompt>
 
+
+    <md-dialog ref="warn-personal-instance-id">
+      <md-dialog-title>No personalised instance id</md-dialog-title>
+
+      <md-dialog-content>
+        You are logging in without an instance id into a production application.
+        If you are testing you should set a personalised instance ID. 
+        If you know what you are doing you can ignore this message.
+      </md-dialog-content>
+
+      <md-dialog-actions>
+        <md-button class="md-primary" @click="logout()">Set instance id</md-button>
+        <md-button class="md-primary" @click="continue_login()">Continue without instance id</md-button>
+      </md-dialog-actions>
+    </md-dialog>
+
   </div>
 </template>
 
@@ -142,7 +158,14 @@
           this.$ga.set("user", `${this.$store.state.meta.user.username}/${this.$store.state.meta.user.name}`)
           this.$endLoading('meta/login')
           this.login_disabled = false
-          this.continue()
+
+
+          if (this.$store.state.meta.user.instance_slug === 'all' && BUILD_TIME.DOUMA_PRODUCTION_MODE) {
+            this.$refs['warn-personal-instance-id'].open();
+            return 
+          } 
+
+          this.continue_login()
         })
         .catch(e => {
           this.$endLoading('meta/login')
@@ -164,9 +187,13 @@
         })
 
       },
-      continue() {
+      continue_login() {
+        this.$refs['warn-personal-instance-id'].close();
         const next_path = this.get_next_path()
         this.$router.push(next_path)
+      },
+      logout() {
+        this.$router.push({name: 'meta:logout'})
       },
       get_next_path() {
         let next_path

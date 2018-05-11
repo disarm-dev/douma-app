@@ -140,9 +140,13 @@
             if (last_successful_sync_count > 0) {
               this.$store.commit('root:set_snackbar', {message: `Successfully synced ${last_successful_sync_count} responses`})
             } else if (last_successful_sync_count === 0 && last_failed_sync_count > 0) {
-              this.$store.commit('root:set_snackbar', {message: `All ${last_failed_sync_count} responses failed to sync`})
+              setTimeout(() => {
+                this.$store.commit('root:set_snackbar', {message: `All ${last_failed_sync_count} responses failed to sync`})
+              }, 3000);
             } else {
-              this.$store.commit('root:set_snackbar', {message: `${last_successful_sync_count} responses synced, ${last_failed_sync_count} responses failed to sync`})
+              setTimeout(() => {
+                this.$store.commit('root:set_snackbar', {message: `${last_successful_sync_count} responses synced, ${last_failed_sync_count} responses failed to sync`})
+              }, 3000);
             }
 
           })

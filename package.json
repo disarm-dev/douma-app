@@ -19,6 +19,7 @@
     "@mapbox/mapbox-gl-draw": "^1.0.1",
     "@turf/bbox": "^4.4.0",
     "@turf/bbox-polygon": "^4.4.0",
+    "@turf/boolean-overlap": "^6.0.1",
     "@turf/boolean-point-in-polygon": "^5.0.4",
     "@turf/boolean-within": "^5.0.4",
     "@turf/center": "^4.4.0",
@@ -174,7 +175,7 @@
     "last 2 versions",
     "not ie <= 10"
   ],
-  "version": "1.0.10",
+  "version": "1.0.12",
   "ava": {
     "require": [
       "./test/helpers/setup.js"

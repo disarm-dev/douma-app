@@ -5,7 +5,7 @@
       <label v-else>Select plan</label>
       <md-select :value="selected_plan" :disabled="plans.length === 0">
         <md-option v-for="plan in plans" :key="plan._id" :value="plan._id" @selected="get_plan(plan)">
-          {{plan.date | format_date }}, {{plan.targets}} areas
+          {{plan.name }}, {{plan.targets}} areas
         </md-option>
       </md-select>
     </md-input-container>

@@ -75,6 +75,7 @@
 
   export default {
     name: 'sidebar',
+    props: ['show_sidebar'],
     data() {
       return {
         can_update: false
@@ -94,12 +95,12 @@
       },
     },
     watch: {
-      '$store.state.trigger_sidebar_visible_irrelevant_value': 'show_hide_sidebar'
+      'show_sidebar': 'show_hide_sidebar'
     },
     methods: {
       navigate(name) {
         this.$router.push({name})
-        this.$store.commit('root:toggle_sidebar')
+        this.show_hide_sidebar()
       },
       show_hide_sidebar() {
         this.$refs.sidebar.toggle()
