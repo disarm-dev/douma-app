@@ -59,8 +59,8 @@ export function configure_application (instance_config) {
 
   document.addEventListener("show-content-available-offline", e => {
     store.commit("root:set_sw_message", {
-      title: 'Offline',
-      message: 'DiSARM is now available offline. You can switch off your internet connection.'
+      title: 'Offline mode ready',
+      message: 'After you are logged in and have downloaded the geodata, the app will work offline'
     })
   })
 
