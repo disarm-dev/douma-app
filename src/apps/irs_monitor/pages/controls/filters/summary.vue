@@ -1,5 +1,5 @@
 <template>
-    <div v-if="filters.length">
+    <div v-if="filters.length" class="filters-summary">
         <h4>Active filters</h4>
         <md-chip v-for="({name, comparator, value}, index) in formatted_filters" :key="index" md-deletable @delete="on_delete(filters[index])">
             {{name}} {{comparator}} {{value}}
@@ -39,5 +39,14 @@
 </script>
 
 <style scoped>
-
+  .filters-summary {
+    background: #f5f5f5;
+    margin-left: -16px;
+    padding-left: 16px;
+    padding-right: 16px;
+    margin-right: -16px;
+    padding-bottom: 16px;
+    margin-bottom: -24px;
+    padding-top: 7px;
+  }
 </style>
