@@ -8,6 +8,7 @@
             v-model="area"
             :options="categories"
             placeholder="Select area"
+            :max-height="200"
     >
       <span slot="noResult">Oops! No elements found. Consider changing the search query.</span>
     </multiselect>
@@ -23,6 +24,7 @@
             :internal-search="false"
             :allow-empty="true"
             @search-change="search"
+            :max-height="200"
     >
       <span slot="noResult">Oops! No elements found. Consider changing the search query.</span>
     </multiselect>
@@ -129,6 +131,6 @@
   }
 
   .spatial-container {
-    min-height: 420px;
+    min-height: 290px;
   }
 </style>
