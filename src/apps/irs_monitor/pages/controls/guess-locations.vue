@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="enabled">
     <!--DOWNLOAD BUTTON -->
     <md-button
       @click.native="$store.dispatch('irs_record_point/guess_response_locations',responses)"
@@ -19,6 +19,9 @@
     name: "guess-locations",
     props: ['responses'],
     computed: {
+      enabled() {
+        return !this.disabled
+      },
       disabled() {
         return this.responses.length === 0
       },
