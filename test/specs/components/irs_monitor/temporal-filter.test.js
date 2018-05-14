@@ -23,29 +23,7 @@ test('should render', t => {
 })
 
 
-test('should reset start and end dates when calling set_start_and_end_dates()', t => {
-  const wrapper = shallow(TemporalFilters, {
-    propsData: {responses}
-  })
-
-  wrapper.vm.start = new Date('2017-9-2')
-  wrapper.vm.end = new Date('2017-9-9')
-
-  wrapper.vm.set_start_and_end_dates()
-
-  const expected_start = new Date(responses[0].recorded_on).getTime()
-  const actual_start = wrapper.vm.start.getTime()
-
-  t.is(expected_start, actual_start)
-
-  const expected_end = new Date(responses[2].recorded_on).getTime()
-  const actual_end = wrapper.vm.end.getTime()
-
-  t.is(expected_end, actual_end)
-
-})
-
-test('should emit 2 change events when adding the temporal filter', t => {
+test('should not emit any events when adding the temporal filter without setting start or end', t => {
   const spy = sinon.spy()
   const mock_store = {
     commit: spy
@@ -60,7 +38,7 @@ test('should emit 2 change events when adding the temporal filter', t => {
 
   wrapper.vm.add_temporal_filter()
 
-  t.is(spy.calledTwice, true)
+  t.is(spy.notCalled, true)
 })
 
 test('should emit 2 valid temporal filters when adding the temporal filter', t => {
@@ -76,7 +54,9 @@ test('should emit 2 valid temporal filters when adding the temporal filter', t =
     propsData: {responses}
   })
 
-  wrapper.vm.set_start_and_end_dates()
+  wrapper.vm.start = new Date('2017-9-1').toString()
+  wrapper.vm.end = new Date('2017-9-5').toString()
+
   wrapper.vm.add_temporal_filter()
 
   const expected_start = {name: 'recorded_on', comparator: '>=', value: new Date(responses[0].recorded_on).getTime(), display_value: 'Sep 1st 2017'}
