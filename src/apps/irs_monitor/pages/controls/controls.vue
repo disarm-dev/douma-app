@@ -34,10 +34,13 @@
         </md-tab>
 
         <md-tab id="advanced" md-label="advanced">
+          <md-icon class="md-warn">warning</md-icon> Be careful changing these advanced settings, they affect the results displayed on the monitor page.
           <limit_to :responses="responses" :targets="targets"></limit_to>
           <guess_locations :responses="responses"></guess_locations>
         </md-tab>
       </md-tabs>
+
+
       <filters_summary :filters="filters"></filters_summary>
 
     </md-card-content>
