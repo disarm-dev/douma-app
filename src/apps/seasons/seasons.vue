@@ -5,21 +5,20 @@
         <span style="color: red;" class="md-error" v-if="error">{{error}}</span>
 
         <md-input-container>
-          <label>Season start date</label>
+          <label>Enter new season start date (YYYY-MM-DD)</label>
           <md-input v-model="new_season_start_date"></md-input>
         </md-input-container>
 
-        <md-button id="add_new_season" @click="push_date()">
-          Add new season
+        <md-button class="md-raised md-primary" id="add_new_season" @click="push_date()">
+          Add
         </md-button>
-
 
         <md-list>
           <md-list-item v-for="(season_start_date, index)  in season_start_dates" :key="season_start_date">
             {{season_start_date}}
-            <span> 
-              <md-button @click="remove_season(index)">
-                Remove season
+            <span>
+              <md-button @click="remove_season(index)" class="md-icon-button md-raised md-warn">
+                <md-icon>delete</md-icon>
               </md-button>
             </span>
           </md-list-item>
