@@ -60,7 +60,6 @@ export function create_router(instance_routes, store) {
 
     // geodata is required by at least one applet. check if it's already valid
     if (!geodata_in_cache_and_valid()) {
-      console.log('geodata required, NOT already exists && valid - go to a page to start getting geodata')
       store.commit('meta/set_previous_route', to.path)
       // try to hydrate geodata from IDB
       hydrate_geodata_cache_from_idb().then(() => {

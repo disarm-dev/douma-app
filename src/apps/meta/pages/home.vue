@@ -13,21 +13,40 @@
       </md-card-content>
     </md-card>
 
-    <!-- <instance_selector></instance_selector> -->
-
+    <!--Version commit hash-->
     <span class='version'>Version: {{commit_hash}}</span>
-    <a class='licenses_link' href="/static/3rdpartylicenses.txt"><span>Licenses</span></a>
+
+    <!--Licenses-->
+    <a class="licenses_link " @click="openLicenseDialog()">Licenses</a>
+
+    <md-dialog-alert
+        class="licenses_dialog"
+        :md-title="license_text.title"
+        :md-content="license_text.content"
+        ref="license_dialog">
+    </md-dialog-alert>
+
+
+
   </div>
 </template>
 
 <script>
+  import axios from 'axios'
   import {mapGetters} from 'vuex'
+
   import BUILD_TIME from 'config/build-time'
-  import instance_selector from './instance_selector.vue'
 
   export default {
     name: 'home',
-    components: {instance_selector},
+    data() {
+      return {
+        license_text: {
+          title: 'Licenses',
+          content: 'Loading license text...'
+        }
+      }
+    },
     computed: {
       ...mapGetters({
         decorated_applets: 'meta/decorated_applets'
@@ -37,7 +56,17 @@
       },
       user() {
         return this.$store.state.meta.user
-      }   
+      }
+    },
+    methods: {
+      openLicenseDialog() {
+        this.$refs['license_dialog'].open()
+        this.load_license_text()
+      },
+      async load_license_text() {
+        const response = await axios.get('/static/3rdpartylicenses.txt')
+        this.license_text.content = response.data
+      }
     }
   }
 </script>
@@ -73,6 +102,11 @@
 
   .licenses_link {
     float: right;
+    cursor: pointer;
+  }
+
+  .licenses_dialog {
+    white-space: pre-wrap;
   }
 
   .version {

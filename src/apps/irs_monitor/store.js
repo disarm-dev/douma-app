@@ -18,7 +18,9 @@ export default {
   namespaced: true,
   unpersisted_state_keys: ['responses'],
   state: {
-    ui: {},
+    ui: { 
+      show_filters: true 
+    },
     responses: [],
     responses_last_updated_at: null,
     last_id: null, // ObjectID of most recently synced response
@@ -36,7 +38,8 @@ export default {
       temporal_aggregation_level: CONFIG.applets.irs_monitor.defaults.temporal_aggregation_level,
       spatial_aggregation_level: null,
       limit_to_plan: true,
-      limit_to: ''
+      limit_to: '',
+      season_start_date: ''
     },
     guess_selection_ids: {}
   },

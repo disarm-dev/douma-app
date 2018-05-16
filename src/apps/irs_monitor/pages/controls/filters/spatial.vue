@@ -1,6 +1,5 @@
 <template>
-  <div>
-    <h4>Spatial filter</h4>
+  <div class="spatial-container">
     <span v-if="area_filter_set">Spatial filter already set. Please remove the spatial filter before adding a new one.</span>
 
     <multiselect
@@ -9,6 +8,7 @@
             v-model="area"
             :options="categories"
             placeholder="Select area"
+            :max-height="200"
     >
       <span slot="noResult">Oops! No elements found. Consider changing the search query.</span>
     </multiselect>
@@ -24,6 +24,7 @@
             :internal-search="false"
             :allow-empty="true"
             @search-change="search"
+            :max-height="200"
     >
       <span slot="noResult">Oops! No elements found. Consider changing the search query.</span>
     </multiselect>
@@ -113,18 +114,23 @@
         }
       },
       add_category() {
-        this.$emit('change', {name: 'location.selection.category', comparator: '==', value: this.area})
+        const filter = {name: 'location.selection.category', comparator: '==', value: this.area}
+        this.$store.commit('irs_monitor/add_filter', filter)
       },
 
       add_area() {
         const filter = {name: 'location.selection.id', comparator: '==', value: this.sub_area.id, display_value: this.sub_area.name}
-        this.$emit('change', filter)
+        this.$store.commit('irs_monitor/add_filter', filter)
       }
     }
   }
 </script>
-<style>
+<style scoped>
   .multiselect {
     margin-top: 0.5em;
+  }
+
+  .spatial-container {
+    min-height: 290px;
   }
 </style>

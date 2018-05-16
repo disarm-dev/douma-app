@@ -15,6 +15,12 @@
       Done faking. Created {{created_responses_length}} records.
       <router-link to="/irs/record_point">View records</router-link>
     </div>
+
+    <md-input-container>
+      <label>Set batch size (higher than 500 might cause problems)</label>
+      <md-input type="number" v-model="batch_size"></md-input>
+    </md-input-container>
+
   </div>
 </template>
 
@@ -32,6 +38,7 @@
   import {Response} from 'lib/models/response/model'
   import {geodata_in_cache_and_valid} from 'lib/models/geodata/geodata.valid'
   import {hydrate_geodata_cache_from_idb} from 'lib/models/geodata/local.geodata_store'
+  import CONFIG from 'config/common'
 
   export default {
     name: 'fake_responses_debug',
@@ -57,6 +64,15 @@
       planning_level_name() {
         return get_planning_level_name()
       },
+      batch_size: {
+        get() {
+          return CONFIG.remote.max_records_batch_size
+
+        },
+        set(val) {
+          CONFIG.remote.max_records_batch_size = parseInt(val, 10)
+        }
+      }
     },
     created () {
       hydrate_geodata_cache_from_idb().then(() => {
