@@ -162,7 +162,7 @@
           this.login_disabled = false
 
 
-          if (this.$store.state.meta.user.instance_slug === 'all' && BUILD_TIME.DOUMA_PRODUCTION_MODE && this.local_personalised_instance_id === 'default') {
+          if (this.$store.state.meta.user.instance_slug === 'all' && BUILD_TIME.BRANCH === 'master' && this.local_personalised_instance_id === 'default') {
             this.$refs['warn-personal-instance-id'].open();
             return 
           } 
