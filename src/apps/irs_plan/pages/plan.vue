@@ -201,7 +201,6 @@
     },
     methods: {
       create_plan(plan_name) {
-       // console.log(event);
         this.save_plan(plan_name);
         this.show_save_plan = false
       },
@@ -229,11 +228,13 @@
           })
         }
 
-        const plan = new Plan().create({
-          instance_config: this.instance_config,
-          focus_filter_area,
-          selected_target_area_ids
-        })
+          const plan = new Plan().create({
+            instance_config: this.instance_config,
+            focus_filter_area,
+            name: event.name || 'No name',
+            selected_target_area_ids
+          })
+
 
         const _id = event._id
 
@@ -306,6 +307,10 @@
       save_plan(plan_name) {
         let focus_filter_area
         let selected_target_area_ids
+
+        if(!plan_name){
+          return this.$store.commit('root:set_snackbar', {message: 'The plan should have a name.'})
+        }
 
 
         if (!this.selected_filter_area) {

@@ -5,7 +5,7 @@
       <md-list class="md-double-line">
         <md-list-item v-for="plan in plan_list" :key="plan.date">
           <div class="md-list-text-container">
-            <span>{{plan.name?plan.name:'No Name'}}</span>
+            <span>{{plan.name ? plan.name : 'No name'}}</span>
             <span>{{(new Date(plan.date)).toLocaleString()}}-{{plan.targets}} targets</span>
           </div>
           <span>
