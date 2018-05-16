@@ -231,7 +231,7 @@
           const plan = new Plan().create({
             instance_config: this.instance_config,
             focus_filter_area,
-            name:event.name,
+            name: event.name || 'No name',
             selected_target_area_ids
           })
 
