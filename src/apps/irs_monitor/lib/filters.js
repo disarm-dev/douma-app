@@ -61,17 +61,17 @@ function standard_comparison_function({name, comparator, value}) {
 function day_comparison_function({name, comparator, value}) {
   switch (comparator) {
     case "equals":
-      return (response) => convert_datetime_to_days(response[name]) === convert_datetime_to_days(value)
+      return (response) => convert_datetime_to_days(get(response, name)) === convert_datetime_to_days(value)
     case ">=":
-      return (response) => convert_datetime_to_days(response[name]) >= convert_datetime_to_days(value)
+      return (response) => convert_datetime_to_days(get(response, name)) >= convert_datetime_to_days(value)
     case "<=":
-      return (response) => convert_datetime_to_days(response[name]) <= convert_datetime_to_days(value)
+      return (response) => convert_datetime_to_days(get(response, name)) <= convert_datetime_to_days(value)
     case "<":
-      return (response) => convert_datetime_to_days(response[name]) < convert_datetime_to_days(value)
+      return (response) => convert_datetime_to_days(get(response, name)) < convert_datetime_to_days(value)
     case ">":
-      return (response) => convert_datetime_to_days(response[name]) > convert_datetime_to_days(value)
+      return (response) => convert_datetime_to_days(get(response, name)) > convert_datetime_to_days(value)
     case "not_equals":
-      return (response) => convert_datetime_to_days(response[name]) !== convert_datetime_to_days(value)
+      return (response) => convert_datetime_to_days(get(response, name)) !== convert_datetime_to_days(value)
   }
 }
 
