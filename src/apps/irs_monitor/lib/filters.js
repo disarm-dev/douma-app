@@ -12,12 +12,6 @@ export function filter_responses(responses, filters = []) {
   for (let i = 0; i < responses.length; i++) {
     let response = responses[i]
 
-    // Check response has all required fields for filters
-    const all_field_present = filter_names.every(filter_name => {
-      return get(response, filter_name, null) !== null
-    })
-    if (!all_field_present) continue
-
     // Run composed filter against response, and keep response if true
     if (filter_fn(response)) output.push(response)
   }
