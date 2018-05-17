@@ -50,17 +50,17 @@ function filter_function({name, comparator, value}) {
 function standard_comparison_function({name, comparator, value}) {
   switch (comparator) {
     case "equals":
-      return (response) => response[name] === value
+      return (response) => get(response, name) === value
     case ">=":
-      return (response) => response[name] >= value
+      return (response) => get(response, name) >= value
     case "<=":
-      return (response) => response[name] <= value
+      return (response) => get(response, name) <= value
     case "<":
-      return (response) => response[name] < value
+      return (response) => get(response, name) < value
     case ">":
-      return (response) => response[name] > value
+      return (response) => get(response, name) > value
     case "not_equals":
-      return (response) => response[name] !== value
+      return (response) => get(response, name) !== value
   }
 }
 
