@@ -16,7 +16,7 @@ export function filter_responses(responses, filters = []) {
     const all_field_present = filter_names.every(filter_name => {
       return get(response, filter_name, null) !== null
     })
-    if (!all_field_present) return
+    if (!all_field_present) continue
 
     // Run composed filter against response, and keep response if true
     if (filter_fn(response)) output.push(response)
@@ -50,17 +50,17 @@ function filter_function({name, comparator, value}) {
 function standard_comparison_function({name, comparator, value}) {
   switch (comparator) {
     case "equals":
-      return (response) => response[name] === value
+      return (response) => get(response, name) === value
     case ">=":
-      return (response) => response[name] >= value
+      return (response) => get(response, name) >= value
     case "<=":
-      return (response) => response[name] <= value
+      return (response) => get(response, name) <= value
     case "<":
-      return (response) => response[name] < value
+      return (response) => get(response, name) < value
     case ">":
-      return (response) => response[name] > value
+      return (response) => get(response, name) > value
     case "not_equals":
-      return (response) => response[name] !== value
+      return (response) => get(response, name) !== value
   }
 }
 
