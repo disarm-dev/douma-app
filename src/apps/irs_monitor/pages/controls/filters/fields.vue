@@ -5,7 +5,7 @@
         <md-option v-for="field_name in field_names" :key='field_name' :value="field_name">{{field_name}}</md-option>
       </md-select>
 
-      <md-select v-model="filter_comparator" class="select" disabled>
+      <md-select v-model="filter_comparator" class="select">
         <md-option v-for="comparator in comparators" :key="comparator" :value="comparator">{{comparator}}</md-option>
       </md-select>
 
