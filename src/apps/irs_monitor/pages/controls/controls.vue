@@ -10,7 +10,7 @@
     </md-card-header>
 
     <md-card-content v-show="show_filters">
-      <md-tabs class="md-transparent filter-container">
+      <md-tabs class="md-transparent filter-container" ref="tabs">
 
         <md-tab id="season_plan" md-label="Season/plan">
           <seasons :season_start_dates="season_start_dates"></seasons>
@@ -76,6 +76,7 @@
           return this.$store.state.irs_monitor.ui.show_filters
         },
         set(val){
+          if (this.$refs.tabs.activeTab === 'season_plan') this.$refs.tabs.setActiveTab(this.$refs.tabs.tabList['season_plan'])
           this.$store.commit('irs_monitor/set_ui', {show_filters: val})
         }
       }
