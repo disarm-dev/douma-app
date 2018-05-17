@@ -114,12 +114,12 @@
         }
       },
       add_category() {
-        const filter = {name: 'location.selection.category', comparator: '==', value: this.area}
+        const filter = {name: 'location.selection.category', comparator: 'equals', value: this.area}
         this.$store.commit('irs_monitor/add_filter', filter)
       },
 
       add_area() {
-        const filter = {name: 'location.selection.id', comparator: '==', value: this.sub_area.id, display_value: this.sub_area.name}
+        const filter = {name: 'location.selection.id', comparator: 'equals', value: this.sub_area.id, display_value: this.sub_area.name}
         this.$store.commit('irs_monitor/add_filter', filter)
       }
     }
