@@ -7,6 +7,7 @@ if (BUILD_TIME.DOUMA_PRODUCTION_MODE) {
       console.log('[sw] Service worker is active.');
     },
     cached() {
+      document.dispatchEvent(new Event('show-content-available-offline'))
       console.log('[sw] Content has been cached for offline use.');
     },
     updated() {

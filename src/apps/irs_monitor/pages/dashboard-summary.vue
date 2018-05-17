@@ -1,31 +1,26 @@
 <template>
   <controls>
-    <md-button slot="primary_action" class="md-icon-button md-raised md-primary" :disabled="!$can('read', 'irs_monitor') || $loading.isLoading('irs_monitor/load_responses')" @click.native='load_data'>
+    <md-button slot="primary_action" class="md-icon-button md-raised md-primary" :disabled="!$can('read', 'irs_monitor') || isLoading('irs_monitor/load_responses')" @click.native='load_data'>
       <md-icon>refresh</md-icon>
     </md-button>
 
     <template slot="menu_items">
-      <md-menu-item :disabled="!$can('read', 'irs_monitor') || $loading.isLoading('irs_monitor/load_plan')" @click="load_plan">
-        <md-icon>file_download</md-icon>
-        <span>Load plan</span>
-      </md-menu-item>
-
-      <md-menu-item :disabled="!$can('read', 'irs_monitor') || $loading.isLoading('irs_monitor/load_all_plans')" @click="load_all_plans">
+      <md-menu-item :disabled="!$can('read', 'irs_monitor') || isLoading('irs_monitor/load_all_plans')" @click="load_all_plans">
         <md-icon>file_download</md-icon>
         <span>Load all plans</span>
       </md-menu-item>
 
-      <md-menu-item :disabled="!$can('read', 'irs_monitor') || $loading.isLoading('irs_monitor/load_responses')" @click="load_responses">
+      <md-menu-item :disabled="!$can('read', 'irs_monitor') || isLoading('irs_monitor/load_responses')" @click="load_responses">
         <md-icon>file_download</md-icon>
-        <span>Retrieve responses</span>
+        <span>Load responses</span>
       </md-menu-item>
 
-      <md-menu-item :disabled="!$can('read', 'irs_monitor') || $loading.isLoading('irs_monitor/refresh_data') || !responses.length" @click="force_load_responses">
+      <md-menu-item :disabled="!$can('read', 'irs_monitor') || isLoading('irs_monitor/refresh_data') || !responses.length" @click="force_load_responses">
         <md-icon>file_download</md-icon>
-        <span>Re-retrieve all responses</span>
+        <span>Re-load all responses</span>
       </md-menu-item>
 
-      <md-menu-item :disabled="!$can('read', 'irs_monitor') || $loading.isLoading('irs_monitor/refresh_data') || !responses.length" @click="download_responses">
+      <md-menu-item :disabled="!$can('read', 'irs_monitor') || isLoading('irs_monitor/refresh_data') || !responses.length" @click="download_responses">
         <md-icon>file_download</md-icon>
         <span>Download responses</span>
       </md-menu-item>
@@ -33,17 +28,13 @@
     </template>
 
     <div slot="text">
-      <span v-if="$loading.anyLoading">Loading...</span>
-      <template v-else>
-        <span v-if="plan">[Plan loaded] </span>
-        <span v-if="filters.length">
-          {{filters.length}} filters active, {{responses.length}} filtered records showing
-        </span>
-        <span v-else>
-          {{responses.length}} records
-          Last updated: {{responses_last_updated_at}}
-        </span>
-      </template>
+      <div v-if="filters.length">
+        {{filters.length}} filters active, {{responses.length}} filtered records showing
+      </div>
+      <div v-else>
+        {{responses.length}} records
+        Last updated: {{responses_last_updated_at}}
+      </div>
     </div>
   </controls>
 
@@ -58,9 +49,9 @@
   import {flatten_json_to_csv} from 'lib/helpers/csv-export'
 
   export default {
-    name: 'dashboard-summary',
+    name: 'summary',
     components: {controls},
-    props: ['responses', 'filters', 'plan'],
+    props: ['responses', 'filters'],
     mounted() {
     },
     data() {
@@ -68,6 +59,7 @@
     },
     computed: {
       ...mapState({
+        plan: state => state.irs_monitor.plan,
         instance_config: state => state.instance_config,
         responses_last_updated_at: state => {
           if (state.irs_monitor.responses_last_updated_at) {

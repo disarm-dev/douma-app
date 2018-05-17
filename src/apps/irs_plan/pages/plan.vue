@@ -5,12 +5,11 @@
 
       <md-dialog-content>
         <md-list>
-        <md-list-item v-for="plan in plan_list" @click="load_plan_detail(plan._id)" :key="plan._id">
-          <span>
-            {{(new Date(plan.date)).toLocaleString()}}
-            -
-            {{plan.targets}} targets
-          </span>
+        <md-list-item class="md-double-line" v-for="plan in plan_list" @click="load_plan_detail(plan._id)" :key="plan._id">
+          <div class="md-list-text-container">
+            <span>{{plan.name?plan.name:'No Name'}}</span>
+            <span>{{(new Date(plan.date)).toLocaleString()}}<md-chip>{{plan.targets}} targets</md-chip></span>
+          </div>
           </md-list-item>
         </md-list>
       </md-dialog-content>
@@ -34,14 +33,16 @@
         slot="primary_action"
         class="md-primary md-icon-button md-raised"
         :class="{'md-warn': edit_mode}"
-        :disabled="!$can('write', 'irs_plan') || edit_disabled || $loading.isLoading('irs_plan/load_plan') || !can_and_have_focused_planned"
+        :disabled="!$can('write', 'irs_plan') || edit_disabled || isLoading('irs_plan/load_plan') || !can_and_have_focused_planned"
         @click.native='edit_mode = !edit_mode'
       >
         <md-icon>edit</md-icon>
       </md-button>
 
       <template slot="menu_items">
-        <md-menu-item :disabled="!$can('read', 'irs_plan') || $loading.isLoading('irs_plan/load_plan')"
+
+
+        <md-menu-item :disabled="!$can('read', 'irs_plan') || isLoading('irs_plan/load_plan')"
                       @click="toggle_plan_selector">
           <md-icon>assignment_turned_in</md-icon>
           <span>Load Plan</span>
@@ -143,7 +144,7 @@
         edit_disabled: true,
         select_plan_dialog: false,
         show_save_plan: false,
-        plan_list: [],
+        plan_list: []
       }
     },
     computed: {
@@ -199,8 +200,8 @@
       }
     },
     methods: {
-      create_plan(event) {
-        this.save_plan();
+      create_plan(plan_name) {
+        this.save_plan(plan_name);
         this.show_save_plan = false
       },
       update_plan(event) {
@@ -227,11 +228,13 @@
           })
         }
 
-        const plan = new Plan().create({
-          instance_config: this.instance_config,
-          focus_filter_area,
-          selected_target_area_ids
-        })
+          const plan = new Plan().create({
+            instance_config: this.instance_config,
+            focus_filter_area,
+            name: event.name || 'No name',
+            selected_target_area_ids
+          })
+
 
         const _id = event._id
 
@@ -290,15 +293,24 @@
           })
       },
       load_plan() {
-        this.$loading.startLoading('irs_plan/load_plan')
+        this.$startLoading('irs_plan/load_plan')
 
         this.$store.dispatch('irs_plan/get_network_plan')
-          .then(() => { this.$loading.endLoading('irs_plan/load_plan') })
-          .catch(() => { this.$loading.endLoading('irs_plan/load_plan') })
+          .then(() => {
+            this.$endLoading('irs_plan/load_plan')
+          })
+          .catch(() => {
+            this.$endLoading('irs_plan/load_plan')
+          })
+
       },
-      save_plan() {
+      save_plan(plan_name) {
         let focus_filter_area
         let selected_target_area_ids
+
+        if(!plan_name){
+          return this.$store.commit('root:set_snackbar', {message: 'The plan should have a name.'})
+        }
 
 
         if (!this.selected_filter_area) {
@@ -322,14 +334,15 @@
         const plan = new Plan().create({
           instance_config: this.instance_config,
           focus_filter_area,
+          name:plan_name,
           selected_target_area_ids
         })
 
-        this.$loading.startLoading('irs_plan/save_plan')
+        this.$startLoading('irs_plan/save_plan')
         this.$store.dispatch('irs_plan/save_plan', plan)
           .then(() => {
             this.$store.commit('root:set_snackbar', {message: 'Successful save'})
-            this.$loading.endLoading('irs_plan/save_plan')
+            this.$endLoading('irs_plan/save_plan')
             this.$store.dispatch('irs_plan/get_network_plan_list')
               .then(plan_list => this.plan_list = plan_list)
           })
@@ -338,7 +351,7 @@
             if (e.response.status !== 401) {
               this.$store.commit('root:set_snackbar', {message: 'Not saved. Something wrong.'})
             }
-            this.$loading.endLoading('irs_plan/save_plan')
+            this.$endLoading('irs_plan/save_plan')
           })
       },
       clear_plan() {
