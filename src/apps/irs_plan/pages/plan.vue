@@ -236,11 +236,11 @@
 
         const _id = event._id
 
-        this.$startLoading('irs_plan/save_plan')
+        this.$loading.startLoading('irs_plan/save_plan')
         this.$store.dispatch('irs_plan/update_plan', {plan, _id})
           .then(() => {
             this.$store.commit('root:set_snackbar', {message: 'Successful save'})
-            this.$endLoading('irs_plan/save_plan')
+            this.$loading.endLoading('irs_plan/save_plan')
             this.$store.dispatch('irs_plan/get_network_plan_list')
               .then(plan_list => this.plan_list = plan_list)
           })
@@ -248,16 +248,16 @@
             if (e.response.status !== 401) {
               this.$store.commit('root:set_snackbar', {message: 'Not saved. Something wrong.'})
             }
-            this.$endLoading('irs_plan/save_plan')
+            this.$loading.endLoading('irs_plan/save_plan')
           })
       },
       delete_plan(event) {
         this.show_save_plan = false
-        this.$startLoading('irs_plan/save_plan')
+        this.$loading.startLoading('irs_plan/save_plan')
         this.$store.dispatch('irs_plan/delete_plan', event._id)
           .then(() => {
             this.$store.commit('root:set_snackbar', {message: 'Successful save'})
-            this.$endLoading('irs_plan/save_plan')
+            this.$loading.endLoading('irs_plan/save_plan')
             this.$store.dispatch('irs_plan/get_network_plan_list')
               .then(plan_list => this.plan_list = plan_list)
           })
@@ -265,7 +265,7 @@
             if (e.response.status !== 401) {
               this.$store.commit('root:set_snackbar', {message: 'Not deleted. Something wrong.'})
             }
-            this.$endLoading('irs_plan/save_plan')
+            this.$loading.endLoading('irs_plan/save_plan')
           })
       },
       open_dialog(ref) {
@@ -280,14 +280,14 @@
       load_plan_detail(plan_id) {
         console.log('load plan detail ', plan_id)
         this.close_dialog('select_plan_dialog')
-        this.$startLoading('irs_plan/load_plan_detail')
+        this.$loading.startLoading('irs_plan/load_plan_detail')
 
         this.$store.dispatch('irs_plan/get_network_plan_detail', plan_id)
           .then(() => {
-            this.$endLoading('irs_plan/load_plan_detail')
+            this.$loading.endLoading('irs_plan/load_plan_detail')
           })
           .catch(() => {
-            this.$endLoading('irs_plan/load_plan_detail')
+            this.$loading.endLoading('irs_plan/load_plan_detail')
           })
       },
       load_plan() {

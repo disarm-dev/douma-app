@@ -157,7 +157,7 @@
         this.$store.dispatch('meta/login', login_details).then(() => {
           // dimension3 is the dimension we use for the user attribute we send to GA. Could refactor.
           this.$ga.set("dimension3", `${this.$store.state.meta.user.username}/${this.$store.state.meta.user.name}`)
-          this.$endLoading('meta/login')
+          this.$loading.endLoading('meta/login')
           this.login_disabled = false
 
 
