@@ -19,9 +19,6 @@ Vue.use(ClientTable)
 import TreeView from 'vue-json-tree-view'
 Vue.use(TreeView)
 
-import VueShortkey from 'vue-shortkey'
-Vue.use(VueShortkey)
-
 // VueMaterial
 import VueMaterial from 'vue-material'
 Vue.use(VueMaterial)
@@ -38,14 +35,11 @@ import { configure_spatial_helpers } from 'lib/instance_data/spatial_hierarchy_h
 import { add_network_status_watcher } from 'lib/helpers/network_status.js'
 import { check_need_to_update } from 'lib/remote/check-application-version'
 import { set_raven_user_context } from 'config/error_tracking.js'
-import { instantiate_axios_instance } from 'lib/remote/axios_instance'
-import BUILD_TIME from 'config/build-time'
 import { clean_up_local_dbs } from 'lib/local_db'
 import { setup_acl } from 'lib/acess-control-list'
 import { hydrate_geodata_cache_from_idb } from 'lib/models/geodata/local.geodata_store'
-import CONFIG from 'config/common'
-import { createVuexLoader } from 'vuex-loading'
 
+import BUILD_TIME from 'config/build-time'
 
 /**
  * Build a 'douma_app' instance
