@@ -2,7 +2,7 @@ import Vuex from 'vuex'
 import createPersistedState from 'vuex-persistedstate'
 
 let store
-export {store}
+export { store }
 
 export function create_store(instance_config, instance_stores) {
   // delete location_selection
@@ -16,13 +16,12 @@ export function create_store(instance_config, instance_stores) {
       instance_config: instance_config, // Really important, should maybe be somewhere else
 
       // Global UI
-      snackbar: {message: null},
-      sw_message: {message: null, title: null},
+      snackbar: { message: null },
+      sw_message: { message: null, title: null },
       sw_update_available: false,
       network_online: false,
 
       // Irrelevant values: only watched for changes
-      trigger_sidebar_visible_irrelevant_value: false,
       trigger_help_visible_irrelevant_value: false, // Beware - don't care whether it true or false, just that it changes
 
     },
@@ -47,13 +46,9 @@ export function create_store(instance_config, instance_stores) {
       },
       'root:trigger_help_visible': (state) => {
         state.trigger_help_visible_irrelevant_value = !state.trigger_help_visible_irrelevant_value
-      },
-      'root:toggle_sidebar': (state) => {
-        state.trigger_sidebar_visible_irrelevant_value = !state.trigger_sidebar_visible_irrelevant_value
-      },
+      }
     },
   })
 
   return store
 }
-

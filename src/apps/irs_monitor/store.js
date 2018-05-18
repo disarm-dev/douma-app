@@ -1,28 +1,36 @@
 import Vue from 'vue'
-import {isEqual, get} from 'lodash'
+import {
+  isEqual,
+  get
+} from 'lodash'
 
-import {set_filter, unset_filter} from './pages/controls/filters/controller'
+import {
+  set_filter,
+  unset_filter
+} from './pages/controls/filters/controller'
 import CONFIG from 'config/common'
 
 
 export default {
   namespaced: true,
   state: {
-    ui: {},
+    ui: {
+      show_filters: false,
+    },
     last_id: null, // ObjectID of most recently synced response, should be kept in store for persistence
     filter: null,
     map_options: {
       show_response_points: true,
       selected_layer: 'normalised_risk'
     },
-    show_filters: false,
     responses_last_updated_at: null,
     dashboard_options: {
       // TODO: @config Extract default temporal_aggregation_level
       temporal_aggregation_level: CONFIG.applets.irs_monitor.defaults.temporal_aggregation_level,
       spatial_aggregation_level: null,
       limit_to_plan: true,
-      limit_to: ''
+      limit_to: '',
+      season_start_date: ''
     },
 
     // Probably data
@@ -40,7 +48,10 @@ export default {
       state.responses_last_updated_at = new Date
     },
 
-    set_filter: (state, {filter_name, filter_object}) => {
+    set_filter: (state, {
+      filter_name,
+      filter_object
+    }) => {
       const new_filters = set_filter(state.filters, filter_name, filter_object)
       state.filters = new_filters
     },
@@ -64,16 +75,16 @@ export default {
       const index = state.filters.findIndex(filter => isEqual(filter, field_filter))
       state.filters.splice(index, 1)
     },
-    set_show_filters: (state, value) => {
-      state.show_filters = value
-    },
     set_ui: (state, ui) => {
       state.ui = ui
     },
     set_dashboard_options: (state, options) => {
       state.dashboard_options = options
     },
-    set_dashboard_option: (state, {key, value}) => {
+    set_dashboard_option: (state, {
+      key,
+      value
+    }) => {
       Vue.set(state.dashboard_options, key, value)
     },
     set_selected_layer(state, selected_layer) {
@@ -86,7 +97,4 @@ export default {
       state.last_id = last_id
     }
   },
-  // TODO: Re-remove everything under here.
-  getters: {},
-  actions: {}
 }

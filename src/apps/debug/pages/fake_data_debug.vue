@@ -15,6 +15,12 @@
       Done faking. Created {{created_responses_length}} records (cumulative).
       <router-link to="/irs/record_point">View records</router-link>
     </div>
+
+    <md-input-container>
+      <label>Set batch size (higher than 500 might cause problems)</label>
+      <md-input type="number" v-model="batch_size"></md-input>
+    </md-input-container>
+
   </div>
 </template>
 
@@ -22,10 +28,9 @@
   import {geodata_in_cache_and_valid} from 'lib/models/geodata/geodata.valid'
   import {hydrate_geodata_cache_from_idb} from 'lib/models/geodata/local.geodata_store'
   import {ResponseController} from 'lib/models/response/controller'
-
   import {generate_data} from 'lib/helpers/generate_fake_data'
-
   const controller = new ResponseController('record')
+  import CONFIG from 'config/common'
 
   export default {
     name: 'fake_responses_debug',
@@ -35,6 +40,20 @@
         created_responses_length: 0, // ui
 
         areas_count: 50, // param
+      }
+    },
+    computed: {
+      planning_level_name() {
+        return get_planning_level_name()
+      },
+      batch_size: {
+        get() {
+          return CONFIG.remote.max_records_batch_size
+
+        },
+        set(val) {
+          CONFIG.remote.max_records_batch_size = parseInt(val, 10)
+        }
       }
     },
     created () {

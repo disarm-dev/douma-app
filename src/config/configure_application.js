@@ -26,6 +26,7 @@ Vue.use(VueShortkey)
 import VueMaterial from 'vue-material'
 Vue.use(VueMaterial)
 
+import get from 'lodash.get'
 
 import DoumaComponent from 'components/app.vue'
 import { create_router } from '../apps/router'
@@ -34,7 +35,6 @@ import { get_instance_stores_and_routes } from './applet_stores_and_routes'
 import { configure_theme } from './theme'
 import { instantiate_analytics, set_common_analytics } from 'config/analytics'
 import { configure_spatial_helpers } from 'lib/instance_data/spatial_hierarchy_helper'
-import { try_reconnect } from 'lib/remote/util'
 import { add_network_status_watcher } from 'lib/helpers/network_status.js'
 import { check_need_to_update } from 'lib/remote/check-application-version'
 import { set_raven_user_context } from 'config/error_tracking.js'
@@ -53,11 +53,22 @@ import { createVuexLoader } from 'vuex-loading'
  * @returns {Vue}
  */
 export async function configure_application(instance_config) {
+  //
+  // BEFORE router or store
+  //
+
+  // Set page title
+  const title = get(instance_config, 'instance.title', '')
+  document.title = `DiSARM ${title}`
+
   // Configure spatial_helpers to use instance_config
   // We need to do this before we create the store, the store relies on some of the function in spatial_hierarchy_helpers
   configure_spatial_helpers(instance_config)
 
-  // CREATE REQUIRED OBJECTS FOR APP (store AND router)
+
+  //
+  // CREATE router and store
+  //
 
 
   // Collect stores and routes for applets ONLY in this instance {stores: {}, routes: []}
@@ -73,6 +84,13 @@ export async function configure_application(instance_config) {
     store.commit("root:set_sw_update_available", true)
   })
 
+  document.addEventListener("show-content-available-offline", e => {
+    store.commit("root:set_sw_message", {
+      title: 'Offline mode ready',
+      message: 'After you are logged in and have downloaded the geodata, the app will work offline'
+    })
+  })
+
   // Create Vue#$router from what you got
   // (Required for the app)
   const router = create_router(instance_applets_stores_and_routes.routes, store)
@@ -80,25 +98,25 @@ export async function configure_application(instance_config) {
   // Configure theme, either from default or instance_config
   configure_theme(instance_config)
 
+  //
+  // AFTER router and store, BEFORE app
+  //
 
-  // BEFORE VUE APP IS CREATED (USING store OR router)
+  // Analytics (injects $ga in every component)
+  instantiate_analytics(router, store)
 
-  // Configure standard_handler for remote requests
-  // Also trigger a ping to API, for lots of reasons, mostly that the API seems to take ages to wake up
-  // (Loads of components use network requests when they are created/mounted)
-  try_reconnect()
+  // Clean up old dbs, do migrations/upgrades here in the future
+  clean_up_local_dbs()
 
-  // Analytics 1/2: instantiate analytics before you create the application
-  // (Vue injects $ga in every component)
-  instantiate_analytics(router)
+  // Configure permissions
+  setup_acl()
 
   // Clean up old dbs, do migrations/upgrades here in the future
   await clean_up_local_dbs()
 
   await hydrate_geodata_cache_from_idb()
-
-  setup_acl()
     // CREATE VUE APP
+  //
 
   // Instantiate Vue app with store and router
   const douma_app = new Vue({
@@ -114,11 +132,6 @@ export async function configure_application(instance_config) {
 
   // AFTER VUE APP IS CREATED (first page has rendered)
 
-
-  // Analytics 2/2: set common properties (e.g. user) for every event
-  // (App needs to be running to send the first requests setting user props, etc)
-  set_common_analytics(douma_app)
-
   // Configure application update
   check_need_to_update()
 
@@ -131,35 +144,4 @@ export async function configure_application(instance_config) {
   // Keep track of what version we're working on, in production at least.
   if (BUILD_TIME.DOUMA_PRODUCTION_MODE) console.info('🚀 Launched DiSARM version ' + BUILD_TIME.VERSION_COMMIT_HASH_SHORT)
 
-}
-
-// export function boot_app() {
-//   // This is only enought to get the application launching without any errors
-//   // We need a lot of stuff from the function above
-//
-//   const config_for_boot = {applets: {meta: {}}, instance: {title: 'instance'}}
-//   const instance_applets_stores_and_routes = get_instance_stores_and_routes(config_for_boot)
-//
-//   const store = create_store(config_for_boot, instance_applets_stores_and_routes.stores)
-//   store.commit('root:set_instance_config', config_for_boot)
-//   const router = create_router(instance_applets_stores_and_routes.routes, store)
-//
-//   // Analytics, obvs
-//   instantiate_analytics(router)
-//
-//   const douma_app = new Vue({
-//     el: '#douma',
-//     router,
-//     store,
-//     render: createElement => createElement(DoumaComponent),
-//   })
-//   set_common_analytics(douma_app)
-// }
-//
-export function do_stuff_after_login_and_we_know_which_applets_you_are_allowed_to_use_but_first_we_need_to_select_an_instance(instance_name, store, router) {
-  // TODO: We need to dynamically register the applet stores here.
-  // https://vuex.vuejs.org/en/modules.html#dynamic-module-registration
-
-  // TODO: We need to dynamically register the routes here using:
-  // router.addRoutes(routes)
 }
