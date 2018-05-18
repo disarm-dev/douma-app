@@ -115,9 +115,10 @@ export async function configure_application(instance_config) {
   await clean_up_local_dbs()
 
   await hydrate_geodata_cache_from_idb()
-    // CREATE VUE APP
-  //
 
+  //
+  // CREATE VUE APP
+  //
   // Instantiate Vue app with store and router
   const douma_app = new Vue({
     el: '#douma',
