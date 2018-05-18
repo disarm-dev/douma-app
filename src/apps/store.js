@@ -5,7 +5,8 @@ let store
 export { store }
 
 export function create_store(instance_config, instance_stores) {
-  // delete location_selection
+  // location_selection is big, don't want to store in state.
+  // TODO: instance_config should not be in $store
   delete instance_config.location_selection
 
   store = new Vuex.Store({
@@ -13,7 +14,7 @@ export function create_store(instance_config, instance_stores) {
     plugins: [createPersistedState()],
     state: {
       // Global config
-      instance_config: instance_config, // Really important, should maybe be somewhere else
+      instance_config: instance_config,
 
       // Global UI
       snackbar: { message: null },
@@ -37,9 +38,6 @@ export function create_store(instance_config, instance_stores) {
       },
       'root:set_sw_update_available': (state, sw_update_available) => {
         state.sw_update_available = sw_update_available
-      },
-      'root:set_instance_config': (state, instance_config) => {
-        state.instance_config = instance_config
       },
       'root:network_online': (state, is_online) => {
         state.network_online = is_online
