@@ -23,6 +23,7 @@
   import flow from 'lodash/fp/flow'
   import uniq from 'lodash/fp/uniq'
   import sortBy from 'lodash/fp/sortBy'
+  import filter from 'lodash/fp/filter'
   import map from 'lodash/fp/map'
 
   import FieldNamesWorker from '../../../lib/field_names.worker.js'
@@ -49,6 +50,9 @@
         if (!this.filter_name) return []
 
         return flow(
+          filter(r => {
+            return get(r, this.filter_name) !== undefined
+          }),
           map(r => {
             return get(r, this.filter_name)
           }),
@@ -104,7 +108,7 @@
         this.filter_value = ''
       },
       add_filter() {
-        this.$emit('change', this.filter)
+        this.$store.commit('irs_monitor/add_filter', this.filter)
         this.reset_inputs()
       }
     }
