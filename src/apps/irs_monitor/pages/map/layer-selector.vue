@@ -5,6 +5,7 @@
       label="label"
       @input="set_selected_layer"
       :value="selected_layer_id"
+      openDirection="top"
   >
   </multiselect>
 </template>
