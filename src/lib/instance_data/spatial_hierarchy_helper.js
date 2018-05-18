@@ -5,23 +5,6 @@ let spatial_hierarchy_cache = null
 
 
 const configure_spatial_helpers = (instance_config) => {
-  const handler = {
-    set(target, key, value) {
-      console.log(`instance_config_cache: Setting  value ${key} as ${value}`)
-      target[key] = value;
-    },
-    get(target, key) {
-      console.log(`instance_config_cache: Reading value from ${key}`)
-      return target[key];
-    },
-    deleteProperty(target, key) {
-      console.log(`instance_config_cache: Deleting ${key}`)
-      delete target[key];
-    },
-  };
-  instance_config_cache = new Proxy(instance_config, handler)
-  console.log('instance_config_cache: INIT', instance_config_cache)
-  spatial_hierarchy_cache = instance_config.spatial_hierarchy
 }
 
 
@@ -91,7 +74,6 @@ const get_all_spatial_hierarchy_level_names = () => spatial_hierarchy_cache.leve
 
 const get_record_location_selection = () => {
   const record_location_selection_level_name = spatial_hierarchy_cache.markers.record_location_selection_level_name
-  debugger
   return instance_config_cache.location_selection[record_location_selection_level_name]
 }
 
