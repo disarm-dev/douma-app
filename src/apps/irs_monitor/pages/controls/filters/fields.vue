@@ -25,7 +25,7 @@
   import sortBy from 'lodash/fp/sortBy'
   import map from 'lodash/fp/map'
 
-  import FieldNamesWorker from 'worker-loader!../../../lib/field_names.worker'
+  import FieldNamesWorker from '../../../lib/field_names.worker.js'
 
   export default {
     name: 'field-filters',
