@@ -104,7 +104,7 @@
     "vue-virtual-scroll-list": "^1.1.2",
     "vuejs-datepicker": "^1.1.5",
     "vuex": "^2.3.1",
-    "vuex-loading": "^0.1.11",
+    "vuex-loading": "^0.2.6",
     "vuex-persistedstate": "^1.4.1",
     "webpack-comment-remover-loader": "0.0.3",
     "which-polygon": "^2.1.0"
