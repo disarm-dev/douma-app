@@ -72,7 +72,7 @@
       }),
       show_filters: {
         get(){
-          return this.$store.state.irs_monitor.show_filters
+          return this.$store.state.irs_monitor.ui.show_filters
         },
         set(val){
           if (this.$refs.tabs.activeTab === 'season_plan') this.$refs.tabs.setActiveTab(this.$refs.tabs.tabList['season_plan'])
