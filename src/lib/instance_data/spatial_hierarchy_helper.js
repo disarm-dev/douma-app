@@ -1,12 +1,13 @@
 import get from 'lodash.get'
+import cloneDeep from 'lodash.clonedeep'
 
 let instance_config_cache = null
 let spatial_hierarchy_cache = null
 
 
 const configure_spatial_helpers = (instance_config) => {
-  instance_config_cache = instance_config
-  spatial_hierarchy_cache = instance_config.spatial_hierarchy
+  instance_config_cache = cloneDeep(instance_config)
+  spatial_hierarchy_cache = instance_config_cache.spatial_hierarchy
 }
 
 

@@ -29,7 +29,8 @@
     name: 'custom_chart',
     props: ['chart_id', 'responses', 'targets', 'aggregations', 'options'],
     watch: {
-      'responses': 'render_chart',
+      'responses': 'get_chart_data',
+      'chart_data': 'render_chart'
     },
     data() {
       return {
@@ -45,9 +46,6 @@
       this.plotly_event_listeners = []
       this.data = []
     },
-    mounted() {
-      this.render_chart()
-    },
     beforeDestroy() {
       for(let fn of this.plotly_event_listeners) {
         window.removeEventListener('resize', fn)
@@ -55,6 +53,28 @@
       }
     },
     methods: {
+      get_chart_data() {
+        if (!this.has_responses) {
+          return false
+        }
+
+        const geodata = cache.geodata // TODO: @refac When we fix geodata into store, etc
+        const responses = this.responses
+        const targets = this.targets
+        const aggregations = this.aggregations
+        const options = this.options
+
+        // const func = get_data
+        const params = {
+          responses,
+          targets,
+          aggregations,
+          options,
+          geodata
+        }
+
+        this.chart_data = get_data(params)
+      },
       render_chart() {
         // If no responses and chart was previously rendered, then remove it and return
         // Do these checks to avoid rendering whole chart if data has changed
@@ -62,16 +82,6 @@
           if (this._chart) Plotly.purge(this._chart)
           return false
         }
-
-        const geodata = cache.geodata // TODO: @refac When we fix geodata into store, etc
-
-        this.chart_data = get_data({
-          responses: this.responses,
-          targets: this.targets,
-          aggregations: this.aggregations,
-          options: this.options,
-          geodata: geodata
-        })
 
         // Check options not empty
         const options_layout = get(this.options, 'layout', {})

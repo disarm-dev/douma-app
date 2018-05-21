@@ -1,14 +1,23 @@
 import Vue from 'vue'
 
+// Async computed properties - https://alligator.io/vuejs/async-computed-properties/
+import AsyncComputed from 'vue-async-computed'
+Vue.use(AsyncComputed)
+
+// use vuex
+import Vuex from 'vuex'
+Vue.use(Vuex)
+
+// vuex-loading
+import VueLoading from 'vuex-loading'
+Vue.use(VueLoading)
+
 // Components
-import {ClientTable} from 'vue-tables-2'
+import { ClientTable } from 'vue-tables-2'
 Vue.use(ClientTable)
 
-import TreeView from "vue-json-tree-view"
+import TreeView from 'vue-json-tree-view'
 Vue.use(TreeView)
-
-import VueShortkey from 'vue-shortkey'
-Vue.use(VueShortkey)
 
 // VueMaterial
 import VueMaterial from 'vue-material'
@@ -17,27 +26,27 @@ Vue.use(VueMaterial)
 import get from 'lodash.get'
 
 import DoumaComponent from 'components/app.vue'
-import {create_router} from '../apps/router'
-import {create_store} from '../apps/store'
-import {get_instance_stores_and_routes} from './applet_stores_and_routes'
-import {configure_theme} from './theme'
-import {instantiate_analytics, set_common_analytics} from 'config/analytics'
-import {configure_spatial_helpers} from 'lib/instance_data/spatial_hierarchy_helper'
-import {add_network_status_watcher} from 'lib/helpers/network_status.js'
-import {check_need_to_update} from 'lib/remote/check-application-version'
-import {set_raven_user_context} from 'config/error_tracking.js'
-import {instantiate_axios_instance} from 'lib/remote/axios_instance'
-import BUILD_TIME from 'config/build-time'
-import {clean_up_local_dbs} from "lib/local_db"
-import {setup_acl} from "lib/acess-control-list"
+import { create_router } from '../apps/router'
+import { create_store } from '../apps/store'
+import { get_instance_stores_and_routes } from './applet_stores_and_routes'
+import { configure_theme } from './theme'
+import { instantiate_analytics, set_common_analytics } from 'config/analytics'
+import { configure_spatial_helpers } from 'lib/instance_data/spatial_hierarchy_helper'
+import { add_network_status_watcher } from 'lib/helpers/network_status.js'
+import { check_need_to_update } from 'lib/remote/check-application-version'
+import { set_raven_user_context } from 'config/error_tracking.js'
+import { clean_up_local_dbs } from 'lib/local_db'
+import { setup_acl } from 'lib/acess-control-list'
+import { hydrate_geodata_cache_from_idb } from 'lib/models/geodata/local.geodata_store'
 
+import BUILD_TIME from 'config/build-time'
 
 /**
  * Build a 'douma_app' instance
  * @param instance_config
  * @returns {Vue}
  */
-export function configure_application (instance_config) {
+export async function configure_application(instance_config) {
   //
   // BEFORE router or store
   //
@@ -96,16 +105,20 @@ export function configure_application (instance_config) {
   // Configure permissions
   setup_acl()
 
+  // Clean up old dbs, do migrations/upgrades here in the future
+  await clean_up_local_dbs()
+
+  await hydrate_geodata_cache_from_idb()
 
   //
   // CREATE VUE APP
   //
-
   // Instantiate Vue app with store and router
   const douma_app = new Vue({
     el: '#douma',
     router,
     store,
+    vueLoading: new VueLoading(),
     render: createElement => createElement(DoumaComponent),
   })
 

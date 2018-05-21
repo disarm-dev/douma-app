@@ -5,6 +5,8 @@ import {store} from 'apps/store'
 import {get_denominator_enumerable_name} from 'lib/instance_data/spatial_hierarchy_helper'
 import {get_planning_level_name} from "../../../instance_data/spatial_hierarchy_helper";
 
+import cache from 'config/cache'
+
 /**
  * For the given array of responses, will reduce to a single value
  * @param {array} responses
@@ -138,7 +140,7 @@ function other_filtered_targets({targets, bin}) {
 function filtered_targets({targets, responses, options, spatial_filter, bin}) {
   const spatial_aggregation_level = options.spatial_aggregation_level
   const planning_level_name = get_planning_level_name()// e.g villages
-  const location_selection_options = store.state.instance_config.location_selection[planning_level_name]
+  const location_selection_options = cache.instance_config.location_selection[planning_level_name]
 
   // Calculate
   let shrunk_targets = cloneDeep(targets)

@@ -47,6 +47,8 @@
   import {get_record_location_selection} from 'lib/instance_data/spatial_hierarchy_helper'
   import { uniq } from 'lodash'
 
+  import cache from 'config/cache'
+
   export default {
     name: 'location_selection',
     props: ['initial_location_selection'],
@@ -133,7 +135,7 @@
         this.$emit('change', this.sub_area)
       },
       prepare_fuse() {
-        this._all_locations = get_record_location_selection()
+        this._all_locations = get_record_location_selection(cache)
 
         const fuse_options = {
           keys: ['name']

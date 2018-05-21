@@ -14,30 +14,36 @@ export default {
   applets: {
     // The order here is irrelevant to sidebar - that is currently fixed by the user auth/permissions sheet,
     // but should set by instance_config.json
-    'irs_record_point': {title: 'IRS Record', icon: 'assignment', geodata_required: false},
-    'irs_plan': {title: 'IRS Plan', icon: 'assignment_turned_in', geodata_required: true},
+    'irs_record_point': { title: 'IRS Record', icon: 'assignment', geodata_required: false },
+    'irs_plan': { title: 'IRS Plan', icon: 'assignment_turned_in', geodata_required: true },
     'irs_monitor': {
       title: 'IRS Monitor',
       icon: 'dashboard',
       geodata_required: true,
       replace_null_key_with: 'unknown',
-      defaults: {temporal_aggregation_level: 'week'},
+      defaults: { temporal_aggregation_level: 'week' },
       limit_to_options: ['all', 'responses', 'plan'],
-      chart_layout_defaults:{ // plotlyjs
-        legend: {"x": 1, y: 0, bgcolor: 'rgba(234, 234, 234, 0.79)'}
+      chart_layout_defaults: { // plotlyjs
+        legend: { "x": 1, y: 0, bgcolor: 'rgba(234, 234, 234, 0.79)' }
       }
     },
-    'irs_tasker': {title: 'IRS Tasker', icon: 'group', geodata_required: true},
-    'debug': {title: 'Debug', icon: 'bug_report', geodata_required: true},
+    'irs_tasker': { title: 'IRS Tasker', icon: 'group', geodata_required: true },
+    'debug': { title: 'Debug', icon: 'bug_report', geodata_required: true },
     // Meta below is currently ignored in sidebar (statically included), but here for the breadcrumbs
     'meta': {
-      title: 'User', icon: 'person', geodata_required: false
+      title: 'User',
+      icon: 'person',
+      geodata_required: false
     },
     'foci': {
-      title: 'Foci', icon: 'bubble_chart', geodata_required: false
+      title: 'Foci',
+      icon: 'bubble_chart',
+      geodata_required: false
     },
     'seasons': {
-      title: 'Seasons', icon: 'bubble_chart', geodata_required: false
+      title: 'Seasons',
+      icon: 'bubble_chart',
+      geodata_required: false
     }
   },
   hash_params: {
@@ -56,18 +62,8 @@ export default {
   },
   instances: {
     list: ['foci', 'struc_demo', 'make', 'bwa', 'nam', 'swz', 'zwe-mats', 'zwe-matn', 'rsa', 'mwi-schisto', 'moz-gbm'],
-    // TODO: @refac This required_instance_files list is only relevant for the IRS modules.
-    required_instance_files: ['instance', 'form', 'location_selection', 'aggregations', 'fake_form', 'validations', 'presenters', 'decorators']
   },
   remote: {
     max_records_batch_size: 100
-  },
-  vuex_loader_options: {
-    // The Vuex module name, 'loading' by default.
-    moduleName: 'loading',
-    // The Vue component name, 'v-loading' by default.
-    componentName: 'v-loading',
-    // Vue component class name, 'v-loading' by default.
-    className: 'v-loading',
   }
 }

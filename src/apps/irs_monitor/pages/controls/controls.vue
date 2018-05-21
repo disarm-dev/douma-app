@@ -40,7 +40,6 @@
         </md-tab>
       </md-tabs>
 
-
       <filters_summary :filters="filters"></filters_summary>
 
     </md-card-content>
@@ -64,11 +63,11 @@
   export default {
     name: 'controls',
     components: {filters_summary, temporal_filter, spatial_filter, fields_filters,  aggregation_settings, limit_to, guess_locations, plans, seasons},
-    props: ['responses', 'targets'],
+    props: ['responses', 'targets', 'plans'],
     computed: {
       ...mapState({
         filters: state => state.irs_monitor.filters,
-        plans: state => state.irs_monitor.plans,
+        //plans: state => state.irs_monitor.plans,
         season_start_dates: state => state.instance_config.applets.irs_monitor.season_start_dates.sort((a,b)=>a<b)
       }),
       show_filters: {
@@ -81,6 +80,11 @@
         }
       }
     },
+    methods:{
+      get_plan(_id){
+        this.$emit('get_plan',_id)
+      }
+    }
   }
 </script>
 
