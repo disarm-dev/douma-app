@@ -5,7 +5,7 @@
 
       <md-dialog-content>
         <md-list>
-        <md-list-item class="md-double-line" v-for="plan in plan_list" @click="load_plan_detail(plan._id)" :key="plan._id">
+        <md-list-item class="md-double-line" v-for="plan in plan_list" @click="load_plan(plan._id)" :key="plan._id">
           <div class="md-list-text-container">
             <span>{{plan.name?plan.name:'No Name'}}</span>
             <span>{{(new Date(plan.date)).toLocaleString()}}<md-chip>{{plan.targets}} targets</md-chip></span>
@@ -275,23 +275,11 @@
       toggle_plan_selector() {
         this.open_dialog('select_plan_dialog')
       },
-      load_plan_detail(plan_id) {
-        console.log('load plan detail ', plan_id)
+      load_plan(plan_id) {
         this.close_dialog('select_plan_dialog')
-        this.$loading.startLoading('irs_plan/load_plan_detail')
-
-        this.$store.dispatch('irs_plan/get_network_plan_detail', plan_id)
-          .then(() => {
-            this.$loading.endLoading('irs_plan/load_plan_detail')
-          })
-          .catch(() => {
-            this.$loading.endLoading('irs_plan/load_plan_detail')
-          })
-      },
-      load_plan() {
         this.$loading.startLoading('irs_plan/load_plan')
 
-        this.$store.dispatch('irs_plan/get_network_plan')
+        this.$store.dispatch('irs_plan/get_network_plan_detail', plan_id)
           .then(() => { this.$loading.endLoading('irs_plan/load_plan') })
           .catch(() => { this.$loading.endLoading('irs_plan/load_plan') })
       },
