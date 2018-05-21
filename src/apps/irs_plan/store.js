@@ -10,7 +10,6 @@ const controller = new PlanController('plan')
 
 export default {
   namespaced: true,
-  unpersisted_state_keys: [],
   state: {
     // State
     selected_filter_area_option: null, // map
