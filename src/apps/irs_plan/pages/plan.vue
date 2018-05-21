@@ -26,6 +26,7 @@
       @cancel="show_save_plan=false"
       @update="update_plan"
       @clear="delete_plan"
+      :saving="$loading.isLoading('irs_plan/save_plan')"
     ></save_plan>
 
     <controls>
