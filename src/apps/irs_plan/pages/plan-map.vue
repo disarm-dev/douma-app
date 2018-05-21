@@ -46,7 +46,7 @@
     get_next_level_down_from_planning_level,
     get_next_level_up_from_planning_level
   } from 'lib/instance_data/spatial_hierarchy_helper'
-  import {target_areas_inside_focus_filter_area} from '../helpers/target_areas_helper.js'
+  import {target_areas_inside_focus_filter_area, quick_select_targets_by_risk_inside_focus} from '../helpers/target_areas_helper.js'
   import {prepare_palette} from 'lib/helpers/palette_helper.js'
   import {layer_definitions} from 'config/map_layers'
   import plan_layer_definitions from '../helpers/plan_map_layers.js'
@@ -495,19 +495,22 @@
 
       // Risk slider
       set_risk_slider_value: debounce(function () {
-        let areas = this.planning_level_fc.features.filter((feature) => {
+        let ids_in_filter_area
+
+        let areas_above_risk_threshold = this.planning_level_fc.features.filter((feature) => {
           return feature.properties.risk >= this.converted_slider_value
         })
 
-        let area_ids = areas.map((area) => {
-          return area.properties.__disarm_geo_id
-        })
+        if (this.selected_filter_area) {
+          ids_in_filter_area = quick_select_targets_by_risk_inside_focus({
+            areas: areas_above_risk_threshold,
+            selected_filter_area: this.selected_filter_area
+          })
+        } else {
+          ids_in_filter_area = areas_above_risk_threshold.map(a => a.properties.__disarm_geo_id)
+        }
 
-        const selected_areas_in_filter_area = target_areas_inside_focus_filter_area({
-          area_ids,
-          selected_filter_area: this.selected_filter_area
-        })
-        this.$store.commit('irs_plan/set_bulk_selected_ids', selected_areas_in_filter_area)
+        this.$store.commit('irs_plan/set_bulk_selected_ids', ids_in_filter_area)
 
         this.refilter_target_areas()
 
