@@ -49,7 +49,13 @@
   import {decorate_with_risk, entries_for_legend} from 'apps/irs_monitor/lib/map-helpers'
 
   export default {
-    props: ['responses', 'targets', 'aggregations', 'options', 'plan_target_area_ids'],
+    props: {
+      'responses': Array,
+      'targets': Array,
+      'aggregations': Array,
+      'options': {},
+      'plan_target_area_ids': Array
+    },
     components: {map_legend, layer_selector},
     data() {
       return {
