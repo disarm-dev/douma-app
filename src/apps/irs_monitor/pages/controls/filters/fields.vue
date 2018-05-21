@@ -1,7 +1,7 @@
 <template>
   <div class="filter_fields">
     <md-input-container class="filter_field">
-      <md-select v-model="filter_name" class="select" :disabled="!field_names.length" :placeholder="field_dropdown_placeholder">
+      <md-select v-model="filter_name" class="select" :disabled="!field_name_length" :placeholder="field_dropdown_placeholder">
         <md-option v-for="field_name in field_names" :key='field_name' :value="field_name">{{field_name}}</md-option>
       </md-select>
 
@@ -9,9 +9,10 @@
         <md-option v-for="comparator in comparators" :key="comparator" :value="comparator">{{comparator}}</md-option>
       </md-select>
 
-      <md-select v-model="filter_value" class="select" :disabled="!field_values.length" placeholder="Value">
+      <md-select v-model="filter_value" class="select" :disabled="!field_name_length" placeholder="Value">
         <md-option v-for="value in field_values" :key="value" :value="value">{{value}}</md-option>
       </md-select>
+
     </md-input-container>
 
     <md-button :disabled='add_disabled' @click="add_filter()">Add filter</md-button>
@@ -37,7 +38,6 @@
         filter_name: null,
         filter_comparator: null,
         filter_value: null,
-
         comparators: ['equals']
       }
     },
@@ -46,9 +46,12 @@
         const can_add = (this.filter_name && this.filter_comparator && this.filter_value)
         return !can_add
       },
+      field_name_length(){
+          return this.field_names ?
+                 this.field_names.length :
+                 0
+      },
       field_values() {
-        if (!this.filter_name) return []
-
         return flow(
           filter(r => {
             return get(r, this.filter_name) !== undefined
@@ -70,7 +73,7 @@
       field_dropdown_placeholder() {
         if (this.responses.length === 0) {
           return 'No responses'
-        } else if (this.field_names.length === 0) {
+        } else if (!this.field_name_length === 0) {
           return 'Getting field names'
         } else {
           return 'Select field'
@@ -80,8 +83,7 @@
     asyncComputed: {
       field_names: {
         get() {
-          this.responses.length
-
+          if(!this.responses) return []
           return new Promise((resolve, reject) => {
             this.$nextTick(() => {
               const worker = new FieldNamesWorker()
