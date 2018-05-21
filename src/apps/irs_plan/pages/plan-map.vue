@@ -54,7 +54,7 @@
 
   export default {
     name: 'plan_map',
-    props: ['edit_mode', 'selected_filter_area_id'],
+    props: ['edit_mode', 'selected_filter_area'],
     components: {map_legend},
     data() {
       return {
@@ -160,7 +160,7 @@
 
       'risk_visible': 'redraw_target_areas',
       'selected_target_area_ids': 'redraw_target_areas',
-      'selected_filter_area_id': 'redraw_target_areas',
+      'selected_filter_area': 'redraw_target_areas',
     },
     mounted() {
       this.render_map()
