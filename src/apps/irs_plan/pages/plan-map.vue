@@ -227,7 +227,7 @@
       },
       manage_map_mode() {
         // Either show or hide risk when changing map modes
-        this.toggle_show_risk()
+        this.show_risk_if_possible()
 
         // Check if you're in editing mode
         if (this.edit_mode) {
@@ -371,7 +371,7 @@
           // redraw target areas
           this.remove_target_areas()
           this.add_target_areas()
-          this.toggle_show_risk()
+          this.show_risk_if_possible()
 
           // remove + add draw_controls
           this.add_draw_controls()
@@ -521,7 +521,7 @@
       },
 
       // RISK
-      toggle_show_risk() {
+      show_risk_if_possible() {
         if (this.risk_visible && !this.edit_mode) {
           this.add_areas_coloured_by_risk()
         } else {
