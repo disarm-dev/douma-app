@@ -34,11 +34,8 @@
   import bbox from '@turf/bbox'
   import centroid from '@turf/centroid'
   import within from '@turf/within'
-  import inside from '@turf/inside'
-  import intersect from '@turf/intersect'
   import bboxPolygon from '@turf/bbox-polygon'
   import {featureCollection} from '@turf/helpers'
-  import which_polygon from 'which-polygon'
   import numeral from 'numeral'
 
   import cache from 'config/cache.js'
