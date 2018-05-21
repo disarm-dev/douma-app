@@ -33,7 +33,7 @@
         slot="primary_action"
         class="md-primary md-icon-button md-raised"
         :class="{'md-warn': edit_mode}"
-        :disabled="!$can('write', 'irs_plan') || edit_disabled || $loading.isLoading('irs_plan/load_plan') || !can_and_have_focused_planned"
+        :disabled="!$can('write', 'irs_plan') || edit_disabled || $loading.isLoading('irs_plan/load_plan') || !can_and_do_have_focus"
         @click.native='edit_mode = !edit_mode'
       >
         <md-icon>edit</md-icon>
@@ -79,7 +79,7 @@
             <plan_calculator></plan_calculator>
             <plan_map
               :edit_mode="edit_mode"
-              :selected_filter_area_id="selected_filter_area_id"
+              :selected_filter_area="selected_filter_area"
               @map_ready="edit_disabled = false"
             ></plan_map>
           </md-card-content>
@@ -150,7 +150,6 @@
         instance_config: state => state.instance_config,
 
         current_plan: state => state.irs_plan.current_plan,
-        selected_filter_area_id: state => get(state, 'irs_plan.selected_filter_area_option.id', null),
         unsaved_changes: state => state.irs_plan.unsaved_changes,
         current_plan_date: state => {
           if (state.irs_plan.current_plan) {
@@ -159,7 +158,9 @@
         },
       }),
       ...mapGetters({
-        isLoading: 'loading/isLoading'
+        isLoading: 'loading/isLoading',
+        selected_target_area_ids: 'irs_plan/all_selected_area_ids',
+        selected_filter_area: 'irs_plan/selected_filter_area'
       }),
       must_focus_planning() {
         if (this.instance_config.spatial_hierarchy.hasOwnProperty('ignore_planning_level_restriction') && this.instance_config.spatial_hierarchy.ignore_planning_level_restriction) {
@@ -168,17 +169,14 @@
         // TODO: @refac Improve checking if planning can be focused
         return get_next_level_up_from_planning_level()
       },
-      can_and_have_focused_planned() {
+      can_and_do_have_focus() {
+        // Check if it is possible to focus planning on one geodata entity, and if it is currently set.
         if (!this.must_focus_planning) return true
-        return !!(this.selected_filter_area_id)
+        return !!(this.selected_filter_area)
       },
       next_level_up_from_planning_level() {
         return get_next_level_up_from_planning_level()
       },
-      ...mapGetters({
-        selected_target_area_ids: 'irs_plan/all_selected_area_ids',
-        selected_filter_area: 'irs_plan/selected_filter_area'
-      }),
       title() {
         if (!this.edit_mode) return "View"
         if (this.edit_mode && !this.current_plan_date) return "Create"
