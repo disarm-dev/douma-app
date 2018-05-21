@@ -159,7 +159,7 @@
 
       'risk_visible': 'redraw_target_areas',
       'selected_target_area_ids': 'redraw_target_areas',
-      'selected_filter_area': 'redraw_target_areas',
+      'selected_filter_area': 'selected_area_changed',
     },
     mounted() {
       this.render_map()
@@ -180,7 +180,6 @@
           this.toggle_cluster_visiblity()
         })
       },
-
       fit_bounds() {
         this._map.fitBounds(this.bbox, {padding: 20})
       },
@@ -318,7 +317,6 @@
           })
 
           this.bbox = bbox(this.selected_filter_area)
-          this.fit_bounds()
         }
 
         // Add text labels
@@ -596,6 +594,10 @@
         }
 
         download(JSON.stringify(fc), title)
+      },
+      selected_area_changed() {
+        this.redraw_target_areas()
+        this.fit_bounds()
       }
     }
   }
