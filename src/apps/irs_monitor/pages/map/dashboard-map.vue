@@ -48,6 +48,8 @@
   import get_data from '../../lib/get_data_for_viz'
   import {decorate_with_risk, entries_for_legend} from 'apps/irs_monitor/lib/map-helpers'
 
+  let risk_scaler
+
   export default {
     props: {
       'responses': Array,
@@ -59,8 +61,6 @@
     components: {map_legend, layer_selector},
     data() {
       return {
-        _risk_scaler: null,
-
         // map cache
         _map: null,
         map_loaded: false,
@@ -82,7 +82,7 @@
         instance_config: state => state.instance_config,
       }),
       entries_for_legend() {
-        return entries_for_legend(this.selected_layer, this._risk_scaler)
+        return entries_for_legend(this.selected_layer, risk_scaler)
       },
       selected_layer: {
         get() {return this.$store.state.irs_monitor.map_options.selected_layer},
@@ -342,7 +342,7 @@
         })
 
         // Decorate with risk
-        this._aggregated_responses_fc.features = decorate_with_risk(this._aggregated_responses_fc.features, this._risk_scaler)
+        this._aggregated_responses_fc.features = decorate_with_risk(this._aggregated_responses_fc.features, risk_scaler)
       },
     }
   }
