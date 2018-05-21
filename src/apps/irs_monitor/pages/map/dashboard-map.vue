@@ -61,8 +61,8 @@
     components: {map_legend, layer_selector},
     data() {
       return {
-        // map cache
-        _map: null,
+        // map object
+        _map: null, // Keep here for now, might make production debugging slightly more possible
         map_loaded: false,
         bbox: [],
         _click_handler: null,
@@ -341,8 +341,9 @@
           geodata: cache.geodata // TODO: @refac When we fix geodata into store, etc
         })
 
-        // Decorate with risk
-        this._aggregated_responses_fc.features = decorate_with_risk(this._aggregated_responses_fc.features, risk_scaler)
+        // Decorate with scaled risk values
+        const features = this._aggregated_responses_fc.features
+        this._aggregated_responses_fc.features = decorate_with_risk(features, risk_scaler)
       },
     }
   }
