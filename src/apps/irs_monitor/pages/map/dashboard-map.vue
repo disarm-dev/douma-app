@@ -28,20 +28,20 @@
 
 <script>
   import {mapGetters, mapState} from 'vuex'
-  import {featureCollection, point} from '@turf/helpers'
-  import bbox from '@turf/bbox'
-  import centroid from '@turf/centroid'
-  import {Popup} from 'mapbox-gl'
   import {clone, get} from 'lodash'
   import flatten_object from 'flat'
   import moment from 'moment-mini'
   import Raven from 'raven-js'
+  // Map and geospatial
+  import {featureCollection, point} from '@turf/helpers'
+  import bbox from '@turf/bbox'
+  import centroid from '@turf/centroid'
+  import {Popup} from 'mapbox-gl'
 
   import {basic_map} from 'lib/helpers/basic_map.js'
   import map_legend from 'components/map_legend.vue'
   import layer_selector from './layer-selector.vue'
   import cache from 'config/cache'
-  import {get_planning_level_name} from 'lib/instance_data/spatial_hierarchy_helper'
   import {layer_definitions} from 'config/map_layers'
   import {prepare_palette} from 'lib/helpers/palette_helper'
 
@@ -111,6 +111,8 @@
       },
       redraw_layers() {
         if (!this.map_loaded) return
+
+        // TODO: Why timeout?
         setTimeout(() => {
           this.calculate_layer_attributes()
           this.switch_layer()
