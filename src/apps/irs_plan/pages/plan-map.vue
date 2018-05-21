@@ -93,7 +93,6 @@
       }),
       ...mapGetters({
         selected_target_area_ids: 'irs_plan/all_selected_area_ids',
-        selected_filter_area: 'irs_plan/selected_filter_area'
       }),
       planning_level_fc() {
         return cache.geodata[get_planning_level_name()]
