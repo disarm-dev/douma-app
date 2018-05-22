@@ -10,7 +10,6 @@ const controller = new PlanController('plan')
 
 export default {
   namespaced: true,
-  unpersisted_state_keys: [],
   state: {
     // State
     selected_filter_area_option: null, // map
@@ -176,7 +175,6 @@ export default {
       })
     },
     'get_network_plan_detail': (context, plan_id) => {
-      console.log('store plan id', plan_id)
       return controller.read_plan_detail_network(plan_id).then(plan_json => {
         if (Object.keys(plan_json).length === 0) {
           return context.commit('root:set_snackbar', { message: 'There is no remote plan. Please create one.' }, { root: true })
@@ -201,7 +199,6 @@ export default {
       })
     },
     'get_network_plan_list': (context) => {
-      console.log('Get bnetwork plan list')
       return controller.read_plan_list_network().then(plan_json => {
         if (Object.keys(plan_json).length === 0) {
           return context.commit('root:set_snackbar', { message: 'There is no remote plan. Please create one.' }, { root: true })

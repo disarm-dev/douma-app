@@ -34,11 +34,8 @@
   import bbox from '@turf/bbox'
   import centroid from '@turf/centroid'
   import within from '@turf/within'
-  import inside from '@turf/inside'
-  import intersect from '@turf/intersect'
   import bboxPolygon from '@turf/bbox-polygon'
   import {featureCollection} from '@turf/helpers'
-  import which_polygon from 'which-polygon'
   import numeral from 'numeral'
 
   import cache from 'config/cache.js'
@@ -49,7 +46,7 @@
     get_next_level_down_from_planning_level,
     get_next_level_up_from_planning_level
   } from 'lib/instance_data/spatial_hierarchy_helper'
-  import {target_areas_inside_focus_filter_area} from '../helpers/target_areas_helper.js'
+  import {target_areas_inside_focus_filter_area, quick_select_targets_by_risk_inside_focus} from '../helpers/target_areas_helper.js'
   import {prepare_palette} from 'lib/helpers/palette_helper.js'
   import {layer_definitions} from 'config/map_layers'
   import plan_layer_definitions from '../helpers/plan_map_layers.js'
@@ -57,7 +54,7 @@
 
   export default {
     name: 'plan_map',
-    props: ['edit_mode', 'selected_filter_area_id'],
+    props: ['edit_mode', 'selected_filter_area'],
     components: {map_legend},
     data() {
       return {
@@ -96,7 +93,6 @@
       }),
       ...mapGetters({
         selected_target_area_ids: 'irs_plan/all_selected_area_ids',
-        selected_filter_area: 'irs_plan/selected_filter_area'
       }),
       planning_level_fc() {
         return cache.geodata[get_planning_level_name()]
@@ -163,7 +159,7 @@
 
       'risk_visible': 'redraw_target_areas',
       'selected_target_area_ids': 'redraw_target_areas',
-      'selected_filter_area_id': 'redraw_target_areas',
+      'selected_filter_area': 'selected_area_changed',
     },
     mounted() {
       this.render_map()
@@ -184,7 +180,6 @@
           this.toggle_cluster_visiblity()
         })
       },
-
       fit_bounds() {
         this._map.fitBounds(this.bbox, {padding: 20})
       },
@@ -230,7 +225,7 @@
       },
       manage_map_mode() {
         // Either show or hide risk when changing map modes
-        this.toggle_show_risk()
+        this.show_risk_if_possible()
 
         // Check if you're in editing mode
         if (this.edit_mode) {
@@ -322,7 +317,6 @@
           })
 
           this.bbox = bbox(this.selected_filter_area)
-          this.fit_bounds()
         }
 
         // Add text labels
@@ -374,7 +368,7 @@
           // redraw target areas
           this.remove_target_areas()
           this.add_target_areas()
-          this.toggle_show_risk()
+          this.show_risk_if_possible()
 
           // remove + add draw_controls
           this.add_draw_controls()
@@ -499,19 +493,22 @@
 
       // Risk slider
       set_risk_slider_value: debounce(function () {
-        let areas = this.planning_level_fc.features.filter((feature) => {
+        let ids_in_filter_area
+
+        let areas_above_risk_threshold = this.planning_level_fc.features.filter((feature) => {
           return feature.properties.risk >= this.converted_slider_value
         })
 
-        let area_ids = areas.map((area) => {
-          return area.properties.__disarm_geo_id
-        })
+        if (this.selected_filter_area) {
+          ids_in_filter_area = quick_select_targets_by_risk_inside_focus({
+            areas: areas_above_risk_threshold,
+            selected_filter_area: this.selected_filter_area
+          })
+        } else {
+          ids_in_filter_area = areas_above_risk_threshold.map(a => a.properties.__disarm_geo_id)
+        }
 
-        const selected_areas_in_filter_area = target_areas_inside_focus_filter_area({
-          area_ids,
-          selected_filter_area: this.selected_filter_area
-        })
-        this.$store.commit('irs_plan/set_bulk_selected_ids', selected_areas_in_filter_area)
+        this.$store.commit('irs_plan/set_bulk_selected_ids', ids_in_filter_area)
 
         this.refilter_target_areas()
 
@@ -524,7 +521,7 @@
       },
 
       // RISK
-      toggle_show_risk() {
+      show_risk_if_possible() {
         if (this.risk_visible && !this.edit_mode) {
           this.add_areas_coloured_by_risk()
         } else {
@@ -597,6 +594,10 @@
         }
 
         download(JSON.stringify(fc), title)
+      },
+      selected_area_changed() {
+        this.redraw_target_areas()
+        this.fit_bounds()
       }
     }
   }
