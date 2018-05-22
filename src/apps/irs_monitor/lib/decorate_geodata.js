@@ -4,7 +4,7 @@ import flow from "lodash/fp/flow"
 import map from "lodash/fp/map"
 import compact from "lodash/fp/compact"
 import {featureCollection} from "@turf/helpers"
-import {get_planning_level_name} from "lib/instance_data/spatial_hierarchy_helper"
+import {get_planning_level_name, get_field_name_for_level} from "lib/instance_data/spatial_hierarchy_helper"
 
 /**
  *
@@ -15,7 +15,19 @@ import {get_planning_level_name} from "lib/instance_data/spatial_hierarchy_helpe
  * @returns {{}}
  */
 export function decorate_geodata({binned_responses, targets, aggregations, options}) {
-  const selected_geodata_level_fc = cache.geodata[options.spatial_aggregation_level]
+  let selected_geodata_level_fc = {features: []}
+  const all_features = cache.geodata[options.spatial_aggregation_level]
+
+  if (options.limit_to_plan) {
+    const planning_level_name = get_planning_level_name()
+    const id_field = get_field_name_for_level(planning_level_name)
+    const target_ids = targets.map(t => t.id)
+    const geodata_for_targets = all_features.features.filter(f => target_ids.includes(f.properties[id_field]))
+    selected_geodata_level_fc.features = geodata_for_targets
+  } else {
+    selected_geodata_level_fc = all_features
+  }
+
   // collect the aggregations from options.aggregation_names
   const aggregations_for_map = options.aggregation_names.map(string => {
     const found = aggregations.find(aggregation => aggregation.name === string)

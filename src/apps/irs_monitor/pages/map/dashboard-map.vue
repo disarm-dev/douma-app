@@ -28,35 +28,41 @@
 
 <script>
   import {mapGetters, mapState} from 'vuex'
-  import {featureCollection, point} from '@turf/helpers'
-  import bbox from '@turf/bbox'
-  import centroid from '@turf/centroid'
-  import {Popup} from 'mapbox-gl'
   import {clone, get} from 'lodash'
   import flatten_object from 'flat'
   import moment from 'moment-mini'
   import Raven from 'raven-js'
+  // Map and geospatial
+  import {featureCollection, point} from '@turf/helpers'
+  import bbox from '@turf/bbox'
+  import centroid from '@turf/centroid'
+  import {Popup} from 'mapbox-gl'
 
   import {basic_map} from 'lib/helpers/basic_map.js'
   import map_legend from 'components/map_legend.vue'
   import layer_selector from './layer-selector.vue'
   import cache from 'config/cache'
-  import {get_planning_level_name} from 'lib/instance_data/spatial_hierarchy_helper'
   import {layer_definitions} from 'config/map_layers'
   import {prepare_palette} from 'lib/helpers/palette_helper'
 
   import get_data from '../../lib/get_data_for_viz'
   import {decorate_with_risk, entries_for_legend} from 'apps/irs_monitor/lib/map-helpers'
 
+  let risk_scaler
+
   export default {
-    props: ['responses', 'targets', 'aggregations', 'options', 'plan_target_area_ids'],
+    props: {
+      'responses': Array,
+      'targets': Array,
+      'aggregations': Array,
+      'options': {},
+      'plan_target_area_ids': Array
+    },
     components: {map_legend, layer_selector},
     data() {
       return {
-        _risk_scaler: null,
-
-        // map cache
-        _map: null,
+        // map object
+        _map: null, // Keep here for now, might make production debugging slightly more possible
         map_loaded: false,
         bbox: [],
         _click_handler: null,
@@ -76,7 +82,7 @@
         instance_config: state => state.instance_config,
       }),
       entries_for_legend() {
-        return entries_for_legend(this.selected_layer, this._risk_scaler)
+        return entries_for_legend(this.selected_layer, risk_scaler)
       },
       selected_layer: {
         get() {return this.$store.state.irs_monitor.map_options.selected_layer},
@@ -105,6 +111,8 @@
       },
       redraw_layers() {
         if (!this.map_loaded) return
+
+        // TODO: Why timeout?
         setTimeout(() => {
           this.calculate_layer_attributes()
           this.switch_layer()
@@ -333,8 +341,9 @@
           geodata: cache.geodata // TODO: @refac When we fix geodata into store, etc
         })
 
-        // Decorate with risk
-        this._aggregated_responses_fc.features = decorate_with_risk(this._aggregated_responses_fc.features, this._risk_scaler)
+        // Decorate with scaled risk values
+        const features = this._aggregated_responses_fc.features
+        this._aggregated_responses_fc.features = decorate_with_risk(features, risk_scaler)
       },
     }
   }
