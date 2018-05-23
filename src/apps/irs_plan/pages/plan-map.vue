@@ -177,7 +177,7 @@
           this.map_loaded = true
           this.show_clusters_disabled = false
           this.manage_map_mode()
-          this.add_target_areas()
+          this.add_target_areas(true)
           this.fit_bounds()
           this.$emit('map_ready')
           this.set_slider_range()
@@ -243,7 +243,7 @@
       },
 
       // Add and handle target_areas
-      add_target_areas() {
+      add_target_areas(with_zoom) {
         const geojson = this.planning_level_fc
         this.bbox = bbox(geojson)
 
@@ -321,8 +321,11 @@
             },
           })
 
-          this.bbox = bbox(this.selected_filter_area)
-          this.fit_bounds()
+          if(with_zoom){
+            this.bbox = bbox(this.selected_filter_area)
+            this.fit_bounds()
+          }
+
         }
 
         // Add text labels
@@ -380,6 +383,7 @@
           this.add_draw_controls()
         }
       },
+
       refilter_target_areas() {
         this._map.setFilter('bulk_selected', ['in', '__disarm_geo_id'].concat(this.bulk_selected_ids))
         this._map.setFilter('bulk_unselected', ['!in', '__disarm_geo_id'].concat(this.bulk_selected_ids))
