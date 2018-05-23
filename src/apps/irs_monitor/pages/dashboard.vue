@@ -215,14 +215,6 @@
             }
           })
       },
-
-     /* load_all_plans() {
-        return plan_controller.read_plans()
-          .then(plans => {
-            console.log('Loaded all plans',plans)
-            this.plans = plansf
-          })
-      },*/
       get_network_plan_detail: (context, plan_id) => {
         return plan_controller.read_plan_detail_network(plan_id).then(plan_json => {
           if (Object.keys(plan_json).length === 0) {
@@ -250,7 +242,6 @@
           if (Object.keys(plan_json).length === 0) {
             return this.$store.commit('root:set_snackbar', {message: 'There is no remote plan. Please create one.'}, {root: true})
           }
-          console.log('Loaded all plans')
           this.plans = plan_json
           return plan_json
         })
