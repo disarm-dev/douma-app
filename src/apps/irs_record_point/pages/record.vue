@@ -354,9 +354,9 @@
 
         try {
           if (this.response_id) {
-            await controller.update_response_local(response)
+            await controller.update_response_local(decorated_response)
           } else {
-            await controller.create_response_local(response)
+            await controller.create_response_local(decorated_response)
           }
           this.$router.push('/irs/record_point/')
         } catch(e) {
