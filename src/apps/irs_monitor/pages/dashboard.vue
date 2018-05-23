@@ -311,6 +311,8 @@
 
         const plan_json = await plan_controller.read_plan_current_network()
 
+        this.$loading.endLoading('irs_monitor/load_plan')
+
         if (Object.keys(plan_json).length === 0) {
           return this.$store.commit('root:set_snackbar', {message: 'No plan loaded.'})
         }
@@ -318,7 +320,6 @@
         try {
           new Plan().validate(plan_json)
           this.plan = plan_json
-          this.$loading.endLoading('irs_monitor/load_plan')
           this.$store.commit('root:set_snackbar', {message: 'Successfully retrieved plan'})
         } catch (e) {
           console.log(e)
