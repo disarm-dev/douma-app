@@ -107,6 +107,7 @@
         })
       },
       fit_bounds() {
+        if (!this.bbox.length) return 
         this._map.fitBounds(this.bbox, {padding: 20})
       },
       redraw_layers() {
@@ -133,6 +134,7 @@
       },
       zoom_to_features () {
         // Zoom to features
+        if (!this._aggregated_responses_fc.features.length) return 
         this.bbox = bbox(this._aggregated_responses_fc)
         this.bind_popup(this.selected_layer)
       },
