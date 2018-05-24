@@ -9,9 +9,13 @@
         <md-option v-for="comparator in comparators" :key="comparator" :value="comparator">{{comparator}}</md-option>
       </md-select>
 
-      <md-select v-model="filter_value" class="select" :disabled="!field_name_length" placeholder="Value">
-        <md-option v-for="value in field_values" :key="value" :value="value">{{value}}</md-option>
-      </md-select>
+      <multiselect
+          v-model="filter_value"
+          :options="field_values"
+          :disabled="!field_name_length"
+          placeholder="Value"
+          openDirection="top"
+      ></multiselect>
 
     </md-input-container>
 
@@ -26,12 +30,14 @@
   import sortBy from 'lodash/fp/sortBy'
   import filter from 'lodash/fp/filter'
   import map from 'lodash/fp/map'
+  import Multiselect from 'vue-multiselect'
 
   import FieldNamesWorker from '../../../lib/field_names.worker.js'
 
   export default {
     name: 'field-filters',
     props: ['responses'],
+    components: {Multiselect},
     data() {
       return {
         // see below #reset_inputs for default values
