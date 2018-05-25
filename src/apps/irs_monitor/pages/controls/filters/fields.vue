@@ -14,7 +14,8 @@
           :options="field_values"
           :disabled="!field_name_length"
           placeholder="Value"
-          openDirection="top"
+          openDirection="bottom"
+          :max-height="200"
       ></multiselect>
 
     </md-input-container>
@@ -130,8 +131,7 @@
   }
 
   .filter_fields {
-    display: flex;
-    flex-flow: row wrap;
+    min-height: 300px;
   }
 
   .filter_field {
