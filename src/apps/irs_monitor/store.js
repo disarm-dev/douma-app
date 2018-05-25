@@ -40,9 +40,9 @@ export default {
   mutations: {
     // clear storage (called by meta store)
     clear_data_storage: (state) => {
-      // state.responses = [] // TODO: Remove
       state.responses_last_updated_at = null
       state.filters = []
+      state.last_id = null
     },
     update_responses_last_updated_at: (state) => {
       state.responses_last_updated_at = new Date
