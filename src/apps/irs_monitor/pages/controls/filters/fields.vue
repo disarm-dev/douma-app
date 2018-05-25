@@ -1,34 +1,43 @@
 <template>
   <div class="filter_fields">
-    <md-input-container class="filter_field">
+    <md-layout>
 
-      <multiselect
+      <md-layout md-flex-small="33" md-flex-xsmall="100">
+        <multiselect
           v-model="filter_name"
           :options="field_names"
           :disabled="!field_name_length"
-          placeholder="Value"
+          placeholder="Field name"
           openDirection="bottom"
           :max-height="200"
-      ></multiselect>
+        ></multiselect>
+      </md-layout>
 
-      <multiselect
+      <md-layout md-flex-small="33" md-flex-xsmall="100">
+        <multiselect
+          md-flex-small="33"
+          md-flex-xsmall="100"
           v-model="filter_comparator"
           :options="comparators"
           openDirection="bottom"
           :max-height="200"
-      ></multiselect>
+        ></multiselect>
+      </md-layout>
 
-      <multiselect
+      <md-layout md-flex-small="33" md-flex-xsmall="100">
+        <multiselect
+          md-flex-small="33"
+          md-flex-xsmall="100"
           v-model="filter_value"
           :options="field_values"
           :disabled="!field_name_length"
           placeholder="Value"
           openDirection="bottom"
           :max-height="200"
-      ></multiselect>
+        ></multiselect>
+      </md-layout>
 
-    </md-input-container>
-
+    </md-layout>
     <md-button :disabled='add_disabled' @click="add_filter()">Add filter</md-button>
   </div>
 </template>
@@ -62,10 +71,10 @@
         const can_add = (this.filter_name && this.filter_comparator && this.filter_value)
         return !can_add
       },
-      field_name_length(){
-          return this.field_names ?
-                 this.field_names.length :
-                 0
+      field_name_length() {
+        return this.field_names ?
+          this.field_names.length :
+          0
       },
       field_values() {
         return flow(
@@ -99,14 +108,14 @@
     asyncComputed: {
       field_names: {
         get() {
-          if(!this.responses) return []
+          if (!this.responses) return []
           return new Promise((resolve, reject) => {
             this.$nextTick(() => {
               const worker = new FieldNamesWorker()
 
               worker.postMessage({responses: this.responses})
 
-              worker.addEventListener("message", function (event) {
+              worker.addEventListener('message', function (event) {
                 resolve(event.data)
               });
             })
@@ -115,7 +124,7 @@
         default: []
       },
     },
-    created () {
+    created() {
       this.reset_inputs()
     },
     methods: {
@@ -141,9 +150,5 @@
 
   .filter_fields {
     min-height: 300px;
-  }
-
-  .filter_field {
-    flex: 1 1 33%;
   }
 </style>
