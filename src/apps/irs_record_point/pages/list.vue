@@ -18,6 +18,9 @@
 
       </template>
 
+      <!--<div v-if="$loading.isLoading('responses')" slot="text">Loading responses...</div>-->
+      <div v-if="$loading.anyLoading" slot="text">Loading...</div>
+
       <div v-if="!online" slot="text">
         Offline - unable to sync
       </div>
@@ -70,11 +73,14 @@
   import virtual_list from 'vue-virtual-scroll-list'
   import download from 'downloadjs'
   import moment from 'moment-mini'
-  import {mapState} from 'vuex'
-  import {cloneDeep, flatten, get} from 'lodash'
+  import {mapState, mapGetters} from 'vuex'
+  import {flatten, get} from 'lodash'
 
   import controls from 'components/controls.vue'
   import local_record_summary from './local_record_summary'
+  import {ResponseController} from 'lib/models/response/controller'
+
+  const controller = new ResponseController('record')
 
   export default {
     name: 'List',
@@ -83,19 +89,17 @@
       return {
         syncing: false,
         target_denominator: 0,
-        id_search_string: ''
+        id_search_string: '',
+        responses: []
       }
     },
     computed: {
       ...mapState({
         instance_config: state => state.instance_config,
-        unsynced_count: state => state.irs_record_point.responses.filter(r => !r.synced).length,
         online: state => state.network_online
       }),
-      responses() {
-        return this.$store.state.irs_record_point.responses
-      },
       filtered_responses() {
+        if (!this.responses.length) return []
         return this.responses
           .filter(r => {
             if (!this.id_search_string) return true
@@ -103,14 +107,26 @@
           })
           .sort((a, b) => new Date(b.recorded_on) - new Date(a.recorded_on))
       },
+      unsynced_count() {
+        return this.unsynced_responses.length
+      },
       unsynced_responses() {
+        if (!this.responses.length) return []
         return this.responses.filter(r => !r.synced)
       }
     },
     mounted () {
-      this.$store.dispatch('irs_record_point/read_records')
+      this.load_responses()
     },
     methods: {
+      async load_responses() {
+        this.$loading.startLoading('responses')
+        const personalised_instance_id = this.$store.state.meta.personalised_instance_id
+        const instance = this.$store.state.instance_config.instance.slug
+
+        this.responses = await controller.read_all_cache({personalised_instance_id, instance})
+        this.$loading.endLoading('responses')
+      },
       format_response(response) {
         const id = this.short_id(get(response, 'id', 'no id'))
         const location_name = get(response, 'location.selection.name', '')
@@ -124,40 +140,42 @@
       format_datetime(date) {
         return moment(date).format('hh:mm a DD MMM YYYY')
       },
-      sync() {
-        this.$startLoading('irs_record_point/sync')
+      async sync() {
+        // Really is UI
+        this.$loading.startLoading('irs_record_point/sync')
         this.syncing = true
 
-        this.$store.dispatch('irs_record_point/create_records', this.unsynced_responses)
-          .then((results) => {
-            const last_successful_sync_count = flatten(results.pass).length
-            const last_failed_sync_count = flatten(results.fail).length
+        try {
+          // TODO: Pass back counts instead of objects
+          const results = await controller.create_records(this.unsynced_responses)
+          const last_successful_sync_count = flatten(results.pass).length
+          const last_failed_sync_count = flatten(results.fail).length
 
-            this.$endLoading('irs_record_point/sync')
-            this.syncing = false
+          this.$loading.endLoading('irs_record_point/sync')
+          this.syncing = false
 
-            // did any responses sync?
-            if (last_successful_sync_count > 0) {
-              this.$store.commit('root:set_snackbar', {message: `Successfully synced ${last_successful_sync_count} responses`})
-            } else if (last_successful_sync_count === 0 && last_failed_sync_count > 0) {
-              setTimeout(() => {
-                this.$store.commit('root:set_snackbar', {message: `All ${last_failed_sync_count} responses failed to sync`})
-              }, 3000);
-            } else {
-              setTimeout(() => {
-                this.$store.commit('root:set_snackbar', {message: `${last_successful_sync_count} responses synced, ${last_failed_sync_count} responses failed to sync`})
-              }, 3000);
-            }
+          // did any responses sync?
+          if (last_successful_sync_count > 0) {
+            this.$store.commit('root:set_snackbar', {message: `Successfully synced ${last_successful_sync_count} responses`})
+          } else if (last_successful_sync_count === 0 && last_failed_sync_count > 0) {
+            setTimeout(() => {
+              this.$store.commit('root:set_snackbar', {message: `All ${last_failed_sync_count} responses failed to sync`})
+            }, 3000)
+          } else {
+            setTimeout(() => {
+              this.$store.commit('root:set_snackbar', {message: `${last_successful_sync_count} responses synced, ${last_failed_sync_count} responses failed to sync`})
+            }, 3000)
+          }
+          this.load_responses()
+        } catch(e) {
+          console.log(e)
+          if (e.response && e.response.status !== 401) {
+            this.$store.commit('root:set_snackbar', {message: `Problem syncing responses`})
+          }
+          this.$loading.endLoading('irs_record_point/sync')
+          this.syncing = false
+        }
 
-          })
-          .catch((e) => {
-            console.log(e)
-            if (e.response && e.response.status !== 401) {
-              this.$store.commit('root:set_snackbar', {message: `Problem syncing responses`})
-            }
-            this.$endLoading('irs_record_point/sync')
-            this.syncing = false
-          })
       },
       download_records() {
         const content = JSON.stringify(this.unsynced_responses)

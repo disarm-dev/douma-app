@@ -52,6 +52,7 @@
     "geoposition-to-object": "^1.0.2",
     "is-number": "^3.0.0",
     "js-schema": "git+https://github.com/disarm-platform/js-schema.git",
+    "json-size": "^1.0.0",
     "json2csv": "^4.0.3",
     "lodash": "^4.17.4",
     "lodash.clone": "^4.5.0",
@@ -91,6 +92,7 @@
     "uuid": "^3.0.1",
     "vue": "^2.4.4",
     "vue-analytics": "^5.10.4",
+    "vue-async-computed": "^3.3.1",
     "vue-browser-acl": "^0.5.3",
     "vue-json-tree-view": "^2.0.7",
     "vue-material": "^0.7.4",
@@ -102,7 +104,7 @@
     "vue-virtual-scroll-list": "^1.1.2",
     "vuejs-datepicker": "^1.1.5",
     "vuex": "^2.3.1",
-    "vuex-loading": "^0.1.11",
+    "vuex-loading": "^0.2.6",
     "vuex-persistedstate": "^1.4.1",
     "webpack-comment-remover-loader": "0.0.3",
     "which-polygon": "^2.1.0"
@@ -164,6 +166,7 @@
     "webpack-hot-middleware": "^2.18.0",
     "webpack-merge": "^4.1.0",
     "webpack-visualizer-plugin": "^0.1.11",
+    "worker-loader": "^1.1.1",
     "yaml-include-loader": "^1.0.0"
   },
   "engines": {
@@ -175,7 +178,7 @@
     "last 2 versions",
     "not ie <= 10"
   ],
-  "version": "1.1.2",
+  "version": "1.2.1",
   "ava": {
     "require": [
       "./test/helpers/setup.js"

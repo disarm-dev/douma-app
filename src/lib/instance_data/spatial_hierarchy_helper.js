@@ -1,12 +1,13 @@
 import get from 'lodash.get'
+import cloneDeep from 'lodash.clonedeep'
 
 let instance_config_cache = null
 let spatial_hierarchy_cache = null
 
 
 const configure_spatial_helpers = (instance_config) => {
-  instance_config_cache = instance_config
-  spatial_hierarchy_cache = instance_config.spatial_hierarchy
+  instance_config_cache = cloneDeep(instance_config)
+  spatial_hierarchy_cache = instance_config_cache.spatial_hierarchy
 }
 
 
@@ -57,6 +58,12 @@ const get_display_name_for_level = (level_name) => {
   const level = spatial_hierarchy_cache.levels.find(level => level.name === level_name)
   if (!level) throw new Error(`Cannot find level ${level_name} in instance_config.spatial_hierarchy.levels`)
   return level.display_field_name
+}
+
+const get_group_by_for_level = (level_name) => {
+  const level = spatial_hierarchy_cache.levels.find(level => level.name === level_name)
+  if (!level) throw new Error(`Cannot find level ${level_name} in instance_config.spatial_hierarchy.levels`)
+  return level.group_by_field
 }
 
 
@@ -123,6 +130,7 @@ export {
   get_planning_level_name,
   get_field_name_for_level,
   get_display_name_for_level,
+  get_group_by_for_level,
 
   get_all_spatial_hierarchy_levels,
   get_all_spatial_hierarchy_level_names,

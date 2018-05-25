@@ -52,7 +52,7 @@
         dashboard_options: state => state.irs_monitor.dashboard_options,
         spatial_aggregation_level: state => state.irs_monitor.dashboard_options.spatial_aggregation_level,
         temporal_aggregation_level: state => state.irs_monitor.dashboard_options.temporal_aggregation_level,
-        limit_to: state => state.irs_monitor.dashboard_options.limit_to
+        limit_to: state => state.irs_monitor.dashboard_options.limit_to // TODO: remove limit_to?
       }),
       spatial_level_names() {
         const levels = [get_planning_level_name()]

@@ -34,9 +34,8 @@
     },
     methods:{
       get_plan({_id}){
-        console.log('Plan id',_id)
         this.selected_plan = _id
-        this.$store.dispatch('irs_monitor/get_network_plan_detail',_id)
+        this.$emit('get_plan',_id)
       },
       set_default_plan() {
         if (!this.plans.length) return

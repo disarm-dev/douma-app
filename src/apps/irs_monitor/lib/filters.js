@@ -12,12 +12,6 @@ export function filter_responses(responses, filters = []) {
   for (let i = 0; i < responses.length; i++) {
     let response = responses[i]
 
-    // Check response has all required fields for filters
-    const all_field_present = filter_names.every(filter_name => {
-      return get(response, filter_name, null) !== null
-    })
-    if (!all_field_present) continue
-
     // Run composed filter against response, and keep response if true
     if (filter_fn(response)) output.push(response)
   }
@@ -67,17 +61,17 @@ function standard_comparison_function({name, comparator, value}) {
 function day_comparison_function({name, comparator, value}) {
   switch (comparator) {
     case "equals":
-      return (response) => convert_datetime_to_days(response[name]) === convert_datetime_to_days(value)
+      return (response) => convert_datetime_to_days(get(response, name)) === convert_datetime_to_days(value)
     case ">=":
-      return (response) => convert_datetime_to_days(response[name]) >= convert_datetime_to_days(value)
+      return (response) => convert_datetime_to_days(get(response, name)) >= convert_datetime_to_days(value)
     case "<=":
-      return (response) => convert_datetime_to_days(response[name]) <= convert_datetime_to_days(value)
+      return (response) => convert_datetime_to_days(get(response, name)) <= convert_datetime_to_days(value)
     case "<":
-      return (response) => convert_datetime_to_days(response[name]) < convert_datetime_to_days(value)
+      return (response) => convert_datetime_to_days(get(response, name)) < convert_datetime_to_days(value)
     case ">":
-      return (response) => convert_datetime_to_days(response[name]) > convert_datetime_to_days(value)
+      return (response) => convert_datetime_to_days(get(response, name)) > convert_datetime_to_days(value)
     case "not_equals":
-      return (response) => convert_datetime_to_days(response[name]) !== convert_datetime_to_days(value)
+      return (response) => convert_datetime_to_days(get(response, name)) !== convert_datetime_to_days(value)
   }
 }
 

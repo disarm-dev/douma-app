@@ -70,6 +70,10 @@ module.exports = {
         test: /.json$/,
         loader: StripJSONCommentsLoader,
         exclude: /node_modules/
+      },
+      {
+        test: /\.worker\.js$/,
+        use: { loader: 'worker-loader' }
       }
     ]
   },

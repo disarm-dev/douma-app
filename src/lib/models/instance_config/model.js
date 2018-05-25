@@ -18,7 +18,7 @@ export async function read_instance_configuration_for(config_id) {
   }
 }
 
-async function retrieve_local_config(config_id) {
+export async function retrieve_local_config(config_id) {
   return await local_config_db.read(config_id)
 }
 

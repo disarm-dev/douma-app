@@ -140,7 +140,7 @@
         return true
       },
       login() {
-        this.$startLoading('meta/login')
+        this.$loading.startLoading('meta/login')
         this.error = ""
 
         if (!this.valid_login_request()) return
@@ -157,8 +157,7 @@
         this.$store.dispatch('meta/login', login_details).then(() => {
           // dimension3 is the dimension we use for the user attribute we send to GA. Could refactor.
           this.$ga.set("dimension3", `${this.$store.state.meta.user.username}/${this.$store.state.meta.user.name}`)
-
-          this.$endLoading('meta/login')
+          this.$loading.endLoading('meta/login')
           this.login_disabled = false
 
 
@@ -170,7 +169,7 @@
           this.continue_login()
         })
         .catch(e => {
-          this.$endLoading('meta/login')
+          this.$loading.endLoading('meta/login')
           this.login_disabled = false
 
           // 401 from server

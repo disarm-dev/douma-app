@@ -1,6 +1,6 @@
 import { read_instance_configuration_for } from 'lib/models/instance_config/model'
 import CONFIG from 'config/common'
-import {remove_param, retrieve_stored_param, store_params_from_hash} from 'lib/helpers/hash_params'
+import { remove_param, retrieve_stored_param, store_params_from_hash } from 'lib/helpers/hash_params'
 
 function get_subdomain_if_not_local() {
   const domain = document.domain
@@ -8,8 +8,8 @@ function get_subdomain_if_not_local() {
 
   // Is 'localhost' - this isn't a subdomain
   if (['localhost'].includes(domain)) return false
-  // Subdomain only contains numbers - unlikely to be one of ours
-  if(/^[0-9]*$/.test(possible_subdomain)) return false
+    // Subdomain only contains numbers - unlikely to be one of ours
+  if (/^[0-9]*$/.test(possible_subdomain)) return false
 
   return document.domain.split('.')[0]
 }
@@ -47,7 +47,7 @@ function determine_instance() {
 
 
 function is_valid_subdomain(subdomain) {
-  if(CONFIG.instances.list.includes(subdomain)) {
+  if (CONFIG.instances.list.includes(subdomain)) {
     return true
   } else {
     console.error(`Invalid subdomain: ${subdomain}`)
@@ -63,7 +63,7 @@ export async function get_instance_config() {
   try {
     const instance_config = await read_instance_configuration_for(instance_slug)
     if (!instance_config) return null;
-    
+
     // TODO: @refac fix this
     if (instance_config.aggregations) {
       instance_config.aggregations.push({ name: 'count', numerator_expr: '1' })

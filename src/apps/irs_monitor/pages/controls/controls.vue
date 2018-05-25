@@ -33,13 +33,10 @@
           <aggregation_settings :responses="responses" :targets="targets"></aggregation_settings>
         </md-tab>
 
-        <md-tab id="advanced" md-label="advanced">
-          <md-icon class="md-warn">warning</md-icon> Be careful changing these advanced settings, they affect the results displayed on the monitor page.
-          <limit_to :responses="responses" :targets="targets"></limit_to>
-          <guess_locations :responses="responses"></guess_locations>
+        <md-tab id="advanced" :md-label="advanced_label">
+          <advanced_controls :responses='responses' :targets='targets'></advanced_controls>
         </md-tab>
       </md-tabs>
-
 
       <filters_summary :filters="filters"></filters_summary>
 
@@ -51,10 +48,9 @@
 <script>
   import {mapState} from 'vuex'
   import aggregation_settings from './aggregation-settings.vue'
-  import limit_to from './limit-to.vue'
-  import guess_locations from './guess-locations'
   import plans from './plans'
   import seasons from './seasons'
+  import advanced_controls from './advanced_controls'
   import filters_summary from './filters/summary'
   import fields_filters from './filters/fields'
   import temporal_filter from './filters/temporal'
@@ -63,13 +59,17 @@
 
   export default {
     name: 'controls',
-    components: {filters_summary, temporal_filter, spatial_filter, fields_filters,  aggregation_settings, limit_to, guess_locations, plans, seasons},
-    props: ['responses', 'targets'],
+    components: {filters_summary, plans, seasons, temporal_filter, spatial_filter, fields_filters,  aggregation_settings, advanced_controls, },
+    props: ['responses', 'targets', 'plans'],
     computed: {
       ...mapState({
         filters: state => state.irs_monitor.filters,
-        plans: state => state.irs_monitor.plans,
-        season_start_dates: state => state.instance_config.applets.irs_monitor.season_start_dates.sort((a,b)=>a<b)
+        //plans: state => state.irs_monitor.plans,
+        season_start_dates: state => state.instance_config.applets.irs_monitor.season_start_dates.sort((a, b)=> a < b),
+        advanced_label: state => {
+          const advanced_active = state.irs_monitor.dashboard_options.limit_to_plan
+          return advanced_active ? 'advanced' : 'advanced*'
+        }
       }),
       show_filters: {
         get(){
@@ -79,8 +79,13 @@
           if (this.$refs.tabs.activeTab === 'season_plan') this.$refs.tabs.setActiveTab(this.$refs.tabs.tabList['season_plan'])
           this.$store.commit('irs_monitor/set_ui', {show_filters: val})
         }
-      }
+      },
     },
+    methods:{
+      get_plan(_id){
+        this.$emit('get_plan',_id)
+      }
+    }
   }
 </script>
 

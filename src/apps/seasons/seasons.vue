@@ -31,6 +31,7 @@
 <script>
   import {custom_validations} from '@locational/application-registry-validation'
   import {request_handler} from 'lib/remote/request-handler'
+  import {retrieve_local_config} from 'lib/models/instance_config/model'
 
   export default {
     name: "seasons",
@@ -82,12 +83,15 @@
         this.$store.state.instance_config.applets.irs_monitor.season_start_dates.splice(index, 1)
         this.save_config(this.$store.state.instance_config)
       },
-      async save_config(config_data) {
+      async save_config() {
+        const instance_slug = this.$store.state.instance_config.instance.slug
+        const local_instance_config = await retrieve_local_config(instance_slug)
+
         try {
           const res = await request_handler({
             method: 'post',
             data: {
-              config_data
+              local_instance_config
             },
             url_suffix: '/config'
           })

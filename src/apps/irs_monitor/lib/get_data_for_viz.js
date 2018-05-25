@@ -59,7 +59,6 @@ export default function get_data({responses, targets, aggregations, options, geo
       data = decorate_for_chart({binned_responses, targets, aggregations, options})
       break
     case 'table':
-      // internally it uses the decorate_for_map with some additional transformations
       data = decorate_for_table({binned_responses, targets, aggregations, options})
       break
     case 'map':

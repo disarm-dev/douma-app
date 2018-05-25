@@ -1,49 +1,69 @@
 <template>
   <div class="filter_fields">
-    <md-input-container class="filter_field">
-      <md-select v-model="filter_name" class="select" :disabled="!field_names.length" placeholder="Form field">
-        <md-option v-for="field_name in field_names" :key='field_name' :value="field_name">{{field_name}}</md-option>
-      </md-select>
+    <md-layout>
 
-      <md-select v-model="filter_comparator" class="select" disabled>
-        <md-option v-for="comparator in comparators" :key="comparator" :value="comparator">{{comparator}}</md-option>
-      </md-select>
+      <md-layout md-flex-small="33" md-flex-xsmall="100">
+        <multiselect
+          v-model="filter_name"
+          :options="field_names"
+          :disabled="!field_name_length"
+          placeholder="Field name"
+          openDirection="bottom"
+          :max-height="200"
+        ></multiselect>
+      </md-layout>
 
-      <md-select v-model="filter_value" class="select" :disabled="!field_values.length" placeholder="Value">
-        <md-option v-for="value in field_values" :key="value" :value="value">{{value}}</md-option>
-      </md-select>
-    </md-input-container>
+      <md-layout md-flex-small="33" md-flex-xsmall="100">
+        <multiselect
+          md-flex-small="33"
+          md-flex-xsmall="100"
+          v-model="filter_comparator"
+          :options="comparators"
+          openDirection="bottom"
+          :max-height="200"
+        ></multiselect>
+      </md-layout>
 
+      <md-layout md-flex-small="33" md-flex-xsmall="100">
+        <multiselect
+          md-flex-small="33"
+          md-flex-xsmall="100"
+          v-model="filter_value"
+          :options="field_values"
+          :disabled="!field_name_length"
+          placeholder="Value"
+          openDirection="bottom"
+          :max-height="200"
+        ></multiselect>
+      </md-layout>
+
+    </md-layout>
     <md-button :disabled='add_disabled' @click="add_filter()">Add filter</md-button>
   </div>
 </template>
 
 <script>
-  import {mapState} from 'vuex'
   import {get, sort} from 'lodash'
   import flow from 'lodash/fp/flow'
-  import flatten from 'lodash/fp/flatten'
-  import filter from 'lodash/fp/filter'
   import uniq from 'lodash/fp/uniq'
   import sortBy from 'lodash/fp/sortBy'
+  import filter from 'lodash/fp/filter'
   import map from 'lodash/fp/map'
+  import Multiselect from 'vue-multiselect'
 
-  const EXCLUDE_FIELD_FILTER = f => !f.startsWith('location')
-  const comparators = ['equals', 'not_equals']
-
-  const default_inputs = {
-    filter_name: '',
-    filter_comparator: comparators[0],
-    filter_value: ''
-  }
+  import FieldNamesWorker from '../../../lib/field_names.worker.js'
 
   export default {
     name: 'field-filters',
     props: ['responses'],
+    components: {Multiselect},
     data() {
       return {
-        ...default_inputs,
-        comparators
+        // see below #reset_inputs for default values
+        filter_name: null,
+        filter_comparator: null,
+        filter_value: null,
+        comparators: ['equals']
       }
     },
     computed: {
@@ -51,26 +71,12 @@
         const can_add = (this.filter_name && this.filter_comparator && this.filter_value)
         return !can_add
       },
-      field_names() {
-        if (!this.responses || !this.responses.length) return []
-
-        let all_field_names = []
-        this.responses.forEach(response => {
-          const nested_keys = this.extract_nested_keys(response)
-          all_field_names.push(nested_keys)
-        })
-
-        const flattened = flow(
-          flatten,
-          uniq,
-          sortBy(x => x)
-        )(all_field_names)
-
-        return flattened.filter(EXCLUDE_FIELD_FILTER)
+      field_name_length() {
+        return this.field_names ?
+          this.field_names.length :
+          0
       },
       field_values() {
-        if (!this.filter_name) return []
-
         return flow(
           filter(r => {
             return get(r, this.filter_name) !== undefined
@@ -88,38 +94,45 @@
           comparator: this.filter_comparator,
           value: this.filter_value
         }
+      },
+      field_dropdown_placeholder() {
+        if (this.responses.length === 0) {
+          return 'No responses'
+        } else if (!this.field_name_length === 0) {
+          return 'Getting field names'
+        } else {
+          return 'Select field'
+        }
       }
+    },
+    asyncComputed: {
+      field_names: {
+        get() {
+          if (!this.responses) return []
+          return new Promise((resolve, reject) => {
+            this.$nextTick(() => {
+              const worker = new FieldNamesWorker()
+
+              worker.postMessage({responses: this.responses})
+
+              worker.addEventListener('message', function (event) {
+                resolve(event.data)
+              });
+            })
+          })
+        },
+        default: []
+      },
+    },
+    created() {
+      this.reset_inputs()
     },
     methods: {
       reset_inputs() {
-        this.filter_name = default_inputs.filter_name
-        this.filter_comparator = default_inputs.filter_comparator
-        this.filter_value = default_inputs.filter_value
-      },
-      extract_nested_keys(data) {
-        var result = {};
-
-        function recurse(cur, prop) {
-          if (Object(cur) !== cur) {
-            result[prop] = cur;
-          } else if (Array.isArray(cur)) {
-            for (var i = 0, l = cur.length; i < l; i++)
-              recurse(cur[i], prop + '[' + i + ']');
-            if (l === 0)
-              result[prop] = [];
-          } else {
-            var isEmpty = true;
-            for (var p in cur) {
-              isEmpty = false;
-              recurse(cur[p], prop ? prop + '.' + p : p);
-            }
-            if (isEmpty && prop)
-              result[prop] = {};
-          }
-        }
-
-        recurse(data, '');
-        return Object.keys(result);
+        // TODO: @refac replicating these data definitions === bad
+        this.filter_name = ''
+        this.filter_comparator = 'equals'
+        this.filter_value = ''
       },
       add_filter() {
         this.$store.commit('irs_monitor/add_filter', this.filter)
@@ -129,18 +142,13 @@
   }
 </script>
 
-<style scoped>
 
+<style scoped>
   .select {
     margin-right: 10px
   }
 
   .filter_fields {
-    display: flex;
-    flex-flow: row wrap;
-  }
-
-  .filter_field {
-    flex: 1 1 33%;
+    min-height: 300px;
   }
 </style>

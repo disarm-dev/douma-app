@@ -1,6 +1,6 @@
 <template>
   <div>
-    <md-checkbox class='no-bottom-margin' v-model="include_responses_outside_plan">Include responses outside plan</md-checkbox>
+    <md-checkbox class='no-bottom-margin' v-model="include_responses_outside_plan">Include Responses and geodata outside Plan</md-checkbox>
     <p v-if="include_responses_outside_plan" class="warn">
       The checkbox above means you are showing responses outside the plan. This will display responses on the map, but note that aggregations are calculated from the plan so they may be incorrect or missing.
       Uncheck to limit responses to the plan.
