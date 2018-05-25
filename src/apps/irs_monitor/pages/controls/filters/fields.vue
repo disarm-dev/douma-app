@@ -1,13 +1,22 @@
 <template>
   <div class="filter_fields">
     <md-input-container class="filter_field">
-      <md-select v-model="filter_name" class="select" :disabled="!field_name_length" :placeholder="field_dropdown_placeholder">
-        <md-option v-for="field_name in field_names" :key='field_name' :value="field_name">{{field_name}}</md-option>
-      </md-select>
 
-      <md-select v-model="filter_comparator" class="select">
-        <md-option v-for="comparator in comparators" :key="comparator" :value="comparator">{{comparator}}</md-option>
-      </md-select>
+      <multiselect
+          v-model="filter_name"
+          :options="field_names"
+          :disabled="!field_name_length"
+          placeholder="Value"
+          openDirection="bottom"
+          :max-height="200"
+      ></multiselect>
+
+      <multiselect
+          v-model="filter_comparator"
+          :options="comparators"
+          openDirection="bottom"
+          :max-height="200"
+      ></multiselect>
 
       <multiselect
           v-model="filter_value"
