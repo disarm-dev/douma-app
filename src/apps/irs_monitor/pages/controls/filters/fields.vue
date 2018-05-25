@@ -1,20 +1,43 @@
 <template>
   <div class="filter_fields">
-    <md-input-container class="filter_field">
-      <md-select v-model="filter_name" class="select" :disabled="!field_name_length" :placeholder="field_dropdown_placeholder">
-        <md-option v-for="field_name in field_names" :key='field_name' :value="field_name">{{field_name}}</md-option>
-      </md-select>
+    <md-layout>
 
-      <md-select v-model="filter_comparator" class="select">
-        <md-option v-for="comparator in comparators" :key="comparator" :value="comparator">{{comparator}}</md-option>
-      </md-select>
+      <md-layout md-flex-small="33" md-flex-xsmall="100">
+        <multiselect
+          v-model="filter_name"
+          :options="field_names"
+          :disabled="!field_name_length"
+          placeholder="Field name"
+          openDirection="bottom"
+          :max-height="200"
+        ></multiselect>
+      </md-layout>
 
-      <md-select v-model="filter_value" class="select" :disabled="!field_name_length" placeholder="Value">
-        <md-option v-for="value in field_values" :key="value" :value="value">{{value}}</md-option>
-      </md-select>
+      <md-layout md-flex-small="33" md-flex-xsmall="100">
+        <multiselect
+          md-flex-small="33"
+          md-flex-xsmall="100"
+          v-model="filter_comparator"
+          :options="comparators"
+          openDirection="bottom"
+          :max-height="200"
+        ></multiselect>
+      </md-layout>
 
-    </md-input-container>
+      <md-layout md-flex-small="33" md-flex-xsmall="100">
+        <multiselect
+          md-flex-small="33"
+          md-flex-xsmall="100"
+          v-model="filter_value"
+          :options="field_values"
+          :disabled="!field_name_length"
+          placeholder="Value"
+          openDirection="bottom"
+          :max-height="200"
+        ></multiselect>
+      </md-layout>
 
+    </md-layout>
     <md-button :disabled='add_disabled' @click="add_filter()">Add filter</md-button>
   </div>
 </template>
@@ -26,12 +49,14 @@
   import sortBy from 'lodash/fp/sortBy'
   import filter from 'lodash/fp/filter'
   import map from 'lodash/fp/map'
+  import Multiselect from 'vue-multiselect'
 
   import FieldNamesWorker from '../../../lib/field_names.worker.js'
 
   export default {
     name: 'field-filters',
     props: ['responses'],
+    components: {Multiselect},
     data() {
       return {
         // see below #reset_inputs for default values
@@ -46,10 +71,10 @@
         const can_add = (this.filter_name && this.filter_comparator && this.filter_value)
         return !can_add
       },
-      field_name_length(){
-          return this.field_names ?
-                 this.field_names.length :
-                 0
+      field_name_length() {
+        return this.field_names ?
+          this.field_names.length :
+          0
       },
       field_values() {
         return flow(
@@ -83,14 +108,14 @@
     asyncComputed: {
       field_names: {
         get() {
-          if(!this.responses) return []
+          if (!this.responses) return []
           return new Promise((resolve, reject) => {
             this.$nextTick(() => {
               const worker = new FieldNamesWorker()
 
               worker.postMessage({responses: this.responses})
 
-              worker.addEventListener("message", function (event) {
+              worker.addEventListener('message', function (event) {
                 resolve(event.data)
               });
             })
@@ -99,7 +124,7 @@
         default: []
       },
     },
-    created () {
+    created() {
       this.reset_inputs()
     },
     methods: {
@@ -124,11 +149,6 @@
   }
 
   .filter_fields {
-    display: flex;
-    flex-flow: row wrap;
-  }
-
-  .filter_field {
-    flex: 1 1 33%;
+    min-height: 300px;
   }
 </style>
