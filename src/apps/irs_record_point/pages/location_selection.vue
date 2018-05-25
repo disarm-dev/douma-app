@@ -55,6 +55,7 @@
     components: {Multiselect},
     data() {
       return {
+        _watch_subscription: null,
         _fuse: null,
         search_query: '',
         _all_locations: [],
@@ -108,13 +109,12 @@
     },
     created() {
       this.prepare_fuse()
-    },
-    watch: {
-      'initial_location_selection': 'setup_initial_location_selection'
+      this._watch_subscription = this.$watch('initial_location_selection', this.setup_initial_location_selection)
     },
     methods: {
       setup_initial_location_selection() {
         if (this.initial_location_selection) {
+          this._watch_subscription() // call to stop watching the initial_location_selection
           this.$emit('change', this.initial_location_selection)
 
           if (Object.prototype.hasOwnProperty.call(this.initial_location_selection, 'id')) {
