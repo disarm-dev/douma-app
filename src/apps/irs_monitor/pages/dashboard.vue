@@ -258,8 +258,16 @@
           // store.commit('irs_record_point/clear_responses_not_inVillage')
           // store.commit('irs_record_point/clear_guessed_responses')
         }
-        const remote_responses_batch = await responses_controller.read_new_network_write_local(last_id)
-
+        
+        let remote_responses_batch
+        try {
+          remote_responses_batch = await responses_controller.read_new_network_write_local(last_id)
+        } catch (e) {
+          this.$store.commit('root:set_snackbar', {message: 'Error retrieving records. Try again later'})
+          this.$loading.endLoading('irs_monitor/load_responses')
+          return
+        }
+        
         if (remote_responses_batch.length) {
           const updated_last_id = remote_responses_batch[remote_responses_batch.length - 1]._id
           this.$store.commit('irs_monitor/set_last_id', updated_last_id) //left in store because it has to be persisted
