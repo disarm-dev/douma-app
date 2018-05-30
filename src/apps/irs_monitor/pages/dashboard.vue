@@ -14,7 +14,7 @@
     <div class='applet_container'>
 
       <!--DASHBOARD CONTROLS-->
-      <controls :responses="filtered_responses" :plans="plans" @get_plan="" :targets="targets"></controls>
+      <controls :responses="filtered_responses" :plans="plans" @get_plan="get_network_plan_detail" :targets="targets"></controls>
 
       <!--MAP-->
       <dashboard_map
