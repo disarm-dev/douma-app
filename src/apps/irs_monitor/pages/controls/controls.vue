@@ -14,7 +14,7 @@
 
         <md-tab id="season_plan" md-label="Season/plan">
           <seasons :season_start_dates="season_start_dates"></seasons>
-          <plans :plans="plans"></plans>
+          <plans :plans="plans" @get_plan="get_plan"></plans>
         </md-tab>
 
         <md-tab id="form_field_filters" md-label="form Fields">

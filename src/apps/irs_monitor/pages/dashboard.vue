@@ -14,7 +14,7 @@
     <div class='applet_container'>
 
       <!--DASHBOARD CONTROLS-->
-      <controls :responses="filtered_responses" :plans="plans" @get_plan="" :targets="targets"></controls>
+      <controls :responses="filtered_responses" :plans="plans" @get_plan="get_network_plan_detail" :targets="targets"></controls>
 
       <!--MAP-->
       <dashboard_map
@@ -215,8 +215,8 @@
             }
           })
       },
-      get_network_plan_detail: (context, plan_id) => {
-        return plan_controller.read_plan_detail_network(plan_id).then(plan_json => {
+      get_network_plan_detail(plan_id) {
+        plan_controller.read_plan_detail_network(plan_id).then(plan_json => {
           if (Object.keys(plan_json).length === 0) {
             return this.$store.commit('root:set_snackbar', {message: 'There is no remote plan. Please create one.'}, {root: true})
           }
