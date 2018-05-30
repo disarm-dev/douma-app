@@ -1,5 +1,18 @@
 #!/usr/bin/env bash
 
+# Return early if on master, but not exact tag
+BRANCH=$(git rev-parse --abbrev-ref HEAD)
+BRANCH_REGEX="^master"
+
+TAG=$(git describe --exact-match)
+TAG_REGEX='^v'
+
+if [[ $BRANCH =~ $BRANCH_REGEX ]] && [[ ! $TAG =~ $TAG_REGEX ]]
+  then echo "Not deploying - on master without version tag"; exit 1
+  else echo "Either on master with version tag, or on other branch"
+fi
+
+
 for pid in $(pgrep -f node); do
   echo "Killed node process $pid"
   kill -KILL -$pid
