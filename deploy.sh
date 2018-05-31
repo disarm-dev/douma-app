@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+# Get tags to start with
+git fetch --tags
+
+
 # Return early if on master, but not exact tag
 BRANCH=$(git rev-parse --abbrev-ref HEAD)
 BRANCH_REGEX="^master"
@@ -19,7 +23,6 @@ for pid in $(pgrep -f node); do
 done
 
 # Do the actual building and zero-downtime deployment
-git fetch --tags
 npm install --no-shrinkwrap --no-package-lock
 time npm run build #> build.log 2>&1
 rm -rf serve/
