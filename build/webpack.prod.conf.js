@@ -67,6 +67,11 @@ var webpackConfig = merge(baseWebpackConfig, {
       // necessary to consistently work with multiple chunks via CommonsChunkPlugin
       chunksSortMode: 'dependency'
     }),
+    new HtmlWebpackPlugin({
+      filename: 'reset.html',
+      template: 'reset.html',
+      chunks: []
+    }),
     // split vendor js into its own file
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',
@@ -91,7 +96,6 @@ var webpackConfig = merge(baseWebpackConfig, {
       { from: './src/offline-analytics.js' },
       { from: './index.html', to: '200.html' },
       { from: './src/manifest.json' },
-      { from: './reset.html' },
       { from: './node_modules/sw-offline-google-analytics/build/offline-google-analytics-import.min.js' },
     ]),
     new LicenseWebpackPlugin({
