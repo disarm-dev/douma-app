@@ -8,7 +8,7 @@ TAG=$(git describe --exact-match)
 TAG_REGEX='^v'
 
 if [[ $BRANCH =~ $BRANCH_REGEX ]] && [[ ! $TAG =~ $TAG_REGEX ]]
-  then echo "Not deploying - on master without version tag"; exit 1
+  then echo "Not deploying - on master without version tag"; exit 0
   else echo "Either on master with version tag, or on other branch"
 fi
 
