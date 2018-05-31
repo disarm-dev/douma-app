@@ -59,7 +59,6 @@
       }
     },
     computed: {
-      // primary area selector
       area: {
         get() {
           return this.$store.state.irs_record_point.persisted_metadata.area
