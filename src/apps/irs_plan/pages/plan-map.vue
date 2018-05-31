@@ -222,6 +222,8 @@
 
         // Add click handler
         this._map.on('click', this.handler.click);
+        
+        this._map.on('touchend', this.handler.click);
       },
       manage_map_mode() {
         // Either show or hide risk when changing map modes
