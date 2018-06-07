@@ -20,12 +20,10 @@
       v-if="!use_custom_location"
       :disabled="!area"
       v-model="sub_area"
-      :options="location_options"
+      :options="all_locations"
       placeholder="Select sub-area"
       track-by="id"
       label="name"
-      :internal-search="false"
-      @search-change="search"
       @input="update_value"
     >
       <span slot="noResult">Oops! No elements found. Consider changing the search query.</span>
@@ -42,7 +40,6 @@
 </template>
 
 <script>
-  import Fuse from 'fuse.js'
   import Multiselect from 'vue-multiselect'
   import {get_record_location_selection} from 'lib/instance_data/spatial_hierarchy_helper'
   import { uniq } from 'lodash'
@@ -56,16 +53,12 @@
     data() {
       return {
         _watch_subscription: null,
-        _fuse: null,
-        search_query: '',
-        _all_locations: [],
         _custom_location_selection: '',
         use_custom_location: false,
         sub_area: null
       }
     },
     computed: {
-      // primary area selector
       area: {
         get() {
           return this.$store.state.irs_record_point.persisted_metadata.area
@@ -75,27 +68,11 @@
         }
       },
       categories() {
-        const all_categories = this._all_locations.map(loc => {
+        const all_categories = this.all_locations.map(loc => {
           return loc.category
         })
 
         return uniq(all_categories).sort()
-      },
-      location_options() {
-        let sub_areas
-        if (this.search_query.length) {
-          sub_areas = this._fuse.search(this.search_query)
-        } else {
-          sub_areas = this._all_locations
-        }
-
-        const filtered_sub_areas = sub_areas.filter(({category}) =>  category === this.area)
-
-        const sorted_sub_areas = filtered_sub_areas.sort((a, b) => {
-          return a.name < b.name ? -1 : a.name > b.name ? 1 : a.name >= b.name ? 0 : NaN;
-        })
-
-        return sorted_sub_areas
       },
       custom_location_selection: {
         get() {
@@ -108,7 +85,7 @@
       },
     },
     created() {
-      this.prepare_fuse()
+      this.all_locations = get_record_location_selection(cache)
       this._watch_subscription = this.$watch('initial_location_selection', this.setup_initial_location_selection)
     },
     methods: {
@@ -134,21 +111,9 @@
       update_value() {
         this.$emit('change', this.sub_area)
       },
-      prepare_fuse() {
-        this._all_locations = get_record_location_selection(cache)
-
-        const fuse_options = {
-          keys: ['name']
-        }
-
-        this._fuse =  new Fuse(this._all_locations, fuse_options)
-      },
       find_area_for_sub_area(selection) {
-        const found = this._all_locations.find(l => l.id === selection.id)
+        const found = this.all_locations.find(l => l.id === selection.id)
         if (found) return found.category
-      },
-      search(query) {
-        this.search_query = query
       }
     }
   }
