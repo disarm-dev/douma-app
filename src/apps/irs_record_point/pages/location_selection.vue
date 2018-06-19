@@ -33,10 +33,24 @@
 
     <md-checkbox v-model="use_custom_location">Enter custom location (location not on list)</md-checkbox>
 
-    <md-input-container v-if="use_custom_location">
-      <label>Custom location</label>
-      <md-input v-model="custom_location_selection"></md-input>
-    </md-input-container>
+    <div v-if="use_custom_location">
+      <md-input-container>
+        <label>Custom location</label>
+        <md-input v-model="custom_location_selection"></md-input>
+      </md-input-container>
+
+      <span v-if="do_you_mean.length">
+        <h4>Do you mean...</h4>
+        <md-chip
+            v-for="(suggestion, index) in do_you_mean" :key="index"
+            md-editable
+            v-on:edit="accept_suggestion(suggestion)"
+        >
+          {{suggestion.name}} ({{suggestion.category}})
+        </md-chip>
+        <span>No, use {{custom_location_selection}}</span>
+      </span>
+    </div>
 
   </div>
 </template>
@@ -60,8 +74,9 @@
         search_query: '',
         _all_locations: [],
         _custom_location_selection: '',
-        use_custom_location: false,
-        sub_area: null
+        use_custom_location: true,
+        sub_area: null,
+        do_you_mean: [],
       }
     },
     computed: {
@@ -103,7 +118,7 @@
         },
         set(custom_location) {
           this._custom_location_selection = custom_location
-          this.$emit('change', { name: custom_location})
+          this.do_you_mean = this._all_locations.filter(l => l.name.toLowerCase().startsWith(custom_location.toLowerCase())).slice(0, 10)
         }
       },
     },
@@ -149,6 +164,10 @@
       },
       search(query) {
         this.search_query = query
+      },
+      accept_suggestion(suggestion) {
+        this.$emit('change', suggestion)
+        this.use_custom_location = false;
       }
     }
   }
