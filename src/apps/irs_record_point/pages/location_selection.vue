@@ -33,24 +33,10 @@
 
     <md-checkbox v-model="use_custom_location">Enter custom location (location not on list)</md-checkbox>
 
-    <div v-if="use_custom_location">
-      <md-input-container>
-        <label>Custom location</label>
-        <md-input v-model="custom_location_selection"></md-input>
-      </md-input-container>
-
-      <span v-if="do_you_mean.length">
-        <h4>Do you mean...</h4>
-        <md-chip
-            v-for="(suggestion, index) in do_you_mean" :key="index"
-            md-editable
-            v-on:edit="accept_suggestion(suggestion)"
-        >
-          {{suggestion.name}} ({{suggestion.category}})
-        </md-chip>
-        <span>No, use {{custom_location_selection}}</span>
-      </span>
-    </div>
+    <custom-location
+        v-if="use_custom_location"
+        :all_locations="_all_locations"
+    ></custom-location>
 
   </div>
 </template>
@@ -59,24 +45,23 @@
   import Fuse from 'fuse.js'
   import Multiselect from 'vue-multiselect'
   import {get_record_location_selection} from 'lib/instance_data/spatial_hierarchy_helper'
-  import { uniq } from 'lodash'
+  import {has, uniq} from 'lodash'
+  import CustomLocation from './custom_location'
 
   import cache from 'config/cache'
 
   export default {
     name: 'location_selection',
     props: ['initial_location_selection'],
-    components: {Multiselect},
+    components: {Multiselect, CustomLocation},
     data() {
       return {
         _watch_subscription: null,
         _fuse: null,
         search_query: '',
         _all_locations: [],
-        _custom_location_selection: '',
-        use_custom_location: true,
+        use_custom_location: false,
         sub_area: null,
-        do_you_mean: [],
       }
     },
     computed: {
@@ -112,15 +97,6 @@
 
         return sorted_sub_areas
       },
-      custom_location_selection: {
-        get() {
-          return this._custom_location_selection
-        },
-        set(custom_location) {
-          this._custom_location_selection = custom_location
-          this.do_you_mean = this._all_locations.filter(l => l.name.toLowerCase().startsWith(custom_location.toLowerCase())).slice(0, 10)
-        }
-      },
     },
     created() {
       this.prepare_fuse()
@@ -132,14 +108,15 @@
           this._watch_subscription() // call to stop watching the initial_location_selection
           this.$emit('change', this.initial_location_selection)
 
-          if (Object.prototype.hasOwnProperty.call(this.initial_location_selection, 'id')) {
+          if (has(this.initial_location_selection, 'id')) {
             // initial_location_selection is an object for the multiselect
             this.sub_area = this.initial_location_selection
             this.area = this.find_area_for_sub_area(this.sub_area)
           } else {
             // it is a custom text property, use text input
             this.use_custom_location = true
-            this.custom_location_selection = this.initial_location_selection.name
+            console.log('seem to be a custom location, already set')
+            // this.custom_location_selection = this.initial_location_selection.name
           }
 
         } else {
@@ -165,10 +142,7 @@
       search(query) {
         this.search_query = query
       },
-      accept_suggestion(suggestion) {
-        this.$emit('change', suggestion)
-        this.use_custom_location = false;
-      }
+
     }
   }
 </script>
