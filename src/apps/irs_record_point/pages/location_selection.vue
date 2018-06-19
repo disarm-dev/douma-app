@@ -62,7 +62,7 @@
         _fuse: null,
         search_query: '',
         _all_locations: [],
-        use_custom_location: true,
+        use_custom_location: false,
         sub_area: null, // type: {id, name, category}
       }
     },
