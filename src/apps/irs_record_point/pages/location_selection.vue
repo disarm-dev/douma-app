@@ -145,13 +145,13 @@
         this.search_query = query
       },
       custom_use_custom(custom) {
-        console.log('custom_use_custom', custom)
-        this.$emit('change', custom)
+        this.$emit('change', {name: custom})
       },
       custom_use_suggestion(suggestion) {
         this.area = suggestion.category
         this.sub_area = suggestion
         this.use_custom_location = false;
+        this.$emit('change', suggestion)
       }
     }
   }
