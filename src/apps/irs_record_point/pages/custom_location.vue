@@ -16,7 +16,7 @@
           {{suggestion.name}} ({{suggestion.category}})
         </md-chip>
     </span>
-    <span v-if="custom_text">
+    <span v-if="custom_text && editing">
       <md-chip md-editable class="md-warn" @edit="use_custom">Use "{{custom_text}}"</md-chip>
     </span>
   </div>
@@ -34,7 +34,7 @@
     data() {
       return {
         custom_text: '',
-
+        editing: false,
         suggestions: [],
       }
     },
@@ -43,6 +43,7 @@
     },
     methods: {
       suggest() {
+        this.editing = true
         const matches = this.all_locations.filter(l => {
           return l.name
             .toLowerCase()
@@ -57,6 +58,7 @@
       use_custom() {
         const custom = this.custom_text
         this.suggestions = []
+        this.editing = false
         this.$emit('custom_use_custom', custom)
       }
     },
