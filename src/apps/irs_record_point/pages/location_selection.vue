@@ -38,6 +38,15 @@
       <md-input v-model="custom_location_selection"></md-input>
     </md-input-container>
 
+    <md-dialog-confirm
+        md-title="Are you sure you want to use a custom location?"
+        md-content="This place name does not fall within the sub-areas provided? If you proceed with a custom name, your data will be saved, but not appear in the dashboard"
+        md-ok-text="Use custom location"
+        md-cancel-text="Cancel"
+        @close="onClose"
+        ref="confirm_custom">
+    </md-dialog-confirm>
+
   </div>
 </template>
 
@@ -107,6 +116,9 @@
         }
       },
     },
+    watch: {
+      use_custom_location: 'confirm_use_custom_location'
+    },
     created() {
       this.prepare_fuse()
       this._watch_subscription = this.$watch('initial_location_selection', this.setup_initial_location_selection)
@@ -149,6 +161,18 @@
       },
       search(query) {
         this.search_query = query
+      },
+      confirm_use_custom_location() {
+        if (this.use_custom_location) {
+          this.$refs.confirm_custom.open();
+        } else {
+          this.$refs.confirm_custom.close();
+        }
+      },
+      onClose(response) {
+        if (response === 'cancel') {
+          this.use_custom_location = false
+        }
       }
     }
   }
