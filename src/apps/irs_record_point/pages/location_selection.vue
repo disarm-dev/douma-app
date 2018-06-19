@@ -36,6 +36,7 @@
     <custom-location
         v-if="use_custom_location"
         :all_locations="_all_locations"
+        :initial_custom_text="initial_custom_text"
         @custom_use_suggestion="custom_use_suggestion"
         @custom_use_custom="custom_use_custom"
     ></custom-location>
@@ -64,6 +65,7 @@
         _all_locations: [],
         use_custom_location: false,
         sub_area: null, // type: {id, name, category}
+        initial_custom_text: '',
       }
     },
     computed: {
@@ -117,8 +119,7 @@
           } else {
             // it is a custom text property, use text input
             this.use_custom_location = true
-            console.log('seem to be a custom location, already set')
-            // this.custom_location_selection = this.initial_location_selection.name
+            this.initial_custom_text = this.initial_location_selection.name
           }
 
         } else {

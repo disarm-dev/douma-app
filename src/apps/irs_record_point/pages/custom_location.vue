@@ -26,6 +26,9 @@
   export default {
     name: 'custom_location',
     props: {
+      initial_custom_text: {
+        type: String
+      },
       all_locations: {
         type: Array,
         required: true,
@@ -40,6 +43,12 @@
     },
     watch: {
       custom_text: 'suggest'
+    },
+    mounted() {
+      if (this.initial_custom_text) {
+        this.custom_text = this.initial_custom_text
+        this.$nextTick(() => this.editing = false)
+      }
     },
     methods: {
       suggest() {
