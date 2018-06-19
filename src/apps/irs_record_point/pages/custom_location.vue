@@ -8,13 +8,14 @@
     <span v-if="do_you_mean.length">
         <h4>Do you mean...</h4>
         <md-chip
+            class="md-primary"
             v-for="(suggestion, index) in do_you_mean" :key="index"
             md-editable
-            v-on:edit="accept_suggestion(suggestion)"
+            @edit="accept_suggestion(suggestion)"
         >
           {{suggestion.name}} ({{suggestion.category}})
         </md-chip>
-        <span>No, use {{custom_location_selection}}</span>
+        <md-chip md-editable class="md-warn" @edit="use_custom">No, use "{{_custom_location_selection}}"</md-chip>
       </span>
   </div>
 </template>
@@ -41,14 +42,19 @@
         },
         set(custom_location) {
           this._custom_location_selection = custom_location
-          this.do_you_mean = this.all_locations.filter(l => l.name.toLowerCase().startsWith(custom_location.toLowerCase())).slice(0, 10)
+          const matches = this.all_locations.filter(l => l.name.toLowerCase().startsWith(custom_location.toLowerCase())).slice(0, 10)
+          this.do_you_mean = custom_location.length ? matches : []
         }
       },
     },
     methods: {
       accept_suggestion(suggestion) {
-        console.log('use', suggestion)
         this.$emit('custom_use_suggestion', suggestion)
+      },
+      use_custom() {
+        const custom = this._custom_location_selection
+        this.do_you_mean = []
+        this.$emit('custom_use_custom', custom)
       }
     },
   }

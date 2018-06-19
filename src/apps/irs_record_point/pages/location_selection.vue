@@ -62,7 +62,7 @@
         _fuse: null,
         search_query: '',
         _all_locations: [],
-        use_custom_location: false,
+        use_custom_location: true,
         sub_area: null, // type: {id, name, category}
       }
     },
@@ -146,9 +146,9 @@
       },
       custom_use_custom(custom) {
         console.log('custom_use_custom', custom)
+        this.$emit('change', custom)
       },
       custom_use_suggestion(suggestion) {
-        console.log('custom_use_suggestion', suggestion)
         this.area = suggestion.category
         this.sub_area = suggestion
         this.use_custom_location = false;
