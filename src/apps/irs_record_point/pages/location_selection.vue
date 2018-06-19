@@ -36,6 +36,8 @@
     <custom-location
         v-if="use_custom_location"
         :all_locations="_all_locations"
+        @custom_use_suggestion="custom_use_suggestion"
+        @custom_use_custom="custom_use_custom"
     ></custom-location>
 
   </div>
@@ -61,7 +63,7 @@
         search_query: '',
         _all_locations: [],
         use_custom_location: false,
-        sub_area: null,
+        sub_area: null, // type: {id, name, category}
       }
     },
     computed: {
@@ -142,7 +144,15 @@
       search(query) {
         this.search_query = query
       },
-
+      custom_use_custom(custom) {
+        console.log('custom_use_custom', custom)
+      },
+      custom_use_suggestion(suggestion) {
+        console.log('custom_use_suggestion', suggestion)
+        this.area = suggestion.category
+        this.sub_area = suggestion
+        this.use_custom_location = false;
+      }
     }
   }
 </script>

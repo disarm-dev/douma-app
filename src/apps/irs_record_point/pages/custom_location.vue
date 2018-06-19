@@ -48,8 +48,7 @@
     methods: {
       accept_suggestion(suggestion) {
         console.log('use', suggestion)
-        // this.$emit('change', suggestion)
-        // this.use_custom_location = false;
+        this.$emit('custom_use_suggestion', suggestion)
       }
     },
   }
