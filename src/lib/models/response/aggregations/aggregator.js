@@ -29,6 +29,7 @@ export function aggregate_on({responses, targets, aggregation, previous_aggregat
       if (!isNumber(result)) return 0
       return result * 100
     } catch (e) {
+      console.log(e)
       return 0
     }
 
@@ -140,7 +141,7 @@ function other_filtered_targets({targets, bin}) {
 function filtered_targets({targets, responses, options, spatial_filter, bin}) {
   const spatial_aggregation_level = options.spatial_aggregation_level
   const planning_level_name = get_planning_level_name()// e.g villages
-  const location_selection_options = cache.instance_config.location_selection[planning_level_name]
+  const location_selection_options = cache.location_selection[planning_level_name]
 
   // Calculate
   let shrunk_targets = cloneDeep(targets)
