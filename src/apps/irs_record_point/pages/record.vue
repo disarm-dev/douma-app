@@ -98,11 +98,12 @@
 
     <!--LOCATION CARD (PAGE 2)-->
     <md-card v-show="current_view === 'location'" class='location'>
-      <md-card-content>
-        <md-card-header>
-          <div class="md-title">Location</div>
-        </md-card-header>
 
+      <md-card-header>
+        <div class="md-title">Location</div>
+      </md-card-header>
+
+      <md-card-content>
         <location_coords
           @change='on_location_change'
           :initial_location='response.location.coords'
@@ -113,13 +114,14 @@
           :initial_location_selection="response.location.selection"
         >
         </location_selection>
-
       </md-card-content>
+
       <md-card-actions>
         <md-button v-if="current_index !== 0" @click.native="go_to_previous_view()" class="md-raised">Previous
         </md-button>
         <md-button @click.native="go_to_next_view()" class="md-raised">Next</md-button>
       </md-card-actions>
+
     </md-card>
 
 

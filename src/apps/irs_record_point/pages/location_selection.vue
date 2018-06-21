@@ -1,45 +1,53 @@
 <template>
-  <multiselect
-      v-model="location_selection"
-      :options='suggestion_options'
-      :custom-label="custom_label"
-      track-by="id"
-      @select="set_location_selection"
+  <div>
+    <h3>* Set location</h3>
 
-      :internal-search="false"
-      :searchable="true"
-      @search-change="suggest"
-      :options-limit="10"
+    <multiselect
+        v-model="location_selection"
+        :options='suggestion_options'
+        :custom-label="custom_label"
+        track-by="id"
+        @select="set_location_selection"
+        placeholder="Search for location"
 
-      :taggable="true"
-      @tag="add_tag"
-      tag-position="bottom"
-      :multiple="true"
-      :limit="1"
-  >
-    <template slot="singleLabel" slot-scope="props">{{props.option.name}}</template>
+        :internal-search="false"
+        :searchable="true"
+        @search-change="suggest"
+        :options-limit="10"
+
+        :taggable="true"
+        @tag="add_tag"
+        tag-position="bottom"
+        :multiple="true"
+        :limit="1"
+    >
+      <template slot="singleLabel" slot-scope="props">{{props.option.name}}</template>
 
       <template slot="option" slot-scope="props">
         <span v-if="props.option.name">
-          {{props.option.name}} {{props.option.id}}
+          {{props.option.name}} ({{props.option.category}})
         </span>
         <span v-else>
-          Use <em>{{props.search}}</em> as a custom entry? This record will not appear on the dashboard.
+          Use <em>{{props.search}}</em> as a custom entry? Record will not appear on the dashboard.
         </span>
-    </template>
+      </template>
 
-    <template
-        slot="tag"
-        slot-scope="{option, search, remove}"
-    >
+      <template
+          slot="tag"
+          slot-scope="{option, search, remove}"
+      >
       <span class="tag" v-if="option.category">
         {{option.name}} ({{option.category}})
       </span>
-      <span class="tag warn" v-else>
-        <md-icon>warning</md-icon>Using <em>{{option.name}}</em> as a custom entry - this record will not appear on the dashboard
+      <span v-else>
+        <span  class="tag warn">
+          <em>{{option.name}}</em>
+          <md-icon>warning</md-icon>is a custom entry - this record will not appear on the dashboard
+        </span>
       </span>
-    </template>
-  </multiselect>
+      </template>
+    </multiselect>
+  </div>
 
 </template>
 
@@ -96,10 +104,20 @@
 
 <style scoped>
   .tag {
+    position: relative;
+    display: inline-block;
     padding: 4px 10px 4px 10px;
-    border-radius: 4px;
+    border-radius: 5px;
+    margin-right: 10px;
+    line-height: 1;
     background-color: #e1e5ff;
+    margin-bottom: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    max-width: 100%;
+    text-overflow: ellipsis;
   }
+
   .warn {
     background: #ffc55b;
   }
