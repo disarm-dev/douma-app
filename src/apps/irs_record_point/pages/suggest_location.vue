@@ -1,50 +1,51 @@
 <template>
-  <multiselect
-    v-model="selected_location"
-    :options='suggestion_options'
-    :custom-label="custom_label"
-    track-by="id"
-    @select="set_location_selection"
+  <div>
+    <multiselect
+        v-model="selected_location"
+        :options='suggestion_options'
+        :custom-label="custom_label"
+        track-by="id"
+        @select="set_location_selection"
 
-    :internal-search="false"
-    :searchable="true"
-    @search-change="suggest"
+        :internal-search="false"
+        :searchable="true"
+        @search-change="suggest"
 
-    :clear-on-select="false"
+        :clear-on-select="false"
 
-    :taggable="true"
-    @tag="add_tag"
-    tag-placeholder="Use this custom entry"
+        :taggable="true"
+        @tag="add_tag"
+        tag-placeholder="Use this custom entry"
     >
-  </multiselect>
+    </multiselect>
+    <md-chip v-if='selected_location && !selected_location.category'class="md-warn">Custom location</md-chip>
+  </div>
 </template>
 
 <script>
   import Multiselect from 'vue-multiselect'
+  import {get_record_location_selection} from 'lib/instance_data/spatial_hierarchy_helper'
 
   export default {
     name: 'suggest_location',
     components: {Multiselect},
     props: {
-      existing_location_selection: {
+      initial_location_selection: {
         type: Object,
         required: false
-      },
-      all_locations: {
-        type: Array,
-        required: true,
       },
     },
     data() {
       return {
+        all_locations: get_record_location_selection(),
         selected_location: null,
         suggestion_options: []
       }
     },
     mounted() {
       // Check if existing_location_selection already
-      if (this.existing_location_selection) {
-        this.selected_location = this.existing_location_selection
+      if (this.initial_location_selection) {
+        this.selected_location = this.initial_location_selection
         // Need to emit change event?
       }
     },
@@ -53,7 +54,7 @@
         return name + (category ? ` (${category})` : '')
       },
       suggest(query) {
-        // console.log('query', query)
+        console.log('query', query)
         this.suggestion_options = this.all_locations.filter(l => {
           return l.name
             .toLowerCase()
@@ -70,7 +71,7 @@
         // as long as it has at least a `name` property?
         console.log('set_location_selection', location_selection)
         // this.suggestion_options = [];
-        // this.$emit('set_location_selection', location_selection)
+        this.$emit('change', location_selection)
       },
     },
   }
