@@ -146,7 +146,7 @@
   import {Validator} from 'lib/models/response/validations/validations'
 
   import location_coords from './location_coords.vue'
-  import location_selection from './location_selection'
+  import location_selection from './location_selection2'
   import review from './validation.vue'
   import form_renderer from './form.vue'
   import {ResponseController} from 'lib/models/response/controller'

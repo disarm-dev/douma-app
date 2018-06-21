@@ -31,8 +31,6 @@
       <span slot="noResult">Oops! No elements found. Consider changing the search query.</span>
     </multiselect>
 
-    <md-checkbox v-model="use_custom_location">Enter custom location (location not on list)</md-checkbox>
-
     <custom-location
         v-if="use_custom_location"
         :all_locations="_all_locations"
@@ -60,7 +58,7 @@
   // and should be one of the `location_selection` options, or if
   // custom text then just {name: string}
   //
-  
+
   export default {
     name: 'location_selection',
     props: {
