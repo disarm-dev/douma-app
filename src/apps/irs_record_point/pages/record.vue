@@ -147,7 +147,7 @@
 
   import location_coords from './location_coords.vue'
   import location_selection from './suggest_location'
-  
+
   import review from './validation.vue'
   import form_renderer from './form.vue'
   import {ResponseController} from 'lib/models/response/controller'
@@ -161,7 +161,8 @@
     data() {
       return {
         // User data
-        not_response_response: null, // This is the only response which exists
+        not_response_response: null, // This is the only response which exists,
+                                     // and is set async _after_ component created
 
         // Support
         _validator: null,

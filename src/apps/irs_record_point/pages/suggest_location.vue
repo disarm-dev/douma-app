@@ -1,7 +1,7 @@
 <template>
   <div>
     <multiselect
-        v-model="selected_location"
+        v-model="location_selection"
         :options='suggestion_options'
         :custom-label="custom_label"
         track-by="id"
@@ -10,6 +10,7 @@
         :internal-search="false"
         :searchable="true"
         @search-change="suggest"
+        :options-limit="10"
 
         :clear-on-select="false"
 
@@ -18,7 +19,9 @@
         tag-placeholder="Use this custom entry"
     >
     </multiselect>
-    <md-chip v-if='selected_location && !selected_location.category'class="md-warn">Custom location</md-chip>
+
+    <md-chip v-if='location_selection && !location_selection.category' class="md-warn">Warning - custom location</md-chip>
+
   </div>
 </template>
 
@@ -32,21 +35,20 @@
     props: {
       initial_location_selection: {
         type: Object,
-        required: false
+        required: false,
       },
     },
     data() {
       return {
         all_locations: get_record_location_selection(),
-        selected_location: null,
+        location_selection: null,
         suggestion_options: []
       }
     },
-    mounted() {
-      // Check if existing_location_selection already
-      if (this.initial_location_selection) {
-        this.selected_location = this.initial_location_selection
-        // Need to emit change event?
+    watch: {
+      initial_location_selection: function() {
+        console.log('this.initial_location_selection changed', this.initial_location_selection)
+        this.location_selection = this.initial_location_selection
       }
     },
     methods: {
@@ -54,7 +56,6 @@
         return name + (category ? ` (${category})` : '')
       },
       suggest(query) {
-        console.log('query', query)
         this.suggestion_options = this.all_locations.filter(l => {
           return l.name
             .toLowerCase()
@@ -63,14 +64,11 @@
       },
       add_tag(tag) {
         const custom_location = {name: tag}
-        this.suggestion_options.push(custom_location)
-        this.selected_location = custom_location
+        // this.suggestion_options.push(custom_location)
+        this.location_selection = custom_location
+        this.set_location_selection(this.location_selection)
       },
       set_location_selection(location_selection) {
-        // Could be custom or not - does it matter,
-        // as long as it has at least a `name` property?
-        console.log('set_location_selection', location_selection)
-        // this.suggestion_options = [];
         this.$emit('change', location_selection)
       },
     },
