@@ -1,75 +1,77 @@
 <template>
-  <div>
-    <md-input-container>
-      <label>Custom location</label>
-      <md-input v-model="custom_text"></md-input>
-    </md-input-container>
+  <multiselect
+    v-model="selected_location"
+    :options='suggestion_options'
+    :custom-label="custom_label"
+    track-by="id"
+    @select="set_location_selection"
 
-    <span v-if="suggestions.length">
-      <h4>Do you mean...</h4>
-      <md-chip
-          class="md-primary"
-          v-for="(suggestion, index) in suggestions" :key="index"
-          md-editable
-          @edit="accept_suggestion(suggestion)"
-      >
-          {{suggestion.name}} ({{suggestion.category}})
-        </md-chip>
-    </span>
-    <span v-if="custom_text && editing">
-      <md-chip md-editable class="md-warn" @edit="use_custom">Use "{{custom_text}}"</md-chip>
-    </span>
-  </div>
+    :internal-search="false"
+    :searchable="true"
+    @search-change="suggest"
+
+    :clear-on-select="false"
+
+    :taggable="true"
+    @tag="add_tag"
+    tag-placeholder="Use this custom entry"
+    >
+  </multiselect>
 </template>
 
 <script>
+  import Multiselect from 'vue-multiselect'
+
   export default {
     name: 'suggest_location',
+    components: {Multiselect},
     props: {
-      initial_text: {
-        type: String
+      existing_location_selection: {
+        type: Object,
+        required: false
       },
       all_locations: {
         type: Array,
         required: true,
-      }
+      },
     },
     data() {
       return {
-        custom_text: '',
-        editing: false,
-        suggestions: [],
+        selected_location: null,
+        suggestion_options: []
       }
     },
-    watch: {
-      custom_text: 'suggest'
-    },
     mounted() {
-      if (this.initial_text) {
-        this.custom_text = this.initial_text
-        this.$nextTick(() => this.editing = false)
+      // Check if existing_location_selection already
+      if (this.existing_location_selection) {
+        this.selected_location = this.existing_location_selection
+        // Need to emit change event?
       }
     },
     methods: {
-      suggest() {
-        this.editing = true
-        const matches = this.all_locations.filter(l => {
+      custom_label({name, category}) {
+        return name + (category ? ` (${category})` : '')
+      },
+      suggest(query) {
+        // console.log('query', query)
+        this.suggestion_options = this.all_locations.filter(l => {
           return l.name
             .toLowerCase()
-            .startsWith(this.custom_text.toLowerCase())
-        }).slice(0, 10)
-
-        this.suggestions = this.custom_text.length ? matches : []
+            .startsWith(query.toLowerCase())
+        })
       },
-      accept_suggestion(suggestion) {
-        this.$emit('custom_use_suggestion', suggestion)
+      add_tag(tag) {
+        const custom_location = {name: tag}
+        this.suggestion_options.push(custom_location)
+        this.selected_location = custom_location
       },
-      use_custom() {
-        const custom = this.custom_text
-        this.suggestions = []
-        this.editing = false
-        this.$emit('custom_use_custom', custom)
-      }
+      set_location_selection(location_selection) {
+        // Could be custom or not - does it matter,
+        // as long as it has at least a `name` property?
+        console.log('set_location_selection', location_selection)
+        // this.suggestion_options = [];
+        // this.$emit('set_location_selection', location_selection)
+      },
     },
   }
 </script>

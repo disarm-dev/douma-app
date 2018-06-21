@@ -2,10 +2,10 @@
   <div>
 
     <!-- Already have location set, might want to edit-->
-    <template v-if="initial_location_selection">
+    <template v-if="location_selection">
       <h3>Existing location</h3>
-      {{initial_location_selection.name}}
-      <span v-if="initial_location_selection.category">({{initial_location_selection.category}})</span>
+      {{location_selection.name}}
+      <span v-if="location_selection.category">({{location_selection.category}})</span>
       <span v-else class="warn">(Custom entry - this record will not appear in the dashboard results)</span>
       <md-button>change</md-button>
     </template>
@@ -13,11 +13,11 @@
     <!-- Do not already have location set-->
     <template v-else>
       <h3>* Search for Location</h3>
+      <md-chip v-if="location_selection && !location_selection.category">Warning - setting custom location</md-chip>
       <suggest-location
         :all_locations="all_locations"
-        :initial_text="initial_text"
-        @use_suggestion="use_suggestion"
-        @use_custom="use_custom"
+        :existing_location_selection="location_selection"
+        @set_location_selection="set_location_selection"
       ></suggest-location>
     </template>
   </div>
@@ -39,29 +39,27 @@
     name: 'location_selection_2',
     components: {SuggestLocation},
     props: {
-      initial_location_selection: Object,
+      location_selection: Object,
       default: function() {
         return { name: 'None',}
       }
     },
     data() {
       return {
-        all_locations: get_record_location_selection()
+        all_locations: get_record_location_selection(),
       }
     },
     computed: {
       initial_text() {
         if (!this.initial_location_selection) return ''
         return this.initial_location_selection.name
-      }
+      },
     },
     methods: {
-      use_suggestion(suggestion) {
-        console.log('suggestion', suggestion)
+      set_location_selection(location_selection) {
+        this.location_selection = location_selection
+        console.log('set_location_selection', location_selection)
       },
-      use_custom(custom_text) {
-        console.log('custom_text', custom_text)
-      }
     }
   }
 </script>
