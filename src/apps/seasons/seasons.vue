@@ -91,7 +91,7 @@
           const res = await request_handler({
             method: 'post',
             data: {
-              local_instance_config
+              config_data: local_instance_config
             },
             url_suffix: '/config'
           })
