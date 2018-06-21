@@ -24,9 +24,9 @@
 
 <script>
   export default {
-    name: 'custom_location',
+    name: 'suggest_location',
     props: {
-      initial_custom_text: {
+      initial_text: {
         type: String
       },
       all_locations: {
@@ -45,8 +45,8 @@
       custom_text: 'suggest'
     },
     mounted() {
-      if (this.initial_custom_text) {
-        this.custom_text = this.initial_custom_text
+      if (this.initial_text) {
+        this.custom_text = this.initial_text
         this.$nextTick(() => this.editing = false)
       }
     },

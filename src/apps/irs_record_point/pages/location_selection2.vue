@@ -13,12 +13,21 @@
     <!-- Do not already have location set-->
     <template v-else>
       <h3>* Search for Location</h3>
+      <suggest-location
+        :all_locations="all_locations"
+        :initial_text="initial_text"
+        @use_suggestion="use_suggestion"
+        @use_custom="use_custom"
+      ></suggest-location>
     </template>
   </div>
 
 </template>
 
 <script>
+  import SuggestLocation from './suggest_location'
+  import {get_record_location_selection} from 'lib/instance_data/spatial_hierarchy_helper'
+
   //
   // Component emits: `change` with an object which gets sets
   // on `Record.vue` as `this.response.location.selection`.
@@ -27,11 +36,33 @@
   // custom text then just {name: string}
   //
   export default {
-    name: 'location_selection2.vue',
+    name: 'location_selection_2',
+    components: {SuggestLocation},
     props: {
       initial_location_selection: Object,
-      required: false,
+      default: function() {
+        return { name: 'None',}
+      }
     },
+    data() {
+      return {
+        all_locations: get_record_location_selection()
+      }
+    },
+    computed: {
+      initial_text() {
+        if (!this.initial_location_selection) return ''
+        return this.initial_location_selection.name
+      }
+    },
+    methods: {
+      use_suggestion(suggestion) {
+        console.log('suggestion', suggestion)
+      },
+      use_custom(custom_text) {
+        console.log('custom_text', custom_text)
+      }
+    }
   }
 </script>
 

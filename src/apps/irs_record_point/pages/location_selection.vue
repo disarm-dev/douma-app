@@ -47,7 +47,7 @@
   import Multiselect from 'vue-multiselect'
   import {get_record_location_selection} from 'lib/instance_data/spatial_hierarchy_helper'
   import {has, uniq} from 'lodash'
-  import CustomLocation from './custom_location'
+  import CustomLocation from './suggest_location'
 
   import cache from 'config/cache'
 
