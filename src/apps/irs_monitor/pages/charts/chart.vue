@@ -55,6 +55,7 @@
     methods: {
       get_chart_data() {
         if (!this.has_responses) {
+          if (this._chart) Plotly.purge(this._chart)
           return false
         }
 
