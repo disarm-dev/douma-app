@@ -1,28 +1,31 @@
 <template>
-  <div>
-    <multiselect
-        v-model="location_selection"
-        :options='suggestion_options'
-        :custom-label="custom_label"
-        track-by="id"
-        @select="set_location_selection"
+  <multiselect
+      v-model="location_selection"
+      :options='suggestion_options'
+      :custom-label="custom_label"
+      track-by="id"
+      @select="set_location_selection"
 
-        :internal-search="false"
-        :searchable="true"
-        @search-change="suggest"
-        :options-limit="10"
+      :internal-search="false"
+      :searchable="true"
+      @search-change="suggest"
+      :options-limit="10"
 
-        :clear-on-select="false"
+      :taggable="true"
+      @tag="add_tag"
+      tag-placeholder="Custom location"
+      tag-position="bottom"
+      :multiple="true"
+      :limit="1"
+  >
+    <!--<template-->
+        <!--slot="tag"-->
+        <!--slot-scope="{option, search, remove}"-->
+    <!--&gt;-->
+      <!--{{option.name}} {{option.category ? `${option.category}` : 'warning'}}-->
+    <!--</template>-->
+  </multiselect>
 
-        :taggable="true"
-        @tag="add_tag"
-        tag-placeholder="Use this custom entry"
-    >
-    </multiselect>
-
-    <md-chip v-if='location_selection && !location_selection.category' class="md-warn">Warning - custom location</md-chip>
-
-  </div>
 </template>
 
 <script>
@@ -46,7 +49,7 @@
       }
     },
     watch: {
-      initial_location_selection: function() {
+      initial_location_selection: function () {
         console.log('this.initial_location_selection changed', this.initial_location_selection)
         this.location_selection = this.initial_location_selection
       }
