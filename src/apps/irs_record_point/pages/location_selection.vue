@@ -53,9 +53,20 @@
 
   import cache from 'config/cache'
 
+  //
+  // Component emits: `change` with an object which gets sets
+  // on `Record.vue` as `this.response.location.selection`.
+  // Object is of type {id: string, name: string, category: string}
+  // and should be one of the `location_selection` options, or if
+  // custom text then just {name: string}
+  //
+  
   export default {
     name: 'location_selection',
-    props: ['initial_location_selection'],
+    props: {
+      initial_location_selection: Object,
+      required: false,
+    },
     components: {Multiselect, CustomLocation},
     data() {
       return {
