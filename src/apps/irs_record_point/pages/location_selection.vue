@@ -20,11 +20,13 @@
         tag-position="bottom"
         :multiple="true"
         :limit="1"
+
+        @remove="remove"
     >
       <template slot="singleLabel" slot-scope="props">{{props.option.name}}</template>
 
       <template slot="option" slot-scope="props">
-        <span v-if="props.option.name">
+        <span v-if="props.option.category">
           {{props.option.name}} ({{props.option.category}})
         </span>
         <span v-else>
@@ -39,12 +41,13 @@
       <span class="tag" v-if="option.category">
         {{option.name}} ({{option.category}})
       </span>
-      <span v-else>
+      <span v-else-if="option.name">
         <span  class="tag warn">
           <em>{{option.name}}</em>
           <md-icon>warning</md-icon>is a custom entry - this record will not appear on the dashboard
         </span>
       </span>
+
       </template>
     </multiselect>
   </div>
@@ -98,6 +101,9 @@
       set_location_selection(location_selection) {
         this.$emit('change', location_selection)
       },
+      remove() {
+        this.$emit('change', {})
+      }
     },
   }
 </script>
