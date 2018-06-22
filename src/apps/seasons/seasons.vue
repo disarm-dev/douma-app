@@ -84,8 +84,6 @@
         this.save_config(this.$store.state.instance_config)
       },
       async save_config() {
-        await save_local_config(this.$store.state.instance_config)
-
         try {
           const res = await request_handler({
             method: 'post',
@@ -94,6 +92,7 @@
             },
             url_suffix: '/config'
           })
+          await save_local_config(this.$store.state.instance_config)
           console.log('res', res);
         } catch (e) {
           this.error = e.message
