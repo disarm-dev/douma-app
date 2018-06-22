@@ -5,24 +5,34 @@
 
         <label>Enter new season start date</label>
         <div class="input-container">
-          <masked-input class='masked-input' v-model="input_val" mask="1111-11-11" placeholder="YYYY-MM-DD"/>
+          <masked-input
+              class='masked-input'
+              v-model="input_val"
+              mask="1111-11-11"
+              placeholder="YYYY-MM-DD"
+              @keyup.native.enter="add_season"
+          />
 
-          <md-button class="md-raised md-primary" :disabled='network_active || invalid_date || !input_ready' id="add_new_season" @click="add_season">
-            {{add_button_text}}
+          <md-button class="md-raised md-primary"
+                     :disabled='network_active || invalid_date || already_exists || !input_ready' id="add_new_season"
+                     @click="add_season">
+            {{button_text__add}}
           </md-button>
 
-          <!--Errors-->
-          <div style="color: red;" v-if="input_ready && invalid_date">{{this.input_val}} is not a valid date</div>
-          <div style="color: green;" v-if="input_ready && !invalid_date">{{this.input_val}} is a valid date</div>
-          <div style="color: red;" v-if="error">{{error}}</div>
+          <!--Success and Errors-->
+          <div>
+            <span style="color: red;" v-if="input_ready && invalid_date">Invalid date</span>
+            <span style="color: red;" v-if="input_ready && already_exists">Date already added</span>
+            <span style="color: red;" v-if="error">{{error}}</span>
+          </div>
         </div>
 
-
         <md-list>
-          <md-list-item v-for="(season_start_date, index)  in sort_season_start_dates" :key="season_start_date">
+          <md-list-item v-for="(season_start_date, index)  in sorted_season_start_dates" :key="season_start_date">
             {{season_start_date}}
             <span>
-              <md-button @click="remove_season(index)" class="md-icon-button md-raised md-warn">
+              <md-button @click="remove_season(index)" class="md-icon-button md-raised md-warn"
+                         :disabled="network_active">
                 <md-icon>delete</md-icon>
               </md-button>
             </span>
@@ -36,117 +46,110 @@
 <script>
   import MaskedInput from 'vue-masked-input'
   import moment from 'moment-mini'
-  window.m = moment
+  import {cloneDeep} from 'lodash'
 
   import {custom_validations} from '@locational/application-registry-validation'
   import {request_handler} from 'lib/remote/request-handler'
-  import {retrieve_local_config, save_local_config} from 'lib/models/instance_config/model'
+  import {save_local_config} from 'lib/models/instance_config/model'
 
   export default {
     name: 'seasons',
     components: {MaskedInput},
     data() {
       return {
-        cloned_season_start_dates: [],
         input_val: '',
+        local_season_start_dates: [],
 
         error: '',
-        network_active: false,
+        network_active: false, // TODO: Could replace with $loading
       }
     },
     computed: {
-      add_button_text() {
+      button_text__add() {
         return this.network_active ? 'saving...' : 'add'
       },
-      sort_season_start_dates() {
-        return this.cloned_season_start_dates.sort((a, b) => a > b)
+      sorted_season_start_dates() {
+        return this.local_season_start_dates.sort((a, b) => a > b)
       },
       input_ready() {
         return /\d{4}\-\d{2}\-\d{2}/.test(this.input_val)
       },
       invalid_date() {
         return !moment(this.input_val).isValid()
+      },
+      already_exists() {
+        return this.local_season_start_dates.includes(this.input_val)
+      }
+    },
+    watch: {
+      input_val: function () {
+        this.error = ''
       }
     },
     created() {
-      this.cloned_season_start_dates = [...this.$store.state.instance_config.applets.irs_monitor.season_start_dates]
+      this.create_local_season_start_dates()
     },
     methods: {
+      create_local_season_start_dates() {
+        this.local_season_start_dates = [...this.$store.state.instance_config.applets.irs_monitor.season_start_dates]
+      },
+      reset_ui() {
+        this.input_val = ''
+        this.network_active = false
+      },
       add_season() {
         this.error = ''
-        this.network_active = true
-
-        // Do not add if already exists
-        if (this.cloned_season_start_dates.includes(this.input_val)) {
-          this.error = 'That season start date has already been added'
-          this.network_active = false
-          return
-        }
-
-        const new_season_start_dates = [...this.cloned_season_start_dates, this.input_val]
+        const dates_to_save = [...this.local_season_start_dates, this.input_val]
 
         // Check if makes a valid configuration
-        if (this.validate_seasons(new_season_start_dates) ) {
-          this.cloned_season_start_dates.push(this.input_val)
-          this.input_val = ''
-          this.save_config(this.input_val)
+        if (this.validate_seasons(dates_to_save)) {
+          this.save_config(dates_to_save)
+        } else {
+          this.error = 'Selected date would create an invalid application configuration. Date not saved'
         }
       },
       remove_season(index) {
-        this.error = ''
-        this.network_active = true
+        const dates_to_save = [...this.local_season_start_dates]
 
-        this.cloned_season_start_dates.splice(index, 1)
-        this.save_config(this.cloned_season_start_dates)
+        dates_to_save.splice(index, 1)
+        this.save_config(dates_to_save)
       },
       validate_seasons(season_start_dates) {
-        const configuration = {
-          applets: {
-            irs_monitor: {
-              season_start_dates
-            }
-          }
-        }
+        const test_configuration = {applets: {irs_monitor: {season_start_dates}}}
 
         try {
-          custom_validations[5](configuration) // TODO: Horrible!!!! But works for now.
+          custom_validations[5](test_configuration) // TODO: Horrible!!!! But works for now.
           return true
         } catch (e) {
           this.error = e.message
           return false
         }
       },
-      push_date(){
-        this.error = ""
+      async save_config(new_season_start_dates) {
+        this.network_active = true
 
-        if (this.$store.state.instance_config.applets.irs_monitor.season_start_dates.includes(this.new_season_start_date)) {
-          this.error = "That season start date has already been added"
-          return 
-        }
-
-        const season_start_dates = [...this.$store.state.instance_config.applets.irs_monitor.season_start_dates, this.new_season_start_date]
-        if (this.validate_seasons(season_start_dates)) {
-          this.$store.state.instance_config.applets.irs_monitor.season_start_dates.push(this.new_season_start_date)
-          this.new_season_start_date = ""
-          this.save_config(this.$store.state.instance_config)
-        }
-      },
-      remove_season(index){
-        this.$store.state.instance_config.applets.irs_monitor.season_start_dates.splice(index, 1)
-        this.save_config(this.$store.state.instance_config)
-      },
-      async save_config() {
         try {
+          // Create clone of instance_config
+          const cloned_config = cloneDeep(this.$store.state.instance_config)
+          cloned_config.applets.irs_monitor.season_start_dates = new_season_start_dates
+
           const res = await request_handler({
             method: 'post',
             data: {
-              config_data: this.$store.state.instance_config
+              config_data: cloned_config
             },
             url_suffix: '/config'
           })
-          await save_local_config(this.$store.state.instance_config)
+
+          await save_local_config(cloned_config)
+          this.$store.state.instance_config = cloned_config
+          this.create_local_season_start_dates()
+
+          this.reset_ui()
         } catch (e) {
+          this.network_active = false
           this.error = e.message
+          this.create_local_season_start_dates()
         }
       }
     }
@@ -157,9 +160,11 @@
   .input-container {
     display: flex;
   }
+
   .input-child {
     flex-grow: 1;
   }
+
   .masked-input {
     background: #f5f5f5;
     border: 0;
@@ -168,6 +173,7 @@
     width: 120px;
     display: block;
   }
+
   .masked-input:focus {
     border: 0;
     outline: 1px solid gainsboro;
