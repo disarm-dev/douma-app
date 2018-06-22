@@ -31,7 +31,7 @@
 <script>
   import {custom_validations} from '@locational/application-registry-validation'
   import {request_handler} from 'lib/remote/request-handler'
-  import {retrieve_local_config} from 'lib/models/instance_config/model'
+  import {retrieve_local_config, save_local_config} from 'lib/models/instance_config/model'
 
   export default {
     name: "seasons",
@@ -84,14 +84,13 @@
         this.save_config(this.$store.state.instance_config)
       },
       async save_config() {
-        const instance_slug = this.$store.state.instance_config.instance.slug
-        const local_instance_config = await retrieve_local_config(instance_slug)
+        await save_local_config(this.$store.state.instance_config)
 
         try {
           const res = await request_handler({
             method: 'post',
             data: {
-              config_data: local_instance_config
+              config_data: this.$store.state.instance_config
             },
             url_suffix: '/config'
           })
