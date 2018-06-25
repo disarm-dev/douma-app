@@ -8,7 +8,8 @@
           <masked-input
               class='masked-input'
               v-model="input_val"
-              mask="1111-11-11"
+              mask="####-##-##"
+              :masked="true"
               placeholder="YYYY-MM-DD"
               @keyup.native.enter="add_season"
           />
@@ -44,7 +45,7 @@
 </template>
 
 <script>
-  import MaskedInput from 'vue-masked-input'
+  import {TheMask as MaskedInput}from 'vue-the-mask'
   import moment from 'moment-mini'
   import {cloneDeep} from 'lodash'
 
@@ -75,7 +76,7 @@
         return /\d{4}\-\d{2}\-\d{2}/.test(this.input_val)
       },
       invalid_date() {
-        return !moment(this.input_val).isValid()
+        return this.input_ready && !moment(this.input_val).isValid()
       },
       already_exists() {
         return this.local_season_start_dates.includes(this.input_val)
