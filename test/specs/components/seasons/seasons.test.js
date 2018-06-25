@@ -137,7 +137,7 @@ test('renders an add button', t => {
 })
 
 // UI Interactions
-test('clicking add new season should call push_date', t => {
+test('clicking add new season should call add_season', t => {
   const mock_store = {
     state: {
       instance_config: {
@@ -157,7 +157,7 @@ test('clicking add new season should call push_date', t => {
       $store: mock_store
     },
     methods: {
-      push_date: spy
+      add_season: spy
     }
   })
 
