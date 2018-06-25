@@ -21,7 +21,7 @@
           </md-button>
 
           <!--Success and Errors-->
-          <div>
+          <div class="errors">
             <span style="color: red;" v-if="input_ready && invalid_date">Invalid date</span>
             <span style="color: red;" v-if="input_ready && already_exists">Date already added</span>
             <span style="color: red;" v-if="error">{{error}}</span>

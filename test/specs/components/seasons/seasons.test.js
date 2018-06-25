@@ -108,9 +108,9 @@ test('shows an error if error', t => {
       $store: mock_store
     }
   })
-  t.throws(() => wrapper.findAll('.md-error').at(0).exists())
+  t.throws(() => wrapper.findAll('.errors span').at(0).exists())
   wrapper.setData({error: 'There is an error'})
-  t.true(wrapper.findAll('.md-error').at(0).exists())
+  t.true(wrapper.findAll('.errors span').exists())
 })
 
 
