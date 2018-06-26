@@ -86,6 +86,10 @@ const get_record_location_selection = () => {
   return instance_config_cache.location_selection[record_location_selection_level_name]
 }
 
+const get_location_selection = () => {
+  return instance_config_cache.location_selection
+}
+
 
 
 /**
@@ -135,6 +139,7 @@ export {
   get_all_spatial_hierarchy_levels,
   get_all_spatial_hierarchy_level_names,
   get_record_location_selection,
+  get_location_selection,
 
   get_next_level_up_from_planning_level,
   get_next_level_down_from_planning_level,

@@ -52,6 +52,7 @@
   import {custom_validations} from '@locational/application-registry-validation'
   import {request_handler} from 'lib/remote/request-handler'
   import {save_local_config} from 'lib/models/instance_config/model'
+  import {get_location_selection} from 'lib/instance_data/spatial_hierarchy_helper'
 
   export default {
     name: 'seasons',
@@ -132,6 +133,10 @@
         try {
           // Create clone of instance_config
           const cloned_config = cloneDeep(this.$store.state.instance_config)
+          // add location_selection
+          const location_selection = get_location_selection()
+          debugger
+          cloned_config.location_selection = location_selection
           cloned_config.applets.irs_monitor.season_start_dates = new_season_start_dates
 
           const res = await request_handler({
