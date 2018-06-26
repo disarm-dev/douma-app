@@ -20,6 +20,7 @@
     <span class='version'>
       Version: {{commit_hash}} <br/>
       {{userAgent}}
+      {{which_config}}
     </span>
 
 
@@ -37,7 +38,7 @@
 
 <script>
   import axios from 'axios'
-  import {mapGetters} from 'vuex'
+  import {mapGetters, mapState} from 'vuex'
   import {get} from 'lodash';
 
   import BUILD_TIME from 'config/build-time'
@@ -57,11 +58,18 @@
       ...mapGetters({
         decorated_applets: 'meta/decorated_applets'
       }),
+      ...mapState({
+        slug: state => state.instance_config.instance.slug,
+        config_version: state => state.instance_config.config_version
+      }),
       commit_hash() {
         return BUILD_TIME.VERSION_COMMIT_HASH_SHORT
       },
       user() {
         return this.$store.state.meta.user
+      },
+      which_config() {
+        return `${this.slug}@${this.config_version}`
       }
     },
     methods: {
