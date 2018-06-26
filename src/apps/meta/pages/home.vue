@@ -13,11 +13,15 @@
       </md-card-content>
     </md-card>
 
-    <!--Version commit hash-->
-    <span class='version'>Version: {{commit_hash}}</span>
-
     <!--Licenses-->
     <a class="licenses_link " @click="openLicenseDialog()">Licenses</a>
+
+    <!--Version commit hash-->
+    <span class='version'>
+      Version: {{commit_hash}} <br/>
+      {{userAgent}}
+    </span>
+
 
     <md-dialog-alert
         class="licenses_dialog"
@@ -34,6 +38,7 @@
 <script>
   import axios from 'axios'
   import {mapGetters} from 'vuex'
+  import {get} from 'lodash';
 
   import BUILD_TIME from 'config/build-time'
 
@@ -43,8 +48,9 @@
       return {
         license_text: {
           title: 'Licenses',
-          content: 'Loading license text...'
-        }
+          content: 'Loading license text...',
+        },
+        userAgent: get(navigator, 'userAgent', 'unknown'),
       }
     },
     computed: {
