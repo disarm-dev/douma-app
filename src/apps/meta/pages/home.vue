@@ -17,9 +17,12 @@
     <a class="licenses_link " @click="openLicenseDialog()">Licenses</a>
 
     <!--Version commit hash-->
-    <span class='version'>
+    <span class='version' style='cursor: pointer;' @click="toggle_debug_info">
       Version: {{commit_hash}} <br/>
-      {{userAgent}}
+      <span v-if="debug_info_visible">
+        <p>Config: {{which_config}}</p>
+        <p>UserAgent: {{userAgent}}</p>
+      </span>
     </span>
 
 
@@ -37,7 +40,7 @@
 
 <script>
   import axios from 'axios'
-  import {mapGetters} from 'vuex'
+  import {mapGetters, mapState} from 'vuex'
   import {get} from 'lodash';
 
   import BUILD_TIME from 'config/build-time'
@@ -51,17 +54,25 @@
           content: 'Loading license text...',
         },
         userAgent: get(navigator, 'userAgent', 'unknown'),
+        debug_info_visible: false,
       }
     },
     computed: {
       ...mapGetters({
         decorated_applets: 'meta/decorated_applets'
       }),
+      ...mapState({
+        slug: state => state.instance_config.instance.slug,
+        config_version: state => state.instance_config.config_version
+      }),
       commit_hash() {
         return BUILD_TIME.VERSION_COMMIT_HASH_SHORT
       },
       user() {
         return this.$store.state.meta.user
+      },
+      which_config() {
+        return `${this.slug}@${this.config_version}`
       }
     },
     methods: {
@@ -72,6 +83,9 @@
       async load_license_text() {
         const response = await axios.get('/static/3rdpartylicenses.txt')
         this.license_text.content = response.data
+      },
+      toggle_debug_info() {
+        this.debug_info_visible = !this.debug_info_visible;
       }
     }
   }
