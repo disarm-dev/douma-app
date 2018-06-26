@@ -145,11 +145,8 @@
             url_suffix: '/seasons'
           })
 
-          await save_local_config(cloned_config)
-          this.$store.state.instance_config = cloned_config
-          this.create_local_season_start_dates()
-
-          this.reset_ui()
+          //TODO Fetch Updated Config and
+          //this.reset_ui()
         } catch (e) {
           this.network_active = false
           this.error = e.message
