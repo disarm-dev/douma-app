@@ -139,7 +139,7 @@
             method: 'put',
             data: {
               seasons_start_dates: this.sort_season_start_dates(new_season_start_dates),
-              slug: this.slug,
+              config_id: this.slug,
               config_version: this.config_version
             },
             url_suffix: '/seasons'
