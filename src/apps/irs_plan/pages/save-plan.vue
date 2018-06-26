@@ -48,7 +48,7 @@
       'show': {
         type: Boolean
       },
-      'saving': Boolean
+      'network_active': Boolean
     },
     name: "save-plan",
     watch: {
