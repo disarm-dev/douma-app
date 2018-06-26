@@ -101,6 +101,7 @@
     "vue-shortkey": "^2.1.8",
     "vue-slider-component": "^2.2.7",
     "vue-tables-2": "^0.6.23",
+    "vue-the-mask": "^0.11.1",
     "vue-virtual-scroll-list": "^1.1.2",
     "vuejs-datepicker": "^1.1.5",
     "vuex": "^2.3.1",

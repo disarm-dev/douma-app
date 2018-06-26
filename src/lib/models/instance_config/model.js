@@ -34,3 +34,7 @@ async function retrieve_and_store_remote_config(config_id) {
     return null
   }
 }
+
+export async function save_local_config(instance_config) {
+  await local_config_db.update(instance_config)
+}

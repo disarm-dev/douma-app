@@ -1,6 +1,5 @@
 import test from 'ava'
-import {shallow, createLocalVue} from 'vue-test-utils'
-import Vuex from 'vuex'
+import {shallow} from 'vue-test-utils'
 import sinon from 'sinon'
 import Seasons from 'apps/seasons/seasons.vue'
 
@@ -67,16 +66,16 @@ test('renders a remove button for each list item', t => {
       instance_config: {
         applets: {
           irs_monitor: {
-            season_start_dates: ['2018-01-01','2018-02-01','2018-03-01']
+            season_start_dates: ['2018-01-01', '2018-02-01', '2018-03-01']
           }
         }
       }
     }
   }
 
-  const wrapper = shallow(Seasons,{
-    mocks:{
-      $store:mock_store
+  const wrapper = shallow(Seasons, {
+    mocks: {
+      $store: mock_store
     }
   })
 
@@ -91,7 +90,7 @@ test('renders a remove button for each list item', t => {
 
 })
 
-test('shows an error if error',t => {
+test('shows an error if error', t => {
   const mock_store = {
     state: {
       instance_config: {
@@ -104,14 +103,14 @@ test('shows an error if error',t => {
     }
   }
 
-  const wrapper = shallow(Seasons,{
-    mocks:{
-      $store:mock_store
+  const wrapper = shallow(Seasons, {
+    mocks: {
+      $store: mock_store
     }
   })
-  t.throws(()=>wrapper.findAll('.md-error').at(0).exists())
-  wrapper.setData({ error: 'There is an error' })
-  t.true(wrapper.findAll('.md-error').at(0).exists())
+  t.throws(() => wrapper.findAll('.errors span').at(0).exists())
+  wrapper.setData({error: 'There is an error'})
+  t.true(wrapper.findAll('.errors span').exists())
 })
 
 
@@ -128,9 +127,9 @@ test('renders an add button', t => {
     }
   }
 
-  const wrapper = shallow(Seasons,{
-    mocks:{
-      $store:mock_store
+  const wrapper = shallow(Seasons, {
+    mocks: {
+      $store: mock_store
     }
   })
   let button = wrapper.findAll('#add_new_season');
@@ -138,7 +137,7 @@ test('renders an add button', t => {
 })
 
 // UI Interactions
-test('clicking add new season should call push_date', t => {
+test('clicking add new season should call add_season', t => {
   const mock_store = {
     state: {
       instance_config: {
@@ -158,7 +157,7 @@ test('clicking add new season should call push_date', t => {
       $store: mock_store
     },
     methods: {
-      push_date: spy
+      add_season: spy
     }
   })
 
@@ -201,7 +200,6 @@ test('clicking remove season should call remove_season', t => {
   buttons.at(0).trigger('click')
   t.true(remove_season.calledOnce)
 })
-
 
 
 // Method test
