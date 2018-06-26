@@ -44,18 +44,23 @@ function filter_function({name, comparator, value}) {
 function standard_comparison_function({name, comparator, value}) {
   switch (comparator) {
     case "equals":
-      return (response) => get(response, name) === value
+      return (response) => prep_for_comparison(get(response, name)) === prep_for_comparison(value)
     case ">=":
-      return (response) => get(response, name) >= value
+      return (response) => prep_for_comparison(get(response, name)) >= prep_for_comparison(value)
     case "<=":
-      return (response) => get(response, name) <= value
+      return (response) => prep_for_comparison(get(response, name)) <= prep_for_comparison(value)
     case "<":
-      return (response) => get(response, name) < value
+      return (response) => prep_for_comparison(get(response, name)) < prep_for_comparison(value)
     case ">":
-      return (response) => get(response, name) > value
+      return (response) => prep_for_comparison(get(response, name)) > prep_for_comparison(value)
     case "not_equals":
-      return (response) => get(response, name) !== value
+      return (response) => prep_for_comparison(get(response, name)) !== prep_for_comparison(value)
   }
+}
+
+function prep_for_comparison(value) {
+  if (typeof value !== 'string') return value;
+  return value.toLowerCase()
 }
 
 function day_comparison_function({name, comparator, value}) {
