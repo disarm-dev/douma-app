@@ -45,7 +45,8 @@
 </template>
 
 <script>
-  import {TheMask as MaskedInput}from 'vue-the-mask'
+  import {mapState} from 'vuex';
+  import {TheMask as MaskedInput} from 'vue-the-mask'
   import moment from 'moment-mini'
   import {cloneDeep} from 'lodash'
 
@@ -66,11 +67,15 @@
       }
     },
     computed: {
+      ...mapState({
+        slug: state => state.instance_config.instance.slug,
+        config_version: state => state.instance_config.config_version
+      }),
       button_text__add() {
         return this.network_active ? 'saving...' : 'add'
       },
       sorted_season_start_dates() {
-        return this.local_season_start_dates.sort((a, b) => a > b)
+        return this.sort_season_start_dates(this.local_season_start_dates)
       },
       input_ready() {
         return /\d{4}\-\d{2}\-\d{2}/.test(this.input_val)
@@ -130,16 +135,14 @@
         this.network_active = true
 
         try {
-          // Create clone of instance_config
-          const cloned_config = cloneDeep(this.$store.state.instance_config)
-          cloned_config.applets.irs_monitor.season_start_dates = new_season_start_dates
-
           const res = await request_handler({
-            method: 'post',
+            method: 'put',
             data: {
-              config_data: cloned_config
+              seasons_start_dates: this.sort_season_start_dates(new_season_start_dates),
+              slug: this.slug,
+              config_version: this.config_version
             },
-            url_suffix: '/config'
+            url_suffix: '/seasons'
           })
 
           await save_local_config(cloned_config)
@@ -152,6 +155,9 @@
           this.error = e.message
           this.create_local_season_start_dates()
         }
+      },
+      sort_season_start_dates(dates_array) {
+        return dates_array.sort((a, b) => a < b)
       }
     }
   }
