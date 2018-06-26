@@ -133,10 +133,12 @@
         try {
           // Create clone of instance_config
           const cloned_config = cloneDeep(this.$store.state.instance_config)
+          
           // add location_selection
           const location_selection = get_location_selection()
-          debugger
           cloned_config.location_selection = location_selection
+
+
           cloned_config.applets.irs_monitor.season_start_dates = new_season_start_dates
 
           const res = await request_handler({
