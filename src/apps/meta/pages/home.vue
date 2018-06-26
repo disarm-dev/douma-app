@@ -17,10 +17,12 @@
     <a class="licenses_link " @click="openLicenseDialog()">Licenses</a>
 
     <!--Version commit hash-->
-    <span class='version'>
+    <span class='version' style='cursor: pointer;' @click="toggle_debug_info">
       Version: {{commit_hash}} <br/>
-      {{userAgent}}
-      {{which_config}}
+      <span v-if="debug_info_visible">
+        <p>Config: {{which_config}}</p>
+        <p>UserAgent: {{userAgent}}</p>
+      </span>
     </span>
 
 
@@ -52,6 +54,7 @@
           content: 'Loading license text...',
         },
         userAgent: get(navigator, 'userAgent', 'unknown'),
+        debug_info_visible: false,
       }
     },
     computed: {
@@ -80,6 +83,9 @@
       async load_license_text() {
         const response = await axios.get('/static/3rdpartylicenses.txt')
         this.license_text.content = response.data
+      },
+      toggle_debug_info() {
+        this.debug_info_visible = !this.debug_info_visible;
       }
     }
   }
