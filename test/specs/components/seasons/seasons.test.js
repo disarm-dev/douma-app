@@ -12,6 +12,9 @@ test('should render', t => {
           irs_monitor: {
             season_start_dates: []
           }
+        },
+        instance: {
+          slug: 'example_slug'
         }
       }
     }
@@ -38,6 +41,9 @@ test('should render the correct number of items', t => {
               '2017-11-1'
             ]
           }
+        },
+        instance: {
+          slug: 'example_slug'
         }
       }
     }
@@ -68,6 +74,9 @@ test('renders a remove button for each list item', t => {
           irs_monitor: {
             season_start_dates: ['2018-01-01', '2018-02-01', '2018-03-01']
           }
+        },
+        instance: {
+          slug: 'example_slug'
         }
       }
     }
@@ -98,6 +107,9 @@ test('shows an error if error', t => {
           irs_monitor: {
             season_start_dates: []
           }
+        },
+        instance: {
+          slug: 'example_slug'
         }
       }
     }
@@ -122,6 +134,9 @@ test('renders an add button', t => {
           irs_monitor: {
             season_start_dates: []
           }
+        },
+        instance: {
+          slug: 'example_slug'
         }
       }
     }
@@ -145,6 +160,9 @@ test('clicking add new season should call add_season', t => {
           irs_monitor: {
             season_start_dates: []
           }
+        },
+        instance: {
+          slug: 'example_slug'
         }
       }
     }
@@ -181,6 +199,9 @@ test('clicking remove season should call remove_season', t => {
           irs_monitor: {
             season_start_dates: ['2018-01-01']
           }
+        },
+        instance: {
+          slug: 'example_slug'
         }
       }
     }
