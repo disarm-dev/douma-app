@@ -33,12 +33,23 @@ export function decorate_geodata({binned_responses, targets, aggregations, optio
     // Include only targets, by id
     const target_ids = targets.map(t => t.id)
     const geodata_for_targets = all_features.features.filter(f => target_ids.includes(f.properties[id_field]))
-
-    selected_geodata_level_fc.features = geodata_for_targets
-
+    
     // Copy enumeration property(s) from targets back onto geodata
-    const denominator_fields = get_denominator_fields()
-    debugger
+    const geodata_for_targets_with_denominators = geodata_for_targets.map(target => {
+      const found_target = targets.find(t => t.id === target.properties[id_field])
+      if (!found_target) return target
+      
+      const denominator_fields = get_denominator_fields()
+      
+      for (const denominator_field in denominator_fields) {
+        const field = denominator_fields[denominator_field]
+        target.properties[field] = found_target[denominator_field]
+      }
+      return target
+    })
+
+    selected_geodata_level_fc.features = geodata_for_targets_with_denominators
+
   } else {
     // Use all current geodata
     selected_geodata_level_fc = all_features
