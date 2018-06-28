@@ -26,7 +26,11 @@
       </md-card-content>
     </md-card>
     <div id="map"></div>
-
+    <div v-if="matching_building_ids.length">
+      Found
+      {{matching_building_ids.length}}
+      matching
+      structure{{matching_building_ids.length > 1 ? 's' : ''}}</div>
   </div>
 </template>
 
