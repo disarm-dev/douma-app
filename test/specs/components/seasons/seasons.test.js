@@ -1,7 +1,7 @@
 import test from 'ava'
 import {shallow} from 'vue-test-utils'
 import sinon from 'sinon'
-import Seasons from 'apps/seasons/seasons.vue'
+import Seasons from 'apps/seasons/seasons'
 
 // UI
 test('should render', t => {
