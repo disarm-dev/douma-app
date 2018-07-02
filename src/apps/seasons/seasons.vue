@@ -41,6 +41,7 @@
         </md-list>
       </md-card-content>
     </md-card>
+    <warning/>
   </div>
 </template>
 
@@ -48,7 +49,7 @@
   import {mapState} from 'vuex';
   import {TheMask as MaskedInput} from 'vue-the-mask'
   import moment from 'moment-mini'
-  import {cloneDeep} from 'lodash'
+  import warning from './components/warning'
 
   import {custom_validations} from '@locational/application-registry-validation'
   import {request_handler} from 'lib/remote/request-handler'
@@ -56,7 +57,7 @@
 
   export default {
     name: 'seasons',
-    components: {MaskedInput},
+    components: {MaskedInput, warning},
     data() {
       return {
         input_val: '',
