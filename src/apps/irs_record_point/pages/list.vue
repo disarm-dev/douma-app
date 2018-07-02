@@ -30,7 +30,6 @@
     </controls>
 
     <div class='applet_container'>
-
       <!-- LIST ALL -->
       <md-card>
         <md-card-header>
@@ -78,7 +77,6 @@
   import {flatten, get} from 'lodash'
 
   import controls from 'components/controls.vue'
-  import local_record_summary from './local_record_summary'
   import {ResponseController} from 'lib/models/response/controller'
 
   const controller = new ResponseController('record')
@@ -87,8 +85,8 @@
 
   export default {
     name: 'List',
-    components: {controls, virtual_list, local_record_summary},
-    data() {
+    components: {controls, virtual_list},
+    data () {
       return {
         syncing: false,
         target_denominator: 0,
