@@ -146,7 +146,7 @@
           })
 
           //TODO Fetch Updated Config and
-          //this.reset_ui()
+          this.reset_ui()
         } catch (e) {
           this.network_active = false
           this.error = e.message
