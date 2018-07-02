@@ -6,12 +6,12 @@
         <label>Enter new season start date</label>
         <div class="input-container">
           <masked-input
-              class='masked-input'
-              v-model="input_val"
-              mask="####-##-##"
-              :masked="true"
-              placeholder="YYYY-MM-DD"
-              @keyup.native.enter="add_season"
+            class='masked-input'
+            v-model="input_val"
+            mask="####-##-##"
+            :masked="true"
+            placeholder="YYYY-MM-DD"
+            @keyup.native.enter="add_season"
           />
 
           <md-button class="md-raised md-primary"
@@ -102,6 +102,7 @@
       reset_ui() {
         this.input_val = ''
         this.network_active = false
+        location.reload(true)
       },
       add_season() {
         this.error = ''
@@ -145,12 +146,10 @@
             url_suffix: '/seasons'
           })
 
-          //TODO Fetch Updated Config and
           this.reset_ui()
         } catch (e) {
           this.network_active = false
           this.error = e.message
-          this.create_local_season_start_dates()
         }
       },
       sort_season_start_dates(dates_array) {
