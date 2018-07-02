@@ -9,7 +9,6 @@ import * as Controller from 'lib/models/response/controller'
 test('0 responses visible when no responses', t => {
 
   Controller.ResponseController.prototype.constructor = stub()
-  // Controller.ResponseController = stub()
   Controller.ResponseController.prototype.read_all_cache = stub().returns([])
   Controller.ResponseController.prototype.create_records = stub().returns([])
 
