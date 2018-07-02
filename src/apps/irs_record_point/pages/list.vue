@@ -100,7 +100,7 @@
       ...mapState({
         instance_config: state => state.instance_config,
         online: state => state.network_online,
-        filter_field: state => 'household_name'//get(state, 'instance_config.applets.irs_record_point.filter_field', default_path),
+        filter_field: state => get(state, 'instance_config.applets.irs_record_point.filter_field', default_path),
       }),
       filter_field_path() {
         if (this.filter_field !== default_path) {
