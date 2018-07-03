@@ -21,7 +21,6 @@
 
       </template>
 
-      <!--<div v-if="$loading.isLoading('responses')" slot="text">Loading responses...</div>-->
       <div v-if="$loading.anyLoading" slot="text">Loading...</div>
 
       <div v-if="!online" slot="text">
@@ -31,8 +30,6 @@
     </controls>
 
     <div class='applet_container'>
-      <!--<local_record_summary></local_record_summary>-->
-
       <!-- LIST ALL -->
       <md-card>
         <md-card-header>
@@ -40,8 +37,8 @@
         </md-card-header>
         <md-card-content>
           <md-input-container>
-            <label>filter by ID</label>
-            <md-input v-model="id_search_string"></md-input>
+            <label>Find by {{filter_field}} or location</label>
+            <md-input v-model="search_string"></md-input>
           </md-input-container>
 
           <md-list>
@@ -87,35 +84,47 @@
   import {flatten, get} from 'lodash'
 
   import controls from 'components/controls.vue'
-  import local_record_summary from './local_record_summary'
   import {ResponseController} from 'lib/models/response/controller'
 
   const controller = new ResponseController('record')
 
+  const default_path = 'id'
+
   export default {
     name: 'List',
-    components: {controls, virtual_list, local_record_summary},
+    components: {controls, virtual_list},
     data() {
       return {
         syncing: false,
         target_denominator: 0,
-        id_search_string: '',
+        search_string: '',
         responses: []
       }
     },
     computed: {
       ...mapState({
         instance_config: state => state.instance_config,
-        online: state => state.network_online
+        online: state => state.network_online,
+        filter_field: state => get(state, 'instance_config.applets.irs_record_point.filter_field', default_path),
       }),
+      filter_field_path() {
+        if (this.filter_field !== default_path) {
+          return `form_data.${this.filter_field}`
+        } else {
+          return default_path
+        }
+      },
       filtered_responses() {
         if (!this.responses.length) return []
+        if (!this.search_string) return this.responses
+
+        const regex = new RegExp(this.search_string.toLowerCase(), 'i')
+
         return this.responses
           .filter(r => {
-            if (!this.id_search_string) return true
-            return this.short_id(r.id).includes(this.id_search_string)
+            const got = get(r, this.filter_field_path, '').toString()
+            return got.match(regex) || r.location.selection.name.match(regex)
           })
-          .sort((a, b) => new Date(b.recorded_on) - new Date(a.recorded_on))
       },
       unsynced_count() {
         return this.unsynced_responses.length
@@ -125,8 +134,8 @@
         return this.responses.filter(r => !r.synced)
       }
     },
-    mounted() {
-      this.load_responses()
+    async mounted() {
+      await this.load_responses()
     },
     methods: {
       async load_responses() {
@@ -134,15 +143,16 @@
         const personalised_instance_id = this.$store.state.meta.personalised_instance_id
         const instance = this.$store.state.instance_config.instance.slug
 
-        this.responses = await controller.read_all_cache({personalised_instance_id, instance})
+        const found = await controller.read_all_cache({personalised_instance_id, instance})
+        this.responses = found.sort((a, b) => new Date(b.recorded_on) - new Date(a.recorded_on))
         this.$loading.endLoading('responses')
       },
       format_response(response) {
-        const id = this.short_id(get(response, 'id', 'no id'))
         const location_name = get(response, 'location.selection.name', '')
         const ago = this.format_datetime_from_now(response.recorded_on)
+        const filter_field_value = get(response, this.filter_field_path)
 
-        return `${ago} in ${location_name} (id: ${id})`
+        return `${ago} in ${location_name} (${this.filter_field}: ${filter_field_value})`
       },
       format_datetime_from_now(date) {
         return moment(date).fromNow()//format('hh:mm a DD MMM YYYY')
@@ -178,7 +188,7 @@
           }
           this.load_responses()
         } catch (e) {
-          console.log(e)
+          console.error(e)
           if (e.response && e.response.status !== 401) {
             this.$store.commit('root:set_snackbar', {message: `Problem syncing responses`})
           }
@@ -192,9 +202,6 @@
         const date = moment().format('YYYY-MM-DD_HHmm')
         download(content, `${this.instance_config.instance.slug}_responses_export_${date}.json`)
       },
-      short_id(id) {
-        return id.substring(0, 5)
-      }
     }
   }
 

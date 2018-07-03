@@ -32,6 +32,7 @@
     "@turf/points-within-polygon": "^5.0.4",
     "@turf/turf": "^4.1.0",
     "@turf/within": "^4.4.0",
+    "@vue/test-utils": "^1.0.0-beta.20",
     "ajv": "^6.1.1",
     "alphanum-sort": "^1.0.2",
     "array-unique": "^0.3.2",
