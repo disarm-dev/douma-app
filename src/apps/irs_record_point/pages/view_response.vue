@@ -27,22 +27,13 @@
   import flatten from 'flat'
   import {isDate, isObject} from 'lodash'
 
-  import {ResponseController} from 'lib/models/response/controller'
-
-  const controller = new ResponseController('record')
-
   export default {
     name: 'view_response',
     props: {
-      response_id: {
-        type: String,
+      response: {
+        type: Object,
         required: true
-      }
-    },
-    data() {
-      return {
-        response: null,
-      }
+      },
     },
     computed: {
       sections() {
@@ -50,24 +41,11 @@
         return Object.keys(this.response);
       }
     },
-    mounted() {
-      this.set_response_by_id(this.response_id)
+    created() {
+      if (!this.response) this.$router.back()
     },
     methods: {
       isObject: isObject,
-      async set_response_by_id(response_id) {
-        const personalised_instance_id = this.$store.state.meta.personalised_instance_id
-        const instance = this.$store.state.instance_config.instance.slug
-
-        const responses = await controller.read_all_cache({personalised_instance_id, instance})
-        const found = responses.find(response => response.id === this.response_id)
-
-        if (found) {
-          this.response = found
-        } else {
-          console.error('No response found for id', this.response_id)
-        }
-      },
       flat_section(section) {
         if (!this.response || !section) return false
 

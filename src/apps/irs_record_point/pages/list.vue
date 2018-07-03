@@ -1,17 +1,20 @@
 <template>
   <div>
     <controls>
-      <md-button slot="primary_action" :disabled="!$can('write', 'irs_record_point')" class="md-icon-button md-raised md-primary" @click.native='$router.push("/irs/record_point/new")'>
+      <md-button slot="primary_action" :disabled="!$can('write', 'irs_record_point')"
+                 class="md-icon-button md-raised md-primary" @click.native='$router.push("/irs/record_point/new")'>
         <md-icon>add</md-icon>
       </md-button>
 
       <template slot="menu_items">
-        <md-menu-item :disabled="!$can('write', 'irs_record_point') || syncing || unsynced_count === 0 || !online" @click="sync">
+        <md-menu-item :disabled="!$can('write', 'irs_record_point') || syncing || unsynced_count === 0 || !online"
+                      @click="sync">
           <md-icon>sync</md-icon>
           <span>Sync {{unsynced_count}} responses</span>
         </md-menu-item>
 
-        <md-menu-item :disabled="!$can('write', 'irs_record_point') || syncing || unsynced_count === 0" @click="download_records">
+        <md-menu-item :disabled="!$can('write', 'irs_record_point') || syncing || unsynced_count === 0"
+                      @click="download_records">
           <md-icon>file_download</md-icon>
           <span>Export {{unsynced_count}} unsynced</span>
         </md-menu-item>
@@ -28,7 +31,7 @@
     </controls>
 
     <div class='applet_container'>
-       <!--<local_record_summary></local_record_summary>-->
+      <!--<local_record_summary></local_record_summary>-->
 
       <!-- LIST ALL -->
       <md-card>
@@ -44,10 +47,10 @@
           <md-list>
             <virtual_list :size="40" :remain="10">
               <md-list-item
-                v-for='response in filtered_responses'
-                :index='response'
-                :class="{'md-primary': !response.synced || !response.uneditable}"
-                :key="response.id"
+                  v-for='response in filtered_responses'
+                  :index='response'
+                  :class="{'md-primary': !response.synced || !response.uneditable}"
+                  :key="response.id"
               >
                 <md-icon>
                   {{response.synced ? 'check' : (response.uneditable ? 'warning' : 'mode_edit')}}
@@ -55,8 +58,15 @@
 
                 <div>
                   <router-link
-                    :to="{name: response.synced || response.uneditable ? 'irs_record_point:view' : 'irs_record_point:edit', params: {response_id: response.id}}">
-                    {{format_response(response)}}
+                      v-if="response.synced || response.uneditable"
+                      :to="{name: 'irs_record_point:view', params: {response}}"
+                  >{{format_response(response)}}
+                  </router-link>
+
+                  <router-link
+                      v-else
+                      :to="{name: 'irs_record_point:edit', params: {response_id: response.id}}"
+                  >{{format_response(response)}}
                   </router-link>
                 </div>
               </md-list-item>
@@ -73,7 +83,7 @@
   import virtual_list from 'vue-virtual-scroll-list'
   import download from 'downloadjs'
   import moment from 'moment-mini'
-  import {mapState, mapGetters} from 'vuex'
+  import {mapState} from 'vuex'
   import {flatten, get} from 'lodash'
 
   import controls from 'components/controls.vue'
@@ -85,7 +95,7 @@
   export default {
     name: 'List',
     components: {controls, virtual_list, local_record_summary},
-    data () {
+    data() {
       return {
         syncing: false,
         target_denominator: 0,
@@ -115,7 +125,7 @@
         return this.responses.filter(r => !r.synced)
       }
     },
-    mounted () {
+    mounted() {
       this.load_responses()
     },
     methods: {
@@ -167,7 +177,7 @@
             }, 3000)
           }
           this.load_responses()
-        } catch(e) {
+        } catch (e) {
           console.log(e)
           if (e.response && e.response.status !== 401) {
             this.$store.commit('root:set_snackbar', {message: `Problem syncing responses`})
@@ -183,7 +193,7 @@
         download(content, `${this.instance_config.instance.slug}_responses_export_${date}.json`)
       },
       short_id(id) {
-        return id.substring(0,5)
+        return id.substring(0, 5)
       }
     }
   }

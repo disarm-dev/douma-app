@@ -36,8 +36,8 @@ export default [
       can: 'write irs_record_point',
       fail: '/meta/home'
     }
-  },{
-    path: '/irs/record_point/view/:response_id',
+  }, {
+    path: '/irs/record_point/view',
     props: true,
     component: view_response,
     name: 'irs_record_point:view',
