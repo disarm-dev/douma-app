@@ -7,12 +7,15 @@
 
       <md-card-content>
         <div v-for="section in sections">
+
           <h4>{{section}}</h4>
+
           <div v-if="isObject(flat_section(section))">
             <div v-for="(val, key) in flat_section(section)">
               {{key}}: {{val}}
             </div>
           </div>
+
           <div v-else>
             {{flat_section(section)}}
           </div>
