@@ -6,25 +6,25 @@
     </md-card-header>
 
     <multiselect
-      class="multiselect"
-      v-if="!use_custom_location"
-      v-model="area"
-      :options="categories"
-      placeholder="Select area"
-      >
+        class="multiselect"
+        v-if="!use_custom_location"
+        v-model="area"
+        :options="categories"
+        placeholder="Select area"
+    >
       <span slot="noResult">Oops! No elements found. Consider changing the search query.</span>
     </multiselect>
 
     <multiselect
-      class="multiselect"
-      v-if="!use_custom_location"
-      :disabled="!area"
-      v-model="sub_area"
       :options="all_locations"
-      placeholder="Select sub-area"
-      track-by="id"
-      label="name"
-      @input="update_value"
+        class="multiselect"
+        v-if="!use_custom_location"
+        :disabled="!area"
+        v-model="sub_area"
+        placeholder="Select sub-area"
+        track-by="id"
+        label="name"
+        @input="update_value"
     >
       <span slot="noResult">Oops! No elements found. Consider changing the search query.</span>
     </multiselect>
@@ -51,7 +51,7 @@
 <script>
   import Multiselect from 'vue-multiselect'
   import {get_record_location_selection} from 'lib/instance_data/spatial_hierarchy_helper'
-  import { uniq } from 'lodash'
+  import {uniq} from 'lodash'
 
   import cache from 'config/cache'
 
@@ -92,7 +92,7 @@
         },
         set(custom_location) {
           this._custom_location_selection = custom_location
-          this.$emit('change', { name: custom_location})
+          this.$emit('change', {name: custom_location})
         }
       },
     },
