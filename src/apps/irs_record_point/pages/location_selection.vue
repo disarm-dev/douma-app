@@ -16,11 +16,11 @@
     </multiselect>
 
     <multiselect
-      :options="all_locations"
         class="multiselect"
         v-if="!use_custom_location"
         :disabled="!area"
         v-model="sub_area"
+        :options="subarea_options"
         placeholder="Select sub-area"
         track-by="id"
         label="name"
@@ -73,6 +73,10 @@
           return this.$store.state.irs_record_point.persisted_metadata.area
         },
         set(area_string) {
+          // If the area changes, need to unset any sub-area
+          this.sub_area = null
+          console.log('update_value with null location')
+          this.update_value()
           this.$store.commit('irs_record_point/set_persisted_metadata', {name: 'area', value: area_string})
         }
       },
@@ -84,7 +88,7 @@
         return uniq(all_categories).sort()
       },
       subarea_options() {
-
+        return this.all_locations.filter(l => l.category === this.area)
       },
       custom_location_selection: {
         get() {
