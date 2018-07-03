@@ -83,6 +83,9 @@
 
         return uniq(all_categories).sort()
       },
+      subarea_options() {
+
+      },
       custom_location_selection: {
         get() {
           return this._custom_location_selection
