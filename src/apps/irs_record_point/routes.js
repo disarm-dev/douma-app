@@ -8,10 +8,10 @@ export default [
     redirect: '/irs/record_point/list',
     name: 'irs_record_point',
     meta: {
-     can: 'read irs_record_point',
-     fail: '/meta/home'
+      can: 'read irs_record_point',
+      fail: '/meta/home'
     }
-  },{
+  }, {
     path: '/irs/record_point/list',
     component: list,
     name: 'irs_record_point:list',
@@ -19,7 +19,7 @@ export default [
       can: 'read irs_record_point',
       fail: '/meta/home'
     }
-  },{
+  }, {
     path: '/irs/record_point/new',
     component: record,
     name: 'irs_record_point:new',
@@ -27,7 +27,7 @@ export default [
       can: 'write irs_record_point',
       fail: '/meta/home'
     }
-  },{
+  }, {
     path: '/irs/record_point/edit/:response_id',
     props: true,
     component: record,
@@ -36,8 +36,8 @@ export default [
       can: 'write irs_record_point',
       fail: '/meta/home'
     }
-  },{
-    path: '/irs/record_point/view/:response_id',
+  }, {
+    path: '/irs/record_point/view',
     props: true,
     component: view_response,
     name: 'irs_record_point:view',

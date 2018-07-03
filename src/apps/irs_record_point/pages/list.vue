@@ -55,8 +55,15 @@
 
                 <div>
                   <router-link
-                      :to="{name: response.synced || response.uneditable ? 'irs_record_point:view' : 'irs_record_point:edit', params: {response_id: response.id}}">
-                    {{format_response(response)}}
+                      v-if="response.synced || response.uneditable"
+                      :to="{name: 'irs_record_point:view', params: {response}}"
+                  >{{format_response(response)}}
+                  </router-link>
+
+                  <router-link
+                      v-else
+                      :to="{name: 'irs_record_point:edit', params: {response_id: response.id}}"
+                  >{{format_response(response)}}
                   </router-link>
                 </div>
               </md-list-item>
@@ -73,7 +80,7 @@
   import virtual_list from 'vue-virtual-scroll-list'
   import download from 'downloadjs'
   import moment from 'moment-mini'
-  import {mapState, mapGetters} from 'vuex'
+  import {mapState} from 'vuex'
   import {flatten, get} from 'lodash'
 
   import controls from 'components/controls.vue'
