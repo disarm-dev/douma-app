@@ -1,8 +1,7 @@
 <template>
   <div>
-    <md-card-header>
-      <div>* Get GPS coordinates</div>
-    </md-card-header>
+    <h3>* Get GPS coordinates</h3>
+
     <md-button :disabled='hunting_location' class='md-raised md-primary' ref="update_location_button"
                @click.native="check_for_location">
       Get/Update point location
