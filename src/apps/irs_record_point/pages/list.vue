@@ -86,7 +86,7 @@
   export default {
     name: 'List',
     components: {controls, virtual_list},
-    data () {
+    data() {
       return {
         syncing: false,
         target_denominator: 0,
@@ -115,7 +115,8 @@
 
         return this.responses
           .filter(r => {
-            return get(r, this.filter_field_path, '').match(regex) || r.location.selection.name.match(regex)
+            const got = get(r, this.filter_field_path, '').toString()
+            return got.match(regex) || r.location.selection.name.match(regex)
           })
       },
       unsynced_count() {
@@ -126,8 +127,8 @@
         return this.responses.filter(r => !r.synced)
       }
     },
-    mounted() {
-      this.load_responses()
+    async mounted() {
+      await this.load_responses()
     },
     methods: {
       async load_responses() {
@@ -180,7 +181,7 @@
           }
           this.load_responses()
         } catch (e) {
-          console.log(e)
+          console.error(e)
           if (e.response && e.response.status !== 401) {
             this.$store.commit('root:set_snackbar', {message: `Problem syncing responses`})
           }

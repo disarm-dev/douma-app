@@ -5,7 +5,7 @@ import {shallow} from 'vue-test-utils'
 import applet from 'apps/irs_record_point/pages/list'
 import {ResponseController} from 'lib/models/response/controller'
 
-test.beforeEach(t => {
+test.beforeEach(async (t) => {
   ResponseController.prototype.constructor = stub()
   ResponseController.prototype.read_all_cache = stub().resolves([])
   ResponseController.prototype.create_records = stub().resolves()
@@ -13,14 +13,14 @@ test.beforeEach(t => {
   t.context.mock_store = {
     state: {
       instance_config: {
-        instance: {}
+        instance: {},
+        applets: {
+          irs_record_point: {
+            filter_field: 'a'
+          }
+        }
       },
       meta: {},
-      applets: {
-        irs_record_point: {
-          filter_field: 'a'
-        }
-      }
     },
     commit: () => {
     },
@@ -56,8 +56,6 @@ test('controller', async (t) => {
 })
 
 test('0 responses visible when no responses given in test setup', t => {
-  t.context.wrapper.setData({responses: []});
-
   t.is(t.context.wrapper.vm.responses.length, 0)
   t.is(t.context.wrapper.find('.md-title').text(), '0 responses (0 unsynced)')
 })
@@ -73,6 +71,42 @@ test('1 response visible', t => {
   t.context.wrapper.setData({responses: [{id: 1, synced: false, form_data: {a: 1}}]});
 
   t.is(t.context.wrapper.vm.filtered_responses.length, 1)
+  t.is(t.context.wrapper.vm.responses.length, 1)
+  t.is(t.context.wrapper.vm.unsynced_count, 1)
+  t.is(t.context.wrapper.find('.md-title').text(), '1 responses (1 unsynced)')
+})
+
+test('1 response visible found with filtering', t => {
+  t.context.wrapper.vm.$set(t.context.mock_store.state, 'applets.irs_record_point.filter_field', 'filter_by')
+  t.context.wrapper.setData({
+    responses: [{
+      id: 1,
+      synced: false,
+      form_data: {a: 1, filter_by: 'a'},
+      location: {selection: {name: 'location_name'}}
+    }],
+    search_string: 'a'
+  });
+
+  t.is(t.context.wrapper.vm.filtered_responses.length, 1)
+  t.is(t.context.wrapper.vm.responses.length, 1)
+  t.is(t.context.wrapper.vm.unsynced_count, 1)
+  t.is(t.context.wrapper.find('.md-title').text(), '1 responses (1 unsynced)')
+})
+
+test('1 response visible not found with filtering', t => {
+  t.context.wrapper.vm.$set(t.context.mock_store.state, 'applets.irs_record_point.filter_field', 'filter_by')
+  t.context.wrapper.setData({
+    responses: [{
+      id: 1,
+      synced: false,
+      form_data: {a: 1, filter_by: 'a'},
+      location: {selection: {name: 'location_name'}}
+    }],
+    search_string: 'not a'
+  });
+
+  t.is(t.context.wrapper.vm.filtered_responses.length, 0)
   t.is(t.context.wrapper.vm.responses.length, 1)
   t.is(t.context.wrapper.vm.unsynced_count, 1)
   t.is(t.context.wrapper.find('.md-title').text(), '1 responses (1 unsynced)')
