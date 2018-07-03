@@ -1,17 +1,20 @@
 <template>
   <div>
     <controls>
-      <md-button slot="primary_action" :disabled="!$can('write', 'irs_record_point')" class="md-icon-button md-raised md-primary" @click.native='$router.push("/irs/record_point/new")'>
+      <md-button slot="primary_action" :disabled="!$can('write', 'irs_record_point')"
+                 class="md-icon-button md-raised md-primary" @click.native='$router.push("/irs/record_point/new")'>
         <md-icon>add</md-icon>
       </md-button>
 
       <template slot="menu_items">
-        <md-menu-item :disabled="!$can('write', 'irs_record_point') || syncing || unsynced_count === 0 || !online" @click="sync">
+        <md-menu-item :disabled="!$can('write', 'irs_record_point') || syncing || unsynced_count === 0 || !online"
+                      @click="sync">
           <md-icon>sync</md-icon>
           <span>Sync {{unsynced_count}} responses</span>
         </md-menu-item>
 
-        <md-menu-item :disabled="!$can('write', 'irs_record_point') || syncing || unsynced_count === 0" @click="download_records">
+        <md-menu-item :disabled="!$can('write', 'irs_record_point') || syncing || unsynced_count === 0"
+                      @click="download_records">
           <md-icon>file_download</md-icon>
           <span>Export {{unsynced_count}} unsynced</span>
         </md-menu-item>
@@ -34,17 +37,17 @@
         </md-card-header>
         <md-card-content>
           <md-input-container>
-            <label>filter by ID</label>
-            <md-input v-model="id_search_string"></md-input>
+            <label>Find by {{filter_field}} or location</label>
+            <md-input v-model="search_string"></md-input>
           </md-input-container>
 
           <md-list>
             <virtual_list :size="40" :remain="10">
               <md-list-item
-                v-for='response in filtered_responses'
-                :index='response'
-                :class="{'md-primary': !response.synced || !response.uneditable}"
-                :key="response.id"
+                  v-for='response in filtered_responses'
+                  :index='response'
+                  :class="{'md-primary': !response.synced || !response.uneditable}"
+                  :key="response.id"
               >
                 <md-icon>
                   {{response.synced ? 'check' : (response.uneditable ? 'warning' : 'mode_edit')}}
@@ -52,7 +55,7 @@
 
                 <div>
                   <router-link
-                    :to="{name: response.synced || response.uneditable ? 'irs_record_point:view' : 'irs_record_point:edit', params: {response_id: response.id}}">
+                      :to="{name: response.synced || response.uneditable ? 'irs_record_point:view' : 'irs_record_point:edit', params: {response_id: response.id}}">
                     {{format_response(response)}}
                   </router-link>
                 </div>
@@ -78,30 +81,43 @@
 
   const controller = new ResponseController('record')
 
+  const default_path = 'id'
+
   export default {
     name: 'List',
     components: {controls, virtual_list},
-    data () {
+    data() {
       return {
         syncing: false,
         target_denominator: 0,
-        id_search_string: '',
+        search_string: '',
         responses: []
       }
     },
     computed: {
       ...mapState({
         instance_config: state => state.instance_config,
-        online: state => state.network_online
+        online: state => state.network_online,
+        filter_field: state => get(state, 'instance_config.applets.irs_record_point.filter_field', default_path),
       }),
+      filter_field_path() {
+        if (this.filter_field !== default_path) {
+          return `form_data.${this.filter_field}`
+        } else {
+          return default_path
+        }
+      },
       filtered_responses() {
         if (!this.responses.length) return []
+        if (!this.search_string) return this.responses
+
+        const regex = new RegExp(this.search_string.toLowerCase(), 'i')
+
         return this.responses
           .filter(r => {
-            if (!this.id_search_string) return true
-            return this.short_id(r.id).includes(this.id_search_string)
+            const got = get(r, this.filter_field_path, '').toString()
+            return got.match(regex) || r.location.selection.name.match(regex)
           })
-          .sort((a, b) => new Date(b.recorded_on) - new Date(a.recorded_on))
       },
       unsynced_count() {
         return this.unsynced_responses.length
@@ -111,8 +127,8 @@
         return this.responses.filter(r => !r.synced)
       }
     },
-    mounted () {
-      this.load_responses()
+    async mounted() {
+      await this.load_responses()
     },
     methods: {
       async load_responses() {
@@ -120,15 +136,16 @@
         const personalised_instance_id = this.$store.state.meta.personalised_instance_id
         const instance = this.$store.state.instance_config.instance.slug
 
-        this.responses = await controller.read_all_cache({personalised_instance_id, instance})
+        const found = await controller.read_all_cache({personalised_instance_id, instance})
+        this.responses = found.sort((a, b) => new Date(b.recorded_on) - new Date(a.recorded_on))
         this.$loading.endLoading('responses')
       },
       format_response(response) {
-        const id = this.short_id(get(response, 'id', 'no id'))
         const location_name = get(response, 'location.selection.name', '')
         const ago = this.format_datetime_from_now(response.recorded_on)
+        const filter_field_value = get(response, this.filter_field_path)
 
-        return `${ago} in ${location_name} (id: ${id})`
+        return `${ago} in ${location_name} (${this.filter_field}: ${filter_field_value})`
       },
       format_datetime_from_now(date) {
         return moment(date).fromNow()//format('hh:mm a DD MMM YYYY')
@@ -163,8 +180,8 @@
             }, 3000)
           }
           this.load_responses()
-        } catch(e) {
-          console.log(e)
+        } catch (e) {
+          console.error(e)
           if (e.response && e.response.status !== 401) {
             this.$store.commit('root:set_snackbar', {message: `Problem syncing responses`})
           }
@@ -178,9 +195,6 @@
         const date = moment().format('YYYY-MM-DD_HHmm')
         download(content, `${this.instance_config.instance.slug}_responses_export_${date}.json`)
       },
-      short_id(id) {
-        return id.substring(0,5)
-      }
     }
   }
 
