@@ -8,7 +8,7 @@ import * as Controller from 'lib/models/response/controller'
 
 test.beforeEach(() => {
   Controller.ResponseController.prototype.constructor = stub()
-  Controller.ResponseController.prototype.read_all_cache = stub().resolves([{recorded_on: new Date()}, {recorded_on: new Date()}])
+  Controller.ResponseController.prototype.read_all_cache = stub().resolves([])
   Controller.ResponseController.prototype.create_records = stub().resolves()
 })
 
@@ -56,8 +56,23 @@ function basic_objects() {
   }
 }
 
-test.skip('0 responses visible when no responses', t => {
+test('controller', async (t) => {
+  const c = new Controller.ResponseController()
+  const actual = await c.read_all_cache()
+  t.is(actual.length, 0)
+})
+
+test('0 responses visible when no responses given in test setup', t => {
   const {mock_store, wrapper} = basic_objects()
+  wrapper.setData({responses: []});
+
+  t.is(wrapper.vm.responses.length, 0)
+  t.is(wrapper.find('.md-title').text(), '0 responses (0 unsynced)')
+})
+
+test('0 responses visible when 0 responses explicitly set', t => {
+  const {mock_store, wrapper} = basic_objects()
+  wrapper.setData({responses: []});
 
   t.is(wrapper.vm.responses.length, 0)
   t.is(wrapper.find('.md-title').text(), '0 responses (0 unsynced)')
@@ -65,7 +80,7 @@ test.skip('0 responses visible when no responses', t => {
 
 test('1 response visible', t => {
   const {mock_store, wrapper} = basic_objects()
-  wrapper.vm.responses = [{id: 1, synced: false, form_data: {a: 1}}]
+  wrapper.setData({responses: [{id: 1, synced: false, form_data: {a: 1}}]});
 
   t.is(wrapper.vm.filtered_responses.length, 1)
   t.is(wrapper.vm.responses.length, 1)
