@@ -35,7 +35,6 @@
     props: {
       response: {
         type: Object,
-        required: true
       },
     },
     computed: {
@@ -45,7 +44,7 @@
       }
     },
     created() {
-      if (!this.response) this.$router.back()
+      if (!this.response) this.$router.push({name: 'irs_record_point'})
     },
     methods: {
       isObject: isObject,
