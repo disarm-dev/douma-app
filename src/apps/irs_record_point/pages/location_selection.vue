@@ -80,7 +80,7 @@
     },
     computed: {
       is_custom_location() {
-        return !has(this.location_selection, 'id')
+        return this.location_selection && !has(this.location_selection, 'id')
       },
       area: {
         get() {
@@ -105,13 +105,15 @@
     },
     watch: {
       location_selection() {
-        // location_selection is only available after mounted, because the record.vue retrieves it async from DB
-        if (this.location_selection && !this.use_custom_location && this.is_custom_location) {
+        // location_selection is only available after mounted, because Record.vue retrieves it async from DB
+        if (this.is_custom_location && !this.use_custom_location) {
           this.use_custom_location = true
         }
       },
       use_custom_location() {
-        this.confirm_use_custom_location()
+        if (!this.is_custom_location) {
+          this.confirm_use_custom_location()
+        }
       }
     },
     created() {
