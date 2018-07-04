@@ -66,7 +66,6 @@
   import {get, has, uniq} from 'lodash'
 
   import {get_record_location_selection} from 'lib/instance_data/spatial_hierarchy_helper'
-  import cache from 'config/cache'
 
   export default {
     name: 'location_selection',
@@ -81,31 +80,22 @@
     },
     computed: {
       is_custom_location() {
-        return !has(this.sub_area, 'id')
+        return !has(this.location_selection, 'id')
       },
       area: {
         get() {
-          return get(
-            this.location_selection,
-            'category',
-            this.$store.state.irs_record_point.persisted_metadata.area
-          )
+          const from_store = this.$store.state.irs_record_point.persisted_metadata.area
+          return get(this.location_selection, 'category', from_store)
         },
         set(area_string) {
           this.$store.commit('irs_record_point/set_persisted_metadata', {name: 'area', value: area_string})
-
-          // If the main area changes, must also reset the sub-area/location
-          this.reset_location()
+          this.update_value() // If the main area changes, reset the location_selection
         }
       },
 
       // Dropdown options
       categories() {
-        const all_categories = this.all_locations.map(loc => {
-          return loc.category
-        })
-
-        return uniq(all_categories).sort()
+        return uniq(this.all_locations.map(loc => loc.category)).sort()
       },
       subarea_options() {
         return this.all_locations
@@ -114,22 +104,26 @@
       },
     },
     watch: {
-      use_custom_location: 'confirm_use_custom_location'
+      location_selection() {
+        // location_selection is only available after mounted, because the record.vue retrieves it async from DB
+        if (!this.use_custom_location && this.is_custom_location) {
+          this.use_custom_location = true
+        }
+      },
+      use_custom_location() {
+        this.confirm_use_custom_location()
+      }
     },
     created() {
-      this.all_locations = get_record_location_selection(cache)
+      this.all_locations = get_record_location_selection()
     },
     methods: {
       get,
+      has,
       update_value(selection) {
         this.$emit('change_location_selection', selection)
       },
-      reset_location() {
-        this.sub_area = null
-        this.update_value()
-      },
 
-      // Custom location
       confirm_use_custom_location() {
         if (this.use_custom_location) {
           this.$refs.confirm_custom.open();
