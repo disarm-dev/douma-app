@@ -1,13 +1,14 @@
 <template>
   <div>
     <md-card-header>
-      <div v-if="use_custom_location">Enter location *</div>
-      <div v-else>* Select area and sub-area</div>
+      <div>* Select location</div>
     </md-card-header>
 
 
     <!-- DROPDOWN SELECTION -->
-    <div v-if="!is_custom_location || !use_custom_location">
+    <div v-if="!use_custom_location">
+      <p>Select area and sub-area from dropdowns</p>
+
       <multiselect
           class="multiselect"
           v-model="area"
@@ -32,25 +33,30 @@
       </multiselect>
     </div>
 
-
     <!--CUSTOM LOCATION SELECTION -->
-    <!--<div>-->
-    <!--<md-checkbox v-model="use_custom_location">Enter custom location (location not on list)</md-checkbox>-->
+    <md-checkbox v-model="use_custom_location">Enter custom location (location not on list)</md-checkbox>
 
-    <!--<md-input-container v-if="use_custom_location">-->
-    <!--<label>Custom location</label>-->
-    <!--<md-input v-model="custom_location_selection"></md-input>-->
-    <!--</md-input-container>-->
+    <div v-if="use_custom_location">
+      <p>Enter custom location as text. Will not display in XX</p>
 
-    <!--<md-dialog-confirm-->
-    <!--md-title="Are you sure you want to use a custom location?"-->
-    <!--md-content="This place name does not fall within the sub-areas provided? If you proceed with a custom name, your data will be saved, but not appear in the dashboard"-->
-    <!--md-ok-text="Use custom location"-->
-    <!--md-cancel-text="Cancel"-->
-    <!--@close="on_close_confirmation"-->
-    <!--ref="confirm_custom">-->
-    <!--</md-dialog-confirm>-->
-    <!--</div>-->
+      <md-input-container>
+        <label>Custom location</label>
+        <md-input
+            v-bind:value="get(location_selection, 'name', '')"
+            @input="update_custom_location"
+        ></md-input>
+      </md-input-container>
+    </div>
+
+    <!-- CUSTOM LOCATION CONFIRMATION DIALOG-->
+    <md-dialog-confirm
+        md-title="Are you sure you want to use a custom location?"
+        md-content="This place name does not fall within the sub-areas provided? If you proceed with a custom name, your data will be saved, but not appear in the dashboard"
+        md-ok-text="Use custom location"
+        md-cancel-text="Cancel"
+        @close="on_close_confirmation"
+        ref="confirm_custom">
+    </md-dialog-confirm>
 
   </div>
 </template>
@@ -70,8 +76,7 @@
     components: {Multiselect},
     data() {
       return {
-        _custom_location_selection: '',
-        use_custom_location: false,
+        use_custom_location: true, // TODO: Replace debug value use_custom_location: false,
       }
     },
     computed: {
@@ -106,17 +111,6 @@
           .filter(l => l.category === this.area)
           .sort((a, b) => a.name.localeCompare(b.name))
       },
-
-      custom_location_selection: {
-        get() {
-          return this._custom_location_selection
-        },
-        set(custom_location) {
-          this._custom_location_selection = custom_location
-          const custom_location_selection = {name: custom_location}
-          this.$emit('change', custom_location_selection)
-        }
-      },
     },
     watch: {
       use_custom_location: 'confirm_use_custom_location'
@@ -125,6 +119,7 @@
       this.all_locations = get_record_location_selection(cache)
     },
     methods: {
+      get,
       update_value(selection) {
         this.$emit('change_location_selection', selection)
       },
@@ -145,7 +140,11 @@
         if (response === 'cancel') {
           this.use_custom_location = false
         }
-      }
+      },
+      update_custom_location(text) {
+        const custom_location_selection = {name: text}
+        this.update_value(custom_location_selection)
+      },
     }
   }
 </script>
