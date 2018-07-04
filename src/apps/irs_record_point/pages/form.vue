@@ -56,15 +56,8 @@
       'current_view': 'control_navigation',
       'initial_form_data': 'create_form'
     },
-    mounted() {
-    //  this.create_form('Mounted')
-    },
     methods: {
-      on_initial_response(rspns) {
-        console.log('Initial Response', this.initial_form_data)
-      },
       create_form(caller) {
-        console.log('Create Form ',this._survey)
         if(this._survey) return
         const form_options = {
           ...this.$store.state.instance_config.form,
