@@ -7,10 +7,9 @@
 
 
     <!-- DROPDOWN SELECTION -->
-    <div>
+    <div v-if="!is_custom_location || !use_custom_location">
       <multiselect
           class="multiselect"
-          v-if="!use_custom_location"
           v-model="area"
           :options="categories"
           placeholder="Select area"
@@ -20,13 +19,13 @@
 
       <multiselect
           class="multiselect"
-          v-if="!use_custom_location"
           :disabled="!area"
-          v-model="sub_area"
           :options="subarea_options"
           placeholder="Select sub-area"
           track-by="id"
           label="name"
+
+          v-bind:value="location_selection"
           @input="update_value"
       >
         <span slot="noResult">Oops! No elements found. Consider changing the search query.</span>
@@ -58,34 +57,40 @@
 
 <script>
   import Multiselect from 'vue-multiselect'
-  import {get_record_location_selection} from 'lib/instance_data/spatial_hierarchy_helper'
-  import {uniq} from 'lodash'
+  import {get, has, uniq} from 'lodash'
 
+  import {get_record_location_selection} from 'lib/instance_data/spatial_hierarchy_helper'
   import cache from 'config/cache'
 
   export default {
     name: 'location_selection',
-    props: ['initial_location_selection'],
+    props: {
+      location_selection: Object,
+    },
     components: {Multiselect},
     data() {
       return {
-        _watch_subscription: null,
         _custom_location_selection: '',
         use_custom_location: false,
-        sub_area: null
       }
     },
     computed: {
+      is_custom_location() {
+        return !has(this.sub_area, 'id')
+      },
       area: {
         get() {
-          return this.$store.state.irs_record_point.persisted_metadata.area
+          return get(
+            this.location_selection,
+            'category',
+            this.$store.state.irs_record_point.persisted_metadata.area
+          )
         },
         set(area_string) {
-          // If the area changes, need to unset any sub-area
-          this.sub_area = null
-          console.log('update_value with null location')
-          this.update_value()
           this.$store.commit('irs_record_point/set_persisted_metadata', {name: 'area', value: area_string})
+
+          // If the main area changes, must also reset the sub-area/location
+          // this.reset_location()
         }
       },
       categories() {
@@ -104,7 +109,8 @@
         },
         set(custom_location) {
           this._custom_location_selection = custom_location
-          this.$emit('change', {name: custom_location})
+          const custom_location_selection = {name: custom_location}
+          this.$emit('change', custom_location_selection)
         }
       },
     },
@@ -113,38 +119,18 @@
     },
     created() {
       this.all_locations = get_record_location_selection(cache)
-      this._watch_subscription = this.$watch('initial_location_selection', this.setup_initial_location_selection)
     },
     methods: {
-      setup_initial_location_selection() {
-        if (this.initial_location_selection) {
-          this._watch_subscription() // call to stop watching the initial_location_selection
-          this.$emit('change', this.initial_location_selection)
+      update_value(e, f) {
+        console.log(e, f)
+        // this.$emit('change_location_selection', this.sub_area)
+      },
+      reset_location() {
+        this.sub_area = null
+        this.update_value()
+      },
 
-          if (Object.prototype.hasOwnProperty.call(this.initial_location_selection, 'id')) {
-            // initial_location_selection is an object for the multiselect
-            this.sub_area = this.initial_location_selection
-            this.area = this.find_area_for_sub_area(this.sub_area)
-          } else {
-            // it is a custom text property, use text input
-            this.use_custom_location = true
-            this.custom_location_selection = this.initial_location_selection.name
-          }
-
-        } else {
-          this.$emit('change', this.sub_area)
-        }
-      },
-      update_value() {
-        this.$emit('change_location_selection', this.sub_area)
-      },
-      find_area_for_sub_area(selection) {
-        const found = this.all_locations.find(l => l.id === selection.id)
-        if (found) return found.category
-      },
-      search(query) {
-        this.search_query = query
-      },
+      // Custom location - TODO: separate component
       confirm_use_custom_location() {
         if (this.use_custom_location) {
           this.$refs.confirm_custom.open();
