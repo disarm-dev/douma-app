@@ -133,6 +133,7 @@
       confirm_use_custom_location() {
         if (this.use_custom_location) {
           this.$refs.confirm_custom.open();
+          this.update_value()
         } else {
           this.$refs.confirm_custom.close();
         }
