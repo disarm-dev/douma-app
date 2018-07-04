@@ -76,7 +76,7 @@
     components: {Multiselect},
     data() {
       return {
-        use_custom_location: true, // TODO: Replace debug value use_custom_location: false,
+        use_custom_location: false,
       }
     },
     computed: {
