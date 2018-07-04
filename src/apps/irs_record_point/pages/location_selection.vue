@@ -136,7 +136,7 @@
         }
       },
       update_value() {
-        this.$emit('change', this.sub_area)
+        this.$emit('change_location_selection', this.sub_area)
       },
       find_area_for_sub_area(selection) {
         const found = this.all_locations.find(l => l.id === selection.id)
