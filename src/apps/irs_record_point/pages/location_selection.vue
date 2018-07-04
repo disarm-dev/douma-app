@@ -5,45 +5,53 @@
       <div v-else>* Select area and sub-area</div>
     </md-card-header>
 
-    <multiselect
-        class="multiselect"
-        v-if="!use_custom_location"
-        v-model="area"
-        :options="categories"
-        placeholder="Select area"
-    >
-      <span slot="noResult">Oops! No elements found. Consider changing the search query.</span>
-    </multiselect>
 
-    <multiselect
-        class="multiselect"
-        v-if="!use_custom_location"
-        :disabled="!area"
-        v-model="sub_area"
-        :options="subarea_options"
-        placeholder="Select sub-area"
-        track-by="id"
-        label="name"
-        @input="update_value"
-    >
-      <span slot="noResult">Oops! No elements found. Consider changing the search query.</span>
-    </multiselect>
+    <!-- DROPDOWN SELECTION -->
+    <div>
+      <multiselect
+          class="multiselect"
+          v-if="!use_custom_location"
+          v-model="area"
+          :options="categories"
+          placeholder="Select area"
+      >
+        <span slot="noResult">Oops! No elements found. Consider changing the search query.</span>
+      </multiselect>
 
-    <md-checkbox v-model="use_custom_location">Enter custom location (location not on list)</md-checkbox>
+      <multiselect
+          class="multiselect"
+          v-if="!use_custom_location"
+          :disabled="!area"
+          v-model="sub_area"
+          :options="subarea_options"
+          placeholder="Select sub-area"
+          track-by="id"
+          label="name"
+          @input="update_value"
+      >
+        <span slot="noResult">Oops! No elements found. Consider changing the search query.</span>
+      </multiselect>
+    </div>
 
-    <md-input-container v-if="use_custom_location">
-      <label>Custom location</label>
-      <md-input v-model="custom_location_selection"></md-input>
-    </md-input-container>
 
-    <md-dialog-confirm
-        md-title="Are you sure you want to use a custom location?"
-        md-content="This place name does not fall within the sub-areas provided? If you proceed with a custom name, your data will be saved, but not appear in the dashboard"
-        md-ok-text="Use custom location"
-        md-cancel-text="Cancel"
-        @close="onClose"
-        ref="confirm_custom">
-    </md-dialog-confirm>
+    <!--CUSTOM LOCATION SELECTION -->
+    <div>
+      <md-checkbox v-model="use_custom_location">Enter custom location (location not on list)</md-checkbox>
+
+      <md-input-container v-if="use_custom_location">
+        <label>Custom location</label>
+        <md-input v-model="custom_location_selection"></md-input>
+      </md-input-container>
+
+      <md-dialog-confirm
+          md-title="Are you sure you want to use a custom location?"
+          md-content="This place name does not fall within the sub-areas provided? If you proceed with a custom name, your data will be saved, but not appear in the dashboard"
+          md-ok-text="Use custom location"
+          md-cancel-text="Cancel"
+          @close="onClose"
+          ref="confirm_custom">
+      </md-dialog-confirm>
+    </div>
 
   </div>
 </template>
