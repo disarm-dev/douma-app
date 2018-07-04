@@ -106,7 +106,7 @@
     watch: {
       location_selection() {
         // location_selection is only available after mounted, because the record.vue retrieves it async from DB
-        if (!this.use_custom_location && this.is_custom_location) {
+        if (this.location_selection && !this.use_custom_location && this.is_custom_location) {
           this.use_custom_location = true
         }
       },
