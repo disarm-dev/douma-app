@@ -90,7 +90,7 @@
           this.$store.commit('irs_record_point/set_persisted_metadata', {name: 'area', value: area_string})
 
           // If the main area changes, must also reset the sub-area/location
-          // this.reset_location()
+          this.reset_location()
         }
       },
       categories() {
@@ -100,9 +100,13 @@
 
         return uniq(all_categories).sort()
       },
+
       subarea_options() {
-        return this.all_locations.filter(l => l.category === this.area)
+        return this.all_locations
+          .filter(l => l.category === this.area)
+          .sort((a, b) => a.name.localeCompare(b.name))
       },
+
       custom_location_selection: {
         get() {
           return this._custom_location_selection
@@ -121,16 +125,15 @@
       this.all_locations = get_record_location_selection(cache)
     },
     methods: {
-      update_value(e, f) {
-        console.log(e, f)
-        // this.$emit('change_location_selection', this.sub_area)
+      update_value(selection) {
+        this.$emit('change_location_selection', selection)
       },
       reset_location() {
         this.sub_area = null
         this.update_value()
       },
 
-      // Custom location - TODO: separate component
+      // Custom location
       confirm_use_custom_location() {
         if (this.use_custom_location) {
           this.$refs.confirm_custom.open();
