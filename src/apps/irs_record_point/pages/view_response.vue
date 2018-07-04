@@ -1,34 +1,72 @@
 <template>
-  <tree-view v-if='response' class='container' :data="response" :options="{maxDepth: 4}"></tree-view>
+  <div class="applet_container">
+    <md-card>
+      <md-card-header>
+        <div class="md-title">Submitted response review</div>
+      </md-card-header>
+
+      <md-card-content>
+        <div v-for="section in sections">
+
+          <h4>{{section}}</h4>
+
+          <div v-if="isObject(flat_section(section))">
+            <div v-for="(val, key) in flat_section(section)">
+              {{key}}: {{val}}
+            </div>
+          </div>
+
+          <div v-else>
+            {{flat_section(section)}}
+          </div>
+
+        </div>
+      </md-card-content>
+    </md-card>
+  </div>
 </template>
 
 <script>
-  import {ResponseController} from 'lib/models/response/controller'
+  import flatten from 'flat'
+  import {isDate, isObject} from 'lodash'
 
-  const controller = new ResponseController('record')
   export default {
     name: 'view_response',
     props: {
-      response_id: {
-        type: String,
-        required: true
+      response: {
+        type: Object,
+      },
+    },
+    computed: {
+      sections() {
+        if (!this.response) return [];
+        return Object.keys(this.response);
       }
     },
-    mounted() {
-      this.find_response(this.response_id)
+    created() {
+      if (!this.response) this.$router.push({name: 'irs_record_point'})
     },
     methods: {
-      async find_response(response_id) {
-        const personalised_instance_id = this.$store.state.meta.personalised_instance_id
-        const instance = this.$store.state.instance_config.instance.slug
+      isObject: isObject,
+      flat_section(section) {
+        if (!this.response || !section) return false
 
-        const responses = await controller.read_all_cache({personalised_instance_id, instance})
-        return responses.find(response => response.id === this.response_id)
-      },
+        const chunk = this.response[section]
+
+        if (isObject(chunk) && !isDate(chunk)) {
+          return flatten(chunk)
+        } else if (isDate(chunk)) {
+          return chunk.toLocaleString()
+        } else {
+          return chunk
+        }
+      }
     }
   }
 </script>
 
 <style scoped>
-
+  h4 {
+    margin-bottom: 0;
+  }
 </style>

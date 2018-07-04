@@ -241,9 +241,6 @@
       this._validator = new Validator(this.instance_config.validations)
 
       if (this.response_id) {
-        /*
-          found becomes undefined if this.$store.dispatch('irs_record_point/read_records') is not awaited
-         */
         const found = responses.find(r => r.id === this.response_id)
         if (found.uneditable) {
           return this.$router.replace({name: 'irs_record_point:view', params: {response_id: this.response_id}})
@@ -268,9 +265,6 @@
       }
 
       this.current_view = this.pages[0]
-    },
-    mounted() {
-
     },
     methods: {
       go_to_next_view() {
@@ -333,7 +327,7 @@
         if (this.response_is_valid) {
           this.save_response()
         } else {
-          console.log('No idea what we do here.')
+          console.error('Invalid response. Not saving.', this.response)
         }
       },
       validate(response) {
