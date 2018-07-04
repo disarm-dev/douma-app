@@ -110,7 +110,7 @@
 
         <location_selection
             @change_location_selection="on_location_selection_change"
-            :initial_location_selection="response.location.selection"
+            :location_selection="response.location.selection"
         >
         </location_selection>
 
