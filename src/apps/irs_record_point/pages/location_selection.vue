@@ -105,14 +105,21 @@
     },
     watch: {
       location_selection() {
-        // location_selection is only available after mounted, because Record.vue retrieves it async from DB
+        // The location_selection is only available after mounted, because Record.vue retrieves it async from DB
+
+        // If it's really a custom_location, and UI not already set to use custom_location, then set UI
+        // to use custom
         if (this.is_custom_location && !this.use_custom_location) {
           this.use_custom_location = true
         }
       },
       use_custom_location() {
+        // When checkbox changes, only show confirmation if it's not a real custom location - avoids the pop when
+        // editing an existing custom location
         if (!this.is_custom_location) {
           this.confirm_use_custom_location()
+        } else {
+          this.update_value()
         }
       }
     },
