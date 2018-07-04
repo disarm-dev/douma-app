@@ -119,7 +119,6 @@
     },
     methods: {
       get,
-      has,
       update_value(selection) {
         this.$emit('change_location_selection', selection)
       },
