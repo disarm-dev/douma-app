@@ -35,23 +35,23 @@
 
 
     <!--CUSTOM LOCATION SELECTION -->
-    <div>
-      <md-checkbox v-model="use_custom_location">Enter custom location (location not on list)</md-checkbox>
+    <!--<div>-->
+    <!--<md-checkbox v-model="use_custom_location">Enter custom location (location not on list)</md-checkbox>-->
 
-      <md-input-container v-if="use_custom_location">
-        <label>Custom location</label>
-        <md-input v-model="custom_location_selection"></md-input>
-      </md-input-container>
+    <!--<md-input-container v-if="use_custom_location">-->
+    <!--<label>Custom location</label>-->
+    <!--<md-input v-model="custom_location_selection"></md-input>-->
+    <!--</md-input-container>-->
 
-      <md-dialog-confirm
-          md-title="Are you sure you want to use a custom location?"
-          md-content="This place name does not fall within the sub-areas provided? If you proceed with a custom name, your data will be saved, but not appear in the dashboard"
-          md-ok-text="Use custom location"
-          md-cancel-text="Cancel"
-          @close="onClose"
-          ref="confirm_custom">
-      </md-dialog-confirm>
-    </div>
+    <!--<md-dialog-confirm-->
+    <!--md-title="Are you sure you want to use a custom location?"-->
+    <!--md-content="This place name does not fall within the sub-areas provided? If you proceed with a custom name, your data will be saved, but not appear in the dashboard"-->
+    <!--md-ok-text="Use custom location"-->
+    <!--md-cancel-text="Cancel"-->
+    <!--@close="on_close_confirmation"-->
+    <!--ref="confirm_custom">-->
+    <!--</md-dialog-confirm>-->
+    <!--</div>-->
 
   </div>
 </template>
@@ -152,7 +152,7 @@
           this.$refs.confirm_custom.close();
         }
       },
-      onClose(response) {
+      on_close_confirmation(response) {
         if (response === 'cancel') {
           this.use_custom_location = false
         }
