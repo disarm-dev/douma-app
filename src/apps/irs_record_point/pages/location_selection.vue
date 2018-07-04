@@ -118,7 +118,11 @@
         // editing an existing custom location
         if (!this.is_custom_location) {
           this.confirm_use_custom_location()
-        } else {
+        }
+
+        // If you're setting to false, then reset the location
+        if (!this.use_custom_location) {
+          console.log('reset in use_custom_location watcher')
           this.update_value()
         }
       }
