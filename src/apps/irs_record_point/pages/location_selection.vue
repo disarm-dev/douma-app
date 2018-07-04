@@ -37,7 +37,7 @@
     <md-checkbox v-model="use_custom_location">Enter custom location (location not on list)</md-checkbox>
 
     <div v-if="use_custom_location">
-      <p>Enter custom location as text. Will not display in XX</p>
+      <p>Enter custom location as text. Data will be saved but will not display in the dashboard</p>
 
       <md-input-container>
         <label>Custom location</label>
@@ -98,6 +98,8 @@
           this.reset_location()
         }
       },
+
+      // Dropdown options
       categories() {
         const all_categories = this.all_locations.map(loc => {
           return loc.category
@@ -105,7 +107,6 @@
 
         return uniq(all_categories).sort()
       },
-
       subarea_options() {
         return this.all_locations
           .filter(l => l.category === this.area)
