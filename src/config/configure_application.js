@@ -38,6 +38,7 @@ import { set_raven_user_context } from 'config/error_tracking.js'
 import { clean_up_local_dbs } from 'lib/local_db'
 import { setup_acl } from 'lib/acess-control-list'
 import { hydrate_geodata_cache_from_idb } from 'lib/models/geodata/local.geodata_store'
+import pubsubcache from 'lib/helpers/pubsubcache'
 
 import BUILD_TIME from 'config/build-time'
 
@@ -76,15 +77,15 @@ export async function configure_application(instance_config) {
   store.commit('root:set_sw_update_available', false)
   store.commit('root:set_instance_config', instance_config)
 
-  document.addEventListener('show-update-downloading', e => {
+  pubsubcache.subscribe('show-update-downloading', e => {
     store.commit('root:set_sw_update_downloading', true)
   })
 
-  document.addEventListener('show-update-available', e => {
+  pubsubcache.subscribe('show-update-available', e => {
     store.commit('root:set_sw_update_available', true)
   })
 
-  document.addEventListener("show-content-available-offline", e => {
+  pubsubcache.subscribe("show-content-available-offline", e => {
     store.commit("root:set_sw_message", {
       title: 'Offline mode ready',
       message: 'After you are logged in and have downloaded the geodata, the app will work offline'
