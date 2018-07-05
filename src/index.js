@@ -19,8 +19,6 @@ configure_error_tracking()
 
 configure_pubsub_listeners()
 
-console.log('v5')
-
 get_instance_config()
   .then(instance_config => {
     if (instance_config) {
