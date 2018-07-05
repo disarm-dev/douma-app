@@ -31,7 +31,10 @@ server.post('/login', (req, res) => {
 
 server.post('/record/create?', (req, res) => {
   console.log(req.body)
-  res.send(201)
+  const fake_response = {
+    successful_ids: [1,2,3,4]
+  }
+  res.status(201).send(fake_response)
 })
 
 // Use default router
