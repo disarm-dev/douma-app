@@ -1,7 +1,10 @@
 <template>
   <div>
     <md-card-header>
-      <div>* Select location</div>
+      <div>
+        * Select location
+        <span v-if="area" class="clear" @click="area = '' && update_value()">Clear</span>
+      </div>
     </md-card-header>
 
 
@@ -13,7 +16,7 @@
           class="multiselect"
           v-model="area"
           :options="categories"
-          placeholder="OPTIONAL: Select area to filter selection below"
+          :placeholder="top_placeholder"
       >
         <span slot="noResult">Oops! No elements found. Consider changing the search query.</span>
       </multiselect>
@@ -22,9 +25,9 @@
       <multiselect
           class="multiselect"
           :options="subarea_options"
-          placeholder="Select sub-area"
+          :placeholder="bottom_placeholder"
           track-by="id"
-          :custom-label="nameWithLang"
+          :custom-label="name_with_category"
 
           v-bind:value="location_selection"
           @input="update_value"
@@ -37,7 +40,10 @@
     <md-checkbox v-model="use_custom_location">Enter custom location (location not on list)</md-checkbox>
 
     <div v-if="use_custom_location">
-      <p>Enter custom location as text. Data will be saved but will not display in the dashboard</p>
+      <p class="warning">
+        <md-icon class="md-warn">warning</md-icon>
+        Enter custom location as text. Data will be saved but will not display in the dashboard
+      </p>
 
       <md-input-container>
         <label>Custom location</label>
@@ -51,7 +57,7 @@
     <!-- CUSTOM LOCATION CONFIRMATION DIALOG-->
     <md-dialog-confirm
         md-title="Are you sure you want to use a custom location?"
-        md-content="This place name does not fall within the sub-areas provided? If you proceed with a custom name, your data will be saved, but not appear in the dashboard"
+        md-content="Are you sure this place name does not fall within the areas provided? If you proceed with a custom name, your data will be saved, but not appear in the dashboard"
         md-ok-text="Use custom location"
         md-cancel-text="Cancel"
         @close="on_close_confirmation"
@@ -65,7 +71,11 @@
   import Multiselect from 'vue-multiselect'
   import {get, has, uniq} from 'lodash'
 
-  import {get_record_location_selection} from 'lib/instance_data/spatial_hierarchy_helper'
+  import {
+    get_record_location_selection,
+    get_planning_level_name,
+    get_next_level_up_from_planning_level
+  } from 'lib/instance_data/spatial_hierarchy_helper'
 
   export default {
     name: 'location_selection',
@@ -105,6 +115,12 @@
           })
           .sort((a, b) => a.name.localeCompare(b.name))
       },
+      top_placeholder() {
+        return `OPTIONAL: Select ${this.singularise(get_next_level_up_from_planning_level().name)} to filter ${get_planning_level_name()} list below`
+      },
+      bottom_placeholder() {
+        return `REQUIRED: Select ${this.singularise(get_planning_level_name())}`
+      }
     },
     watch: {
       location_selection() {
@@ -125,7 +141,6 @@
 
         // If you're setting to false, then reset the location
         if (!this.use_custom_location) {
-          console.log('reset in use_custom_location watcher')
           this.update_value()
         }
       }
@@ -134,7 +149,12 @@
       this.all_locations = get_record_location_selection()
     },
     methods: {
-      nameWithLang({name, category}) {
+      get_planning_level_name,
+      get_next_level_up_from_planning_level,
+      singularise(text) {
+        return text.replace(/s$/, '')
+      },
+      name_with_category({name, category}) {
         if (!this.area) {
           return `${name} (${category})`
         } else {
@@ -169,5 +189,15 @@
 <style>
   .multiselect {
     margin-top: 0.5em;
+  }
+
+  .clear {
+    color: #ff5723;
+    cursor: pointer;
+    margin-left: 10px;
+  }
+
+  .warning {
+    color: #ff5723;
   }
 </style>
