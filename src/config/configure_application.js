@@ -72,6 +72,7 @@ export async function configure_application(instance_config) {
   // Make Vuex#$store and replace rehydrated (by vuex-persistedstate) instance_config with received instance_config
   // (Required for the app)
   const store = create_store(instance_config, instance_applets_stores_and_routes.stores)
+  store.commit('root:set_sw_update_available', false)
   store.commit('root:set_instance_config', instance_config)
 
   document.addEventListener("show-update-available", e => {
