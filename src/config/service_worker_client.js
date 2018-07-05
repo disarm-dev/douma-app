@@ -10,6 +10,10 @@ if (BUILD_TIME.DOUMA_PRODUCTION_MODE) {
       document.dispatchEvent(new Event('show-content-available-offline'))
       console.log('[sw] Content has been cached for offline use.');
     },
+    updatefound() {
+      document.dispatchEvent(new Event('show-update-downloading'))
+      console.log('[sw] New content downloading')
+    },
     updated() {
       document.dispatchEvent(new Event('show-update-available'))
       console.log('[sw] New content is available; please refresh.');
