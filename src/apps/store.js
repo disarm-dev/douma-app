@@ -19,6 +19,7 @@ export function create_store(instance_config, instance_stores) {
       // Global UI
       snackbar: { message: null },
       sw_message: { message: null, title: null },
+      sw_update_downloading: false,
       sw_update_available: false,
       network_online: false,
 

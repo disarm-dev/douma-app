@@ -38,6 +38,7 @@ import { set_raven_user_context } from 'config/error_tracking.js'
 import { clean_up_local_dbs } from 'lib/local_db'
 import { setup_acl } from 'lib/acess-control-list'
 import { hydrate_geodata_cache_from_idb } from 'lib/models/geodata/local.geodata_store'
+import pubsubcache from 'lib/helpers/pubsubcache'
 
 import BUILD_TIME from 'config/build-time'
 
@@ -72,14 +73,19 @@ export async function configure_application(instance_config) {
   // Make Vuex#$store and replace rehydrated (by vuex-persistedstate) instance_config with received instance_config
   // (Required for the app)
   const store = create_store(instance_config, instance_applets_stores_and_routes.stores)
+  store.commit('root:set_sw_update_downloading', false)
   store.commit('root:set_sw_update_available', false)
   store.commit('root:set_instance_config', instance_config)
 
-  document.addEventListener("show-update-available", e => {
-    store.commit("root:set_sw_update_available", true)
+  pubsubcache.subscribe('sw:show_update_downloading', e => {
+    store.commit('root:set_sw_update_downloading', true)
   })
 
-  document.addEventListener("show-content-available-offline", e => {
+  pubsubcache.subscribe('sw:show_update_available', e => {
+    store.commit('root:set_sw_update_available', true)
+  })
+
+  pubsubcache.subscribe('sw:show_content_available_offline', e => {
     store.commit("root:set_sw_message", {
       title: 'Offline mode ready',
       message: 'After you are logged in and have downloaded the geodata, the app will work offline'
