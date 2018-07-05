@@ -19,9 +19,12 @@
             </span>
         </h2>
 
-        <md-button v-if="sw_update_downloading" @click="reload" class="md-raised md-primary">Update downloading
+        <md-button v-if="sw_update_downloading" class="md-raised md-primary">
+          Update downloading
         </md-button>
-        <md-button v-if="sw_update_available" @click="reload" class="md-raised md-accent">Update available</md-button>
+        <md-button v-if="sw_update_available" @click="reload" class="md-raised md-accent">
+          Update available
+        </md-button>
 
         <!-- OFFLINE , TRY RECONNECT-->
         <md-button v-if="!online" @click="try_reconnect" class="md-icon-button md-dense md-warn">
@@ -60,7 +63,7 @@
       ...mapState({
         instance_title: state => state.instance_config.instance.title,
         online: state => state.network_online,
-        sw_update_downloading: state => state.sw_update_downloading,
+        sw_update_downloading: state => state.sw_update_downloading && !state.sw_update_available,
         sw_update_available: state => state.sw_update_available,
       }),
       ...mapGetters({
