@@ -28,6 +28,8 @@
           :placeholder="bottom_placeholder"
           track-by="id"
           :custom-label="name_with_category"
+          :internal-search="false"
+          @search-change="search_subarea"
 
           v-bind:value="location_selection"
           @input="update_value"
@@ -86,6 +88,7 @@
     data() {
       return {
         use_custom_location: false,
+        subarea_query: ''
       }
     },
     computed: {
@@ -112,6 +115,10 @@
           .filter(l => {
             if (!this.area) return true
             return l.category === this.area
+          })
+          .filter(l => {
+            if (!this.subarea_query) return true
+            return new RegExp(this.subarea_query, 'i').test(l.name)
           })
           .sort((a, b) => a.name.localeCompare(b.name))
       },
@@ -151,8 +158,13 @@
     methods: {
       get_planning_level_name,
       get_next_level_up_from_planning_level,
+      get,
       singularise(text) {
         return text.replace(/s$/, '')
+      },
+
+      search_subarea(query) {
+        this.subarea_query = query
       },
       name_with_category({name, category}) {
         if (!this.area) {
@@ -161,7 +173,6 @@
           return name
         }
       },
-      get,
       update_value(selection) {
         this.$emit('change_location_selection', selection)
       },
