@@ -19,7 +19,7 @@ configure_error_tracking()
 
 configure_pubsub_listeners()
 
-console.log('v4')
+console.log('v5')
 
 get_instance_config()
   .then(instance_config => {
