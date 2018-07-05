@@ -7,24 +7,24 @@
 
     <!-- DROPDOWN SELECTION -->
     <div v-if="!use_custom_location">
-      <p>Select area and sub-area from dropdowns</p>
 
+      <!--<p>Optionally set an area to filter the dropdown below</p>-->
       <multiselect
           class="multiselect"
           v-model="area"
           :options="categories"
-          placeholder="Select area"
+          placeholder="OPTIONAL: Select area to filter selection below"
       >
         <span slot="noResult">Oops! No elements found. Consider changing the search query.</span>
       </multiselect>
 
+      <!--<p>* Select sub-area from dropdown - if you don't know the area, you can start searching all subareas below</p>-->
       <multiselect
           class="multiselect"
-          :disabled="!area"
           :options="subarea_options"
           placeholder="Select sub-area"
           track-by="id"
-          label="name"
+          :custom-label="nameWithLang"
 
           v-bind:value="location_selection"
           @input="update_value"
@@ -99,7 +99,10 @@
       },
       subarea_options() {
         return this.all_locations
-          .filter(l => l.category === this.area)
+          .filter(l => {
+            if (!this.area) return true
+            return l.category === this.area
+          })
           .sort((a, b) => a.name.localeCompare(b.name))
       },
     },
@@ -131,6 +134,13 @@
       this.all_locations = get_record_location_selection()
     },
     methods: {
+      nameWithLang({name, category}) {
+        if (!this.area) {
+          return `${name} (${category})`
+        } else {
+          return name
+        }
+      },
       get,
       update_value(selection) {
         this.$emit('change_location_selection', selection)
