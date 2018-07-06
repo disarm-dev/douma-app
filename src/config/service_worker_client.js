@@ -1,5 +1,5 @@
 import BUILD_TIME from 'config/build-time'
-import {register} from 'register-service-worker'
+import {register} from 'lib/helpers/register_service_worker'
 
 if (BUILD_TIME.DOUMA_PRODUCTION_MODE) {
   register('/service-worker.js', {
