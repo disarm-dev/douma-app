@@ -67,6 +67,6 @@ export default {
     max_records_batch_size: 100
   },
   support: {
-    default_support_chat_number: '15551234567'
+    default_support_chat_number: '26876677616'
   }
 }
