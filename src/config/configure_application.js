@@ -73,24 +73,14 @@ export async function configure_application(instance_config) {
   // Make Vuex#$store and replace rehydrated (by vuex-persistedstate) instance_config with received instance_config
   // (Required for the app)
   const store = create_store(instance_config, instance_applets_stores_and_routes.stores)
-  store.commit('root:set_sw_update_downloading', false)
-  store.commit('root:set_sw_update_available', false)
   store.commit('root:set_instance_config', instance_config)
 
-  pubsubcache.subscribe('sw:show_update_downloading', e => {
-    store.commit('root:set_sw_update_downloading', true)
-  })
+  // Reset key UI state
+  store.commit('root:set_sw_update_downloading', false)
+  store.commit('root:set_sw_update_available', false)
 
-  pubsubcache.subscribe('sw:show_update_available', e => {
-    store.commit('root:set_sw_update_available', true)
-  })
-
-  pubsubcache.subscribe('sw:show_content_available_offline', e => {
-    store.commit("root:set_sw_message", {
-      title: 'Offline mode ready',
-      message: 'After you are logged in and have downloaded the geodata, the app will work offline'
-    })
-  })
+  // Create listeners to act on store
+  configure_pubsubcache_listeners(store)
 
   // Create Vue#$router from what you got
   // (Required for the app)
