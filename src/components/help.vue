@@ -4,6 +4,11 @@
       <md-dialog-title>Help</md-dialog-title>
 
       <md-dialog-content>
+        <a :href="support_chat_link" class="no-underline">
+          <md-icon>chat</md-icon>
+          Start WhatsApp support chat
+        </a>
+
         <md-input-container>
           <label>Search</label>
           <md-input v-model="search_term"></md-input>
@@ -37,8 +42,11 @@
 
 <script>
   import array_unique from 'array-unique'
+  import {get} from 'lodash'
   import Fuse from 'fuse.js'
   import showdown from 'showdown'
+
+  import CONFIG from 'config/common'
 
   const help_content = require("json-loader!yaml-include-loader!../help_articles/help.yaml")
 
@@ -75,6 +83,11 @@
       sections() {
         return array_unique(this.filtered_help_content.map(c => c.section_title))
       },
+      support_chat_link() {
+        const default_number = CONFIG.support.default_support_chat_number
+        const support_number = get(this.$store.state.instance_config.instance, 'support_number', default_number)
+        return `https://wa.me/${support_number}`
+      }
     },
     watch: {
       '$store.state.trigger_help_visible_irrelevant_value': 'open_dialog_help',
@@ -139,5 +152,9 @@
   .help > .md-dialog {
     min-width: 90%;
     height: 90%;
+  }
+
+  .no-underline:hover {
+    text-decoration: none !important;
   }
 </style>
