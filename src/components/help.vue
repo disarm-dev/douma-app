@@ -4,7 +4,7 @@
       <md-dialog-title>Help</md-dialog-title>
 
       <md-dialog-content>
-        <a :href="support_chat_link" class="no-underline">
+        <a :href="support_chat_link" class="no-underline" target="_blank">
           <md-icon>chat</md-icon>
           Start WhatsApp support chat
         </a>
