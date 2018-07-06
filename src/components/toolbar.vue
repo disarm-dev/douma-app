@@ -63,8 +63,12 @@
       ...mapState({
         instance_title: state => state.instance_config.instance.title,
         online: state => state.network_online,
-        sw_update_downloading: state => state.sw_update_downloading && !state.sw_update_available,
         sw_update_available: state => state.sw_update_available,
+        sw_update_downloading: state => {
+          return state.sw_update_downloading
+            && !state.sw_update_available
+            && state.network_online
+        },
       }),
       ...mapGetters({
         decorated_applets: 'meta/decorated_applets',
