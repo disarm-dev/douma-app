@@ -38,7 +38,7 @@ import { set_raven_user_context } from 'config/error_tracking.js'
 import { clean_up_local_dbs } from 'lib/local_db'
 import { setup_acl } from 'lib/acess-control-list'
 import { hydrate_geodata_cache_from_idb } from 'lib/models/geodata/local.geodata_store'
-import pubsubcache from 'lib/helpers/pubsubcache'
+import {configure_pubsubcache_listeners} from 'config/configure_pubsubcache_listeners'
 
 import BUILD_TIME from 'config/build-time'
 
@@ -79,8 +79,8 @@ export async function configure_application(instance_config) {
   store.commit('root:set_sw_update_downloading', false)
   store.commit('root:set_sw_update_available', false)
 
-  // Create listeners to act on store
   configure_pubsubcache_listeners(store)
+  // Create listeners to act on store
 
   // Create Vue#$router from what you got
   // (Required for the app)
