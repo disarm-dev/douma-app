@@ -65,5 +65,8 @@ export default {
   },
   remote: {
     max_records_batch_size: 100
+  },
+  support: {
+    default_support_chat_number: '15551234567'
   }
 }
