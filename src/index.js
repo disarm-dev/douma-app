@@ -19,6 +19,8 @@ configure_error_tracking()
 
 configure_pubsub_converters()
 
+console.log('v1')
+
 get_instance_config()
   .then(instance_config => {
     if (instance_config) {
