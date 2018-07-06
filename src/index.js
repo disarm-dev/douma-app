@@ -12,12 +12,12 @@ import 'vue-multiselect/dist/vue-multiselect.min.css'
 import {configure_error_tracking} from 'config/error_tracking.js'
 import {get_instance_config} from 'config/load_instance_config.js'
 import {configure_application} from 'config/configure_application.js'
-import {configure_pubsub_listeners} from 'config/configure_pubsub_listeners'
+import {configure_pubsub_converters} from 'config/configure_pubsub_converters'
 
 // configure_error_tracking!!
 configure_error_tracking()
 
-configure_pubsub_listeners()
+configure_pubsub_converters()
 
 get_instance_config()
   .then(instance_config => {
