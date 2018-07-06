@@ -19,7 +19,7 @@
             </span>
         </h2>
 
-        <md-button v-if="sw_update_downloading" class="md-raised md-primary">
+        <md-button v-if="sw_update_downloading" @click='dismiss_downloading_notification' class="md-raised md-primary">
           Update downloading
         </md-button>
         <md-button v-if="sw_update_available" @click="reload" class="md-raised md-accent">
@@ -99,6 +99,9 @@
       reload() {
         console.log('trigger location.reload()')
         location.reload()
+      },
+      dismiss_downloading_notification() {
+        this.$store.commit('root:set_sw_update_downloading', false)
       }
     }
   }
