@@ -1,6 +1,6 @@
 import pubsubcache from 'lib/helpers/pubsubcache'
 
-export const configure_pubsub_listeners = () => {
+export const configure_pubsub_converters = () => {
   document.addEventListener('show-update-downloading', e => {
     pubsubcache.publish('sw:show_update_downloading')
   })
