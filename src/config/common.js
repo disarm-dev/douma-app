@@ -44,6 +44,11 @@ export default {
       title: 'Seasons',
       icon: 'bubble_chart',
       geodata_required: false
+    },
+    record2: {
+      title: 'Record2',
+      icon: 'assignment',
+      geodata_required: false,
     }
   },
   hash_params: {
