@@ -24,7 +24,8 @@ server.post('/login', (req, res) => {
     'allowed_apps': {
       'read': ['record2', 'debug'],
       'write': ['record2', 'debug']
-    }
+    },
+    'permissions': ['read:record2', 'write:record2', 'read:debug', 'write:debug']
   })
 })
 

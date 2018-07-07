@@ -6,7 +6,8 @@
       "config_id": "test",
       "config_version": "1.0.16",
       "applets": {
-        "test": {},
+        "record2": {},
+        "debug": {},
         "meta": {}
       },
       "fake_form": [
