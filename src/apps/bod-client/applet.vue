@@ -16,8 +16,7 @@
 </template>
 
 <script>
-  // import run from './algorithmia'
-  import {Algorithmia} from 'lib/algorithmia-0.2.0'
+  import Algorithmia from 'lib/algorithmia-0.2.0'
 
   export default {
     name: 'applet',
@@ -39,10 +38,6 @@
           const client = Algorithmia.client('simnHu2YBsHV0/bHJQnkJi5aJ2N1');
           const res = await client.algo('locational/testalgo1').pipe(this.input_json)
           this.output = res.result
-
-          // const res = await run('locational/testalgo1', this.input_json)
-          // const json_res = await res.json()
-          // this.output = json_res.result
         } catch (e) {
           console.error(e);
         }

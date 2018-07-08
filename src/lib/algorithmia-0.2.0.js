@@ -1,4 +1,4 @@
-export const Algorithmia = {}
+const Algorithmia = {}
 
 Algorithmia.query = function (algo_uri, api_key, input, cb) {
   return Algorithmia.client(api_key).algo(algo_uri).pipe(input, function (result) {
@@ -136,3 +136,5 @@ const Algorithm = function (client, algo_uri) {
     return promise;
   };
 };
+
+export default Algorithmia;
