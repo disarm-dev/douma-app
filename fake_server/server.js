@@ -22,10 +22,10 @@ server.post('/login', (req, res) => {
     'key': 'b48fbf5e746e6bfbd6c36dca5ff088b3',
     'instance_slug': 'all',
     'allowed_apps': {
-      'read': ['record2', 'debug'],
-      'write': ['record2', 'debug']
+      'read': ['record2', 'bod-client', 'debug'],
+      'write': ['record2', 'bod-client', 'debug']
     },
-    'permissions': ['read:record2', 'write:record2', 'read:debug', 'write:debug']
+    'permissions': ['read:record2', 'write:record2', 'read:debug', 'write:debug', 'read:bod-client', 'write:bod-client']
   })
 })
 

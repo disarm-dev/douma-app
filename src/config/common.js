@@ -49,6 +49,11 @@ export default {
       title: 'Record2',
       icon: 'assignment',
       geodata_required: false,
+    },
+    'bod-client': {
+      title: 'BOD Client',
+      icon: 'battery_charging_full',
+      geodata_required: false
     }
   },
   hash_params: {
