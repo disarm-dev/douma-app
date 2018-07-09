@@ -81,13 +81,15 @@
 
           </md-list-item>
 
-          <!-- OPTIONAL FIELDS -->
-          <md-list-item v-for="field in optional_fields" :key="field">
+          <!-- OPTIONAL FIELDS (Only team_name for now)-->
+          <md-list-item v-if="optional_fields.includes('team_name')">
             <md-input-container>
-              <label>{{field}}</label>
-              <md-input v-model.lazy="response[field]" @change="field_changed(field)"></md-input>
+              <label>Team name</label>
+              <md-input v-model.lazy="response.team_name" @change="team_name_changed()"></md-input>
             </md-input-container>
           </md-list-item>
+
+
         </md-list>
 
       </md-card-content>
@@ -372,9 +374,8 @@
           this.$router.push('/irs/record_point')
         }
       },
-      field_changed(field) {
-        // TODO: @refac Stop this being only able to do team_name!
-        this.$store.commit('irs_record_point/set_team_name', this.response[field])
+      team_name_changed() {
+        this.$store.commit('irs_record_point/set_team_name', this.response['team_name'])
       }
     }
   }
