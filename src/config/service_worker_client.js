@@ -1,5 +1,5 @@
 import BUILD_TIME from 'config/build-time'
-import {register} from 'register-service-worker'
+import {register} from 'lib/helpers/register_service_worker'
 
 if (BUILD_TIME.DOUMA_PRODUCTION_MODE) {
   register('/service-worker.js', {
@@ -9,6 +9,10 @@ if (BUILD_TIME.DOUMA_PRODUCTION_MODE) {
     cached() {
       document.dispatchEvent(new Event('show-content-available-offline'))
       console.log('[sw] Content has been cached for offline use.');
+    },
+    updatefound() {
+      document.dispatchEvent(new Event('show-update-downloading'))
+      console.log('[sw] New content downloading')
     },
     updated() {
       document.dispatchEvent(new Event('show-update-available'))

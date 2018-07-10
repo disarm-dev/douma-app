@@ -19,6 +19,7 @@ export function create_store(instance_config, instance_stores) {
       // Global UI
       snackbar: { message: null },
       sw_message: { message: null, title: null },
+      sw_update_downloading: false,
       sw_update_available: false,
       network_online: false,
 
@@ -35,6 +36,9 @@ export function create_store(instance_config, instance_stores) {
       },
       'root:set_sw_message': (state, sw_message) => {
         state.sw_message = sw_message // Need to have {title: 'title', and message: 'message'}
+      },
+      'root:set_sw_update_downloading': (state, sw_update_downloading) => {
+        state.sw_update_downloading = sw_update_downloading
       },
       'root:set_sw_update_available': (state, sw_update_available) => {
         state.sw_update_available = sw_update_available
