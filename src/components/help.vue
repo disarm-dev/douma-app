@@ -4,7 +4,7 @@
       <md-dialog-title>Help</md-dialog-title>
 
       <md-dialog-content>
-        <a :href="support_chat_link" class="no-underline" target="_blank">
+        <a v-if='support_chat_link' :href="support_chat_link" class="no-underline" target="_blank">
           <md-icon>chat</md-icon>
           Start WhatsApp support chat
         </a>
@@ -84,8 +84,8 @@
         return array_unique(this.filtered_help_content.map(c => c.section_title))
       },
       support_chat_link() {
-        const default_number = CONFIG.support.default_support_chat_number
-        const support_number = get(this.$store.state.instance_config.instance, 'support_number', default_number)
+        const support_number = get(this.$store.state.instance_config.instance, 'support_number', false)
+        if (!support_number) return false
         return `https://wa.me/${support_number}`
       }
     },
