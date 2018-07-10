@@ -123,10 +123,11 @@
           .sort((a, b) => a.name.localeCompare(b.name))
       },
       top_placeholder() {
-        return `OPTIONAL: Select ${this.singularise(get_next_level_up_from_planning_level().name)} to filter ${get_planning_level_name()} list below`
+
+        return `OPTIONAL: Select to filter ${get_planning_level_name()}`
       },
       bottom_placeholder() {
-        return `REQUIRED: Select ${this.singularise(get_planning_level_name())}`
+        return `REQUIRED: Select from ${get_planning_level_name()}`
       }
     },
     watch: {
