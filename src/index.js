@@ -31,9 +31,9 @@ import InstanceConfigLocal from 'lib/models/instance_config/local'
   debugger
 
   console.log('local_instance_config', local_instance_config)
-  if (local_instance_config) {
-    configure_application(instance_config)
-  } else {
-    launch_shell_app()
-  }
+  // if (local_instance_config) {
+  //   configure_application(instance_config)
+  // } else {
+  //   launch_shell_app()
+  // }
 })()
