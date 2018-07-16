@@ -10,7 +10,6 @@ let router
 export {router}
 
 export function create_router(instance_routes, store) {
-  Vue.use(VueRouter)
 
   // Configure routes for all Applets
   const routes = [
