@@ -94,6 +94,7 @@ export default {
       })
     },
     logout: (context) => {
+
       Raven.setUserContext({
         instance_slug: context.rootState.instance_config.instance.slug
       })

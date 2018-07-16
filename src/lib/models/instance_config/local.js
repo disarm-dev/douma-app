@@ -19,4 +19,9 @@ export default class Local {
   async update(instance_config) {
     await this.table.put(instance_config)
   }
+
+  async clear() {
+    console.warn('Wiping all instance_configs from table, but think we only ever want to store one?')
+    await this.table.clear()
+  }
 }
