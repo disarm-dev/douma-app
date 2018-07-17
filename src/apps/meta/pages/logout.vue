@@ -6,10 +6,15 @@
 
 <script>
 
+  import {launch_shell_app} from '../../../shell_app'
+
   export default {
     mounted() {
       this.$store.dispatch('meta/logout').then(() => {
-        setTimeout(() => location.reload(), 1000)
+        setTimeout(() => {
+          // location.reload()
+          launch_shell_app()
+        }, 1000)
       })
     }
   }

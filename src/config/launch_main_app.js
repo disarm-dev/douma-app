@@ -20,14 +20,17 @@ import { hydrate_geodata_cache_from_idb } from 'lib/models/geodata/local.geodata
 import {configure_pubsubcache_listeners} from 'config/configure_pubsubcache_listeners'
 
 import BUILD_TIME from 'config/build-time'
-import {remove_shell_app} from '../shell_app'
 import {hide_loading_page} from 'config/hide_loading_page'
+import {remove_app} from 'config/remove_app'
+import {remove_shell_app} from '../shell_app'
 
 /**
  * Build a 'douma_app' instance
  * @param instance_config
  * @returns {Vue}
  */
+let douma_app
+
 export async function launch_main_app({instance_config, user}) {
 
 
@@ -105,8 +108,17 @@ export async function launch_main_app({instance_config, user}) {
   /////////////////////////////
 
   // Instantiate Vue app with store and router
-  const douma_app = new Vue({
-    el: '#douma',
+  const el_id = 'douma'
+  if (!document.getElementById(el_id)) {
+    const new_el = document.createElement('div')
+    new_el.id = el_id
+    document.getElementsByTagName('body')[0].appendChild(new_el)
+  }
+
+
+  douma_app = new Vue({
+    replace: false,
+    el: `#${el_id}`,
     router,
     store,
     vueLoading: new VueLoading(),
@@ -147,4 +159,8 @@ export async function launch_main_app({instance_config, user}) {
   // If made it to here, make sure loading_page is hidden, and the shell_app is removed
   hide_loading_page()
   remove_shell_app()
+}
+
+export function remove_douma_app() {
+  remove_app(douma_app)
 }

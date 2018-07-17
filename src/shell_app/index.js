@@ -7,6 +7,8 @@ import Shell from './shell'
 import Login from './login'
 import InstanceConfigs from './instance_configs'
 import {hide_loading_page} from 'config/hide_loading_page'
+import {remove_douma_app} from 'config/launch_main_app'
+import {remove_app} from 'config/remove_app'
 
 let shell_app
 
@@ -55,24 +57,26 @@ export function launch_shell_app() {
     }
   })
 
+  const el_id = 'shell'
+  if (!document.getElementById(el_id)) {
+    const new_el = document.createElement('div')
+    new_el.id = el_id
+    document.getElementsByTagName('body')[0].appendChild(new_el)
+  }
+
   shell_app = new Vue({
-    el: '#shell',
+    replace: false,
+    el: `#${el_id}`,
     router,
     store,
     render: createElement => createElement(Shell),
   })
 
-  if (shell_app) hide_loading_page()
+  // Cleanup
+  hide_loading_page()
+  remove_douma_app()
 }
 
 export function remove_shell_app() {
-  if (shell_app) {
-    shell_app.$destroy()
-    shell_app.$off()
-    shell_app.$el.remove()
-    shell_app = null
-    console.log('shell_app destroyed')
-  } else {
-    console.log('shell_app DOES NOT exists - NO need to remove',)
-  }
+  remove_app(shell_app)
 }
