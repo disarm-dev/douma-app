@@ -32,7 +32,6 @@
 </template>
 
 <script>
-  //import { mapState, mapActions, mapMutations } from 'vuex'
   import virtual_list from 'vue-virtual-scroll-list'
   import moment from "moment"
   import {get} from 'lodash'

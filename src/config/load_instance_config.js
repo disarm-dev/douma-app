@@ -1,4 +1,4 @@
-import {read_instance_configuration_for} from '../shell_app/instance_config/model'
+import {read_instance_configuration_for} from '../shell_app/instance_config/controller'
 import CONFIG from 'config/common'
 import { remove_param, retrieve_stored_param, store_params_from_hash } from 'lib/helpers/hash_params'
 
