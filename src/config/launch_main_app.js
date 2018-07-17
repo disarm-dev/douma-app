@@ -28,7 +28,7 @@ import {hide_loading_page} from 'config/hide_loading_page'
  * @param instance_config
  * @returns {Vue}
  */
-export async function launch_main_app(instance_config) {
+export async function launch_main_app({instance_config, user}) {
   //
   // BEFORE router or store
   //
@@ -55,6 +55,7 @@ export async function launch_main_app(instance_config) {
   // (Required for the app)
   const store = create_store(instance_config, instance_applets_stores_and_routes.stores)
   store.commit('root:set_instance_config', instance_config)
+  store.commit('meta:set_user', user)
 
   // Reset key UI state
   store.commit('root:set_sw_update_downloading', false)

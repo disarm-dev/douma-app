@@ -99,8 +99,10 @@ export default {
         instance_slug: context.rootState.instance_config.instance.slug
       })
 
+      // This is the actual log-out side-effect. No `user` means router goes to login
       context.commit('set_user', null)
-      console.log('need to remove instance_config from store')
+
+      console.log('remove instance_config from store')
     },
     clear_data_storage: (context, {instance_id_changed, authenticated_user}) => {
       if (!instance_id_changed) return // Nothing changed

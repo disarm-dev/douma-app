@@ -1,6 +1,6 @@
 <template>
-  <div class='logout'>
-
+  <div class='container'>
+    Returning to login/shell_app. Please wait...
   </div>
 </template>
 
@@ -9,7 +9,7 @@
   export default {
     mounted() {
       this.$store.dispatch('meta/logout').then(() => {
-        this.$router.push('/')
+        setTimeout(() => location.reload(), 1000)
       })
     }
   }

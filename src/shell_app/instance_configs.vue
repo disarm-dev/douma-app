@@ -720,7 +720,8 @@
             'type': 'error'
           }]
         }
-        pubsubcache.publish('shell:launch_with_config', instance_config)
+        const user = {}
+        pubsubcache.publish('shell:launch_with_config', {instance_config, user})
       }
     }
   }

@@ -33,6 +33,7 @@ export function create_router(instance_routes, store) {
     // next() if user already logged in
     if (store.state.meta && store.state.meta.user) return next()
 
+    return console.log('should have already logged-in via shell app?')
     // User not logged in
     if (to.name === 'meta:login') {
       // next() if destination is the login page

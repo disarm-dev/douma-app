@@ -22,12 +22,12 @@ import {launch_shell_app} from './shell_app'
   // Translate document eventListeners into pubsubcache
   configure_pubsub_converters()
 
-  pubsubcache.subscribe('shell:launch_with_config', (topic, instance_config) => {
-    launch_main_app(instance_config)
+  pubsubcache.subscribe('shell:launch_with_config', (topic, {instance_config, user}) => {
+    launch_main_app({instance_config, user})
   })
 
   // login, load instance config
-  const local_instance_config = await retrieve_local_config()
+  const local_instance_config = null//await retrieve_local_config()
 
   if (local_instance_config) {
     launch_main_app(local_instance_config)
