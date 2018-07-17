@@ -100,6 +100,7 @@ export default {
       })
 
       context.commit('set_user', null)
+      console.log('need to remove instance_config from store')
     },
     clear_data_storage: (context, {instance_id_changed, authenticated_user}) => {
       if (!instance_id_changed) return // Nothing changed

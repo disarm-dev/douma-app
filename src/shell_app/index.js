@@ -4,6 +4,8 @@ import Vuex from 'vuex'
 import Shell from './shell'
 import Login from './login'
 
+let shell_app
+
 export function launch_shell_app() {
 
   const routes = [
@@ -31,4 +33,11 @@ export function launch_shell_app() {
     render: createElement => createElement(Shell),
   })
 }
+
+export function remove_shell_app() {
+  if (shell_app) {
+    console.log('shell_app exists - need to remove',)
+  } else {
+    console.log('shell_app DOES NOT exists - NO need to remove',)
+  }
 }
