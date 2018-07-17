@@ -10,7 +10,19 @@
     name: 'login',
     methods: {
       do_login() {
-        this.$store.commit('set_user', {username: 'bob'})
+        const user = {
+          '_id': 'dev2',
+          'name': 'Jonathan',
+          'username': 'js',
+          'key': 'b48fbf5e746e6bfbd6c36dca5ff088b3',
+          'instance_slug': 'all',
+          'allowed_apps': {
+            'read': ['irs_record_point', 'record2', 'bod-client', 'debug'],
+            'write': ['irs_record_point', 'record2', 'bod-client', 'debug']
+          },
+          'permissions': ['read:irs_record_point', 'read:record2', 'write:record2', 'read:debug', 'write:irs_record_point', 'write:debug', 'read:bod-client', 'write:bod-client']
+        }
+        this.$store.commit('set_user', user)
         this.$router.push({name: 'shell:instance_configs'})
       }
     }

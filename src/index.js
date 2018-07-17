@@ -30,7 +30,8 @@ import {launch_shell_app} from './shell_app'
   const local_instance_config = null//await retrieve_local_config()
 
   if (local_instance_config) {
-    launch_main_app(local_instance_config)
+    console.log('launch with', local_instance_config)
+    // launch_main_app(local_instance_config)
   } else {
     launch_shell_app()
   }

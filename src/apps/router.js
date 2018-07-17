@@ -33,16 +33,7 @@ export function create_router(instance_routes, store) {
     // next() if user already logged in
     if (store.state.meta && store.state.meta.user) return next()
 
-    return console.log('should have already logged-in via shell app?')
-    // User not logged in
-    if (to.name === 'meta:login') {
-      // next() if destination is the login page
-      return next()
-    } else {
-      // Otherwise go to the login page (storing your original target)
-      store.commit('meta/set_previous_route', to.path)
-      return next({name: 'meta:login'})
-    }
+    return console.error('should have already logged-in via shell app?')
   })
 
   // Redirect to get geodata if needed

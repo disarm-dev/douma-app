@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Vuex from 'vuex'
-import {has} from 'lodash'
+import {get} from 'lodash'
 
 
 import Shell from './shell'
@@ -36,7 +36,7 @@ export function launch_shell_app() {
   })
 
   router.beforeEach((to, from, next) => {
-    if (has(store.state, 'user')) return next()
+    if (get(store.state, 'user', false)) return next()
 
     if (to.name === 'shell:login') {
       // next() if destination is the login page
@@ -49,12 +49,10 @@ export function launch_shell_app() {
 
   const store = new Vuex.Store({
     state: {
-      nothing: null,
+      user: null,
     },
     mutations: {
-      set_user: (state, user) => {
-        state.user = user
-      }
+      set_user: (state, user) => state.user = user
     }
   })
 

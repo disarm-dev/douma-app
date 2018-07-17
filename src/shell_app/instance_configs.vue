@@ -720,7 +720,7 @@
             'type': 'error'
           }]
         }
-        const user = {}
+        const user = this.$store.state.user
         pubsubcache.publish('shell:launch_with_config', {instance_config, user})
       }
     }
