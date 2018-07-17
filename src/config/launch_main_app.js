@@ -101,8 +101,10 @@ export async function launch_main_app({instance_config, user}) {
     render: createElement => createElement(DoumaComponent),
   })
 
+  // For debugging, add some globals
   window.__disarm_debug_app = douma_app
   window.__disarm_debug_store = douma_app.$store
+  window.__disarm_debug_state = douma_app.$store.state
 
 
   // AFTER VUE APP IS CREATED (first page has rendered)
