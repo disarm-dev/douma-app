@@ -20,7 +20,7 @@
             'read': ['irs_record_point', 'record2', 'bod-client', 'debug'],
             'write': ['irs_record_point', 'record2', 'bod-client', 'debug']
           },
-          'permissions': ['read:irs_record_point', 'read:record2', 'write:record2', 'read:debug', 'write:irs_record_point', 'write:debug', 'read:bod-client', 'write:bod-client']
+          'permissions': ['read:irs_monitor', 'read:irs_record_point', 'read:record2', 'write:record2', 'read:debug', 'write:irs_monitor', 'write:irs_record_point', 'write:debug', 'read:bod-client', 'write:bod-client']
         }
         this.$store.commit('set_user', user)
         this.$router.push({name: 'shell:instance_configs'})
