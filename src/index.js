@@ -7,6 +7,7 @@ import 'lib/bootstrap-extract.css' // contains only table-related stuff, but sti
 import 'vue-material/dist/vue-material.css'
 import 'vue-multiselect/dist/vue-multiselect.min.css'
 // Imports
+import pubsubcache from 'lib/helpers/pubsubcache'
 import 'config/configure_vue'
 import {retrieve_local_config} from 'lib/models/instance_config/model'
 import {configure_error_tracking} from 'config/error_tracking'
@@ -20,6 +21,10 @@ import {launch_shell_app} from './shell_app'
 
   // Translate document eventListeners into pubsubcache
   configure_pubsub_converters()
+
+  pubsubcache.subscribe('shell:launch_with_config', (topic, instance_config) => {
+    launch_main_app(instance_config)
+  })
 
   // login, load instance config
   const local_instance_config = await retrieve_local_config()
