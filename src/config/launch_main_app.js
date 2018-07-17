@@ -20,13 +20,15 @@ import { hydrate_geodata_cache_from_idb } from 'lib/models/geodata/local.geodata
 import {configure_pubsubcache_listeners} from 'config/configure_pubsubcache_listeners'
 
 import BUILD_TIME from 'config/build-time'
+import {remove_shell_app} from '../shell_app'
+import {hide_loading_page} from 'config/hide_loading_page'
 
 /**
  * Build a 'douma_app' instance
  * @param instance_config
  * @returns {Vue}
  */
-export async function configure_application(instance_config) {
+export async function launch_main_app(instance_config) {
   //
   // BEFORE router or store
   //
@@ -116,4 +118,8 @@ export async function configure_application(instance_config) {
   // Keep track of what version we're working on, in production at least.
   if (BUILD_TIME.DOUMA_PRODUCTION_MODE) console.info('🚀 Launched DiSARM version ' + BUILD_TIME.VERSION_COMMIT_HASH_SHORT)
 
+
+  // If made it to here, make sure loading_page is hidden, and the shell_app is removed
+  hide_loading_page()
+  remove_shell_app()
 }
