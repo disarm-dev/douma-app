@@ -3,7 +3,6 @@ import VueRouter from 'vue-router'
 import Vuex from 'vuex'
 import {get} from 'lodash'
 
-
 import Shell from './shell'
 import Login from './login'
 import InstanceConfigs from './instance_configs'
@@ -61,12 +60,6 @@ export function launch_shell_app() {
     router,
     store,
     render: createElement => createElement(Shell),
-    beforeDestroy() {
-      console.log('beforeDestroy shell_app')
-    },
-    destroyed() {
-      console.log('shell_app destroyed, remove from DOM')
-    }
   })
 
   if (shell_app) hide_loading_page()
