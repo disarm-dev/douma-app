@@ -1,5 +1,5 @@
 import Raven from 'raven-js'
-import get from 'lodash.get'
+import {get} from 'lodash'
 import unique from 'array-unique'
 
 import {authenticate} from 'lib/models/user'
@@ -7,7 +7,6 @@ import {decorate_applets} from 'lib/instance_data/decorated_applets'
 import {User} from 'lib/models/user/model'
 import {set_raven_user_context} from 'config/error_tracking.js'
 import {setup_acl} from "lib/acess-control-list"
-import {get_configurations} from 'lib/models/instance_config/remote'
 
 export default {
   namespaced: true,
@@ -114,9 +113,5 @@ export default {
       })
       console.warn('Instance changed. Local data storage cleared for:', applets.join(', '))
     },
-    get_instances: async (context) => {
-      const configurations = await get_configurations()
-      context.commit('set_configurations', configurations)
-    }
   }
 }
