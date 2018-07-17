@@ -1,6 +1,7 @@
 import Dexie from 'dexie'
 
 const db = new Dexie('disarm')
+window.__disarm_debug_db = db // TODO: Remove direct DB access?
 
 const fields = {
   v1: {
