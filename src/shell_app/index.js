@@ -24,10 +24,11 @@ export function launch_shell_app() {
     },
   })
 
-  const loader_app = new Vue({
-    el: '#loader',
+  shell_app = new Vue({
+    el: '#shell',
     router,
     store,
     render: createElement => createElement(Shell),
   })
+}
 }

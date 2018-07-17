@@ -32,25 +32,28 @@
 </head>
 
 <body style='background: white'>
-<div id="loader">
-  <div style="
-          float: none;
-          padding-top: 144px;
+<div id="loader" style="
+        float: none;
+        padding-top: 144px;
+    ">
+  <img src="/static/loading-logo.png" style="
+          margin-left: auto;
+          margin-right: auto;
+          display: block;
+          height: 80px;
       ">
-    <img src="/static/loading-logo.png" style="
-            margin-left: auto;
-            margin-right: auto;
-            display: block;
-            height: 80px;
-        ">
-    <div style='font-family: sans-serif; color: grey; text-align: center;'>
-      version <%= __VERSION_COMMIT_HASH_SHORT %>
-    </div>
-    <div style='font-family: sans-serif; color: grey; text-align: center;'>
-      <a href="/reset.html" style="color: grey;">Reset offline</a>
-    </div>
+  <div style='font-family: sans-serif; color: grey; text-align: center;'>
+    version <%= __VERSION_COMMIT_HASH_SHORT %>
+  </div>
+  <div style='font-family: sans-serif; color: grey; text-align: center;'>
+    <a href="/reset.html" style="color: grey;">Reset offline</a>
   </div>
 </div>
+
+<div id="shell">
+</div>
+
 <div id="douma"></div>
 </body>
+
 </html>
