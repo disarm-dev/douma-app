@@ -1,5 +1,8 @@
 <template>
-  <div>Just login already, ok?</div>
+  <div>
+    Just login already, ok?
+    <md-button class="md-primary" @click="$router.push({name: 'instance_configs'})">Login</md-button>
+  </div>
 </template>
 
 <script>
