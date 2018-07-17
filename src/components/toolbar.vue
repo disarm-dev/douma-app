@@ -95,7 +95,7 @@
       },
       // Help
       toggle_help_visible() {
-        this.$store.commit('root:trigger_help_visible')
+        this.$store.commit('root:trigger_help_visible', true)
       },
       try_reconnect() {
         try_reconnect()

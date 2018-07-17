@@ -106,7 +106,7 @@
         this.$refs.sidebar.toggle()
       },
       toggle_help() {
-        this.$store.commit('root:trigger_help_visible')
+        this.$store.commit('root:set_help_visible', true)
       }
     },
   }
