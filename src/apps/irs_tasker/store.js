@@ -1,4 +1,4 @@
-import without from 'lodash.without'
+import {without} from 'lodash'
 
 import {AssignmentPlan} from 'lib/models/assignment_plan/model'
 import {DECORATED_UNASSIGNED_TEAM} from 'apps/irs_tasker/unassigned_team'

@@ -1,7 +1,5 @@
 import array_unique from 'array-unique'
-import get from 'lodash.get'
-
-import {AssignmentSchema} from './schemas/assignment.schema'
+import {get} from 'lodash'
 import {AssignmentPlanSchema} from './schemas/assignment_plan.schema'
 import {DECORATED_UNASSIGNED_TEAM} from 'apps/irs_tasker/unassigned_team'
 

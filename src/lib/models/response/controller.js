@@ -3,7 +3,7 @@ import Local from './local'
 import instance_decorator from 'lib/models/response/decorators-evaluated'
 import {store} from 'apps/store'
 import CONFIG from 'config/common'
-import clonedeep from 'lodash.clonedeep'
+import {clonedeep} from 'lodash'
 import Raven from 'raven-js'
 
 export class ResponseController {

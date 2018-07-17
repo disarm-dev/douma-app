@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Raven from 'raven-js'
 import RavenVue from 'raven-js/plugins/vue'
-import get from 'lodash.get'
+import {get} from 'lodash'
 import BUILD_TIME from 'config/build-time'
 
 const configure_error_tracking = ()=> {

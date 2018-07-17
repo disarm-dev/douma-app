@@ -1,7 +1,4 @@
-import flatten from 'lodash.flatten'
-import uniq from 'lodash.uniq'
-import intersection from 'lodash.intersection'
-import difference from 'lodash.difference'
+import {flatten, intersection, uniq} from 'lodash'
 
 import {get_form_fields} from 'lib/instance_data/form_helpers'
 

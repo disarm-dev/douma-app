@@ -1,9 +1,5 @@
-import {has, get, sort} from 'lodash'
-import flow from 'lodash/fp/flow'
-import flatten from 'lodash/fp/flatten'
-import uniq from 'lodash/fp/uniq'
-import sortBy from 'lodash/fp/sortBy'
-import map from 'lodash/fp/map'
+import {has} from 'lodash'
+import {flatten, flow, sortBy, uniq} from 'lodash/fp'
 
 
 const EXCLUDE_FIELD_FILTER = f => !f.startsWith('location')

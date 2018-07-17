@@ -1,4 +1,4 @@
-import get from 'lodash.get'
+import {get} from 'lodash'
 
 import {get_all_spatial_hierarchy_levels} from '../instance_data/spatial_hierarchy_helper'
 

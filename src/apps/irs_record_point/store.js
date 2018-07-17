@@ -1,12 +1,4 @@
-import clonedeep from 'lodash.clonedeep'
-import Raven from 'raven-js'
-import has from 'lodash.has'
-
-
-import CONFIG from 'config/common'
 import {ResponseController} from 'lib/models/response/controller'
-import {guess_location_for} from "../../lib/models/response/guess_location";
-import moment from 'moment'
 
 const controller = new ResponseController('record')
 

@@ -26,7 +26,7 @@
 <script>
   import * as Survey from 'survey-knockout'
   import 'survey-knockout/survey.css'
-  import clonedeep from 'lodash.clonedeep'
+  import {clonedeep} from 'lodash'
 
   export default {
     name: 'record-form',

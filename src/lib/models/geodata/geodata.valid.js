@@ -1,10 +1,9 @@
-import has from 'lodash.has'
-import {get, uniq} from 'lodash'
+import {get, has} from 'lodash'
 
 import {get_all_spatial_hierarchy_level_names, get_data_version} from 'lib/instance_data/spatial_hierarchy_helper'
 import cache from 'config/cache'
 import geojson_validation from 'geojson-validation'
-import {versions_match} from "lib/models/geodata/geodata.versions"
+import {versions_match} from 'lib/models/geodata/geodata.versions'
 
 /**
  * @returns {boolean}

@@ -1,6 +1,6 @@
 import Vue from 'vue'
 
-import get from 'lodash.get'
+import {get} from 'lodash'
 
 export const configure_theme = (instance_config) => {
   const default_theme = {
