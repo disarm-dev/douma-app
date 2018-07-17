@@ -29,9 +29,13 @@ import {hide_loading_page} from 'config/hide_loading_page'
  * @returns {Vue}
  */
 export async function launch_main_app({instance_config, user}) {
+
+
+  /////////////////////////////
   //
   // BEFORE router or store
   //
+  /////////////////////////////
 
   // Set page title
   const title = get(instance_config, 'instance.title', '')
@@ -42,9 +46,11 @@ export async function launch_main_app({instance_config, user}) {
   configure_spatial_helpers(instance_config)
 
 
+  /////////////////////////////
   //
   // CREATE router and store
   //
+  /////////////////////////////
 
 
   // Collect stores and routes for applets ONLY in this instance {stores: {}, routes: []}
@@ -71,9 +77,12 @@ export async function launch_main_app({instance_config, user}) {
   // Configure theme, either from default or instance_config
   configure_theme(instance_config)
 
+
+  /////////////////////////////
   //
   // AFTER router and store, BEFORE app
   //
+  /////////////////////////////
 
   // Analytics (injects $ga in every component)
   instantiate_analytics(router, store)
@@ -89,9 +98,12 @@ export async function launch_main_app({instance_config, user}) {
 
   await hydrate_geodata_cache_from_idb()
 
+  /////////////////////////////
   //
   // CREATE VUE APP
   //
+  /////////////////////////////
+
   // Instantiate Vue app with store and router
   const douma_app = new Vue({
     el: '#douma',
@@ -107,7 +119,11 @@ export async function launch_main_app({instance_config, user}) {
   window.__disarm_debug_state = douma_app.$store.state
 
 
+  /////////////////////////////
+  //
   // AFTER VUE APP IS CREATED (first page has rendered)
+  //
+  /////////////////////////////
 
   // Configure application update
   check_need_to_update()
@@ -121,6 +137,12 @@ export async function launch_main_app({instance_config, user}) {
   // Keep track of what version we're working on, in production at least.
   if (BUILD_TIME.DOUMA_PRODUCTION_MODE) console.info('🚀 Launched DiSARM version ' + BUILD_TIME.VERSION_COMMIT_HASH_SHORT)
 
+
+  /////////////////////////////
+  //
+  // CLEANUP BOOT PROCESS
+  //
+  /////////////////////////////
 
   // If made it to here, make sure loading_page is hidden, and the shell_app is removed
   hide_loading_page()
