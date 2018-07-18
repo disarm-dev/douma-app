@@ -80,8 +80,8 @@
 
         Controller.login(credentials, this.$store)
           .then((res) => {
-            debugger
             if (res.status === 200) {
+              this.$store.commit('set_user', res.data)
               this.$router.push({name: 'shell:instance_configs'})
             } else {
               console.error('some error logging-in', res)
