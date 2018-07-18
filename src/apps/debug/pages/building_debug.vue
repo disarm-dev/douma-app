@@ -72,7 +72,7 @@
     methods: {
       // Map
       create_map() {
-        this._map = basic_map(this.$store)
+        this._map = basic_map()
 
         // User geolocation
         const geolocate_control = new mapboxgl.GeolocateControl({

@@ -52,7 +52,7 @@
         // Don't want to create map twice
         if (this._map) return
 
-        this._map = basic_map(this.$store)
+        this._map = basic_map()
 
         this._map.on('load', () => {
           // Basic map stuff

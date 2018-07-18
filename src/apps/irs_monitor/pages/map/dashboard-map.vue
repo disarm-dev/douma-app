@@ -100,7 +100,7 @@
     methods: {
       // Higher-level map stuff
       render_map() {
-        this._map = basic_map(this.$store)
+        this._map = basic_map()
 
         this._map.on('load', () => {
           this.map_loaded = true

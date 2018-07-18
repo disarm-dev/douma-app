@@ -1,7 +1,7 @@
 import CONFIG from 'config/common'
 import {config_axios_instance} from 'lib/remote/axios_instance'
 import {get_api_url} from 'config/api_url'
-import {store} from 'apps/store'
+import {douma_app} from 'config/launch_main_app'
 
 /**
  * Standard request handler for all remote requests (currently both client server and API)
@@ -9,7 +9,6 @@ import {store} from 'apps/store'
  * @param request_config
  */
 export function request_handler(request_config) {
-
   if (!request_config) return Promise.reject(new Error("request is empty"))
 
   // If a `request.url` is not already provided, will create one
@@ -32,7 +31,7 @@ export function request_handler(request_config) {
       // Any route other than login which receives 401 needs to tell user
       if (request_config.url_suffix !== '/login' && err.response && err.response.status === 401) {
         const message = err.response.data.message
-        store.commit('root:set_snackbar', {message})
+        douma_app.$root.$emit('notify:toast', message)
       }
       throw err
     })

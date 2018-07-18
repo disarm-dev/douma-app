@@ -29,7 +29,7 @@ import {remove_shell_app} from '../shell_app'
  * @param instance_config
  * @returns {Vue}
  */
-let douma_app
+export let douma_app
 
 export async function launch_main_app({instance_config, user}) {
 
