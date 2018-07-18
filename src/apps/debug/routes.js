@@ -5,7 +5,6 @@ import validations from './pages/validations_debug.vue'
 import fake_data from './pages/fake_data_debug.vue'
 import check_data_status from './pages/check_data_status.vue'
 import validate_data from './pages/validate_data.vue'
-import upload_geodata from './pages/upload_geodata.vue'
 import instance_config_view from './pages/instance_config_view.vue'
 
 export default [
@@ -58,14 +57,6 @@ export default [
     path: '/debug/validate_data',
     component: validate_data,
     name: 'debug:validate_data',
-    meta: {
-      can: 'read debug',
-      fail: '/meta/home'
-    }
-  }, {
-    path: '/debug/upload_geodata',
-    component: upload_geodata,
-    name: 'debug:upload_geodata',
     meta: {
       can: 'read debug',
       fail: '/meta/home'

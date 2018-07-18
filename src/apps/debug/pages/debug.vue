@@ -46,7 +46,6 @@
           <span>Data</span>
 
           <md-list-expand>
-            <md-list-item><router-link :to="{name: 'debug:upload_geodata'}"><md-icon>file_upload</md-icon><span>Upload geodata</span></router-link></md-list-item>
             <md-list-item @click="goto_survey_editor"><md-icon>library_books</md-icon><span>Survey Editor (dxsurvey.com)</span></md-list-item>
             <md-list-item><router-link :to="{name: 'debug:check_data_status'}"><md-icon>checkbox</md-icon><span>Check data status</span></router-link></md-list-item>
             <md-list-item><router-link :to="{name: 'debug:validate_data'}"><md-icon>playlist_add_check</md-icon><span>Validate data</span></router-link></md-list-item>
