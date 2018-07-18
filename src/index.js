@@ -10,7 +10,7 @@ import 'vue-multiselect/dist/vue-multiselect.min.css'
 // Imports
 import pubsubcache from 'lib/helpers/pubsubcache'
 import 'config/configure_vue'
-import {retrieve_local_config} from './shell_app/instance_config/controller'
+import {retrieve_local_config} from './shell_app/models/instances/controller'
 import {configure_error_tracking} from 'config/error_tracking'
 import {configure_pubsub_converters} from 'config/configure_pubsub_converters'
 import {launch_main_app} from 'config/launch_main_app'
