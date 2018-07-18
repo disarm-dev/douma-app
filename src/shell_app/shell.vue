@@ -13,7 +13,7 @@
       <toolbar-controls
           :sw_update_downloading="false"
           :sw_update_available="false"
-          :online="false"
+          :online="true"
       ></toolbar-controls>
 
     </md-toolbar>
