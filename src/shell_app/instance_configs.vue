@@ -14,7 +14,7 @@
   export default {
     name: 'instance_configs',
     methods: {
-      load_instance(instance_config_id) {
+      async load_instance(instance_config_id) {
         const instance_config = {
           '_id': 'bwa@1.0.21',
           'config_id': 'bwa',
@@ -1099,9 +1099,20 @@
           }
         }
         const user = this.$store.state.user
+        user.permissions = await get_permissions_for({user, instance_config})
         pubsubcache.publish('shell:launch_with_config', {instance_config, user})
       }
     }
+  }
+
+  function get_permissions_for({user, instance_config}) {
+    console.log('fake get permissions for', user._id, 'on', instance_config.instance.slug)
+    const applets = ['irs_monitor', 'irs_plan', 'irs_record_point', 'irs_tasker', 'record2', 'debug', 'bod-client']
+    return [
+      ...applets.map(a => 'read:' + a),
+      ...applets.map(a => 'write:' + a),
+    ]
+
   }
 </script>
 

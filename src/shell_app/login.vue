@@ -108,9 +108,18 @@
     }
   }
 
+  function dummy_user() {
+    return {
+      '_id': 'dev2',
+      'name': 'Dummy',
+      'username': 'du',
+      'key': 'b48fbf5e746e6bfbd6c36dca5ff088b3',
+    }
+  }
+
   function do_login(store) {
     return new Promise((resolve, reject) => {
-      store.commit('set_user', {})
+      store.commit('set_user', dummy_user())
       resolve({status: 200})
       // reject({})
     })
