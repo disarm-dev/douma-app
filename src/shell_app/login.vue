@@ -10,9 +10,9 @@
           <p class="md-body-1 login-text">Welcome to DiSARM</p>
           <p class="md-body-1 login-text login-error" v-if="error">{{error}}</p>
 
-          <md-input-container ref='username_c'>
+          <md-input-container>
             <label>Username</label>
-            <md-input ref='username' required type="email"></md-input>
+            <md-input v-model='username' ref='username' required type="email"></md-input>
           </md-input-container>
 
           <md-input-container>
@@ -20,7 +20,7 @@
             <md-input v-model="password" required type="password"></md-input>
           </md-input-container>
 
-          <md-button class="md-accent md-raised login-button" :disabled='login_disabled || !can_login' type="submit">
+          <md-button class="md-accent md-raised login-button" :disabled="$loading.isLoading('shell:login') || !can_login" type="submit">
             Login
           </md-button>
         </form>
@@ -40,7 +40,6 @@
     data() {
       return {
         error: '',
-        login_disabled: false,
         username: '',
         password: ''
       }
@@ -51,12 +50,10 @@
       },
     },
     mounted() {
-      this.$nextTick(() => {
-        this.$refs.username.$el.focus()
-      })
+      this.$nextTick(() => this.$refs.username.$el.focus())
     },
     methods: {
-      valid_login_request() {
+      validate_login_request() {
         if (!this.username) {
           this.error = 'Please enter a username'
           return false
@@ -70,12 +67,10 @@
         return true
       },
       login() {
-        this.$loading.startLoading('meta/login')
+        this.$loading.startLoading('shell:login')
         this.error = ''
 
-        if (!this.valid_login_request()) return
-
-        this.login_disabled = true
+        if (!this.validate_login_request()) return
 
 
         const login_details = {
@@ -84,11 +79,11 @@
           personalised_instance_id: this.local_personalised_instance_id
         }
 
-        this.$store.dispatch('meta/login', login_details).then(() => {
+        return console.log('login_details', login_details)
+        this.$store.dispatch('shell:login', login_details).then(() => {
           // dimension3 is the dimension we use for the user attribute we send to GA. Could refactor.
           this.$ga.set('dimension3', `${this.$store.state.meta.user.username}/${this.$store.state.meta.user.name}`)
-          this.$loading.endLoading('meta/login')
-          this.login_disabled = false
+          this.$loading.endLoading('shell:login')
 
 
           if (this.$store.state.meta.user.instance_slug === 'all' && BUILD_TIME.DOUMA_PRODUCTION_MODE && this.local_personalised_instance_id === 'default') {
@@ -99,8 +94,7 @@
           this.continue_login()
         })
           .catch(e => {
-            this.$loading.endLoading('meta/login')
-            this.login_disabled = false
+            this.$loading.endLoading('shell:login')
 
             // 401 from server
             if (e.response && e.response.status === 401) {
@@ -117,9 +111,6 @@
             this.error = 'Sorry, cannot login. Network error. Please retry.'
           })
 
-      },
-      logout() {
-        this.$router.push({name: 'meta:logout'})
       },
     }
   }

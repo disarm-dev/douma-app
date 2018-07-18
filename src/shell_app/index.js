@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Vuex from 'vuex'
+import VueLoading from 'vuex-loading'
 import {get} from 'lodash'
 
 import Shell from './shell'
@@ -69,6 +70,7 @@ export function launch_shell_app() {
     el: `#${el_id}`,
     router,
     store,
+    vueLoading: new VueLoading(),
     render: createElement => createElement(Shell),
   })
 
