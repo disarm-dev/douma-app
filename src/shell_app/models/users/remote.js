@@ -1,4 +1,4 @@
-import {shell_request_handler} from '../../lib/shell_request_handler'
+import {shell_axios} from '../../lib/shell_request_handler'
 
 const prefix = 'users'
 
@@ -10,7 +10,7 @@ async function permissions({user_id}) {
       Authorization: 'some_token'
     }
   }
-  return shell_request_handler(request)
+  return shell_axios(request)
 }
 
 export default {

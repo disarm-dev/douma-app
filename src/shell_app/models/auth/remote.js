@@ -1,4 +1,4 @@
-import {shell_request_handler} from 'shell_app/lib/shell_request_handler'
+import {shell_axios} from 'shell_app/lib/shell_request_handler'
 
 const prefix = 'auth'
 
@@ -7,7 +7,7 @@ async function login({username, password}) {
     method: 'post',
     url_suffix: `/${prefix}/login`,
   }
-  return shell_request_handler(request)
+  return shell_axios(request)
 }
 
 async function logout({user}) {
@@ -15,7 +15,7 @@ async function logout({user}) {
     method: 'post',
     url_suffix: `/${prefix}/logout`,
   }
-  return shell_request_handler(request)
+  return shell_axios(request)
 }
 
 export default {
