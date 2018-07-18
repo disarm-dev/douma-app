@@ -6,6 +6,13 @@
       <md-button class="md-accent" @click.native="snackbar_action">OK</md-button>
     </md-snackbar>
 
+    <!-- ANOTHER SNACKBAR, controlled by $root events instead -->
+    <!-- Calling it 'toast' to differentiate -->
+    <md-snackbar md-position="top center" ref="toast" :md-duration="toast_duration">
+      <span>{{toast_message}}</span>
+      <md-button class="md-accent" @click.native="close_toast">OK</md-button>
+    </md-snackbar>
+
     <!--ServiceWorker message DIALOG -->
     <md-dialog ref="sw_dialog">
       <md-dialog-title>{{sw_message.title}}</md-dialog-title>
@@ -19,9 +26,16 @@
 
 <script>
   import {mapState} from 'vuex'
+  import {get} from 'lodash'
 
   export default {
     name: 'notifications',
+    data() {
+      return {
+        toast_message: '',
+        toast_duration: 7000,
+      }
+    },
     computed: {
       ...mapState({
         sw_message: state => state.sw_message,
@@ -29,23 +43,35 @@
       }),
     },
     watch: {
-      'snackbar': 'snackbar_open',
-      'sw_message': 'open_sw_dialog',
+      'snackbar': function () {
+        if (this.snackbar.message) {
+          this.$refs.snackbar.open()
+        }
+      },
+      'sw_message': function () {
+        if (this.sw_message.message) {
+          this.$refs.sw_dialog.open()
+        }
+      },
+    },
+    mounted() {
+      this.$root.$on('notify:toast', (message_object) => {
+        this.toast_message = get(message_object, 'message', message_object)
+        this.$refs.toast.open()
+      })
     },
     methods: {
       // Dialog
-      open_sw_dialog() {
-        this.$refs.sw_dialog.open()
-      },
       close_sw_dialog() {
         this.$refs.sw_dialog.close()
       },
       // Snackbar
-      snackbar_open() {
-        this.$refs.snackbar.open()
-      },
       snackbar_action() {
         this.$refs.snackbar.close()
+      },
+      // Alt snackbar/toast
+      close_toast() {
+        this.$refs.toast.close()
       },
       // Reload page
       reload() {
