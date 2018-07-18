@@ -9,23 +9,17 @@ server.use(jsonServer.bodyParser)
 
 
 server.use(jsonServer.rewriter({
-  '/v7/*': '/$1',
+  '/v1/*': '/$1',
 }))
 
 
 // Add custom routes before JSON Server router
-server.post('/login', (req, res) => {
+server.post('/auth/login', (req, res) => {
   res.jsonp({
-    '_id': 'dev2',
+    'id': 'dev2',
     'name': 'Jonathan',
     'username': 'js',
-    'key': 'b48fbf5e746e6bfbd6c36dca5ff088b3',
-    'instance_slug': 'all',
-    'allowed_apps': {
-      'read': ['record2', 'bod-client', 'debug'],
-      'write': ['record2', 'bod-client', 'debug']
-    },
-    'permissions': ['read:record2', 'write:record2', 'read:debug', 'write:debug', 'read:bod-client', 'write:bod-client']
+    'token': 'b48fbf5e746e6bfbd6c36dca5ff088b3',
   })
 })
 

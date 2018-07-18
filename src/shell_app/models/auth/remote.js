@@ -5,7 +5,7 @@ const prefix = 'auth'
 async function login({username, password}) {
   const request = {
     method: 'post',
-    url_suffix: `/${prefix}/login`,
+    url: `/${prefix}/login`,
   }
   return shell_axios(request)
 }
@@ -13,7 +13,7 @@ async function login({username, password}) {
 async function logout({user}) {
   const request = {
     method: 'post',
-    url_suffix: `/${prefix}/logout`,
+    url: `/${prefix}/logout`,
   }
   return shell_axios(request)
 }

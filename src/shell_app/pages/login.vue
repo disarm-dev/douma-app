@@ -73,13 +73,14 @@
         if (!this.validate_login_request()) return
 
 
-        const login_details = {
+        const credentials = {
           username: this.username,
           password: this.password,
         }
 
-        Controller.login({username, password}, this.$store)
+        Controller.login(credentials, this.$store)
           .then((res) => {
+            debugger
             if (res.status === 200) {
               this.$router.push({name: 'shell:instance_configs'})
             } else {

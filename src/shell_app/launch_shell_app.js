@@ -2,13 +2,6 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Vuex from 'vuex'
 import VueLoading from 'vuex-loading'
-
-// VueAxios
-import VueAxios from 'vue-axios'
-import {shell_axios} from './lib/shell_request_handler'
-
-Vue.use(VueAxios, shell_axios)
-
 import {get} from 'lodash'
 
 import Shell from './pages/shell'
