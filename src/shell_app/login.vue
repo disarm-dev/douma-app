@@ -38,8 +38,8 @@
     data() {
       return {
         error: '',
-        username: '',
-        password: ''
+        username: 'a',//'',
+        password: 'a',//''
       }
     },
     computed: {
@@ -76,11 +76,10 @@
           password: this.password,
         }
 
-        do_login()
+        do_login(this.$store)
           .then((res) => {
             if (res.status === 200) {
-              console.log('logged-in')
-              this.$router.push({name: 'instance_configs'})
+              this.$router.push({name: 'shell:instance_configs'})
             } else {
               console.error('some error logging-in', res)
             }
@@ -109,8 +108,9 @@
     }
   }
 
-  function do_login() {
+  function do_login(store) {
     return new Promise((resolve, reject) => {
+      store.commit('set_user', {})
       resolve({status: 200})
       // reject({})
     })
