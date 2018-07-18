@@ -33,7 +33,7 @@
       </md-dialog-content>
 
       <md-dialog-actions>
-        <md-button class="md-primary" @click.native="hide_help">Close</md-button>
+        <md-button class="md-primary" @click.native="close_help">Close</md-button>
       </md-dialog-actions>
     </md-dialog>
   </keep-alive>
@@ -57,9 +57,6 @@
       }
     },
     computed: {
-      ...mapState({
-        help_visible: state => state.help_visible
-      }),
       filtered_help_content() {
         if (this.search_term === '') return this.flat_help
 
@@ -85,28 +82,22 @@
         return array_unique(this.filtered_help_content.map(c => c.section_title))
       },
       support_chat_link() {
-        const support_number = get(this.$store.state.instance_config.instance, 'support_number', false)
+        const support_number = get(this.$store, 'state.instance_config.instance.support_number', false)
         if (!support_number) return false
         return `https://wa.me/${support_number}`
-      }
-    },
-    watch: {
-      'help_visible': function () {
-        if (this.help_visible) {
-          this.$refs.help.open()
-          this.$ga.event('meta', 'trigger_help')
-        } else {
-          this.$refs.help.close()
-        }
       }
     },
     created() {
       this.prepare_help_items()
     },
+    mounted() {
+      this.$root.$on('help:show', () => this.$refs.help.open())
+    },
     methods: {
-      hide_help() {
-        this.$store.commit('root:set_help_visible', false)
+      close_help() {
+        this.$refs.help.close()
       },
+
       prepare_help_items() {
         const converter = new showdown.Converter()
 

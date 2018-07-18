@@ -69,7 +69,6 @@ export async function launch_main_app({instance_config, user}) {
   // Reset key UI state
   store.commit('root:set_sw_update_downloading', false)
   store.commit('root:set_sw_update_available', false)
-  store.commit('root:set_help_visible', false)
 
   configure_pubsubcache_listeners(store)
   // Create listeners to act on store

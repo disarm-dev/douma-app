@@ -23,9 +23,6 @@ export function create_store(instance_config, instance_stores) {
       sw_update_available: false,
       network_online: false,
 
-      // Irrelevant values: only watched for changes
-      help_visible: false,
-
     },
     mutations: {
       'root:set_instance_config': (state, instance_config) => {
@@ -46,9 +43,6 @@ export function create_store(instance_config, instance_stores) {
       'root:network_online': (state, is_online) => {
         state.network_online = is_online
       },
-      'root:set_help_visible': (state, is_visible) => {
-        state.help_visible = is_visible
-      }
     },
   })
 
