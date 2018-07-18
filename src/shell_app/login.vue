@@ -20,7 +20,9 @@
             <md-input v-model="password" required type="password"></md-input>
           </md-input-container>
 
-          <md-button class="md-accent md-raised login-button" :disabled="$loading.isLoading('shell:login') || !can_login" type="submit">
+          <md-button class="md-accent md-raised login-button"
+                     :disabled="$loading.isLoading('shell:login') || !can_login"
+                     type="submit">
             Login
           </md-button>
         </form>
@@ -31,10 +33,6 @@
 </template>
 
 <script>
-  import {mapState} from 'vuex'
-  import {get} from 'lodash'
-
-  import BUILD_TIME from 'config/build-time'
 
   export default {
     data() {
@@ -76,23 +74,20 @@
         const login_details = {
           username: this.username,
           password: this.password,
-          personalised_instance_id: this.local_personalised_instance_id
         }
 
-        return console.log('login_details', login_details)
-        this.$store.dispatch('shell:login', login_details).then(() => {
-          // dimension3 is the dimension we use for the user attribute we send to GA. Could refactor.
-          this.$ga.set('dimension3', `${this.$store.state.meta.user.username}/${this.$store.state.meta.user.name}`)
-          this.$loading.endLoading('shell:login')
-
-
-          if (this.$store.state.meta.user.instance_slug === 'all' && BUILD_TIME.DOUMA_PRODUCTION_MODE && this.local_personalised_instance_id === 'default') {
-            this.$refs['warn-personal-instance-id'].open();
-            return
-          }
-
-          this.continue_login()
-        })
+        do_login()
+          .then((res) => {
+            if (res.status === 200) {
+              console.log('logged-in')
+              this.$router.push({name: 'instance_configs'})
+            } else {
+              console.error('some error logging-in', res)
+            }
+            // dimension3 is the dimension we use for the user attribute we send to GA. Could refactor.
+            // this.$ga.set('dimension3', `${this.$store.state.meta.user.username}/${this.$store.state.meta.user.name}`)
+            this.$loading.endLoading('shell:login')
+          })
           .catch(e => {
             this.$loading.endLoading('shell:login')
 
@@ -110,9 +105,15 @@
             console.log(e)
             this.error = 'Sorry, cannot login. Network error. Please retry.'
           })
-
       },
     }
+  }
+
+  function do_login() {
+    return new Promise((resolve, reject) => {
+      resolve({status: 200})
+      // reject({})
+    })
   }
 </script>
 

@@ -55,7 +55,7 @@ export function launch_shell_app() {
     },
     mutations: {
       set_user: (state, user) => state.user = user
-    }
+    },
   })
 
   const el_id = 'shell'
