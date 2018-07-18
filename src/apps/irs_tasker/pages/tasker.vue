@@ -121,7 +121,7 @@
     },
     created() {
       if (!geodata_in_cache_and_valid()) {
-        this.$store.commit('meta/set_snackbar', {message: 'Message from TASK: Problem with geodata'})
+        this.$root.$emit('notify:toast', 'Message from TASK: Problem with geodata')
         this.$router.push({name: 'meta:geodata'})
       }
     },
