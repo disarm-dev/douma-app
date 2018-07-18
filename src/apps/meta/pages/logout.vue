@@ -6,7 +6,7 @@
 
 <script>
 
-  import {launch_shell_app} from '../../../shell_app'
+  import {launch_shell_app} from '../../../shell_app/launch_shell_app'
 
   export default {
     mounted() {

@@ -14,7 +14,7 @@ import {retrieve_local_config} from './shell_app/instance_config/controller'
 import {configure_error_tracking} from 'config/error_tracking'
 import {configure_pubsub_converters} from 'config/configure_pubsub_converters'
 import {launch_main_app} from 'config/launch_main_app'
-import {launch_shell_app} from './shell_app'
+import {launch_shell_app} from './shell_app/launch_shell_app'
 
 (async () => {
   // configure_error_tracking!!
