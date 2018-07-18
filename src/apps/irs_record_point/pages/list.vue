@@ -176,26 +176,25 @@
 
           // did any responses sync?
           if (last_successful_sync_count > 0) {
-            this.$store.commit('root:set_snackbar', {message: `Successfully synced ${last_successful_sync_count} responses`})
+            this.$root.$emit('notify:toast', `Successfully synced ${last_successful_sync_count} responses`)
           } else if (last_successful_sync_count === 0 && last_failed_sync_count > 0) {
             setTimeout(() => {
-              this.$store.commit('root:set_snackbar', {message: `All ${last_failed_sync_count} responses failed to sync`})
+              this.$root.$emit('notify:toast', `All ${last_failed_sync_count} responses failed to sync`)
             }, 3000)
           } else {
             setTimeout(() => {
-              this.$store.commit('root:set_snackbar', {message: `${last_successful_sync_count} responses synced, ${last_failed_sync_count} responses failed to sync`})
+              this.$root.$emit('notify:toast', `${last_successful_sync_count} responses synced, ${last_failed_sync_count} responses failed to sync`)
             }, 3000)
           }
           this.load_responses()
         } catch (e) {
           console.error(e)
           if (e.response && e.response.status !== 401) {
-            this.$store.commit('root:set_snackbar', {message: `Problem syncing responses`})
+            this.$root.$emit('notify:toast', `Problem syncing responses`)
           }
           this.$loading.endLoading('irs_record_point/sync')
           this.syncing = false
         }
-
       },
       download_records() {
         const content = JSON.stringify(this.unsynced_responses)

@@ -191,11 +191,11 @@
         if (responses.length) {
           const updated_last_id = responses[responses.length - 1]._id
           this.last_id = updated_last_id
-          this.$store.commit('root:set_snackbar', {message: 'Retrieving more records.'}, {root: true})
+          this.$root.$emit('notify:toast', 'Retrieving more records.', {root: true})
           this.$store.commit('update_responses_last_updated_at') //TODO This is used in irs_monitor, may
           return this.get_all_records()
         } else {
-          this.$store.commit('root:set_snackbar', {message: 'Completed retrieving records. Updated map, table, charts.'}, {root: true})
+          this.$root.$emit('notify:toast', 'Completed retrieving records. Updated map, table, charts.', {root: true})
           return this.get_responses_local()
         }
 
@@ -204,7 +204,7 @@
         return plan_controller.read_plan_current_network()
           .then(plan_json => {
             if (Object.keys(plan_json).length === 0) {
-              return this.$store.commit('root:set_snackbar', {message: 'No plan loaded.'}, {root: true})
+              return this.$root.$emit('notify:toast', 'No plan loaded.', {root: true})
             }
 
             try {
@@ -218,7 +218,7 @@
       get_network_plan_detail(plan_id) {
         plan_controller.read_plan_detail_network(plan_id).then(plan_json => {
           if (Object.keys(plan_json).length === 0) {
-            return this.$store.commit('root:set_snackbar', {message: 'There is no remote plan. Please create one.'}, {root: true})
+            return this.$root.$emit('notify:toast', 'There is no remote plan. Please create one.', {root: true})
           }
 
           try {
@@ -232,7 +232,7 @@
             //TODO: Load responses for this plan
           } catch (e) {
             console.error(e)
-            this.$store.commit('root:set_snackbar', {message: 'ERROR: Plan is not valid'}, {root: true})
+            this.$root.$emit('notify:toast', 'ERROR: Plan is not valid', {root: true})
           }
 
         })
@@ -240,7 +240,7 @@
       get_network_plan_list: (context) => {
         return plan_controller.read_plan_list_network().then(plan_json => {
           if (Object.keys(plan_json).length === 0) {
-            return this.$store.commit('root:set_snackbar', {message: 'There is no remote plan. Please create one.'}, {root: true})
+            return this.$root.$emit('notify:toast', 'There is no remote plan. Please create one.', {root: true})
           }
           this.plans = plan_json
           return plan_json
@@ -263,7 +263,7 @@
         try {
           remote_responses_batch = await responses_controller.read_new_network_write_local(last_id)
         } catch (e) {
-          this.$store.commit('root:set_snackbar', {message: 'Error retrieving records. Try again later'})
+          this.$root.$emit('notify:toast', 'Error retrieving records. Try again later')
           this.$loading.endLoading('irs_monitor/load_responses')
           return
         }
@@ -271,11 +271,11 @@
         if (remote_responses_batch.length) {
           const updated_last_id = remote_responses_batch[remote_responses_batch.length - 1]._id
           this.$store.commit('irs_monitor/set_last_id', updated_last_id) //left in store because it has to be persisted
-          this.$store.commit('root:set_snackbar', {message: 'Retrieving more records.'})
+          this.$root.$emit('notify:toast', 'Retrieving more records.')
           this.$store.commit('irs_monitor/update_responses_last_updated_at') //Left in store because it has to b persisted
           return this.retrieve_responses()
         } else {
-          this.$store.commit('root:set_snackbar', {message: 'Completed retrieving records. Updated map, table, charts.'})
+          this.$root.$emit('notify:toast', 'Completed retrieving records. Updated map, table, charts.')
           await this.load_responses()
 
           let message
@@ -284,7 +284,7 @@
           } else {
             message = 'Successful retrieve, zero records found.'
           }
-          this.$store.commit('root:set_snackbar', {message})
+          this.$root.$emit('notify:toast', message)
           this.$loading.endLoading('irs_monitor/load_responses')
         }
       },
@@ -298,7 +298,7 @@
         this.get_network_plan_list()
           .then((plans) => {
             this.$loading.endLoading('irs_monitor/load_all_plans')
-            this.$store.commit('root:set_snackbar', {message: 'Successfully retrieved all plans'})
+            this.$root.$emit('notify:toast', 'Successfully retrieved all plans')
             this.plans = plans
           })
           .catch(e => {
@@ -313,13 +313,13 @@
         this.$loading.endLoading('irs_monitor/load_plan')
 
         if (Object.keys(plan_json).length === 0) {
-          return this.$store.commit('root:set_snackbar', {message: 'No plan loaded.'})
+          return this.$root.$emit('notify:toast', 'No plan loaded.')
         }
 
         try {
           new Plan().validate(plan_json)
           this.plan = plan_json
-          this.$store.commit('root:set_snackbar', {message: 'Successfully retrieved plan'})
+          this.$root.$emit('notify:toast', 'Successfully retrieved plan')
         } catch (e) {
           console.log(e)
           this.$loading.endLoading('irs_monitor/load_plan')

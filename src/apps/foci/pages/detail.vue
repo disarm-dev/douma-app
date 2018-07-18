@@ -8,7 +8,7 @@
           <div v-for="field in fields" :key="field.name">
 
             <md-input-container v-if="field.enum">
-              <label for="movie">{{field.name}}</label>
+              <label>{{field.name}}</label>
               <md-select v-model="case_cluster[field.name]">
                 <md-option v-for="value in field.enum" :value="value" :key="value">{{value}}</md-option>
               </md-select>
@@ -71,12 +71,12 @@
       },
       save_changes() {
         this.$store.dispatch('foci/update_case_cluster', this.case_cluster).then(res => {
-          this.$store.commit('root:set_snackbar', {message: "Successfully updated case cluster."})
+          this.$root.$emit('notify:toast', 'Successfully updated case cluster.')
           // we should just update the layer, but this is way simpler for now and works reliably
           this.update_case_cluster_map()
         })
         .catch(err => {
-          this.$store.commit('root:set_snackbar', {message: "Error updating case cluster."})
+          this.$root.$emit('notify:toast', 'Error updating case cluster.')
         })
       },
       create_fields_for_edit() {

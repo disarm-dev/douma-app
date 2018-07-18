@@ -69,10 +69,10 @@
         try {
           controller.create_or_update_bulk_local(responses)
           this.created_responses_length += responses.length
-          this.$store.commit('root:set_snackbar', {message: 'Created records'})
+          this.$root.$emit('notify:toast', 'Created records')
         } catch (e) {
           console.error(e) // TODO: Or some better error reporter like Raven
-          this.$store.commit('root:set_snackbar', {message: 'Could not save records locally'})
+          this.$root.$emit('notify:toast', 'Could not save records locally')
         }
 
         this.message_type = 'done'

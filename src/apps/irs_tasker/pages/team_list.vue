@@ -76,17 +76,17 @@
         // Maximum 8 teams (number of colours in palette)
         const max_teams = 8
         if (this.team_names.length == max_teams) {
-          return this.$store.commit('root:set_snackbar', {message: `Maximum ${max_teams} teams.`})
+          return this.$root.$emit('notify:toast', `Maximum ${max_teams} teams.`)
         }
         // Names must be unique
         if (this.team_names.includes(this.new_name)) {
-          return this.$store.commit('root:set_snackbar', {message: 'Names must be unique.'})
+          return this.$root.$emit('notify:toast', 'Names must be unique.')
         }
 
         // Name cannot be "Unassigned". We use that.
         if (this.new_name.toLowerCase() === DECORATED_UNASSIGNED_TEAM.team_name.toLowerCase()) {
           this.new_name = ''
-          return this.$store.commit('root:set_snackbar', {message: `Cannot use "${DECORATED_UNASSIGNED_TEAM.team_name}" as team name!`})
+          return this.$root.$emit('notify:toast', `Cannot use "${DECORATED_UNASSIGNED_TEAM.team_name}" as team name!`)
         }
 
         // Commit all team names

@@ -355,7 +355,7 @@
           this.$router.push('/irs/record_point/')
         } catch(e) {
           console.error(e)
-          this.$store.commit('root:set_snackbar', {message: 'Could not save record locally'})
+          this.$root.$emit('notify:toast', 'Could not save record locally')
         }
       },
       close_form() {

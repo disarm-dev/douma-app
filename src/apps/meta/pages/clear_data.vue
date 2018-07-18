@@ -35,7 +35,7 @@
       clear_applet_storage(applet) {
         const mutation  = `${applet}/clear_data_storage`
         this.$store.commit(mutation, {}, {root: true})
-        this.$store.commit('root:set_snackbar', {message: `Cleared storage for ${applet}`})
+        this.$root.$emit('notify:toast', `Cleared storage for ${applet}`)
       },
     }
   }

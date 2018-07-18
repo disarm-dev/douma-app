@@ -238,14 +238,14 @@
         this.$loading.startLoading('irs_plan/save_plan')
         this.$store.dispatch('irs_plan/update_plan', {plan, _id})
           .then(() => {
-            this.$store.commit('root:set_snackbar', {message: 'Successful save'})
+            this.$root.$emit('notify:toast', 'Successful save')
             this.$loading.endLoading('irs_plan/save_plan')
             this.$store.dispatch('irs_plan/get_network_plan_list')
               .then(plan_list => this.plan_list = plan_list)
           })
           .catch((e) => {
             if (e.response.status !== 401) {
-              this.$store.commit('root:set_snackbar', {message: 'Not saved. Something wrong.'})
+              this.$root.$emit('notify:toast', 'Not saved. Something wrong.')
             }
             this.$loading.endLoading('irs_plan/save_plan')
           })
@@ -255,14 +255,14 @@
         this.$loading.startLoading('irs_plan/save_plan')
         this.$store.dispatch('irs_plan/delete_plan', event._id)
           .then(() => {
-            this.$store.commit('root:set_snackbar', {message: 'Successful save'})
+            this.$root.$emit('notify:toast', 'Successful save')
             this.$loading.endLoading('irs_plan/save_plan')
             this.$store.dispatch('irs_plan/get_network_plan_list')
               .then(plan_list => this.plan_list = plan_list)
           })
           .catch((e) => {
             if (e.response.status !== 401) {
-              this.$store.commit('root:set_snackbar', {message: 'Not deleted. Something wrong.'})
+              this.$root.$emit('notify:toast', 'Not deleted. Something wrong.')
             }
             this.$loading.endLoading('irs_plan/save_plan')
           })
@@ -289,7 +289,7 @@
         let selected_target_area_ids
 
         if(!plan_name){
-          return this.$store.commit('root:set_snackbar', {message: 'The plan should have a name.'})
+          return this.$root.$emit('notify:toast', 'The plan should have a name.')
         }
 
 
@@ -321,7 +321,7 @@
         this.$loading.startLoading('irs_plan/save_plan')
         this.$store.dispatch('irs_plan/save_plan', plan)
           .then(() => {
-            this.$store.commit('root:set_snackbar', {message: 'Successful save'})
+            this.$root.$emit('notify:toast', 'Successful save')
             this.$loading.endLoading('irs_plan/save_plan')
             this.$store.dispatch('irs_plan/get_network_plan_list')
               .then(plan_list => this.plan_list = plan_list)
@@ -329,7 +329,7 @@
           .catch((e) => {
             // Check if 401 (will already have displayed snackbar)
             if (e.response.status !== 401) {
-              this.$store.commit('root:set_snackbar', {message: 'Not saved. Something wrong.'})
+              this.$root.$emit('notify:toast', 'Not saved. Something wrong.')
             }
             this.$loading.endLoading('irs_plan/save_plan')
           })
