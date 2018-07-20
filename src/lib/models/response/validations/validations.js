@@ -16,14 +16,14 @@ export class Validator {
     const location_coords = get(response, 'location.coords', null)
     const location_selection = get(response, 'location.selection', null)
 
-    const location_result = this._validate_location(location_coords)
+    const location_coords_result = this._validate_location_coords(location_coords)
     const location_selection_result = this._validate_location_selection(location_selection)
 
     // Validate main form_data / response object
     const survey_results = this._validate_form_data(response.form_data)
 
     // Collect the results from each type together
-    const results = [].concat(location_result, location_selection_result, survey_results)
+    const results = [].concat(location_coords_result, location_selection_result, survey_results)
 
     // Collect only the {status: 'failed'} results - everything else is for information/debugging
     const failing_results = results.filter(v => v.status === 'failed')
@@ -56,7 +56,7 @@ export class Validator {
     return survey_validations
   }
 
-  _validate_location(coords) {
+  _validate_location_coords(coords) {
     const validation = {
       name: 'no_geo_location',
       message: 'Problem with Geolocation (GPS coordinates)',
