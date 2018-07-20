@@ -1,32 +1,22 @@
-const prefix = 'instance_config'
+import {shell_axios} from 'shell_app/lib/shell_request_handler'
 
-// export function read(instance) {
-//   const request = {
-//     url_suffix: `/${prefix}/${instance}`,
-//     timeout: 10000,
-//     params: {
-//       country: 'app'
-//     }
-//   }
-//   return request_handler(request)
-// }
-//
-// export function get_configurations() {
-//   const options = {
-//     url_suffix: `/${prefix}`,
-//     params: { country: 'app' }
-//   }
-//
-//   return request_handler(options)
-// }
-//
-// export function get_configuration(instance_id) {
-//   const options = {
-//     url_suffix: `/${prefix}/${instance_id}`,
-//     params: {country: 'app'}
-//   }
-//
-//   return request_handler(options)
-// }
+const prefix = 'instances'
 
-// export async function
+function published_instances() {
+  const request = {
+    url: `/${prefix}`
+  }
+  return shell_axios(request)
+}
+
+function published_instance_config({instance_id}) {
+  const request = {
+    url: `/${prefix}/${instance_id}/published_instance_config`,
+  }
+  return shell_axios(request)
+}
+
+export default {
+  published_instances,
+  published_instance_config,
+}

@@ -46,20 +46,26 @@
     },
     computed: {
       can_login() {
-        return this.username.length !== 0 && this.password.length !== 0
+        return this.username_valid && this.password_valid
       },
+      username_valid() {
+        return this.username.length > 0
+      },
+      password_valid() {
+        return this.password.length > 0
+      }
     },
     mounted() {
       this.$nextTick(() => this.$refs.username.$el.focus())
     },
     methods: {
       validate_login_request() {
-        if (!this.username) {
+        if (!this.username_valid) {
           this.error = 'Please enter a username'
           return false
         }
 
-        if (!this.password) {
+        if (!this.password_valid) {
           this.error = 'Please enter a password'
           return false
         }
@@ -72,13 +78,12 @@
 
         if (!this.validate_login_request()) return
 
-
         const credentials = {
           username: this.username,
           password: this.password,
         }
 
-        Controller.login(credentials, this.$store)
+        Controller.login(credentials)
           .then((res) => {
             if (res.status === 200) {
               this.$store.commit('set_user', res.data)

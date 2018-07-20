@@ -22,7 +22,7 @@
 </template>
 
 <script>
-  import ToolbarControls from './toolbar_controls'
+  import ToolbarControls from './ToolbarControls'
   import BUILD_TIME from 'config/build-time'
 
   export default {

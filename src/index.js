@@ -10,7 +10,7 @@ import 'vue-multiselect/dist/vue-multiselect.min.css'
 // Imports
 import pubsubcache from 'lib/helpers/pubsubcache'
 import 'config/configure_vue'
-import {retrieve_local_config} from './shell_app/models/instances/controller'
+import InstancesController from './shell_app/models/instances/controller'
 import {configure_error_tracking} from 'config/error_tracking'
 import {configure_pubsub_converters} from 'config/configure_pubsub_converters'
 import {launch_main_app} from 'config/launch_main_app'
@@ -29,7 +29,7 @@ import {launch_shell_app} from './shell_app/launch_shell_app'
   })
 
   // login, load instance config
-  const local_instance_config = await retrieve_local_config()
+  const local_instance_config = await InstancesController.retrieve_local_config()
 
   if (local_instance_config) {
     launch_main_app(local_instance_config)

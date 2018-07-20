@@ -4,14 +4,15 @@ import Vuex from 'vuex'
 import VueLoading from 'vuex-loading'
 import {get} from 'lodash'
 
-import Shell from './pages/shell'
-import Login from './pages/login'
-import InstanceConfigs from './pages/instance_configs'
+import Shell from './pages/Shell'
+import Login from './pages/Login'
+import InstanceConfigs from './pages/Instances'
 import {hide_loading_page} from 'config/hide_loading_page'
 import {remove_douma_app} from 'config/launch_main_app'
 import {remove_app} from 'config/remove_app'
 
 let shell_app
+export let store
 
 export function launch_shell_app() {
 
@@ -44,20 +45,22 @@ export function launch_shell_app() {
       // next() if destination is the login page
       return next()
     } else {
-      console.log('need to go to login')
       next({name: 'shell:login'})
     }
   })
 
-  const store = new Vuex.Store({
+  store = new Vuex.Store({
     state: {
       user: null,
+      instance_config: null,
     },
     mutations: {
-      set_user: (state, user) => state.user = user
+      set_user: (state, user) => state.user = user,
+      set_instance_config: (state, instance_config) => state.instance_config = instance_config,
     },
   })
 
+  // TODO: Check if necessary to manually recreate the div like this
   const el_id = 'shell'
   if (!document.getElementById(el_id)) {
     const new_el = document.createElement('div')
@@ -84,3 +87,4 @@ export function launch_shell_app() {
 export function remove_shell_app() {
   remove_app(shell_app)
 }
+

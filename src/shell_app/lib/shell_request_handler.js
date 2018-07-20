@@ -7,3 +7,7 @@ export const shell_axios = axios.create({
     // Can set later after login
   }
 })
+
+export function add_token_to_headers(token) {
+  return axios.defaults.headers.Authorization = `Bearer ${token}`
+}

@@ -1,46 +1,31 @@
 import InstanceConfigLocal from './local'
-import {read_instance_config} from './remote'
+import Remote from './remote'
+import {store} from 'shell_app/launch_shell_app'
 
 const local_config_db = new InstanceConfigLocal()
 
-export async function retrieve_local_config() {
+async function retrieve_local_config() {
+  console.warn('TODO: really check local DB for existing instance_config')
   return false
 }
 
-// export async function read_instance_configuration_for(config_id) {
-//   try {
-//     const remote_instance_config = await retrieve_and_store_remote_config(config_id)
-//     if (remote_instance_config) return remote_instance_config
-//     const local_instance_config = await retrieve_local_config(config_id)
-//     if (local_instance_config) {
-//       return local_instance_config
-//     } else {
-//       alert("Cannot retrieve configuration from remote or local. Please try reloading the page.")
-//     }
-//   } catch (e) {
-//     return null
-//   }
-// }
-//
-// export async function retrieve_local_config() {
-//   return await local_config_db.read_first()
-// }
-//
-// async function retrieve_and_store_remote_config(config_id) {
-//   try {
-//     const remote_instance_config = await read_instance_config(config_id)
-//     // TODO: Check this is a valid instance_config
-//     await local_config_db.update(remote_instance_config)
-//     return remote_instance_config
-//   } catch(e) {
-//     // TODO: Check error type
-//     console.error(e)
-//     return null
-//   }
-// }
-//
-// export async function save_local_config(instance_config) {
-//   await local_config_db.update(instance_config)
-// }
+async function published_instances() {
+  return Remote.published_instances()
+}
+
+async function published_instance_config({instance_id}) {
+  console.warn('TODO: missing defensive checks')
+  const res = await Remote.published_instance_config({instance_id})
+  const instance_config = res.data.instance_config
+  store.commit('set_instance_config', instance_config)
+
+  console.warn('TODO: write instance_config to localDB')
+  return instance_config
+}
 
 
+export default {
+  retrieve_local_config,
+  published_instances,
+  published_instance_config,
+}
