@@ -1,8 +1,7 @@
 <template>
   <div>
-    <h1>create_or_update: {{response_id ? response_id : 'new'}}</h1>
+    <h2>Form</h2>
     <span>State: {{survey_state}}</span>
-    <span>Page: {{survey_page}}</span>
     <md-button
         v-for="page in visible_pages"
         :key="page.name"
@@ -33,9 +32,6 @@
   export default {
     name: 'survey_form',
     components: {Survey},
-    props: {
-      response_id: Object,
-    },
     data() {
       return {
         survey_form: null,
@@ -44,9 +40,6 @@
     computed: {
       survey_state() {
         return get(this.survey_form, 'state', 'not loaded')
-      },
-      survey_page() {
-        return 1
       },
       visible_pages() {
         return get(this.survey_form, 'visiblePages', [])

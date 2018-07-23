@@ -1,6 +1,6 @@
 import applet from './applet'
 import list from './pages/list'
-import create_or_update from './pages/survey_form'
+import create_or_update from './pages/create_or_update'
 import show from './pages/show'
 
 export default [
