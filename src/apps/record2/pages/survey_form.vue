@@ -3,6 +3,23 @@
     <h1>create_or_update: {{response_id ? response_id : 'new'}}</h1>
     <span>State: {{survey_state}}</span>
     <span>Page: {{survey_page}}</span>
+    <md-button
+        v-for="page in visible_pages"
+        :key="page.name"
+        @click="jump_page(page)"
+    >{{page.name}}
+    </md-button>
+    <md-button
+        class="md-warn md-raised"
+        @click="log_errors"
+    >log errors
+    </md-button>
+    <md-button
+        class="md-primary md-raised"
+        :disabled="list_errors.length > 0"
+        @click="complete"
+    >Complete
+    </md-button>
     <survey v-if='survey_form' :survey="survey_form"></survey>
   </div>
 </template>
@@ -14,7 +31,7 @@
   import 'survey-vue/survey.css'
 
   export default {
-    name: 'create_or_update',
+    name: 'survey_form',
     components: {Survey},
     props: {
       response_id: Object,
@@ -30,13 +47,27 @@
       },
       survey_page() {
         return 1
+      },
+      visible_pages() {
+        return get(this.survey_form, 'visiblePages', [])
+      },
+      list_errors() {
+        if (!this.survey_form) return []
+        const questions = this.survey_form.getAllQuestions()
+        return questions
+          .map(q => {
+            q.checkForErrors();
+            return q.getAllErrors()
+          })
+          .filter(a => a.length)
       }
     },
     mounted() {
       const surveyJSON = {
         title: 'Tell us, what technologies do you use?', pages: [
           {
-            name: 'page1', questions: [
+            name: 'Frontend',
+            questions: [
               {
                 type: 'radiogroup',
                 choices: ['Yes', 'No'],
@@ -56,7 +87,8 @@
             ]
           },
           {
-            name: 'page2', questions: [
+            name: 'MVMM',
+            questions: [
               {
                 type: 'radiogroup',
                 choices: ['Yes', 'No'],
@@ -75,7 +107,8 @@
               }]
           },
           {
-            name: 'page3', questions: [
+            name: 'comments',
+            questions: [
               {
                 type: 'comment',
                 name: 'about',
@@ -84,10 +117,26 @@
           }
         ]
       }
-      // window.j = surveyJSON
-      const sm = new Model(surveyJSON)
+      const options = {
+        showNavigationButtons: false,
+        checkErrorsMode: 'onValueChanged',
+      }
+      const sm = new Model({...surveyJSON, ...options})
       this.survey_form = sm
+      window.s = sm
       this.survey_form.onComplete.add(() => console.log('completed survey'))
+    },
+    methods: {
+      jump_page(page) {
+        this.survey_form.currentPage = page
+      },
+      complete() {
+        this.survey_form.doComplete()
+        console.log('complete survey with data:', this.survey_form.data)
+      },
+      log_errors() {
+        console.log(this.list_errors)
+      }
     }
   }
 </script>
