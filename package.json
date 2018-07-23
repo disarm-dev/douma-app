@@ -87,6 +87,7 @@
     "showdown": "^1.7.1",
     "strip-json-comments": "^2.0.1",
     "survey-knockout": "^0.12.23",
+    "survey-vue": "^1.0.33",
     "sw-offline-google-analytics": "0.0.19",
     "testcafe": "^0.17.2",
     "uuid": "^3.0.1",

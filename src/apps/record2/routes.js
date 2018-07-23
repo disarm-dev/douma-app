@@ -29,7 +29,7 @@ export default [
       fail: '/meta/home'
     }
   }, {
-    path: '/irs/record2/update/:response_model',
+    path: '/irs/record2/update/:record_id',
     props: true,
     component: create_or_update,
     name: 'record2:update',
@@ -38,7 +38,7 @@ export default [
       fail: '/meta/home'
     }
   }, {
-    path: '/irs/record2/show',
+    path: '/irs/record2/show/:record_id',
     props: true,
     component: show,
     name: 'record2:show',
