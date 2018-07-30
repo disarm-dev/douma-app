@@ -10,13 +10,14 @@ export class Validator {
     return this
   }
 
-  validate(response) {
+  validate(response, instance_config) {
+    const location_coords_optional = instance_config.applets.irs_record_point.location_coords_optional
     // Validate location - only if location.selection has been set (i.e. expect coords set)
 
     const location_coords = get(response, 'location.coords', null)
     const location_selection = get(response, 'location.selection', null)
 
-    const location_coords_result = this._validate_location_coords(location_coords)
+    const location_coords_result = this._validate_location_coords(location_coords, location_coords_optional)
     const location_selection_result = this._validate_location_selection(location_selection)
 
     // Validate main form_data / response object
@@ -56,7 +57,7 @@ export class Validator {
     return survey_validations
   }
 
-  _validate_location_coords(coords) {
+  _validate_location_coords(coords, location_coords_optional) {
     const validation = {
       name: 'no_geo_location',
       message: 'Problem with Geolocation (GPS coordinates)',
@@ -65,10 +66,7 @@ export class Validator {
       status: 'failed'
     }
 
-    // get from config
-    const coords_are_optional = true 
-
-    if (coords_are_optional) {
+    if (location_coords_optional) {
       return {...validation, status: 'passed'}
     }
 
