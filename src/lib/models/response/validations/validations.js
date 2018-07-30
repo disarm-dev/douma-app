@@ -65,8 +65,20 @@ export class Validator {
       status: 'failed'
     }
 
-    if (coords === null) return validation
-    if (!CoordsSchema(coords)) return validation
+    // get from config
+    const coords_are_optional = true 
+
+    if (coords_are_optional) {
+      return {...validation, status: 'passed'}
+    }
+
+    if (coords === null) {
+      return validation
+    }
+
+    if (!CoordsSchema(coords)) {
+      return validation
+    }
 
     return {...validation, status: 'passed'}
 
