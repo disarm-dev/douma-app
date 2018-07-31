@@ -38,6 +38,7 @@
   import bbox from '@turf/bbox'
   import moment from 'moment-mini'
   import mapboxgl from 'mapbox-gl'
+  import {escapeRegExp} from 'lodash'
 
   import {get_current_position} from 'lib/helpers/location_helper.js'
   import {basic_map} from 'lib/helpers/basic_map'
@@ -190,7 +191,7 @@
           // Stop matching everything with a blank input
           this.matching_building_ids = []
         } else {
-          const regex = new RegExp(this.building_typed + "$")
+          const regex = new RegExp(escapeRegExp(this.building_typed) + "$")
           this.matching_building_ids = this._buildings_geojson.features.filter(building => {
             const id = building.properties[this.selected_building_field]
             return regex.test(id)

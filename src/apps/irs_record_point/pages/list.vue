@@ -81,7 +81,7 @@
   import download from 'downloadjs'
   import moment from 'moment-mini'
   import {mapState} from 'vuex'
-  import {flatten, get} from 'lodash'
+  import {flatten, get, escapeRegExp} from 'lodash'
 
   import controls from 'components/controls.vue'
   import {ResponseController} from 'lib/models/response/controller'
@@ -118,7 +118,7 @@
         if (!this.responses.length) return []
         if (!this.search_string) return this.responses
 
-        const regex = new RegExp(this.search_string.toLowerCase(), 'i')
+        const regex = new RegExp(escapeRegExp(this.search_string.toLowerCase()), 'i')
 
         return this.responses
           .filter(r => {
