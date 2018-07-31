@@ -128,8 +128,8 @@
 
         this.$ga.event('irs_monitor',`view_${layer_string}`)
 
-        this.add_response_points()
         this.add_layer(layer_string)
+        this.add_response_points()
         this.zoom_to_features()
       },
       zoom_to_features () {
