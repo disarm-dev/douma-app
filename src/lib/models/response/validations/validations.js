@@ -11,8 +11,9 @@ export class Validator {
   }
 
   validate(response, instance_config) {
-    const gps_coords_required = instance_config.applets.irs_record_point.gps_coords_required
-    const location_selection_required = instance_config.applets.irs_record_point.location_selection_required
+    // location_selection and gps are required by default
+    const gps_coords_required = get(instance_config.applets.irs_record_point, 'gps_coords_required', true);
+    const location_selection_required = get(instance_config.applets.irs_record_point, 'location_selection_required', true);
     // Validate location - only if location.selection has been set (i.e. expect coords set)
 
     const location_coords = get(response, 'location.coords', null)
