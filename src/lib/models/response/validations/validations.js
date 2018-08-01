@@ -11,14 +11,15 @@ export class Validator {
   }
 
   validate(response, instance_config) {
-    const location_coords_optional = instance_config.applets.irs_record_point.location_coords_optional
+    const gps_coords_required = instance_config.applets.irs_record_point.gps_coords_required
+    const location_selection_required = instance_config.applets.irs_record_point.location_selection_required
     // Validate location - only if location.selection has been set (i.e. expect coords set)
 
     const location_coords = get(response, 'location.coords', null)
     const location_selection = get(response, 'location.selection', null)
 
-    const location_coords_result = this._validate_location_coords(location_coords, location_coords_optional)
-    const location_selection_result = this._validate_location_selection(location_selection)
+    const location_coords_result = this._validate_location_coords(location_coords, gps_coords_required)
+    const location_selection_result = this._validate_location_selection(location_selection, location_selection_required)
 
     // Validate main form_data / response object
     const survey_results = this._validate_form_data(response.form_data)
@@ -57,7 +58,7 @@ export class Validator {
     return survey_validations
   }
 
-  _validate_location_coords(coords, location_coords_optional) {
+  _validate_location_coords(coords, gps_coords_required) {
     const validation = {
       name: 'no_geo_location',
       message: 'Problem with Geolocation (GPS coordinates)',
@@ -66,23 +67,20 @@ export class Validator {
       status: 'failed'
     }
 
-    if (location_coords_optional) {
-      return {...validation, status: 'passed'}
-    }
-
-    if (coords === null) {
-      return validation
-    }
-
-    if (!CoordsSchema(coords)) {
-      return validation
+    if (gps_coords_required) {
+      if (coords === null) {
+        return validation
+      }
+  
+      if (!CoordsSchema(coords)) {
+        return validation
+      }
     }
 
     return {...validation, status: 'passed'}
-
   }
 
-  _validate_location_selection(selection) {
+  _validate_location_selection(selection, location_selection_required) {
     const validation = {
       name: 'no_location_selection',
       message: 'Problem with location selection',
@@ -91,8 +89,15 @@ export class Validator {
       status: 'failed'
     }
 
-    if (!selection) return validation
-    if (!SelectionSchema(selection)) return validation
+    if (location_selection_required) {
+      if (!selection) {
+        return validation
+      }
+
+      if (!SelectionSchema(selection)) {
+        return validation
+      } 
+    }
 
     return {...validation, status: 'passed'}
   }
