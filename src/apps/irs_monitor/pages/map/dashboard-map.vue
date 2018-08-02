@@ -74,6 +74,7 @@
     watch: {
       'responses': 'redraw_layers',
       'map_loaded': 'redraw_layers',
+      'targets': 'redraw_layers',
       'show_response_points': 'redraw_layers',
       'selected_layer': 'switch_layer',
     },
