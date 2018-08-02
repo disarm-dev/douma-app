@@ -331,7 +331,7 @@
         }
       },
       validate(response) {
-        this.validation_result = this._validator.validate(response)
+        this.validation_result = this._validator.validate(response, this.instance_config)
         if (this.validation_result_empty) this.show_validation_result = false
 
         // Events

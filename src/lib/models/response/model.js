@@ -48,7 +48,7 @@ export class Response {
   }
 
   is_ready_to_send() {
-    return (this.model.form_data !== null) && (this.model.location.coords !== null) && (this.model.location.selection !== null)
+    return this.model.form_data !== null
   }
 
   decorate_for_sending() { // TODO: @refac Rename to not conflict with 'decorators'

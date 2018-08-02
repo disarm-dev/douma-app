@@ -74,6 +74,7 @@
     watch: {
       'responses': 'redraw_layers',
       'map_loaded': 'redraw_layers',
+      'targets': 'redraw_layers',
       'show_response_points': 'redraw_layers',
       'selected_layer': 'switch_layer',
     },
@@ -128,8 +129,8 @@
 
         this.$ga.event('irs_monitor',`view_${layer_string}`)
 
-        this.add_response_points()
         this.add_layer(layer_string)
+        this.add_response_points()
         this.zoom_to_features()
       },
       zoom_to_features () {

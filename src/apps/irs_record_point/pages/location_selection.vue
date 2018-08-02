@@ -71,7 +71,7 @@
 
 <script>
   import Multiselect from 'vue-multiselect'
-  import {get, has, uniq} from 'lodash'
+  import {get, has, uniq, escapeRegExp} from 'lodash'
 
   import {
     get_record_location_selection,
@@ -118,7 +118,7 @@
           })
           .filter(l => {
             if (!this.subarea_query) return true
-            return new RegExp(this.subarea_query, 'i').test(l.name)
+            return new RegExp(escapeRegExp(this.subarea_query), 'i').test(l.name)
           })
           .sort((a, b) => a.name.localeCompare(b.name))
       },
