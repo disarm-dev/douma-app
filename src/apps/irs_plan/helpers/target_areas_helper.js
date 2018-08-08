@@ -1,6 +1,8 @@
 import inside from '@turf/inside'
 import centroid from '@turf/centroid'
 import booleanWithin from '@turf/boolean-overlap'
+import { multiPolygon } from '@turf/helpers'
+import { getType, getCoords} from '@turf/invariant'
 
 import cache from 'config/cache'
 import {get_planning_level_name, get_group_by_for_level} from 'lib/instance_data/spatial_hierarchy_helper'
@@ -24,9 +26,19 @@ const target_areas_inside_focus_filter_area = ({area_ids, selected_filter_area})
 
     if (!found_area) return false
 
-    return inside(centroid(found_area), selected_filter_area) || booleanWithin(found_area, selected_filter_area)
+    return inside(centroid(found_area), selected_filter_area) || boolean_within_multipolygons(found_area, selected_filter_area)
   })
   return result
+}
+
+function boolean_within_multipolygons(found_area, selected_filter_area) {
+  if (found_area.geometry.type === 'MultiPolygon') {
+    // convert our selection polygon to a multipolygon
+    const coords = getCoords(selected_filter_area)
+    selected_filter_area = multiPolygon(coords) 
+  }
+  
+  return booleanWithin(found_area, selected_filter_area)
 }
 
 function quick_select_targets_by_risk_inside_focus({areas, selected_filter_area}) {
