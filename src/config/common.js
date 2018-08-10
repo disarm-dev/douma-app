@@ -3,7 +3,7 @@ import BUILD_TIME from 'config/build-time'
 export default {
   api: {
     // Standard DOUMA API
-    url: BUILD_TIME.BRANCH === 'master' ? 'https://douma.api.disarm.io' : 'https://douma-stage.api.disarm.io',
+    url: BUILD_TIME.BRANCH === 'master' ? BUILD_TIME.CUSTOM_PRODUCTION_API_URL : BUILD_TIME.CUSTOM_STAGING_API_URL,
     //  url: 'http://localhost:3000',
     version: 'v7',
 

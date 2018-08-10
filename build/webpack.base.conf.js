@@ -83,7 +83,9 @@ module.exports = {
       __VERSION_COMMIT_HASH_SHORT: JSON.stringify(gitRevisionPlugin.version()),
       __BRANCH: JSON.stringify(gitRevisionPlugin.branch()),
       __DOUMA_PRODUCTION_MODE: process.env.NODE_ENV === 'production',
-      __GA_ANALYTICS_UA: JSON.stringify(get_analytics_ua_for_branch(gitRevisionPlugin))
+      __GA_ANALYTICS_UA: JSON.stringify(get_analytics_ua_for_branch(gitRevisionPlugin)),
+      __CUSTOM_STAGING_API_URL: JSON.stringify(process.env.CUSTOM_STAGING_API_URL),
+      __CUSTOM_PRODUCTION_API_URL: JSON.stringify(process.env.CUSTOM_PRODUCTION_API_URL)
     }),
     new GitRevisionPlugin() // Write VERSION and COMMITHASH files
   ]
