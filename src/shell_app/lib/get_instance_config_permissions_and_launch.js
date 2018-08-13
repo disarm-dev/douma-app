@@ -8,8 +8,8 @@ export async function get_instance_config_permissions_and_launch({instance_id}) 
 
   const instance_config = await InstancesController.published_instance_config({instance_id})
 
-  const user_with_permissions = await UsersController.add_permissions({user, instance_id})
+  // const user_with_permissions = await UsersController.add_permissions({user, instance_id})
   console.log('TODO: add defensive checks, handle error branching')
 
-  pubsubcache.publish('shell:launch_with_config', {instance_config, user: user_with_permissions})
+  pubsubcache.publish('shell:launch_with_config', {instance_config, user: user})
 }

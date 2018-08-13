@@ -2,7 +2,7 @@
   <div>
     <h4>Select instance to load config for</h4>
     <ul>
-      <li v-for='instance in instances' :key='instance.id' @click="launch_instance(instance.id)">{{instance.name}}</li>
+      <li v-for='instance in instances' :key='instance.id' @click="launch_instance(instance.config_id)">{{instance.config_id}}@{{instance.config_version}}</li>
     </ul>
   </div>
 </template>
@@ -24,7 +24,7 @@
     methods: {
       async load_published() {
         const res = await InstancesController.published_instances()
-        this.instances = res.data.instances
+        this.instances = res.data
       },
       async launch_instance(instance_id) {
         await get_instance_config_permissions_and_launch({instance_id})

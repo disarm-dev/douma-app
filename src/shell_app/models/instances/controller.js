@@ -16,7 +16,7 @@ async function published_instances() {
 async function published_instance_config({instance_id}) {
   console.warn('TODO: missing defensive checks')
   const res = await Remote.published_instance_config({instance_id})
-  const instance_config = res.data.instance_config
+  const instance_config = res.data
   store.commit('set_instance_config', instance_config)
 
   console.warn('TODO: write instance_config to localDB')

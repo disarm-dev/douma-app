@@ -5,7 +5,7 @@ import Remote from './remote'
 
 async function login({username, password}) {
   const res = await Remote.login({username, password})
-  const token = get(res, 'data.token')
+  const token = get(res, 'data.key')
   if (token) {
     add_token_to_headers(token)
   }

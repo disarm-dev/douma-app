@@ -1,6 +1,6 @@
 import {shell_axios} from 'shell_app/lib/shell_request_handler'
 
-const prefix = 'instances'
+const prefix = 'config'
 
 function published_instances() {
   const request = {
@@ -11,7 +11,7 @@ function published_instances() {
 
 function published_instance_config({instance_id}) {
   const request = {
-    url: `/${prefix}/${instance_id}/published_instance_config`,
+    url: `/${prefix}/${instance_id}`,
   }
   return shell_axios(request)
 }
