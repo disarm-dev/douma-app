@@ -40,11 +40,14 @@
     data() {
       return {
         error: '',
-        username: 'a',//'',
-        password: 'a',//''
+        username: '',
+        password: '',
       }
     },
     computed: {
+      user() {
+        return this.$store.state.user
+      },
       can_login() {
         return this.username_valid && this.password_valid
       },
@@ -57,6 +60,10 @@
     },
     mounted() {
       this.$nextTick(() => this.$refs.username.$el.focus())
+
+      if (this.user) {
+        this.$router.push({name: 'shell:instance_configs'})
+      }
     },
     methods: {
       validate_login_request() {

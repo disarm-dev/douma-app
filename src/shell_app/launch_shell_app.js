@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Vuex from 'vuex'
 import VueLoading from 'vuex-loading'
 import {get} from 'lodash'
+import createPersistedState from 'vuex-persistedstate'
 
 import Shell from './pages/Shell'
 import Login from './pages/Login'
@@ -50,6 +51,7 @@ export function launch_shell_app() {
   })
 
   store = new Vuex.Store({
+    plugins: [createPersistedState({key: 'disarm_shell_app'})],
     state: {
       user: null,
       instance_config: null,
