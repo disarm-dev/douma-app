@@ -70,7 +70,12 @@
           const fail = (error) => {
             this.coords_message = `Cannot get location, if it helps: code ${error.code} ${error.message}`
             this.hunting_location = false
-            this.$emit('change', error)
+            // trying to save a PositionError fails in IndexedDB, so we take the two properties and create a new object
+            const formatted_error = {
+              message: error.message,
+              code: error.code
+            }
+            this.$emit('change', formatted_error)
           }
 
           this.hunting_location = true
