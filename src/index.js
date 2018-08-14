@@ -30,10 +30,10 @@ import {launch_shell_app} from './shell_app/launch_shell_app'
 
   // login, load instance config
   const local_instance_config = await InstancesController.retrieve_local_config()
-
-  if (local_instance_config) {
-    launch_main_app(local_instance_config)
-  } else {
+  
+  // if (local_instance_config) {
+  //   launch_main_app({ instance_config: local_instance_config, user: null })
+  // } else {
     launch_shell_app()
-  }
+  // }
 })()

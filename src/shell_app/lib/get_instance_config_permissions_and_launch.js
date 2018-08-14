@@ -13,3 +13,8 @@ export async function get_instance_config_permissions_and_launch({instance_id}) 
 
   pubsubcache.publish('shell:launch_with_config', {instance_config, user: user})
 }
+
+export async function launch_with_local_config({instance_config}) {
+  const user = store.state.user
+  pubsubcache.publish('shell:launch_with_config', { instance_config, user: user })
+}

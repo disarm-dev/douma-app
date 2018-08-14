@@ -11,12 +11,13 @@ export default class Local {
     return configs.find(c => c.config_id === config_id)
   }
 
-  async read_first() {
+  async read_all() {
     const configs = await this.table.toArray()
-    return configs[0]
+    return configs
   }
 
   async update(instance_config) {
+    console.log('put instance_config', instance_config);
     await this.table.put(instance_config)
   }
 
