@@ -1,6 +1,16 @@
 <template>
   <div class="container">
     <div>
+      <p>Hi {{user.name}}, you are logged in as {{user.username}}</p>
+    </div>
+
+    <div>
+      <md-button @click="logout()">
+        Logout
+      </md-button>
+    </div>
+
+    <div>
       <h4>Select locally saved instance</h4>
       <ul>
         <li v-for='instance in local_instances' :key='instance.id' @click="launch_local_instance(instance)">{{instance.config_id}}@{{instance.config_version}}</li>
@@ -28,6 +38,11 @@
         instances: []
       }
     },
+    computed: {
+      user() {
+        return this.$store.state.user
+      }
+    },
     mounted() {
       this.load_published()
       this.get_local_instance_configs()
@@ -46,6 +61,10 @@
       },
       launch_local_instance(instance_config) {
         launch_with_local_config({instance_config})
+      },
+      logout() {
+        this.$store.commit('set_user', null)
+        this.$router.push({name: 'shell:login'})
       }
     }
   }
