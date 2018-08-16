@@ -13,13 +13,13 @@ const key_suffix = 'disarm_geodata_key'
  */
 export async function save_geodata_to_idb({level_name, level_geodata, instance_slug}) {
   const existing_record = await retrieve_geodata_from_idb(instance_slug)
-  const key_to_save = `${instance_slug}_${key_suffix}`
+  const key = `${instance_slug}_${key_suffix}`
 
   level_geodata._version = get_data_version()
 
   if (!existing_record) {
     const new_record = {
-      disarm_geodata_key: key_to_save,
+      disarm_geodata_key: key,
       geodata: {
         [level_name]: level_geodata
       }
@@ -28,7 +28,7 @@ export async function save_geodata_to_idb({level_name, level_geodata, instance_s
     return db.geodata_collection.put(new_record)
   } else {
     const updated_record = {
-      disarm_geodata_key: key_to_save,
+      disarm_geodata_key: key,
       geodata: {
         ...existing_record.geodata,
         ...{
@@ -37,7 +37,7 @@ export async function save_geodata_to_idb({level_name, level_geodata, instance_s
       }
     }
 
-    return db.geodata_collection.update(key_to_save, updated_record)
+    return db.geodata_collection.update(key, updated_record)
   }
 }
 
