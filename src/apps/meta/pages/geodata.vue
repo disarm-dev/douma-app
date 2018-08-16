@@ -65,7 +65,8 @@
     },
     computed: {
       ...mapState({
-        online: 'network_online'
+        online: 'network_online',
+        instance_slug: state => state.instance_config.instance.slug,
       }),
       ...mapGetters({
         isLoading: 'loading/isLoading'
@@ -81,7 +82,7 @@
       }
     },
     mounted() {
-      hydrate_geodata_cache_from_idb().then(() => {
+      hydrate_geodata_cache_from_idb(this.instance_slug).then(() => {
         this.calculate_loading_progress()
       })
     },
@@ -106,9 +107,9 @@
       retrieve_geodata_for(level) {
         this.$loading.startLoading(`geodata/${level}`)
 
-        get_and_store_locally_geodata_for(level)
+        get_and_store_locally_geodata_for(level, this.instance_slug)
           .then(() => {
-            return hydrate_geodata_cache_from_idb()
+            return hydrate_geodata_cache_from_idb(this.instance_slug)
           })
           .then(() => {
             this.calculate_loading_progress()

@@ -53,7 +53,8 @@ export function create_router(instance_routes, store) {
     if (!geodata_in_cache_and_valid()) {
       store.commit('meta/set_previous_route', to.path)
       // try to hydrate geodata from IDB
-      hydrate_geodata_cache_from_idb().then(() => {
+
+      hydrate_geodata_cache_from_idb(store.state.instance_config.instance.slug).then(() => {
         if (geodata_in_cache_and_valid()) {
           return next()
         } else {

@@ -43,6 +43,9 @@
       }
     },
     computed: {
+      instance_slug() {
+        return this.$store.state.instance_config.instance.slug
+      },
       planning_level_name() {
         return get_planning_level_name()
       },
@@ -58,7 +61,7 @@
     },
     created () {
       // TODO: hydrate_geodata_cache_from_idb should not be in a vue
-      hydrate_geodata_cache_from_idb().then(() => {
+      hydrate_geodata_cache_from_idb(this.instance_slug).then(() => {
         if (!geodata_in_cache_and_valid()) this.message_type = "missing_geodata"
       })
     },
