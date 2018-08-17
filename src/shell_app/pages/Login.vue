@@ -29,6 +29,18 @@
 
       </md-card-content>
     </md-card>
+
+    <md-dialog-prompt
+      md-title="Generate or enter a personalised instance ID"
+      md-content="Please only change this if you know what you're doing, e.g. for training or testing."
+      md-ok-text="OK"
+      md-cancel-text="Use default"
+      @close="close_personalised_instance_id"
+      v-model.trim="local_personalised_instance_id"
+      ref="local_personalised_instance_id">
+    </md-dialog-prompt>
+
+
   </div>
 </template>
 
@@ -42,6 +54,7 @@
         error: '',
         username: '',
         password: '',
+        raw_local_personalised_instance_id: '',
       }
     },
     computed: {
@@ -56,6 +69,10 @@
       },
       password_valid() {
         return this.password.length > 0
+      },
+      local_personalised_instance_id: {
+        get() { return this.raw_local_personalised_instance_id },
+        set(value) { this.raw_local_personalised_instance_id = value.replace(/\s/g,'-') },
       }
     },
     mounted() {
@@ -66,6 +83,17 @@
       }
     },
     methods: {
+      open_personalised_instance_id() {
+        if (this.local_personalised_instance_id === 'default') {
+          this.local_personalised_instance_id = generate_personalised_instance_id()
+        }
+        this.$refs.local_personalised_instance_id.open()
+      },
+      close_personalised_instance_id(type) {
+        if (type === 'cancel') {
+          this.local_personalised_instance_id = 'default'
+        }
+      },
       validate_login_request() {
         if (!this.username_valid) {
           this.error = 'Please enter a username'
