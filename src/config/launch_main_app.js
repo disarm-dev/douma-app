@@ -31,7 +31,7 @@ import {remove_shell_app} from '../shell_app/launch_shell_app'
  */
 let douma_app
 
-export async function launch_main_app({instance_config, user}) {
+export async function launch_main_app({ instance_config, user, personalised_instance_id}) {
 
 
   /////////////////////////////
@@ -65,6 +65,7 @@ export async function launch_main_app({instance_config, user}) {
   const store = create_store(instance_config, instance_applets_stores_and_routes.stores)
   store.commit('root:set_instance_config', instance_config)
   store.commit('meta/set_user', user)
+  store.commit('meta/set_personalised_instance_id', personalised_instance_id)
 
   // Reset key UI state
   store.commit('root:set_sw_update_downloading', false)

@@ -1,7 +1,10 @@
 <template>
   <div class="container">
     <div>
-      <p>Hi {{user.name}}, you are logged in as {{user.username}}</p>
+      <p>
+        Hi {{user.name}}, you are logged in as <b>{{user.username}}</b> 
+        with personalised_instance_id: <b>{{personalised_instance_id}}</b>
+      </p>
     </div>
 
     <div>
@@ -41,6 +44,9 @@
     computed: {
       user() {
         return this.$store.state.user
+      },
+      personalised_instance_id() {
+        return this.$store.state.personalised_instance_id
       }
     },
     mounted() {

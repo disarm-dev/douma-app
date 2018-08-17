@@ -24,8 +24,8 @@ import {launch_shell_app} from './shell_app/launch_shell_app'
   configure_pubsub_converters()
 
   // listener for launching main app from shell_app
-  pubsubcache.subscribe('shell:launch_with_config', (topic, {instance_config, user}) => {
-    launch_main_app({instance_config, user})
+  pubsubcache.subscribe('shell:launch_with_config', (topic, { instance_config, user, personalised_instance_id}) => {
+    launch_main_app({ instance_config, user, personalised_instance_id})
   })
 
   // login, load instance config

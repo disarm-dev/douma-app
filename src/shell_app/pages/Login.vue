@@ -29,6 +29,16 @@
 
       </md-card-content>
     </md-card>
+    <p>
+      Version: {{'commit_hash'}}
+      <span
+        class='local_personalised_instance_id'
+        @click="open_personalised_instance_id"
+      >
+        <span v-if="local_personalised_instance_id !== 'default'">{{local_personalised_instance_id}}</span>
+        <md-icon :class="{'md-warn': local_personalised_instance_id !== 'default'}">local_laundry_service</md-icon>
+      </span>
+    </p>
 
     <md-dialog-prompt
       md-title="Generate or enter a personalised instance ID"
@@ -47,6 +57,7 @@
 <script>
 
   import Controller from 'shell_app/models/auth/controller'
+  import {generate_personalised_instance_id} from 'lib/debug/personalised_instance_id_generator'
 
   export default {
     data() {
@@ -54,7 +65,7 @@
         error: '',
         username: '',
         password: '',
-        raw_local_personalised_instance_id: '',
+        raw_local_personalised_instance_id: 'default',
       }
     },
     computed: {
@@ -81,6 +92,8 @@
       if (this.user) {
         this.$router.push({name: 'shell:instance_configs'})
       }
+
+      this.local_personalised_instance_id = this.$store.state.personalised_instance_id
     },
     methods: {
       open_personalised_instance_id() {
@@ -116,12 +129,14 @@
         const credentials = {
           username: this.username,
           password: this.password,
+          personalised_instance_id: this.local_personalised_instance_id
         }
 
         Controller.login(credentials)
           .then((res) => {
             if (res.status === 200) {
               this.$store.commit('set_user', res.data)
+              this.$store.commit('set_personalised_instance_id', this.local_personalised_instance_id)
               this.$router.push({name: 'shell:instance_configs'})
             } else {
               console.error('some error logging-in', res)

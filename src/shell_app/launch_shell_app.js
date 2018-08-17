@@ -55,9 +55,11 @@ export function launch_shell_app() {
     state: {
       user: null,
       instance_config: null,
+      personalised_instance_id: 'default'
     },
     mutations: {
       set_user: (state, user) => state.user = user,
+      set_personalised_instance_id: (state, personalised_instance_id) => state.personalised_instance_id = personalised_instance_id,
       set_instance_config: (state, instance_config) => state.instance_config = instance_config,
     },
   })
