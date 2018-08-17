@@ -1,27 +1,6 @@
 import Vue from 'vue'
 
-// Async computed properties - https://alligator.io/vuejs/async-computed-properties/
-import AsyncComputed from 'vue-async-computed'
-Vue.use(AsyncComputed)
-
-// use vuex
-import Vuex from 'vuex'
-Vue.use(Vuex)
-
-// vuex-loading
 import VueLoading from 'vuex-loading'
-Vue.use(VueLoading)
-
-// Components
-import { ClientTable } from 'vue-tables-2'
-Vue.use(ClientTable)
-
-import TreeView from 'vue-json-tree-view'
-Vue.use(TreeView)
-
-// VueMaterial
-import VueMaterial from 'vue-material'
-Vue.use(VueMaterial)
 
 import get from 'lodash.get'
 
@@ -41,16 +20,25 @@ import { hydrate_geodata_cache_from_idb } from 'lib/models/geodata/local.geodata
 import {configure_pubsubcache_listeners} from 'config/configure_pubsubcache_listeners'
 
 import BUILD_TIME from 'config/build-time'
+import {hide_loading_page} from 'config/hide_loading_page'
+import {remove_app} from 'config/remove_app'
+import {remove_shell_app} from '../shell_app/launch_shell_app'
 
 /**
  * Build a 'douma_app' instance
  * @param instance_config
  * @returns {Vue}
  */
-export async function configure_application(instance_config) {
+let douma_app
+
+export async function launch_main_app({ instance_config, user, personalised_instance_id}) {
+
+
+  /////////////////////////////
   //
   // BEFORE router or store
   //
+  /////////////////////////////
 
   // Set page title
   const title = get(instance_config, 'instance.title', '')
@@ -61,9 +49,11 @@ export async function configure_application(instance_config) {
   configure_spatial_helpers(instance_config)
 
 
+  /////////////////////////////
   //
   // CREATE router and store
   //
+  /////////////////////////////
 
 
   // Collect stores and routes for applets ONLY in this instance {stores: {}, routes: []}
@@ -74,6 +64,8 @@ export async function configure_application(instance_config) {
   // (Required for the app)
   const store = create_store(instance_config, instance_applets_stores_and_routes.stores)
   store.commit('root:set_instance_config', instance_config)
+  store.commit('meta/set_user', user)
+  store.commit('meta/set_personalised_instance_id', personalised_instance_id)
 
   // Reset key UI state
   store.commit('root:set_sw_update_downloading', false)
@@ -89,9 +81,12 @@ export async function configure_application(instance_config) {
   // Configure theme, either from default or instance_config
   configure_theme(instance_config)
 
+
+  /////////////////////////////
   //
   // AFTER router and store, BEFORE app
   //
+  /////////////////////////////
 
   // Analytics (injects $ga in every component)
   instantiate_analytics(router, store)
@@ -105,24 +100,43 @@ export async function configure_application(instance_config) {
   // Clean up old dbs, do migrations/upgrades here in the future
   await clean_up_local_dbs()
 
-  await hydrate_geodata_cache_from_idb()
+  await hydrate_geodata_cache_from_idb(instance_config.instance.slug)
 
+  /////////////////////////////
   //
   // CREATE VUE APP
   //
+  /////////////////////////////
+
   // Instantiate Vue app with store and router
-  const douma_app = new Vue({
-    el: '#douma',
+  const el_id = 'douma'
+  if (!document.getElementById(el_id)) {
+    const new_el = document.createElement('div')
+    new_el.id = el_id
+    document.getElementsByTagName('body')[0].appendChild(new_el)
+  }
+
+
+  douma_app = new Vue({
+    replace: false,
+    el: `#${el_id}`,
     router,
     store,
     vueLoading: new VueLoading(),
     render: createElement => createElement(DoumaComponent),
   })
 
+  // For debugging, add some globals
   window.__disarm_debug_app = douma_app
+  window.__disarm_debug_store = douma_app.$store
+  window.__disarm_debug_state = douma_app.$store.state
 
 
+  /////////////////////////////
+  //
   // AFTER VUE APP IS CREATED (first page has rendered)
+  //
+  /////////////////////////////
 
   // Configure application update
   check_need_to_update()
@@ -136,4 +150,18 @@ export async function configure_application(instance_config) {
   // Keep track of what version we're working on, in production at least.
   if (BUILD_TIME.DOUMA_PRODUCTION_MODE) console.info('🚀 Launched DiSARM version ' + BUILD_TIME.VERSION_COMMIT_HASH_SHORT)
 
+
+  /////////////////////////////
+  //
+  // CLEANUP BOOT PROCESS
+  //
+  /////////////////////////////
+
+  // If made it to here, make sure loading_page is hidden, and the shell_app is removed
+  hide_loading_page()
+  remove_shell_app()
+}
+
+export function remove_douma_app() {
+  remove_app(douma_app)
 }

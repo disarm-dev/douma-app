@@ -7,8 +7,8 @@ import BUILD_TIME from 'config/build-time'
  */
 const check_need_to_update = async () => {
   try {
-    const remote_version = get_version()
-    if (rcemote_version && (remote_version !== BUILD_TIME.VERSION_COMMIT_HASH_SHORT)) {
+    const remote_version = await get_version()
+    if (remote_version && (remote_version !== BUILD_TIME.VERSION_COMMIT_HASH_SHORT)) {
       console.log(`🔺 DiSARM version check: New version available ${remote_version}, can/should update.`)
       return {status: 'CAN_UPDATE', local_version: BUILD_TIME.VERSION_COMMIT_HASH_SHORT, remote_version: remote_version}
     } else {

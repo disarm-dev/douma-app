@@ -22,7 +22,6 @@
             class="item"
             v-for="{title, image, content, show_excerpt} in items_for_section(section)"
             :key="title"
-
           >
             <h5 v-if='show_excerpt' @click="toggle_show_excerpt(title, section)" class="item-header"><md-icon>expand_more</md-icon> {{title}}</h5>
             <h5 v-if='!show_excerpt' @click="toggle_show_excerpt(title, section)" class="item-header"><md-icon>expand_less</md-icon> {{title}}</h5>
@@ -34,19 +33,18 @@
       </md-dialog-content>
 
       <md-dialog-actions>
-        <md-button class="md-primary" @click.native="close_dialog_help">Close</md-button>
+        <md-button class="md-primary" @click.native="close_help">Close</md-button>
       </md-dialog-actions>
     </md-dialog>
   </keep-alive>
 </template>
 
 <script>
+  import {mapState} from 'vuex'
   import array_unique from 'array-unique'
   import {get} from 'lodash'
   import Fuse from 'fuse.js'
   import showdown from 'showdown'
-
-  import CONFIG from 'config/common'
 
   const help_content = require("json-loader!yaml-include-loader!../help_articles/help.yaml")
 
@@ -84,25 +82,22 @@
         return array_unique(this.filtered_help_content.map(c => c.section_title))
       },
       support_chat_link() {
-        const support_number = get(this.$store.state.instance_config.instance, 'support_number', false)
+        const support_number = get(this.$store, 'state.instance_config.instance.support_number', false)
         if (!support_number) return false
         return `https://wa.me/${support_number}`
       }
     },
-    watch: {
-      '$store.state.trigger_help_visible_irrelevant_value': 'open_dialog_help',
-    },
     created() {
       this.prepare_help_items()
     },
+    mounted() {
+      this.$root.$on('help:show', () => this.$refs.help.open())
+    },
     methods: {
-      open_dialog_help() {
-        this.$refs.help.open()
-        this.$ga.event('meta','trigger_help')
-      },
-      close_dialog_help() {
+      close_help() {
         this.$refs.help.close()
       },
+
       prepare_help_items() {
         const converter = new showdown.Converter()
 

@@ -1,30 +1,23 @@
 <template>
-  <md-sidenav class="md-left" ref="sidebar">
+  <md-sidenav class="md-left" ref="sidebar" v-if="user">
     <md-toolbar class="md-medium">
       <div class="md-toolbar-container">
         <h3>{{instance_title}}</h3>
       </div>
 
       <!--Status/top of sidebar: LOGGED-IN-->
-      <div v-if="user">
-        <p @click="navigate('meta:home')">Logged in: {{user.name}}</p>
-        <p><em>Version {{commit_hash}}</em></p>
-        <p v-if="personalised_instance_id !== 'default'">
-          <em>Instance ID: {{personalised_instance_id}}</em>
-          <md-icon :class="{'md-warn': personalised_instance_id !== 'default'}">local_laundry_service</md-icon>
-        </p>
-      </div>
-
-      <!--Status/top of sidebar: LOGGED-OUT-->
-      <div v-else>
-        <p>Nope, not logged in.</p>
-        <p><em>Version {{commit_hash}}</em></p>
+      <div @click="navigate('meta:home')">Logged in: {{user.name}}</div>
+      <div class="version"><em>Config Version</em> {{instance_config_version}}</div>
+      <div class="version"><em>App Version</em> {{commit_hash}}</div>
+      <div class="personalised-instance-id" v-if="personalised_instance_id !== 'default'">
+        <em>Instance ID: {{personalised_instance_id}}</em>
+        <md-icon :class="{'md-warn': personalised_instance_id !== 'default'}">local_laundry_service</md-icon>
       </div>
     </md-toolbar>
 
     <md-list>
       <!--Sidebar: LOGGED IN-->
-      <template v-if="user">
+      <template>
         <md-list-item v-for='applet in decorated_applets' :key='applet.name' @click="navigate(applet.name)">
           <md-icon>{{applet.icon}}</md-icon>
           <span class="applet-item">{{applet.title}}</span>
@@ -37,12 +30,10 @@
           <span>User</span>
         </md-list-item>
 
-        <md-list-item class='md-primary' @click="toggle_help">
+        <md-list-item class='md-primary' @click="show_help">
           <md-icon>help</md-icon>
           <span>Help</span>
         </md-list-item>
-
-        <md-divider class="md-inset"></md-divider>
 
         <md-list-item class='md-accent' @click="navigate('meta:logout')">
           <md-icon>exit_to_app</md-icon>
@@ -50,20 +41,6 @@
         </md-list-item>
 
       </template>
-
-      <!--Sidebar: LOGGED OUT-->
-      <template v-else>
-        <md-list-item class='md-primary' @click="toggle_help">
-          <md-icon>help</md-icon>
-          <span>Help</span>
-        </md-list-item>
-
-        <md-list-item class='md-accent' @click="navigate('meta:login')">
-          <md-icon>exit_to_app</md-icon>
-          <span>Login</span>
-        </md-list-item>
-      </template>
-
     </md-list>
 
   </md-sidenav>
@@ -83,6 +60,8 @@
     },
     computed: {
       ...mapState({
+        config_version: state => state.instance_config.config_version,
+        slug: state => state.instance_config.instance.slug,
         instance_title: state => state.instance_config.instance.title,
         user: state => state.meta.user,
         personalised_instance_id: state => state.meta.personalised_instance_id
@@ -93,6 +72,9 @@
       commit_hash() {
         return BUILD_TIME.VERSION_COMMIT_HASH_SHORT
       },
+      instance_config_version() {
+        return `${this.slug}@${this.config_version}`
+      }
     },
     watch: {
       'show_sidebar': 'show_hide_sidebar'
@@ -105,8 +87,8 @@
       show_hide_sidebar() {
         this.$refs.sidebar.toggle()
       },
-      toggle_help() {
-        this.$store.commit('root:trigger_help_visible')
+      show_help() {
+        this.$root.$emit('help:show')
       }
     },
   }

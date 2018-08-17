@@ -10,7 +10,6 @@ let router
 export {router}
 
 export function create_router(instance_routes, store) {
-  Vue.use(VueRouter)
 
   // Configure routes for all Applets
   const routes = [
@@ -34,15 +33,7 @@ export function create_router(instance_routes, store) {
     // next() if user already logged in
     if (store.state.meta && store.state.meta.user) return next()
 
-    // User not logged in
-    if (to.name === 'meta:login') {
-      // next() if destination is the login page
-      return next()
-    } else {
-      // Otherwise go to the login page (storing your original target)
-      store.commit('meta/set_previous_route', to.path)
-      return next({name: 'meta:login'})
-    }
+    return console.error('should have already logged-in via shell app?')
   })
 
   // Redirect to get geodata if needed
@@ -62,7 +53,8 @@ export function create_router(instance_routes, store) {
     if (!geodata_in_cache_and_valid()) {
       store.commit('meta/set_previous_route', to.path)
       // try to hydrate geodata from IDB
-      hydrate_geodata_cache_from_idb().then(() => {
+
+      hydrate_geodata_cache_from_idb(store.state.instance_config.instance.slug).then(() => {
         if (geodata_in_cache_and_valid()) {
           return next()
         } else {

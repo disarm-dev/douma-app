@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="main-bit">
     <!-- Toolbar & Sidebar -->
     <toolbar></toolbar>
 
@@ -26,7 +26,7 @@
 </script>
 
 <style>
-  body {
+  .main-bit {
     background-color: white;
     padding-top: 48px;
   }

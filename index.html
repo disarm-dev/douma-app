@@ -1,54 +1,58 @@
 <!DOCTYPE html>
 <html lang="en" style='background: white'>
-  <head>
-    <meta charset="utf-8">
-    <meta name=viewport content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#E91E63">
+<head>
+  <meta charset="utf-8">
+  <meta name=viewport
+        content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#E91E63">
 
-    <title>DiSARM</title>
+  <title>DiSARM</title>
 
-    <link rel="manifest" href="/manifest.json">
-    <link rel="shortcut icon" href="/static/favicon.ico?v3">
-    <link rel="icon" type="image/png" sizes="96x96" href="/static/favicon-96x96.png">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="shortcut icon" href="/static/favicon.ico?v3">
+  <link rel="icon" type="image/png" sizes="96x96" href="/static/favicon-96x96.png">
 
-    <link rel="apple-touch-icon" href="/static/android-icon-192x192.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="/static/android-icon-152x152.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/static/android-icon-180x180.png">
-    <link rel="apple-touch-icon" sizes="167x167" href="/static/android-icon-167x167.png">
+  <link rel="apple-touch-icon" href="/static/android-icon-192x192.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/static/android-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/static/android-icon-180x180.png">
+  <link rel="apple-touch-icon" sizes="167x167" href="/static/android-icon-167x167.png">
 
-    <!--PACE LOADING -->
-    <link rel="stylesheet" href="/static/loader/pace.css">
-    <script>
-      window.paceOptions = {
-        eventLag: false,
-        ajax: {
-          ignoreURLs: ['google-analytics.com', 'favicon', 'favicon-96x96', 'VERSION', '/?version_commit_hash_short', 'geojson']
-        }
+  <!--PACE LOADING -->
+  <link rel="stylesheet" href="/static/loader/pace.css">
+  <script>
+    window.paceOptions = {
+      eventLag: false,
+      ajax: {
+        ignoreURLs: ['google-analytics.com', 'favicon', 'favicon-96x96', 'VERSION', '/?version_commit_hash_short', 'geojson']
       }
-    </script>
-    <script src="/static/loader/pace.min.js"></script>
+    }
+  </script>
+  <script src="/static/loader/pace.min.js"></script>
 
-  </head>
+</head>
 
-  <body style='background: white'>
-      <div id="douma">
-      <div style="
-          float: none;
-          padding-top: 144px;
+<body style='background: white'>
+<div id="loader" style="
+        float: none;
+        padding-top: 144px;
+    ">
+  <img src="/static/loading-logo.png" style="
+          margin-left: auto;
+          margin-right: auto;
+          display: block;
+          height: 80px;
       ">
-        <img src="/static/loading-logo.png" style="
-            margin-left: auto;
-            margin-right: auto;
-            display: block;
-            height: 80px;
-        ">
-        <div style='font-family: sans-serif; color: grey; text-align: center;'>
-          version <%= __VERSION_COMMIT_HASH_SHORT %>
-        </div>
-        <div style='font-family: sans-serif; color: grey; text-align: center;'>
-          <a href="/reset.html" style="color: grey;">Reset offline</a>
-        </div>
-      </div>
-    </div>
-  </body>
+  <div style='font-family: sans-serif; color: grey; text-align: center;'>
+    version <%= __VERSION_COMMIT_HASH_SHORT %>
+  </div>
+  <div style='font-family: sans-serif; color: grey; text-align: center;'>
+    <a href="/reset.html" style="color: grey;">Reset offline</a>
+  </div>
+</div>
+
+<div id="shell"></div>
+
+<div id="douma"></div>
+</body>
+
 </html>

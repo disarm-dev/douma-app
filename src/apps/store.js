@@ -23,9 +23,6 @@ export function create_store(instance_config, instance_stores) {
       sw_update_available: false,
       network_online: false,
 
-      // Irrelevant values: only watched for changes
-      trigger_help_visible_irrelevant_value: false, // Beware - don't care whether it true or false, just that it changes
-
     },
     mutations: {
       'root:set_instance_config': (state, instance_config) => {
@@ -46,9 +43,6 @@ export function create_store(instance_config, instance_stores) {
       'root:network_online': (state, is_online) => {
         state.network_online = is_online
       },
-      'root:trigger_help_visible': (state) => {
-        state.trigger_help_visible_irrelevant_value = !state.trigger_help_visible_irrelevant_value
-      }
     },
   })
 

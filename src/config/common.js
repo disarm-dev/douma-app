@@ -4,7 +4,7 @@ export default {
   api: {
     // Standard DOUMA API
     url: BUILD_TIME.BRANCH === 'master' ? 'https://douma.api.disarm.io' : 'https://douma-stage.api.disarm.io',
-    //  url: 'http://localhost:3000',
+    // url: 'http://localhost:3000',
     version: 'v7',
 
     // Currently not used
@@ -44,6 +44,16 @@ export default {
       title: 'Seasons',
       icon: 'bubble_chart',
       geodata_required: false
+    },
+    record2: {
+      title: 'Record2',
+      icon: 'assignment',
+      geodata_required: false,
+    },
+    'bod-client': {
+      title: 'BOD Client',
+      icon: 'battery_charging_full',
+      geodata_required: false
     }
   },
   hash_params: {
@@ -61,7 +71,7 @@ export default {
     map_token: 'pk.eyJ1Ijoibmljb2xhaWRhdmllcyIsImEiOiJjaXlhNWw1NnkwMDJoMndwMXlsaGo5NGJoIn0.T1wTBzV42MZ1O-2dy8SpOw'
   },
   instances: {
-    list: ['foci', 'struc_demo', 'make', 'bwa', 'nam', 'swz', 'zwe-mats', 'zwe-matn', 'rsa', 'mwi-schisto', 'moz-gbm'],
+    list: ['test', 'foci', 'struc_demo', 'make', 'bwa', 'nam', 'swz', 'zwe-mats', 'zwe-matn', 'rsa', 'mwi-schisto', 'moz-gbm'],
   },
   remote: {
     max_records_batch_size: 100

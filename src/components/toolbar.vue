@@ -32,7 +32,7 @@
         </md-button>
 
         <!--HELP ICON-->
-        <md-button class="md-icon-button md-dense" @click.native="toggle_help_visible">
+        <md-button class="md-icon-button md-dense" @click.native="show_help">
           <md-icon>help</md-icon>
         </md-button>
 
@@ -94,8 +94,8 @@
         this.show_sidebar = !this.show_sidebar
       },
       // Help
-      toggle_help_visible() {
-        this.$store.commit('root:trigger_help_visible')
+      show_help() {
+        this.$root.$emit('help:show')
       },
       try_reconnect() {
         try_reconnect()
