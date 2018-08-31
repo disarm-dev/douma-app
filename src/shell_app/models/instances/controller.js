@@ -14,18 +14,23 @@ async function retrieve_local_configs() {
   return instances
 }
 
-async function published_instances() {
-  return Remote.published_instances()
+async function published_instances({user_id}) {
+  return Remote.published_instances({user_id})
 }
 
-async function published_instance_config({instance_id}) {
-  console.warn('TODO: missing defensive checks')
-  const res = await Remote.published_instance_config({instance_id})
+async function published_instance_config({id}) {
+  // console.warn('TODO: missing defensive checks')
+  const res = await Remote.published_instance_config({id})
   const instance_config = res.data
-  store.commit('set_instance_config', instance_config)
+  // store.commit('set_instance_config', instance_config)
 
-  save_instance_locally(instance_config)
+  // save_instance_locally(instance_config)
   return instance_config
+}
+
+async function instance_config({id}) {
+  const res = await Remote.instance_config({id})
+  return res.data
 }
 
 async function save_instance_locally(instance_config) {
@@ -38,5 +43,6 @@ export default {
   retrieve_local_configs,
   published_instances,
   published_instance_config,
+  instance_config,
   save_instance_locally
 }

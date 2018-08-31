@@ -11,6 +11,7 @@ import InstanceConfigs from './pages/Instances'
 import {hide_loading_page} from 'config/hide_loading_page'
 import {remove_douma_app} from 'config/launch_main_app'
 import {remove_app} from 'config/remove_app'
+import { add_token_to_headers} from './lib/shell_request_handler'
 
 let shell_app
 export let store
@@ -63,6 +64,8 @@ export function launch_shell_app() {
       set_instance_config: (state, instance_config) => state.instance_config = instance_config,
     },
   })
+
+  add_token_to_headers(store.state.user.api_key)
 
   // TODO: Check if necessary to manually recreate the div like this
   const el_id = 'shell'

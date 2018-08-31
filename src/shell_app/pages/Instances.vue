@@ -23,7 +23,14 @@
     <div>
       <h4>Select remote instance to load config for</h4>
       <ul>
-        <li v-for='instance in instances' :key='instance.id' @click="launch_instance(instance.config_id)">{{instance.config_id}}@{{instance.config_version}}</li>
+        <li v-for='instance in instances' :key='instance.id' >
+          {{instance.name}}
+          <ul>
+            <li v-for="config in instance.configs" :key="config.id" @click="launch_instance(config.id)">
+              {{instance.name}}@{{config.version}}
+            </li>
+          </ul>
+        </li>
       </ul>
     </div>
   </div>
@@ -55,15 +62,24 @@
     },
     methods: {
       async load_published() {
-        const res = await InstancesController.published_instances()
-        this.instances = res.data
+        const user_id = this.user.id
+        const res = await InstancesController.published_instances({user_id})
+        const instances = res.data
+        
+        for (const instance of instances) {
+          const configs = await InstancesController.published_instance_config({id: instance.id})
+          instance.configs = configs
+        }
+
+        this.instances = instances
+        console.log('instances', instances);
       },
       async get_local_instance_configs() {
         const res = await InstancesController.retrieve_local_configs()
         this.local_instances = res
       },
-      async launch_instance(instance_id) {
-        await get_instance_config_permissions_and_launch({instance_id})
+      async launch_instance(id) {
+        get_instance_config_permissions_and_launch({id})
       },
       launch_local_instance(instance_config) {
         launch_with_local_config({instance_config})
