@@ -150,7 +150,7 @@
 
             // 401 from server
             if (e.response && e.response.status === 401) {
-              return this.error = e.response.data.message
+              return this.error = e.response.data
             }
 
             // Anything with an error property
