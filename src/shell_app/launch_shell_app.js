@@ -8,6 +8,7 @@ import createPersistedState from 'vuex-persistedstate'
 import Shell from './pages/Shell'
 import Login from './pages/Login'
 import InstanceConfigs from './pages/Instances'
+import Geodata from './pages/Geodata'
 import {hide_loading_page} from 'config/hide_loading_page'
 import {remove_douma_app} from 'config/launch_main_app'
 import {remove_app} from 'config/remove_app'
@@ -28,6 +29,11 @@ export function launch_shell_app() {
       path: '/instance_configs',
       name: 'shell:instance_configs',
       component: InstanceConfigs,
+    },
+    {
+      path: '/geodata',
+      name: 'shell:geodata',
+      component: Geodata,
     },
     {
       path: '*',
@@ -55,17 +61,21 @@ export function launch_shell_app() {
     plugins: [createPersistedState({key: 'disarm_shell_app'})],
     state: {
       user: null,
+      instance: null,
       instance_config: null,
       personalised_instance_id: 'default'
     },
     mutations: {
       set_user: (state, user) => state.user = user,
       set_personalised_instance_id: (state, personalised_instance_id) => state.personalised_instance_id = personalised_instance_id,
+      set_instance: (state, instance) => state.instance = instance,
       set_instance_config: (state, instance_config) => state.instance_config = instance_config,
     },
   })
 
-  add_token_to_headers(store.state.user.api_key)
+  if (store.state.user) {
+    add_token_to_headers(store.state.user.api_key)
+  }
 
   // TODO: Check if necessary to manually recreate the div like this
   const el_id = 'shell'

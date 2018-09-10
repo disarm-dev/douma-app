@@ -11,10 +11,16 @@ export async function get_instance_config_permissions_and_launch({id}) {
 
   const instance_config = response.lob
 
+  store.commit('set_instance_config', instance_config)
+
+  delete response.lob
+
+  store.commit('set_instance', response)
+
   // const user_with_permissions = await UsersController.add_permissions({user, instance_id})
   console.log('TODO: add defensive checks, handle error branching')
 
-  pubsubcache.publish('shell:launch_with_config', { instance_config, user: user, personalised_instance_id})
+  // pubsubcache.publish('shell:launch_with_config', { instance_config, user: user, personalised_instance_id})
 }
 
 export async function launch_with_local_config({instance_config}) {
