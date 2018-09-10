@@ -16,6 +16,15 @@ async function login({ username, password, personalised_instance_id}) {
   return shell_axios(request)
 }
 
+async function get_permissions({user_id}) {
+  const request = {
+    method: 'get',
+    url: `/users/${user_id}/permissions`
+  }
+  return shell_axios(request)
+}
+
 export default {
-  login
+  login,
+  get_permissions
 }
