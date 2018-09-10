@@ -1,6 +1,5 @@
 import cache from 'config/cache'
 import {decorate_geodata_on_cache} from 'lib/models/geodata/geodata.decorate'
-// import {get_data_version} from "lib/instance_data/spatial_hierarchy_helper"
 import {db} from 'lib/local_db'
 
 const key_suffix = 'disarm_geodata_key'

@@ -79,9 +79,15 @@
         this.local_instances = res
       },
       async launch_instance(id) {
-        get_instance_config_permissions_and_launch({id})
+        await get_instance_config_permissions_and_launch({id})
+        this.$router.push('/geodata')
+        return
+        
       },
       launch_local_instance(instance_config) {
+        this.$router.push('/geodata')
+        return
+
         launch_with_local_config({instance_config})
       },
       logout() {
