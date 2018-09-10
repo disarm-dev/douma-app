@@ -83,11 +83,10 @@
         })
       }
     },
-    mounted() {
+    async mounted() {
       configure_spatial_helpers(this.instance_config)
-      hydrate_geodata_cache_from_idb(this.instance_slug).then(() => {
-        this.calculate_loading_progress()
-      })
+      await hydrate_geodata_cache_from_idb(this.instance_slug)
+      this.calculate_loading_progress()
     },
     methods: {
       calculate_loading_progress() {

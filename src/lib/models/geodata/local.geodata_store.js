@@ -55,8 +55,7 @@ export function hydrate_geodata_cache_from_idb(instance_slug) {
     .then((geodata) => {
       if (geodata) {
         cache.geodata = geodata.geodata
-        // TODO: Restore
-        // decorate_geodata_on_cache()
+        decorate_geodata_on_cache()
       }
       return geodata
     })

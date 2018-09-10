@@ -16,7 +16,7 @@
     <div>
       <h4>Select locally saved instance</h4>
       <ul>
-        <li v-for='instance in local_instances' :key='instance.id' @click="launch_local_instance(instance)">{{instance.config_id}}@{{instance.config_version}}</li>
+        <li v-for='instance in local_instances' :key='instance.id' @click="attempt_launch_with_local_instance(instance)">{{instance.config_id}}@{{instance.config_version}}</li>
       </ul>
     </div>
     
@@ -26,7 +26,7 @@
         <li v-for='instance in instances' :key='instance.id' >
           {{instance.name}}
           <ul>
-            <li v-for="config in instance.configs" :key="config.id" @click="launch_instance(config.id)">
+            <li v-for="config in instance.configs" :key="config.id" @click="get_instance_and_attempt_launch(config.id)">
               {{instance.name}}@{{config.version}}
             </li>
           </ul>
@@ -38,7 +38,11 @@
 
 <script>
   import InstancesController from 'shell_app/models/instances/controller'
-  import {get_instance_config_permissions_and_launch, launch_with_local_config} from 'shell_app/lib/get_instance_config_permissions_and_launch'
+  import {configure_spatial_helpers} from 'lib/instance_data/spatial_hierarchy_helper'
+  import { geodata_in_cache_and_valid } from 'lib/models/geodata/geodata.valid'
+  import {launch} from 'shell_app/lib/get_instance_config_permissions_and_launch'
+  import {hydrate_geodata_cache_from_idb} from "lib/models/geodata/local.geodata_store";
+  import { mapState } from 'vuex';
 
   export default {
     name: 'instances',
@@ -49,12 +53,13 @@
       }
     },
     computed: {
-      user() {
-        return this.$store.state.user
-      },
-      personalised_instance_id() {
-        return this.$store.state.personalised_instance_id
-      }
+      ...mapState({
+        instance_config: state => state.instance_config,
+        instance_id: state => state.instance.id,
+        instance_slug: state => state.instance_config.instance.slug,
+        user: state => state.user,
+        personalised_instance_id: state => state.personalised_instance_id
+      })
     },
     mounted() {
       this.load_published()
@@ -78,17 +83,32 @@
         const res = await InstancesController.retrieve_local_configs()
         this.local_instances = res
       },
-      async launch_instance(id) {
-        await get_instance_config_permissions_and_launch({id})
-        this.$router.push('/geodata')
-        return
+      async get_instance_and_attempt_launch(id) {
+        const response = await InstancesController.instance_config({id})
+
+        const instance_config = response.lob
+
+        this.$store.commit('set_instance_config', instance_config)
+
+        delete response.lob
+
+        this.$store.commit('set_instance', response)
+
+        await this.check_geodata_and_launch({instance_config: this.instance_config})       
+      },
+      attempt_launch_with_local_instance() {
         
       },
-      launch_local_instance(instance_config) {
-        this.$router.push('/geodata')
-        return
+      async check_geodata_and_launch({instance_config}) {
+        configure_spatial_helpers(instance_config)
 
-        launch_with_local_config({instance_config})
+        await hydrate_geodata_cache_from_idb(instance_config.instance.slug)
+
+        if (geodata_in_cache_and_valid()) {
+          launch({instance_config: this.instance_config})
+        } else {
+          this.$router.push('/geodata')
+        }
       },
       logout() {
         this.$store.commit('set_user', null)
