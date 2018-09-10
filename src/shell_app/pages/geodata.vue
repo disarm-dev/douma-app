@@ -91,7 +91,6 @@
     },
     methods: {
       calculate_loading_progress() {
-        debugger
         this.level_names.forEach(level => {
           let status
 
@@ -118,7 +117,7 @@
             instance_id: this.instance_id,
             geodata_version: this.instance_config.spatial_hierarchy.data_version
           })
-          debugger
+
           await hydrate_geodata_cache_from_idb(this.instance_slug)
           this.calculate_loading_progress()
         } catch (err) {
