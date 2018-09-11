@@ -66,9 +66,9 @@
     },
     computed: {
       ...mapState({
-        instance_config: state => state.instance_config,
+        instance_config: state => state.instance_config.lob,
         instance_id: state => state.instance.id,
-        instance_slug: state => state.instance_config.instance.slug,
+        instance_slug: state => state.instance_config.lob.instance.slug,
       })
     },
     created() {

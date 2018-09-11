@@ -17,7 +17,7 @@ import { add_token_to_headers} from './lib/shell_request_handler'
 let shell_app
 export let store
 
-export function launch_shell_app() {
+export function launch_shell_app({reset_instance = false} = {}) {
 
   const routes = [
     {
@@ -62,6 +62,7 @@ export function launch_shell_app() {
     state: {
       user: null,
       instance: null,
+      instances: [],
       instance_config: null,
       personalised_instance_id: 'default'
     },
@@ -70,12 +71,19 @@ export function launch_shell_app() {
       set_personalised_instance_id: (state, personalised_instance_id) => state.personalised_instance_id = personalised_instance_id,
       set_instance: (state, instance) => state.instance = instance,
       set_instance_config: (state, instance_config) => state.instance_config = instance_config,
+      set_instances: (state, instances) => state.instances = instances
     },
   })
 
   if (store.state.user) {
     add_token_to_headers(store.state.user.api_key)
   }
+
+  if (reset_instance) {
+    console.log('resetting instance')
+    store.commit('set_instance', null)
+  }
+
 
   // TODO: Check if necessary to manually recreate the div like this
   const el_id = 'shell'

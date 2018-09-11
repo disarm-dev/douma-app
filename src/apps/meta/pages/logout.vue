@@ -13,7 +13,7 @@
       this.$store.dispatch('meta/logout').then(() => {
         setTimeout(() => {
           // location.reload()
-          launch_shell_app()
+          launch_shell_app({reset_instance: true})
         }, 1000)
       })
     }

@@ -15,7 +15,9 @@ async function retrieve_local_configs() {
 }
 
 async function published_instances({user_id}) {
-  return Remote.published_instances({user_id})
+  // TODO: Save the instances locally
+  const res = await Remote.published_instances({ user_id })
+  return res
 }
 
 async function published_instance_config({id}) {
@@ -30,10 +32,11 @@ async function published_instance_config({id}) {
 
 async function instance_config({id}) {
   const res = await Remote.instance_config({id})
+  save_instance_config_locally(res.data)
   return res.data
 }
 
-async function save_instance_locally(instance_config) {
+async function save_instance_config_locally(instance_config) {
   await local_config_db.update(instance_config)
 }
 
@@ -44,5 +47,5 @@ export default {
   published_instances,
   published_instance_config,
   instance_config,
-  save_instance_locally
+  save_instance_config_locally
 }

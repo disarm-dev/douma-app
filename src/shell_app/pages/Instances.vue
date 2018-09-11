@@ -16,7 +16,15 @@
     <div>
       <h4>Select locally saved instance</h4>
       <ul>
-        <li v-for='instance in local_instances' :key='instance.id' @click="attempt_launch_with_local_instance(instance)">{{instance.config_id}}@{{instance.config_version}}</li>
+        <li v-for='instance in local_instances' :key='instance.id' >
+          {{instance.name}}
+          <ul>
+            <li v-for="config in instance.configs" :key="config.id" @click="attempt_launch_with_local_instance(config.id)">
+              {{instance.name}}@{{config.version}}
+            </li>
+          </ul>
+        </li>
+        <!-- <li v-for='instance in local_instances' :key='instance.id' @click="attempt_launch_with_local_instance(instance)">{{instance.config_id}}@{{instance.config_version}}</li> -->
       </ul>
     </div>
     
@@ -70,6 +78,7 @@
         const user_id = this.user.id
         const res = await InstancesController.published_instances({user_id})
         const instances = res.data
+        this.$store.commit('set_instances', instances)
         
         for (const instance of instances) {
           const configs = await InstancesController.published_instance_config({id: instance.id})
@@ -81,23 +90,32 @@
       },
       async get_local_instance_configs() {
         const res = await InstancesController.retrieve_local_configs()
+        console.log('local', res);
         this.local_instances = res
       },
       async get_instance_and_attempt_launch(id) {
-        const response = await InstancesController.instance_config({id})
-
-        const instance_config = response.lob
+        const instance_config = await InstancesController.instance_config({id})
 
         this.$store.commit('set_instance_config', instance_config)
 
-        delete response.lob
+        const instance = {
+          application_version: instance_config.application_version,
+          createdAt: instance_config.createdAt,
+          id: instance_config.id,
+          instance: instance_config.instance,
+          updatedAt: instance_config.updatedAt,
+          version: instance_config.version,
+        }
 
-        this.$store.commit('set_instance', response)
+        this.$store.commit('set_instance', instance)
 
-        await this.check_geodata_and_launch({instance_config: this.instance_config})       
+        await this.check_geodata_and_launch({instance_config: instance_config.lob})       
       },
       attempt_launch_with_local_instance() {
-        
+        // find instance_config, 
+
+        return 
+        check_geodata_and_launch({instance_config: {}})
       },
       async check_geodata_and_launch({instance_config}) {
         configure_spatial_helpers(instance_config)
@@ -105,7 +123,7 @@
         await hydrate_geodata_cache_from_idb(instance_config.instance.slug)
 
         if (geodata_in_cache_and_valid()) {
-          launch({instance_config: this.instance_config})
+          launch({instance_config: instance_config})
         } else {
           this.$router.push('/geodata')
         }
