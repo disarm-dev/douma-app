@@ -73,12 +73,12 @@
     mounted() {
       this.load_published()
       this.get_local_instance_configs()
+      this.get_local_instances()
     },
     methods: {
       async load_published() {
         const user_id = this.user.id
-        const res = await InstancesController.published_instances({user_id})
-        const instances = res.data
+        const instances = await InstancesController.published_instances({user_id})
         this.$store.commit('set_instances', instances)
         
         for (const instance of instances) {
@@ -93,6 +93,11 @@
         const res = await InstanceConfigsController.retrieve_local_configs()
         console.log('local', res);
         this.local_instances = res
+      },
+      async get_local_instances() {
+        const instances = await InstancesController.retrieve_local_instances()
+        this.local_instances = instances
+        // attach locally saved configs here?
       },
       async get_instance_and_attempt_launch(id) {
         const instance_config = await InstanceConfigsController.instance_config({id})
