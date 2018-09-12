@@ -16,15 +16,14 @@
     <div>
       <h4>Select locally saved instance</h4>
       <ul>
-        <li v-for='instance in local_instances' :key='instance.id' >
+        <li v-for='instance in local_instances' :key='instance.id' v-if="instance.configs.length">
           {{instance.name}}
           <ul>
-            <li v-for="config in instance.configs" :key="config.id" @click="attempt_launch_with_local_instance(config.id)">
+            <li v-for="config in instance.configs" :key="config.id" @click="check_geodata_and_launch({instance_config: config})">
               {{instance.name}}@{{config.version}}
             </li>
           </ul>
         </li>
-        <!-- <li v-for='instance in local_instances' :key='instance.id' @click="attempt_launch_with_local_instance(instance)">{{instance.config_id}}@{{instance.config_version}}</li> -->
       </ul>
     </div>
     
@@ -72,8 +71,7 @@
     },
     mounted() {
       this.load_published()
-      this.get_local_instance_configs()
-      this.get_local_instances()
+      this.load_local()
     },
     methods: {
       async load_published() {
@@ -87,17 +85,16 @@
         }
 
         this.instances = instances
-        console.log('instances', instances);
       },
-      async get_local_instance_configs() {
-        const res = await InstanceConfigsController.retrieve_local_configs()
-        console.log('local', res);
-        this.local_instances = res
-      },
-      async get_local_instances() {
-        const instances = await InstancesController.retrieve_local_instances()
-        this.local_instances = instances
-        // attach locally saved configs here?
+      async load_local() {
+        const local_instances = await InstancesController.retrieve_local_instances()
+        const local_configs = await InstanceConfigsController.retrieve_local_configs()
+
+        for (const instance of local_instances) {
+          const configs = local_configs.filter(config => config.instance === instance.id)
+          instance.configs = configs.map(c => c.lob)
+        }
+        this.local_instances = local_instances
       },
       async get_instance_and_attempt_launch(id) {
         const instance_config = await InstanceConfigsController.instance_config({id})
@@ -117,18 +114,12 @@
 
         await this.check_geodata_and_launch({instance_config: instance_config.lob})       
       },
-      attempt_launch_with_local_instance() {
-        // find instance_config, 
-
-        return 
-        check_geodata_and_launch({instance_config: {}})
-      },
       async check_geodata_and_launch({instance_config}) {
         configure_spatial_helpers(instance_config)
 
         await hydrate_geodata_cache_from_idb(instance_config.instance.slug)
-
-        if (geodata_in_cache_and_valid()) {
+        const valid = geodata_in_cache_and_valid()
+        if (valid) {
           launch({instance_config: instance_config})
         } else {
           this.$router.push('/geodata')
