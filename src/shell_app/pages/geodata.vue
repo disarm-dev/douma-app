@@ -28,9 +28,9 @@
 
           <!--DOWNLOAD BUTTON -->
           <md-button
-                  @click.native="retrieve_geodata_for(level)"
-                  :disabled="!online || $loading.isLoading(`geodata/${level}`)"
-                  class="md-dense list-button md-raised md-primary"
+            @click.native="retrieve_geodata_for(level)"
+            :disabled="$loading.isLoading(`geodata/${level}`)"
+            class="md-dense list-button md-raised md-primary"
           >
             Download
           </md-button>
@@ -49,30 +49,32 @@
 <script>
   import {mapGetters, mapState} from 'vuex'
 
-  import {get_all_spatial_hierarchy_level_names} from 'lib/instance_data/spatial_hierarchy_helper'
+  import {get_all_spatial_hierarchy_level_names, configure_spatial_helpers} from 'lib/instance_data/spatial_hierarchy_helper'
   import {geodata_has_level, geodata_versions_correct, geodata_level_version_matches_instance_config } from 'lib/models/geodata/geodata.valid'
   import {get_geodata_for} from 'lib/models/geodata/remote'
-  import {get_and_store_locally_geodata_for} from 'lib/models/geodata/remote'
   import {hydrate_geodata_cache_from_idb} from "lib/models/geodata/local.geodata_store";
+
+  import {get_and_save_layer} from '../models/geodata/controller'
 
   export default {
     name: 'geodata',
     data () {
       return {
         loading_progress: {},
-        level_names: get_all_spatial_hierarchy_level_names()
+        level_names: []
       }
     },
     computed: {
       ...mapState({
-        online: 'network_online',
-        instance_slug: state => state.instance_config.instance.slug,
-      }),
-      ...mapGetters({
-        isLoading: 'loading/isLoading'
+        instance_config: state => state.instance_config.lob,
+        instance_id: state => state.instance.id,
+        instance_slug: state => state.instance_config.lob.instance.slug,
       })
     },
     created() {
+      const level_names = this.instance_config.spatial_hierarchy.levels.map(l => l.name)
+      this.level_names = level_names
+
       for (let level_name of this.level_names) {
         this.$set(this.loading_progress, level_name,  {
           status: '',
@@ -81,10 +83,10 @@
         })
       }
     },
-    mounted() {
-      hydrate_geodata_cache_from_idb(this.instance_slug).then(() => {
-        this.calculate_loading_progress()
-      })
+    async mounted() {
+      configure_spatial_helpers(this.instance_config)
+      await hydrate_geodata_cache_from_idb(this.instance_slug)
+      this.calculate_loading_progress()
     },
     methods: {
       calculate_loading_progress() {
@@ -104,31 +106,38 @@
           this.loading_progress[level].status = status
         })
       },
-      retrieve_geodata_for(level) {
+      async retrieve_geodata_for(level) {
         this.$loading.startLoading(`geodata/${level}`)
 
-        get_and_store_locally_geodata_for(level, this.instance_slug)
-          .then(() => {
-            return hydrate_geodata_cache_from_idb(this.instance_slug)
-          })
-          .then(() => {
-            this.calculate_loading_progress()
-            this.$loading.endLoading(`geodata/${level}`)
-          })
-          .catch((err) => {
-            this.$loading.endLoading(`geodata/${level}`)
-            console.error(err)
+        try {
+          await get_and_save_layer({
+            level_name: level, 
+            instance_slug: this.instance_slug, 
+            instance_id: this.instance_id,
+            geodata_version: this.instance_config.spatial_hierarchy.data_version
           })
 
+          await hydrate_geodata_cache_from_idb(this.instance_slug)
+          this.calculate_loading_progress()
+        } catch (err) {
+          console.error(err)
+        }
+
+        this.$loading.endLoading(`geodata/${level}`)
       },
       back() {
-        this.$router.push('/')
+        this.$router.push('/instance_configs')
       }
     }
   }
 </script>
 
 <style lang="css" scoped>
+  .applet_container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
   .list {
     max-width: 600px;
     margin: 0 auto;

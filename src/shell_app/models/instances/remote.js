@@ -1,22 +1,15 @@
 import {shell_axios} from 'shell_app/lib/shell_request_handler'
 
-const prefix = 'config'
-
-function published_instances() {
+function published_instances({user_id}) {
   const request = {
-    url: `/${prefix}`
-  }
-  return shell_axios(request)
-}
-
-function published_instance_config({instance_id}) {
-  const request = {
-    url: `/${prefix}/${instance_id}`,
+    url: `/instances`,
+    params: {
+      user_id: user_id
+    }
   }
   return shell_axios(request)
 }
 
 export default {
   published_instances,
-  published_instance_config,
 }

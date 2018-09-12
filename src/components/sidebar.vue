@@ -37,7 +37,7 @@
 
         <md-list-item class='md-accent' @click="navigate('meta:logout')">
           <md-icon>exit_to_app</md-icon>
-          <span>Logout</span>
+          <span>Return to launcher</span>
         </md-list-item>
 
       </template>
