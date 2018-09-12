@@ -46,6 +46,7 @@
 
 <script>
   import InstancesController from 'shell_app/models/instances/controller'
+  import InstanceConfigsController from 'shell_app/models/instance_configs/controller'
   import {configure_spatial_helpers} from 'lib/instance_data/spatial_hierarchy_helper'
   import { geodata_in_cache_and_valid } from 'lib/models/geodata/geodata.valid'
   import {launch} from 'shell_app/lib/get_instance_config_permissions_and_launch'
@@ -81,7 +82,7 @@
         this.$store.commit('set_instances', instances)
         
         for (const instance of instances) {
-          const configs = await InstancesController.published_instance_config({id: instance.id})
+          const configs = await InstanceConfigsController.published_instance_config({id: instance.id})
           instance.configs = configs
         }
 
@@ -89,12 +90,12 @@
         console.log('instances', instances);
       },
       async get_local_instance_configs() {
-        const res = await InstancesController.retrieve_local_configs()
+        const res = await InstanceConfigsController.retrieve_local_configs()
         console.log('local', res);
         this.local_instances = res
       },
       async get_instance_and_attempt_launch(id) {
-        const instance_config = await InstancesController.instance_config({id})
+        const instance_config = await InstanceConfigsController.instance_config({id})
 
         this.$store.commit('set_instance_config', instance_config)
 
