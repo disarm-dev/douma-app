@@ -15,13 +15,8 @@ export async function get_instance_config({id}) {
   store.commit('set_instance', response)
 }
 
-export async function launch_with_local_config({instance_config}) {
-  launch({ instance_config })
-}
-
-export function launch({instance_config}) {
-  const user = store.state.user
+export function launch({instance, lob: instance_config}, user) {
   const personalised_instance_id = store.state.personalised_instance_id
 
-  pubsubcache.publish('shell:launch_with_config', { instance_config, user: user, personalised_instance_id})
+  pubsubcache.publish('shell:launch_with_config', { instance_config, user, personalised_instance_id})
 }

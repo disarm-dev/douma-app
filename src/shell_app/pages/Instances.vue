@@ -46,6 +46,8 @@
 <script>
   import InstancesController from 'shell_app/models/instances/controller'
   import InstanceConfigsController from 'shell_app/models/instance_configs/controller'
+  import AuthController from 'shell_app/models/auth/controller'
+  import {geodata_required} from 'shell_app/models/geodata/controller'
   import {configure_spatial_helpers} from 'lib/instance_data/spatial_hierarchy_helper'
   import { geodata_in_cache_and_valid } from 'lib/models/geodata/geodata.valid'
   import {launch} from 'shell_app/lib/get_instance_config_permissions_and_launch'
@@ -80,8 +82,7 @@
         this.$store.commit('set_instances', instances)
         
         for (const instance of instances) {
-          const configs = await InstanceConfigsController.published_instance_config({id: instance.id})
-          instance.configs = configs
+          instance.configs = await InstanceConfigsController.published_instance_config({id: instance.id})
         }
 
         this.instances = instances
@@ -91,8 +92,7 @@
         const local_configs = await InstanceConfigsController.retrieve_local_configs()
 
         for (const instance of local_instances) {
-          const configs = local_configs.filter(config => config.instance === instance.id)
-          instance.configs = configs.map(c => c.lob)
+          instance.configs = local_configs.filter(config => config.instance === instance.id)
         }
         this.local_instances = local_instances
       },
@@ -112,15 +112,22 @@
 
         this.$store.commit('set_instance', instance)
 
-        await this.check_geodata_and_launch({instance_config: instance_config.lob})       
+        await this.check_geodata_and_launch(instance_config)       
       },
-      async check_geodata_and_launch({instance_config}) {
-        configure_spatial_helpers(instance_config)
+      async check_geodata_and_launch(instance_config) {
+        const user = AuthController.prepare_user_for_instance(instance_config.instance, this.$store.state.user)
+        const required = geodata_required(user.permissions)
+        debugger
+        if (!required) {
+          return launch(instance_config, user)
+        }
 
-        await hydrate_geodata_cache_from_idb(instance_config.instance.slug)
+        configure_spatial_helpers(instance_config.lob)
+
+        await hydrate_geodata_cache_from_idb(instance_config.lob.instance.slug)
         const valid = geodata_in_cache_and_valid()
         if (valid) {
-          launch({instance_config: instance_config})
+          launch(instance_config, user)
         } else {
           this.$router.push('/geodata')
         }
