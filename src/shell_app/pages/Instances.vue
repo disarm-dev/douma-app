@@ -19,7 +19,7 @@
         <li v-for='instance in local_instances' :key='instance.id' v-if="instance.configs.length">
           {{instance.name}}
           <ul>
-            <li v-for="config in instance.configs" :key="config.id" @click="check_geodata_and_launch({instance_config: config})">
+            <li v-for="config in instance.configs" :key="config.id" @click="check_geodata_and_launch(config)">
               {{instance.name}}@{{config.version}}
             </li>
           </ul>
@@ -100,7 +100,7 @@
         const instance_config = await InstanceConfigsController.instance_config({id})
 
         this.$store.commit('set_instance_config', instance_config)
-
+        
         const instance = {
           application_version: instance_config.application_version,
           createdAt: instance_config.createdAt,
@@ -115,9 +115,11 @@
         await this.check_geodata_and_launch(instance_config)       
       },
       async check_geodata_and_launch(instance_config) {
-        const user = AuthController.prepare_user_for_instance(instance_config.instance, this.$store.state.user)
+        // remove permissions for other instances
+        const copy_of_user = {...this.$store.state.user} // copy so we don't mutate state, which is bad
+        const user = AuthController.prepare_user_for_instance(instance_config.instance, copy_of_user)
         const required = geodata_required(user.permissions)
-        debugger
+        
         if (!required) {
           return launch(instance_config, user)
         }
