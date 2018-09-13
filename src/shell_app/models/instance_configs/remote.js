@@ -9,7 +9,7 @@ function published_instance_config({ id }) {
 
 function instance_config({ id }) {
   const request = {
-    url: `/instanceconfigs/${id}`,
+    url: `/v1/instanceconfigs/${id}`,
   }
   return shell_axios(request)
 }
