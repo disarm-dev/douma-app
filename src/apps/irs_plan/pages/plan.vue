@@ -110,12 +110,8 @@
 </template>
 
 <script>
-  import {mapState, mapGetters} from 'vuex'
+  import {mapGetters, mapState} from 'vuex'
   import moment from 'moment-mini'
-  import whichPolygon from 'which-polygon';
-  import {featureCollection} from '@turf/helpers'
-  import centroid from '@turf/centroid'
-  import get from 'lodash.get'
 
   import controls from 'components/controls.vue'
   import plan_filter from './plan-filter.vue'
@@ -123,14 +119,10 @@
   import plan_map from './plan-map.vue'
   import plan_calculator from './plan-calculator.vue'
   import save_plan from './save-plan'
-  import cache from 'config/cache.js'
   import {Plan} from 'lib/models/plan/model.js'
   import {get_geodata} from 'lib/models/geodata/remote'
 
-  import {
-    get_planning_level_name,
-    get_next_level_up_from_planning_level
-  } from 'lib/instance_data/spatial_hierarchy_helper'
+  import {get_next_level_up_from_planning_level} from 'lib/instance_data/spatial_hierarchy_helper'
   import {target_areas_inside_focus_filter_area} from '../helpers/target_areas_helper.js'
   import {geodata_in_cache_and_valid} from '../../../lib/models/geodata/geodata.valid'
 

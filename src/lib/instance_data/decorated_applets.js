@@ -1,5 +1,4 @@
-import intersection from 'lodash.intersection'
-import without from 'lodash.without'
+import {intersection, without} from 'lodash'
 
 import CONFIG from 'config/common'
 

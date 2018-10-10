@@ -53,7 +53,6 @@
 
   import {custom_validations} from '@locational/application-registry-validation'
   import {request_handler} from 'lib/remote/request-handler'
-  import {save_local_config} from 'lib/models/instance_config/model'
 
   export default {
     name: 'seasons',

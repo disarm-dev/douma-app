@@ -75,9 +75,9 @@
 </template>
 
 <script>
-  import get from 'lodash.get'
+  import {get} from 'lodash'
 
-  import {get_version, try_reconnect} from 'lib/remote/util'
+  import {try_reconnect} from 'lib/remote/util'
   import {check_need_to_update} from 'lib/remote/check-application-version'
 
   import cache from 'config/cache.js'

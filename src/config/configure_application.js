@@ -23,7 +23,7 @@ Vue.use(TreeView)
 import VueMaterial from 'vue-material'
 Vue.use(VueMaterial)
 
-import get from 'lodash.get'
+import {get} from 'lodash'
 
 import DoumaComponent from 'components/app.vue'
 import { create_router } from '../apps/router'

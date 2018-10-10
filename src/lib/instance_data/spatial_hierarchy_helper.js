@@ -1,5 +1,4 @@
-import get from 'lodash.get'
-import cloneDeep from 'lodash.clonedeep'
+import {cloneDeep, get} from 'lodash'
 
 let instance_config_cache = null
 let spatial_hierarchy_cache = null
@@ -79,13 +78,10 @@ const get_all_spatial_hierarchy_levels = () => spatial_hierarchy_cache.levels
 const get_all_spatial_hierarchy_level_names = () => spatial_hierarchy_cache.levels.map(level => level.name)
 
 
-
-
 const get_record_location_selection = () => {
   const record_location_selection_level_name = spatial_hierarchy_cache.markers.record_location_selection_level_name
   return instance_config_cache.location_selection[record_location_selection_level_name]
 }
-
 
 
 /**

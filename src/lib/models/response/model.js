@@ -1,10 +1,7 @@
 import uuid from 'uuid/v4'
-import which_polygon from 'which-polygon'
-import omit from 'lodash.omit'
+import {omit} from 'lodash'
 
 import {ResponseSchema} from './schemas/schema'
-import cache from 'config/cache'
-import {get_planning_level_id_field, get_planning_level_name} from 'lib/instance_data/spatial_hierarchy_helper'
 import moment from 'moment'
 
 export class Response {

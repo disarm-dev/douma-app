@@ -34,9 +34,7 @@
 <script>
   import Multiselect from 'vue-multiselect'
   import {get_record_location_selection} from 'lib/instance_data/spatial_hierarchy_helper'
-  import uniq from 'lodash.uniq'
-
-  import cache from 'config/cache'
+  import {uniq} from 'lodash'
 
   export default {
     name: 'spatial_filter',

@@ -22,12 +22,10 @@
 </template>
 
 <script>
-  import {mapState, mapGetters} from 'vuex'
-  import debounce from 'lodash.debounce'
-  import is_null from 'lodash.isnull'
+  import {mapGetters, mapState} from 'vuex'
+  import {debounce, is_null} from 'lodash'
   import download from 'downloadjs'
   import moment from 'moment'
-
   // Map and geospatial
   import MapboxDraw from '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw'
 
@@ -42,11 +40,14 @@
   import {basic_map} from 'lib/helpers/basic_map'
   import map_legend from 'components/map_legend.vue'
   import {
-    get_planning_level_name,
     get_next_level_down_from_planning_level,
-    get_next_level_up_from_planning_level
+    get_next_level_up_from_planning_level,
+    get_planning_level_name
   } from 'lib/instance_data/spatial_hierarchy_helper'
-  import {target_areas_inside_focus_filter_area, quick_select_targets_by_risk_inside_focus} from '../helpers/target_areas_helper.js'
+  import {
+    quick_select_targets_by_risk_inside_focus,
+    target_areas_inside_focus_filter_area
+  } from '../helpers/target_areas_helper.js'
   import {prepare_palette} from 'lib/helpers/palette_helper.js'
   import {layer_definitions} from 'config/map_layers'
   import plan_layer_definitions from '../helpers/plan_map_layers.js'

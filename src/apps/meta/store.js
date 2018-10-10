@@ -1,5 +1,5 @@
 import Raven from 'raven-js'
-import get from 'lodash.get'
+import {get} from 'lodash'
 import unique from 'array-unique'
 
 import {authenticate} from 'lib/models/user'

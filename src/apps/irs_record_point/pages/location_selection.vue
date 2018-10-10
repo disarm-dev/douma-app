@@ -74,9 +74,9 @@
   import {get, has, uniq, escapeRegExp} from 'lodash'
 
   import {
-    get_record_location_selection,
+    get_next_level_up_from_planning_level,
     get_planning_level_name,
-    get_next_level_up_from_planning_level
+    get_record_location_selection
   } from 'lib/instance_data/spatial_hierarchy_helper'
 
   export default {
