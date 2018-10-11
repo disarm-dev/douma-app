@@ -4,9 +4,9 @@ export default {
   api: {
     // Standard DOUMA API
     // url: BUILD_TIME.BRANCH === 'master' ? 'https://douma.api.disarm.io' : 'https://douma-stage.api.disarm.io',
-    // url: 'http://localhost:3000',
-    url: BUILD_TIME.BRANCH === 'master' ? BUILD_TIME.CUSTOM_PRODUCTION_API_URL : BUILD_TIME.CUSTOM_STAGING_API_URL,
-    version: 'v7',
+     url: 'http://localhost:3000',
+   // url: BUILD_TIME.BRANCH === 'master' ? BUILD_TIME.CUSTOM_PRODUCTION_API_URL : BUILD_TIME.CUSTOM_STAGING_API_URL,
+    version: 'v8',
 
     // Currently not used
     WEATHER_API_URL: 'https://weather.api.disarm.io/processor/output',

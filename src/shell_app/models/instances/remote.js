@@ -2,7 +2,7 @@ import {shell_axios} from 'shell_app/lib/shell_request_handler'
 
 function published_instances({user_id}) {
   const request = {
-    url: `/v1/instances`,
+    url: `/v8/instance`,
     params: {
       user_id: user_id
     }

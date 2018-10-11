@@ -12,7 +12,7 @@ async function published_instances({user_id}) {
   const res = await Remote.published_instances({ user_id })
   
   const instances = res.data
-  await save_instances_locally(instances)
+ // await save_instances_locally(instances)
 
   return instances
 }

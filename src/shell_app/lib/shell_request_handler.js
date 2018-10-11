@@ -1,7 +1,7 @@
 import axios from 'axios/index'
 import CONFIG from 'config/common'
 
-const api_url = "https://config-server-stage.herokuapp.com"
+const api_url = `http://localhost:3000`//"https://config-server-stage.herokuapp.com"
 
 export const shell_axios = axios.create({
   baseURL: api_url,
@@ -12,5 +12,5 @@ export const shell_axios = axios.create({
 })
 
 export function add_token_to_headers(token) {
-  axios.defaults.headers = { 'api_key': token }
+  axios.defaults.headers = { 'API-key': token }
 }

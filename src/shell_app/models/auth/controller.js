@@ -5,13 +5,15 @@ import Remote from './remote'
 
 async function login({ username, password, personalised_instance_id}) {
   const res = await Remote.login({ username, password, personalised_instance_id})
-  const token = get(res, 'data.api_key')
+  const token = get(res, 'data.key')
+  console.log(token)
   if (token) {
     add_token_to_headers(token)
   }
 
   // GET user permissions here
-  const permissions_res = await Remote.get_permissions({user_id: res.data.id})
+
+  const permissions_res = await Remote.get_permissions({user_id: res.data._id})
 
   res.data.permissions = permissions_res.data
 
