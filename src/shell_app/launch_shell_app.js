@@ -76,7 +76,7 @@ export function launch_shell_app({reset_instance = false} = {}) {
   })
 
   if (store.state.user) {
-    add_token_to_headers(store.state.user.api_key)
+    add_token_to_headers(store.state.user.key)
   }
 
   if (reset_instance) {
