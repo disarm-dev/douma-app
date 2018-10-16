@@ -1,5 +1,5 @@
 import InstanceConfigLocal from './local'
-import { read_instance_config } from './remote'
+import config from '../../../demo-app.config.json'
 
 const local_config_db = new InstanceConfigLocal()
 
@@ -24,7 +24,7 @@ export async function retrieve_local_config(config_id) {
 
 async function retrieve_and_store_remote_config(config_id) {
   try {
-    const remote_instance_config = await read_instance_config(config_id)
+    const remote_instance_config = config
     // TODO: Check this is a valid instance_config
     await local_config_db.update(remote_instance_config)
     return remote_instance_config

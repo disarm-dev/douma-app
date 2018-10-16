@@ -59,7 +59,7 @@ function is_valid_subdomain(subdomain) {
  * @returns Promise
  */
 export async function get_instance_config() {
-  const instance_slug = determine_instance()
+  const instance_slug = 'demo-app' // Could be anything, as we're hardcoding the config in the read_ function - just stops looking for ID in subdomain, etc.
   try {
     const instance_config = await read_instance_configuration_for(instance_slug)
     if (!instance_config) return null;
