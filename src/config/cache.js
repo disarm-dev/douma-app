@@ -1,6 +1,8 @@
+import localidad_geodata from '../demo-app.localidad.geojson'
+
 const cache = {
   geodata: {
-    // e.g. clusters: null // FeatureCollection
+    localidad: localidad_geodata
   },
 }
 // TODO: @debug Remove this global when we no longer need our training wheels
