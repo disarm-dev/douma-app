@@ -41,9 +41,8 @@
 
     <md-dialog-prompt
       md-title="Generate or enter a personalised instance ID"
-      md-content="Please only change this if you know what you're doing, e.g. for training or testing."
       md-ok-text="OK"
-      md-cancel-text="Use default"
+      md-cancel-text="Close"
       @close="close_personalised_instance_id"
       v-model.trim="local_personalised_instance_id"
       ref="local_personalised_instance_id">
@@ -113,6 +112,8 @@
         if (!this.$refs.username) return
         this.$refs.username.$el.focus()
       })
+      // Demo - force personalised_instance_id
+      this.local_personalised_instance_id = generate_personalised_instance_id()
     },
     methods: {
       open_personalised_instance_id() {
@@ -122,9 +123,6 @@
         this.$refs.local_personalised_instance_id.open()
       },
       close_personalised_instance_id(type) {
-        if (type === 'cancel') {
-          this.local_personalised_instance_id = 'default'
-        }
       },
       valid_login_request() {
         if (!this.user_details.username) {
