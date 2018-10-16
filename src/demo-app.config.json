@@ -1,6 +1,6 @@
 {
-  "config_id": "moz-gbm",
-  "config_version": "NaN",
+  "config_id": "demo-app",
+  "config_version": "1.0.0",
   "applets": {
     "irs_monitor": {
       "season_start_dates": ["2017-01-01", "2018-01-01", "2018-02-01", "2018-04-01"],
@@ -86,9 +86,9 @@
     "zoom": 7.5
   },
   "instance": {
-    "title": "Mozambique Goodbye Malaria Test",
+    "title": "DiSARM Mozambique Demo",
     "location_name": "Mozambique",
-    "slug": "moz-gbm"
+    "slug": "demo-app"
   },
   "spatial_hierarchy": {
     "data_version": 1,
