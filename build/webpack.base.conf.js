@@ -67,8 +67,8 @@ module.exports = {
         }
       },
       {
-        test: /.json$/,
-        loader: StripJSONCommentsLoader,
+        test: /.(geojson|json)$/,
+        loader: 'json-loader',
         exclude: /node_modules/
       },
       {
