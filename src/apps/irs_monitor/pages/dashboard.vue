@@ -61,6 +61,8 @@
   import {Plan} from 'lib/models/plan/model'
   import {get_targets} from 'apps/irs_monitor/lib/aggregate_targets'
   import {filter_responses} from 'apps/irs_monitor/lib/filters'
+  import {create_plan_from_all_geodata} from 'lib/instance_data/spatial_hierarchy_helper'
+  import cache from 'config/cache'
 
   //import { isEqual, get } from 'lodash'
 
@@ -138,10 +140,16 @@
       // }),
 
       targets() {
-        if (!this.plan) return []
+        let areas_to_include
+
+        if (this.plan) {
+          areas_to_include = this.plan.targets
+        } else {
+          areas_to_include = create_plan_from_all_geodata(cache)
+        }
 
         const spatial_aggregation_level = this.dashboard_options.spatial_aggregation_level
-        return get_targets(this.plan.targets, spatial_aggregation_level)
+        return get_targets(areas_to_include, spatial_aggregation_level)
       },
       plan_target_area_ids() {
         if (this.plan && this.plan.targets) {

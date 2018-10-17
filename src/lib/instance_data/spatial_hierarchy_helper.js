@@ -119,6 +119,30 @@ const get_data_version = (level_name) => {
   return get(spatial_hierarchy_cache, 'data_version', null)
 }
 
+const create_plan_from_all_geodata = (cache) => {
+  // Collect things
+  const denominator_fields = get_denominator_fields()
+  const planning_level_geodata = cache.geodata[get_planning_level_name()]
+
+  const standard_denominator = get_denominator_enumerable_name()
+  const instance_specific_denominator_field = denominator_fields[standard_denominator] // e.g. NmStrct
+
+  // Simulate a plan model
+  return planning_level_geodata.features.map((area) => {
+    const obj = {}
+    obj[standard_denominator] = area.properties[instance_specific_denominator_field]
+    obj.assigned_to_team_name = null
+    obj.id = area.properties.__disarm_geo_id
+    return obj
+  })
+
+
+
+
+
+  return geodata_for_level
+}
+
 export {
   configure_spatial_helpers,
 
@@ -138,6 +162,8 @@ export {
 
   get_next_level_up_from_planning_level,
   get_next_level_down_from_planning_level,
-  get_data_version
+  get_data_version,
+
+  create_plan_from_all_geodata
 }
 
