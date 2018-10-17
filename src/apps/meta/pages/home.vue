@@ -8,6 +8,12 @@
           <md-list-item v-for='applet in decorated_applets' :key='applet.name' @click="$router.push({name: applet.name})">
             <md-icon>{{applet.icon}}</md-icon><span class="applet-item">{{applet.title}}</span>
           </md-list-item>
+
+          <md-divider class="md-inset"></md-divider>
+
+          <md-list-item @click="$router.push({name: 'meta:geodata'})">
+            <md-icon>explore</md-icon><span class="applet-item">Geodata</span>
+          </md-list-item>
         </md-list>
 
       </md-card-content>

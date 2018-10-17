@@ -26,14 +26,22 @@
           </span>
 
 
-          <!--DOWNLOAD BUTTON -->
+          <!--Retrieve BUTTON -->
           <md-button
             @click.native="retrieve_geodata_for(level)"
             :disabled="$loading.isLoading(`geodata/${level}`)"
             class="md-dense list-button md-raised md-primary"
           >
+            Retrieve
+          </md-button>
+
+          <md-button
+            @click="download(level)"
+          >
             Download
           </md-button>
+
+
 
         </md-list-item>
       </md-list>
@@ -48,11 +56,15 @@
 
 <script>
   import {mapGetters, mapState} from 'vuex'
+  import {get} from 'lodash'
+  import download from 'downloadjs'
 
   import {get_all_spatial_hierarchy_level_names, configure_spatial_helpers} from 'lib/instance_data/spatial_hierarchy_helper'
   import {geodata_has_level, geodata_versions_correct, geodata_level_version_matches_instance_config } from 'lib/models/geodata/geodata.valid'
   import {get_geodata_for} from 'lib/models/geodata/remote'
   import {hydrate_geodata_cache_from_idb} from "lib/models/geodata/local.geodata_store";
+  import cache from 'config/cache'
+  import moment from 'moment'
 
   import {get_and_save_layer} from '../models/geodata/controller'
 
@@ -126,7 +138,20 @@
         this.$loading.endLoading(`geodata/${level}`)
       },
       back() {
-        this.$router.push('/instance_configs')
+        this.$router.push('/')
+      },
+      download(level_name) {
+        console.log('download', level_name)
+        const level_geodata = get(cache.geodata, level_name, [])
+
+        if (level_geodata.length === 0) {
+          console.log("No geodata")
+          return false
+        }
+
+        const date = moment().format('YYYY-MM-DD_HHmm')
+
+        download(JSON.stringify(level_geodata), `${this.slug}-${level_name}-${date}.geojson`)
       }
     }
   }
