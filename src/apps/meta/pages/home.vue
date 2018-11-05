@@ -22,6 +22,7 @@
       <span v-if="debug_info_visible">
         <p>Config: {{which_config}}</p>
         <p>UserAgent: {{userAgent}}</p>
+        <p><a :href="bulk_download_url">Bulk download</a></p>
       </span>
     </span>
 
@@ -44,6 +45,7 @@
   import {get} from 'lodash';
 
   import BUILD_TIME from 'config/build-time'
+  import {get_api_url} from 'config/api_url'
 
   export default {
     name: 'home',
@@ -63,7 +65,9 @@
       }),
       ...mapState({
         slug: state => state.instance_config.instance.slug,
-        config_version: state => state.instance_config.config_version
+        config_version: state => state.instance_config.config_version,
+        personalised_instance_id: state => state.meta.personalised_instance_id,
+        api_key: state => state.meta.user.key
       }),
       commit_hash() {
         return BUILD_TIME.VERSION_COMMIT_HASH_SHORT
@@ -73,6 +77,9 @@
       },
       which_config() {
         return `${this.slug}@${this.config_version}`
+      },
+      bulk_download_url() {
+        return `${get_api_url()}/v7/download_records?country=${this.slug}&personalised_instance_id=${this.personalised_instance_id}&download_key=${this.api_key}`
       }
     },
     methods: {
