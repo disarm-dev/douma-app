@@ -119,11 +119,11 @@
 
         // remove permissions for other instances
         const copy_of_user = {...this.$store.state.user} // copy so we don't mutate state, which is bad
-        const user = AuthController.prepare_user_for_instance(instance_config.instance, copy_of_user)
+        const user = AuthController.prepare_user_for_instance(instance_config.instance_id, copy_of_user)
         const required = geodata_required(user.permissions)
-        
+
         if (!required) {
-          return launch({instance:this.instance_id,instance_config, user})
+          return launch({instance:this.instance_id,instance_config}, user)
         }
 
         configure_spatial_helpers(instance_config)
@@ -131,7 +131,7 @@
         await hydrate_geodata_cache_from_idb(instance_config.instance.slug)
         const valid = geodata_in_cache_and_valid()
         if (valid) {
-          launch({instance:this.instance_id,instance_config, user})
+          launch({instance:this.instance_id,instance_config}, user)
         } else {
           this.$router.push('/geodata')
         }
