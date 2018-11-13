@@ -65,7 +65,7 @@
     computed: {
       ...mapState({
         instance_config: state => state.instance_config,
-        instance_id: state => state.instance.id,
+        instance_id: state => state.instance._id,
         instance_slug: state => state.instance_config.instance.slug,
         user: state => state.user,
         personalised_instance_id: state => state.personalised_instance_id
@@ -123,7 +123,7 @@
         const required = geodata_required(user.permissions)
 
         if (!required) {
-          return launch({instance:this.instance_id,instance_config}, user)
+          return launch({instance:instance_config.instance_id,instance_config}, user)
         }
 
         configure_spatial_helpers(instance_config)
@@ -131,7 +131,7 @@
         await hydrate_geodata_cache_from_idb(instance_config.instance.slug)
         const valid = geodata_in_cache_and_valid()
         if (valid) {
-          launch({instance:this.instance_id,instance_config}, user)
+          launch({instance:instance_config.instance_id,instance_config}, user)
         } else {
           this.$router.push('/geodata')
         }
