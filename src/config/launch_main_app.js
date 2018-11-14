@@ -23,11 +23,6 @@ import {hide_loading_page} from 'config/hide_loading_page'
 import {remove_app} from 'config/remove_app'
 import {remove_shell_app} from 'shell_app/lib/launch_shell_app'
 
-/**
- * Build a 'douma_app' instance
- * @param instance_config
- * @returns {Vue}
- */
 let douma_app
 
 export async function launch_main_app({ instance_config, user, personalised_instance_id}) {
@@ -156,6 +151,8 @@ export async function launch_main_app({ instance_config, user, personalised_inst
   // If made it to here, make sure loading_page is hidden, and the shell_app is removed
   hide_loading_page()
   remove_shell_app()
+
+  return douma_app
 }
 
 export function remove_douma_app() {

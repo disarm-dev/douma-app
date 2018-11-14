@@ -27,7 +27,7 @@ function prepare_user_for_instance(instance, user) {
   return user
 }
 
-export default {
+export const AuthController = {
   prepare_user_for_instance,
   login,
 }

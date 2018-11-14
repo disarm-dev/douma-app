@@ -56,7 +56,7 @@
 
 <script>
 
-  import Controller from 'shell_app/models/auth/controller'
+  import {AuthController} from 'shell_app/models/auth/controller'
   import BUILD_TIME from 'config/build-time'
   import {generate_personalised_instance_id} from 'lib/debug/personalised_instance_id_generator'
 
@@ -136,7 +136,7 @@
           personalised_instance_id: this.local_personalised_instance_id
         }
 
-        Controller.login(credentials)
+        AuthController.login(credentials)
           .then((res) => {
             if (res.status === 200) {
               this.$store.commit('set_user', res.data)

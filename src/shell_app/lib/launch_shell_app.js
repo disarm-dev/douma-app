@@ -107,6 +107,8 @@ export function launch_shell_app({user, instance_config, personalised_instance_i
   // Cleanup
   hide_loading_page()
   remove_douma_app()
+
+  return shell_app
 }
 
 export function remove_shell_app() {

@@ -1,10 +1,10 @@
 import {configure_spatial_helpers} from 'lib/instance_data/spatial_hierarchy_helper'
 import {launch_main_app} from 'config/launch_main_app'
-import AuthController from 'shell_app/models/auth/controller'
+import {AuthController} from 'shell_app/models/auth/controller'
 import {geodata_required} from 'shell_app/models/geodata/controller'
 import {hydrate_geodata_cache_from_idb} from 'lib/models/geodata/local.geodata_store'
 import {geodata_in_cache_and_valid} from 'lib/models/geodata/geodata.valid'
-import InstanceConfigsController from 'lib/instance_data/presenters'
+import {InstanceConfigsController} from 'shell_app/models/instance_configs/controller'
 
 async function launch_from_instance_id(id, store) {
   const instance_config = await InstanceConfigsController.instance_config({id})
@@ -42,6 +42,7 @@ async function check_geodata_and_launch(instance_config, user_copy) {
 
   await hydrate_geodata_cache_from_idb(instance_config.instance.slug)
   const valid = geodata_in_cache_and_valid()
+
   if (valid) {
     return launch_main_app({instance_config, user, personalised_instance_id})
   } else {

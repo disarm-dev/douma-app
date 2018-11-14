@@ -44,8 +44,8 @@
 </template>
 
 <script>
-  import InstancesController from 'shell_app/models/instances/controller'
-  import InstanceConfigsController from 'shell_app/models/instance_configs/controller'
+  import {InstancesController} from 'shell_app/models/instances/controller'
+  import {InstanceConfigsController} from 'shell_app/models/instance_configs/controller'
   import { mapState } from 'vuex';
   import {launch_from_instance_id} from 'shell_app/lib/check_geodata_and_launch'
 
@@ -92,10 +92,11 @@
         this.local_instances = local_instances
       },
       async get_instance_and_attempt_launch(id) {
-        const can_launch = launch_from_instance_id(id, this.$store)
-        if (!can_launch) {
-          this.$router.push('/geodata')
-        }
+        launch_from_instance_id(id, this.$store)
+          .then((geodata_success) => {
+            // If geodata_success is true then it has already started launching the main_app
+            if (!geodata_success) this.$router.push('/geodata')
+          })
       },
       logout() {
         this.$store.commit('set_user', null)

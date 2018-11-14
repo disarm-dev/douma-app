@@ -10,7 +10,7 @@ async function retrieve_local_instances() {
 
 async function published_instances({user_id}) {
   const res = await Remote.published_instances({ user_id })
-  
+
   const instances = res.data
  // await save_instances_locally(instances)
 
@@ -21,7 +21,7 @@ async function save_instances_locally(instances) {
   await local_instance_db.bulkPut(instances)
 }
 
-export default {
+export const InstancesController = {
   retrieve_local_instances,
   published_instances
 }
