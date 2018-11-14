@@ -6,14 +6,14 @@
 
 <script>
 
-  import {slow_or_fast_boot} from '../../../shell_app/slow_or_fast_boot'
+  import {main_or_shell} from '../../../shell_app/main_or_shell'
 
   export default {
     mounted() {
       this.$store.dispatch('meta/logout').then(() => {
         setTimeout(() => {
           // location.reload()
-          slow_or_fast_boot({reset_instance: true})
+          main_or_shell({reset_instance: true})
         }, 1000)
       })
     }

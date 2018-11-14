@@ -1,7 +1,7 @@
 import {get, merge} from 'lodash'
 
 import Remote from './remote'
-import {store} from 'shell_app/slow_or_fast_boot'
+import {store} from 'shell_app/main_or_shell'
 
 async function add_permissions({user, instance_id}) {
   const res = await Remote.permissions({user_id: user.id, instance_id})

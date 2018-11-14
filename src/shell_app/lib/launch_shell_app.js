@@ -18,7 +18,7 @@ import {remove_app} from 'config/remove_app'
 let shell_app
 export let store
 
-export function launch_shell_app(reset_instance) {
+export function launch_shell_app({user, instance_config, personalised_instance_id}, reset_instance) {
   const routes = [
     {
       path: '/',

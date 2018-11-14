@@ -10,9 +10,9 @@ import 'vue-multiselect/dist/vue-multiselect.min.css'
 // Imports
 import 'config/configure_vue.js'
 import {configure_error_tracking} from 'config/error_tracking'
-import {slow_or_fast_boot} from './shell_app/slow_or_fast_boot'
+import {main_or_shell} from './shell_app/main_or_shell'
 
 (async () => {
   configure_error_tracking()
-  slow_or_fast_boot()
+  main_or_shell()
 })()
