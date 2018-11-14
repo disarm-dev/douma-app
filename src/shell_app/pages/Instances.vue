@@ -46,13 +46,8 @@
 <script>
   import InstancesController from 'shell_app/models/instances/controller'
   import InstanceConfigsController from 'shell_app/models/instance_configs/controller'
-  import AuthController from 'shell_app/models/auth/controller'
-  import {geodata_required} from 'shell_app/models/geodata/controller'
-  import {configure_spatial_helpers} from 'lib/instance_data/spatial_hierarchy_helper'
-  import { geodata_in_cache_and_valid } from 'lib/models/geodata/geodata.valid'
-  import {hydrate_geodata_cache_from_idb} from "lib/models/geodata/local.geodata_store";
   import { mapState } from 'vuex';
-  import {launch_main_app} from 'config/launch_main_app'
+  import {check_geodata_and_launch} from 'shell_app/lib/check_geodata_and_launch'
 
   export default {
     name: 'instances',
@@ -97,43 +92,11 @@
         this.local_instances = local_instances
       },
       async get_instance_and_attempt_launch(id) {
-        const instance_config = await InstanceConfigsController.instance_config({id})
-
-        this.$store.commit('set_instance_config', instance_config)
-        
-        const instance = {
-          application_version: instance_config.application_version,
-          createdAt: instance_config.createdAt,
-          id: instance_config.id,
-          instance: instance_config.instance,
-          updatedAt: instance_config.updatedAt,
-          version: instance_config.version,
-        }
-
-        this.$store.commit('set_instance', instance)
-
-        await this.check_geodata_and_launch(instance_config)       
-      },
-      async check_geodata_and_launch(instance_config) {
-
-        // remove permissions for other instances
-        const copy_of_user = {...this.$store.state.user} // copy so we don't mutate state, which is bad
-        const user = AuthController.prepare_user_for_instance(instance_config.instance_id, copy_of_user)
-        const required = geodata_required(user.permissions)
-
-        if (!required) {
-          return launch_main_app({instance_config, user, personalised_instance_id: this.personalised_instance_id})
-        }
-
-        configure_spatial_helpers(instance_config)
-
-        await hydrate_geodata_cache_from_idb(instance_config.instance.slug)
-        const valid = geodata_in_cache_and_valid()
-        if (valid) {
-          return launch_main_app({instance_config, user, personalised_instance_id: this.personalised_instance_id})
-        } else {
+        const can_launch = launch_from_instance_id(id, this.$store)
+        if (!can_launch) {
           this.$router.push('/geodata')
         }
+
       },
       logout() {
         this.$store.commit('set_user', null)

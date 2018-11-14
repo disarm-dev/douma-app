@@ -1,0 +1,52 @@
+import {configure_spatial_helpers} from 'lib/instance_data/spatial_hierarchy_helper'
+import {launch_main_app} from 'config/launch_main_app'
+import AuthController from 'shell_app/models/auth/controller'
+import {geodata_required} from 'shell_app/models/geodata/controller'
+import {hydrate_geodata_cache_from_idb} from 'lib/models/geodata/local.geodata_store'
+import {geodata_in_cache_and_valid} from 'lib/models/geodata/geodata.valid'
+import InstanceConfigsController from 'lib/instance_data/presenters'
+
+async function launch_from_instance_id(id, store) {
+  const instance_config = await InstanceConfigsController.instance_config({id})
+  const user = store.state.user
+
+  store.commit('set_instance_config', instance_config)
+
+  const instance = {
+    application_version: instance_config.application_version,
+    createdAt: instance_config.createdAt,
+    id: instance_config.id,
+    instance: instance_config.instance,
+    updatedAt: instance_config.updatedAt,
+    version: instance_config.version,
+  }
+
+  store.commit('set_instance', instance)
+  return await check_geodata_and_launch(instance_config, user)
+}
+
+
+async function check_geodata_and_launch(instance_config, user_copy) {
+
+  // remove permissions for other instances
+  const copy_of_user = {...user_copy} // copy so we don't mutate state, which is bad
+  const user = AuthController.prepare_user_for_instance(instance_config.instance_id, copy_of_user)
+  const personalised_instance_id = this.personalised_instance_id
+  const required = geodata_required(user.permissions)
+
+  if (!required) {
+    return launch_main_app({instance_config, user, personalised_instance_id})
+  }
+
+  configure_spatial_helpers(instance_config)
+
+  await hydrate_geodata_cache_from_idb(instance_config.instance.slug)
+  const valid = geodata_in_cache_and_valid()
+  if (valid) {
+    return launch_main_app({instance_config, user, personalised_instance_id})
+  } else {
+    return false
+  }
+}
+
+export {launch_from_instance_id, check_geodata_and_launch}
