@@ -30,7 +30,7 @@
       </md-card-content>
     </md-card>
     <p>
-      Version: {{'commit_hash'}}
+      Version: {{commit_hash}}
       <span
         class='local_personalised_instance_id'
         @click="open_personalised_instance_id"
@@ -57,6 +57,7 @@
 <script>
 
   import Controller from 'shell_app/models/auth/controller'
+  import BUILD_TIME from 'config/build-time'
   import {generate_personalised_instance_id} from 'lib/debug/personalised_instance_id_generator'
 
   export default {
@@ -84,7 +85,10 @@
       local_personalised_instance_id: {
         get() { return this.raw_local_personalised_instance_id },
         set(value) { this.raw_local_personalised_instance_id = value.replace(/\s/g,'-') },
-      }
+      },
+      commit_hash() {
+        return BUILD_TIME.VERSION_COMMIT_HASH_SHORT
+      },
     },
     mounted() {
       this.$nextTick(() => this.$refs.username.$el.focus())
