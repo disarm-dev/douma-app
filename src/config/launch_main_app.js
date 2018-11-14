@@ -27,6 +27,7 @@ let douma_app
 
 export async function launch_main_app({ instance_config, user, personalised_instance_id}) {
 
+  Vue.material.setCurrentTheme('default')
 
   /////////////////////////////
   //
