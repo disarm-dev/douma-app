@@ -151,7 +151,7 @@
 
         const date = moment().format('YYYY-MM-DD_HHmm')
 
-        download(JSON.stringify(level_geodata), `${this.slug}-${level_name}-${date}.geojson`)
+        download(JSON.stringify(level_geodata), `${this.instance_slug}.${level_name}.${date}.geojson`)
       }
     }
   }
