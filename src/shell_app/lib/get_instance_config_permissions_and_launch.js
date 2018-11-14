@@ -1,6 +1,6 @@
 import InstancesController from 'shell_app/models/instances/controller'
 import {store} from 'shell_app/launch_shell_app'
-import pubsubcache from 'lib/helpers/pubsubcache'
+import {launch_main_app} from 'config/launch_main_app'
 
 export async function get_instance_config({id}) {
 
@@ -17,5 +17,5 @@ export async function get_instance_config({id}) {
 
 export function launch({instance, instance_config}, user) {
   const personalised_instance_id = store.state.personalised_instance_id
-  pubsubcache.publish('shell:launch_with_config', { instance_config, user, personalised_instance_id})
+  launch_main_app({ instance_config, user, personalised_instance_id})
 }

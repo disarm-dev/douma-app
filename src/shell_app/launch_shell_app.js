@@ -10,7 +10,7 @@ import Login from './pages/Login'
 import InstanceConfigs from './pages/Instances'
 import Geodata from './pages/geodata'
 import {hide_loading_page} from 'config/hide_loading_page'
-import {remove_douma_app} from 'config/launch_main_app'
+import {launch_main_app, remove_douma_app} from 'config/launch_main_app'
 import {remove_app} from 'config/remove_app'
 import { add_token_to_headers} from './lib/shell_request_handler'
 
@@ -18,6 +18,13 @@ let shell_app
 export let store
 
 export function launch_shell_app({reset_instance = false} = {}) {
+
+
+  // Check if there's enough to start main_app already
+  console.log('not enough to launch main_app')
+  // launch_main_app({ instance_config, user, personalised_instance_id})
+
+
 
   const routes = [
     {
