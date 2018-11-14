@@ -21,7 +21,7 @@ import {configure_pubsubcache_listeners} from 'config/configure_pubsubcache_list
 import BUILD_TIME from 'config/build-time'
 import {hide_loading_page} from 'config/hide_loading_page'
 import {remove_app} from 'config/remove_app'
-import {remove_shell_app} from 'shell_app/lib/configure_shell_app'
+import {remove_shell_app} from 'shell_app/lib/launch_shell_app'
 
 /**
  * Build a 'douma_app' instance

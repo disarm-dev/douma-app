@@ -8,12 +8,11 @@ import 'vue-material/dist/vue-material.css'
 import 'vue-multiselect/dist/vue-multiselect.min.css'
 
 // Imports
-import 'config/configure_vue'
+import 'config/configure_vue.js'
 import {configure_error_tracking} from 'config/error_tracking'
-import {launch_shell_app} from './shell_app/launch_shell_app'
+import {slow_or_fast_boot} from './shell_app/slow_or_fast_boot'
 
 (async () => {
-  // configure_error_tracking!!
   configure_error_tracking()
-  launch_shell_app()
+  slow_or_fast_boot()
 })()

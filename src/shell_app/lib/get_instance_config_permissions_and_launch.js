@@ -1,5 +1,5 @@
 import InstancesController from 'shell_app/models/instances/controller'
-import {store} from 'shell_app/lib/configure_shell_app'
+import {store} from 'shell_app/lib/launch_shell_app'
 import {launch_main_app} from 'config/launch_main_app'
 
 export async function get_instance_config({id}) {
