@@ -50,9 +50,9 @@
   import {geodata_required} from 'shell_app/models/geodata/controller'
   import {configure_spatial_helpers} from 'lib/instance_data/spatial_hierarchy_helper'
   import { geodata_in_cache_and_valid } from 'lib/models/geodata/geodata.valid'
-  import {launch} from 'shell_app/lib/get_instance_config_permissions_and_launch'
   import {hydrate_geodata_cache_from_idb} from "lib/models/geodata/local.geodata_store";
   import { mapState } from 'vuex';
+  import {launch_main_app} from 'config/launch_main_app'
 
   export default {
     name: 'instances',
@@ -122,7 +122,7 @@
         const required = geodata_required(user.permissions)
 
         if (!required) {
-          return launch({instance:instance_config.instance_id,instance_config}, user)
+          return launch_main_app({instance_config, user, personalised_instance_id: this.personalised_instance_id})
         }
 
         configure_spatial_helpers(instance_config)
@@ -130,7 +130,7 @@
         await hydrate_geodata_cache_from_idb(instance_config.instance.slug)
         const valid = geodata_in_cache_and_valid()
         if (valid) {
-          launch({instance:instance_config.instance_id,instance_config}, user)
+          return launch_main_app({instance_config, user, personalised_instance_id: this.personalised_instance_id})
         } else {
           this.$router.push('/geodata')
         }
