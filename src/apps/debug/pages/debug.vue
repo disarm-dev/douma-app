@@ -34,9 +34,6 @@
               <md-icon v-if="network_checking" class="md-warn">network_check</md-icon>
               <md-icon v-if='network_pass' class="md-primary">check</md-icon>
             </md-list-item>
-            <md-list-item @click="check_if_update_available"> <md-icon>system_update</md-icon><span>check for update</span>
-              <md-icon v-if="update_status === 'CAN_UPDATE'" class="md-warn">update</md-icon>
-            </md-list-item>
           </md-list-expand>
         </md-list-item>
 
@@ -76,8 +73,7 @@
 <script>
   import get from 'lodash.get'
 
-  import {get_version, try_reconnect} from 'lib/remote/util'
-  import {check_need_to_update} from 'lib/remote/check-application-version'
+  import {try_reconnect} from 'lib/remote/util'
 
   import cache from 'config/cache.js'
 
@@ -127,12 +123,6 @@
           if (res) this.network_pass = true
         }).catch(() => {
           this.network_checking = false
-        })
-      },
-      check_if_update_available() {
-        this.update_status = 'CHECKING'
-        check_need_to_update().then(need_update => {
-          this.update_status = need_update.status
         })
       },
       goto_survey_editor() {

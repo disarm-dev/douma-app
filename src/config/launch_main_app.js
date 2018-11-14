@@ -12,7 +12,6 @@ import { configure_theme } from './theme'
 import { instantiate_analytics, set_common_analytics } from 'config/analytics'
 import { configure_spatial_helpers } from 'lib/instance_data/spatial_hierarchy_helper'
 import { add_network_status_watcher } from 'lib/helpers/network_status.js'
-import { check_need_to_update } from 'lib/remote/check-application-version'
 import { set_raven_user_context } from 'config/error_tracking.js'
 import { clean_up_local_dbs } from 'lib/local_db'
 import { setup_acl } from 'lib/acess-control-list'
@@ -137,9 +136,6 @@ export async function launch_main_app({ instance_config, user, personalised_inst
   // AFTER VUE APP IS CREATED (first page has rendered)
   //
   /////////////////////////////
-
-  // Configure application update
-  check_need_to_update()
 
   // Add extra info to error logging
   set_raven_user_context(douma_app.$store.state)
