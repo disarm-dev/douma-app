@@ -9,6 +9,7 @@ import {InstanceConfigsController} from 'shell_app/models/instance_configs/contr
 async function launch_from_instance_id(id, store) {
   const instance_config = await InstanceConfigsController.instance_config({id})
   const user = store.state.user
+  const personalised_instance_id = store.state.personalised_instance_id
 
   store.commit('set_instance_config', instance_config)
 
@@ -22,20 +23,19 @@ async function launch_from_instance_id(id, store) {
   }
 
   store.commit('set_instance', instance)
-  return await check_geodata_and_launch(instance_config, user)
+  return await check_geodata_and_launch({instance_config, user, personalised_instance_id})
 }
 
 
-async function check_geodata_and_launch(instance_config, user_copy) {
+async function check_geodata_and_launch({instance_config, user_copy: user, personalised_instance_id}) {
 
   // remove permissions for other instances
-  const copy_of_user = {...user_copy} // copy so we don't mutate state, which is bad
-  const user = AuthController.prepare_user_for_instance(instance_config.instance_id, copy_of_user)
-  const personalised_instance_id = this.personalised_instance_id
-  const required = geodata_required(user.permissions)
+  let copy_of_user = {...user} // copy so we don't mutate state, which is bad
+  copy_of_user = AuthController.prepare_user_for_instance(instance_config.instance_id, copy_of_user)
+  const required = geodata_required(copy_of_user.permissions)
 
   if (!required) {
-    return launch_main_app({instance_config, user, personalised_instance_id})
+    return launch_main_app({instance_config, user: copy_of_user, personalised_instance_id})
   }
 
   configure_spatial_helpers(instance_config)
@@ -44,7 +44,7 @@ async function check_geodata_and_launch(instance_config, user_copy) {
   const valid = geodata_in_cache_and_valid()
 
   if (valid) {
-    return launch_main_app({instance_config, user, personalised_instance_id})
+    return launch_main_app({instance_config, user: copy_of_user, personalised_instance_id})
   } else {
     return false
   }
