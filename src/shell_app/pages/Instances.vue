@@ -79,7 +79,6 @@
       async load_published() {
         const user_id = this.user.id
         const instances = await InstancesController.published_instances({user_id})
-        console.log(instances)
         this.$store.commit('set_instances', instances)
         
         for (const instance of instances) {
