@@ -1,4 +1,4 @@
-import { db } from 'lib/local_db'
+import { db } from '../../shell_db'
 
 export default class Local {
   constructor() {
