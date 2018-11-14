@@ -29,8 +29,8 @@ db.version(1).stores({
 })
 
 db.version(2).stores({
-  'instance_config': 'id',
-  'instances': 'id',
+  'instance_config': '_id',
+  'instances': '_id',
   "foci/case_clusters": fields.v2.case_clusters,
   "foci/case_locations": fields.v2.case_locations,
 })

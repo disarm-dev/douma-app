@@ -1,9 +1,7 @@
-import BUILD_TIME from 'config/build-time'
-
 export default {
   api: {
-    // Standard DOUMA API
-    url: 'http://localhost:3000',
+    protocol: 'http',
+    port: 3000,
     version: 'v8'
   },
   applets: {

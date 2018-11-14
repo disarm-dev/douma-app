@@ -1,10 +1,8 @@
 import axios from 'axios/index'
-import CONFIG from 'config/common'
-
-const api_url = `http://localhost:3000`//"https://config-server-stage.herokuapp.com"
+import {get_api_url} from 'config/api_url'
 
 export const shell_axios = axios.create({
-  baseURL: api_url,
+  baseURL: get_api_url(),
   timeout: 10000,
   params: { 
     country: 'all', 

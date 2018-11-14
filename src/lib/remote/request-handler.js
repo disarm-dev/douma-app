@@ -17,11 +17,7 @@ export function request_handler(request_config) {
   if (!request_config.url) {
     if (!request_config.url_suffix && request_config.url_suffix !== '') throw new Error("Missing `url_suffix` on request")
 
-    // Get API URL - either from localStorage or the default from CONFIG
-    const api_url = get_api_url()
-
-    const douma_api_root = `${api_url}/${CONFIG.api.version}`
-    request_config.url = douma_api_root + request_config.url_suffix
+    request_config.url = get_api_url() + request_config.url_suffix
   }
 
   const axios_instance = config_axios_instance()
