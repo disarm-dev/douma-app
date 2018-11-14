@@ -47,7 +47,7 @@
   import InstancesController from 'shell_app/models/instances/controller'
   import InstanceConfigsController from 'shell_app/models/instance_configs/controller'
   import { mapState } from 'vuex';
-  import {check_geodata_and_launch} from 'shell_app/lib/check_geodata_and_launch'
+  import {launch_from_instance_id} from 'shell_app/lib/check_geodata_and_launch'
 
   export default {
     name: 'instances',
@@ -96,7 +96,6 @@
         if (!can_launch) {
           this.$router.push('/geodata')
         }
-
       },
       logout() {
         this.$store.commit('set_user', null)
