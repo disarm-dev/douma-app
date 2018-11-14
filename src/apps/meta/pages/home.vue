@@ -28,7 +28,7 @@
       <span v-if="debug_info_visible">
         <p>Config: {{which_config}}</p>
         <p>UserAgent: {{userAgent}}</p>
-        <p><a :href="bulk_download_url">Bulk download</a></p>
+        <p><a :href="bulk_download_url" target="_blank">Bulk download</a></p>
       </span>
     </span>
 
@@ -85,7 +85,7 @@
         return `${this.slug}@${this.config_version}`
       },
       bulk_download_url() {
-        return `${get_api_url()}/v7/download_records?country=${this.slug}&personalised_instance_id=${this.personalised_instance_id}&download_key=${this.api_key}`
+        return `${get_api_url()}/download_records?country=${this.slug}&personalised_instance_id=${this.personalised_instance_id}&download_key=${this.api_key}`
       }
     },
     methods: {
