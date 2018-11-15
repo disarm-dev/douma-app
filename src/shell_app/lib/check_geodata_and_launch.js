@@ -21,13 +21,7 @@ async function launch_from_instance_id(id, store) {
     updatedAt: instance_config.updatedAt,
     version: instance_config.version,
   }
-
   store.commit('set_instance', instance)
-  return await check_geodata_and_launch({instance_config, user, personalised_instance_id})
-}
-
-
-async function check_geodata_and_launch({instance_config, user, personalised_instance_id}) {
 
   // remove permissions for other instances
   let copy_of_user = {...user} // copy so we don't mutate state, which is bad
