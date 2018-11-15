@@ -1,6 +1,7 @@
 import applet from './applet.vue'
 import home from './pages/home.vue'
 import logout from './pages/logout.vue'
+import geodata from './pages/geodata.vue'
 import clear_data from './pages/clear_data.vue'
 import fix_personalised_instance_id_record from './pages/fix_personalised_instance_id_record.vue'
 
@@ -24,6 +25,11 @@ export default [
         path: 'clear_data',
         name: 'meta:clear_data',
         component: clear_data,
+      },
+      {
+        path: 'geodata',
+        name: 'meta:geodata',
+        component: geodata
       },
       {
         path: 'fix_personalised_instance_id_record',
