@@ -9,7 +9,7 @@
             <span>{{(new Date(plan.date)).toLocaleString()}}-{{plan.targets}} targets</span>
           </div>
           <span>
-            <md-button flat @click="update(plan)" :disabled="saving">update</md-button>
+            <md-button flat @click="update(plan)">update</md-button>
           </span>
           <span>
             <md-button @click="clear(plan)" class="md-icon-button md-list-action" flat>
@@ -28,13 +28,13 @@
           </span>
             <span>{{new Date().toLocaleString()}} </span>
           </div>
-          <span><md-button flat @click="create()" :disabled="saving">Create</md-button></span>
+          <span><md-button flat @click="create()">Create</md-button></span>
         </md-list-item>
       </md-list>
     </md-dialog-content>
 
     <md-dialog-actions>
-      <md-button class="md-primary" @click="cancel()" :disabled="saving">Cancel</md-button>
+      <md-button class="md-primary" @click="cancel()">Cancel</md-button>
     </md-dialog-actions>
   </md-dialog>
 </template>
@@ -73,7 +73,7 @@
         this.$emit('clear', item)
       },
       create() {
-        this.$emit('create',this.new_plan_name)
+        this.$emit('create', this.new_plan_name)
       },
       cancel() {
         this.$emit('cancel')

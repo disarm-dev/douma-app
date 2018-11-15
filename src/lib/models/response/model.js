@@ -1,10 +1,7 @@
 import uuid from 'uuid/v4'
-import which_polygon from 'which-polygon'
 import omit from 'lodash.omit'
 
 import {ResponseSchema} from './schemas/schema'
-import cache from 'config/cache'
-import {get_planning_level_id_field, get_planning_level_name} from 'lib/instance_data/spatial_hierarchy_helper'
 import moment from 'moment'
 
 export class Response {
@@ -21,7 +18,6 @@ export class Response {
     form_data: null,
     synced: false,
     team_name: null,
-    instance_id: null // Needed, more than country
   }
 
   /**

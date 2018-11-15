@@ -255,7 +255,6 @@
           username: this.username,
           instance_slug: this.instance_slug,
           team_name: this.team_name, // TODO: @refac Brittle: this needs to match what's set in `instance.json`
-          instance_id: this.instance_config.instance_id
         }
         this.not_response_response = new Response(empty_response)
       }
