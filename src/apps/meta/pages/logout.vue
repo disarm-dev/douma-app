@@ -1,7 +1,4 @@
 <template>
-  <div class='container'>
-    Returning to login/shell_app. Please wait...
-  </div>
 </template>
 
 <script>

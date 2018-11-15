@@ -44,10 +44,4 @@ function _create(responses) {
   }
 }
 
-export async function response_download({instance_id,personalised_instance_id}){
-  axios({
-    url_suffix: `/download_records?instance_id=${instance_id}&personalised_instance_id=${personalised_instance_id}`,
-    method: 'GET'
-  })
-}
 
