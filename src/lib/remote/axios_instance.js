@@ -20,12 +20,14 @@ function config_axios_instance() {
   const country = get(store, 'state.instance_config.instance.slug')
   const user = get(store, 'state.user.username')
   const api_key = get(store, 'state.meta.user.key')
+  const instance_id = get(store, 'state.instance_config.instance_id')
 
   instance.defaults.params = {
     personalised_instance_id,
     country,
     instance_slug: country, // TODO: @refac remove 'country' property
-    user
+    user,
+    instance_id
   }
 
   instance.defaults.headers = {

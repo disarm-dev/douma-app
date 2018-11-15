@@ -20,7 +20,8 @@ export class Response {
     },
     form_data: null,
     synced: false,
-    team_name: null
+    team_name: null,
+    instance_id: null // Needed, more than country
   }
 
   /**
@@ -52,10 +53,11 @@ export class Response {
   }
 
   decorate_for_sending() { // TODO: @refac Rename to not conflict with 'decorators'
+    console.log('🚨 TODO: Update record model use on server and everywhere else (e.g. aggregations and monitor)')
     if (!this.is_ready_to_send()) return false
 
     const decorated = omit(this.model, 'synced')
-    console.log('🚨 TODO: Update record model use on server and everywhere else (e.g. aggregations and monitor)')
+
     decorated.country = decorated.instance_slug
 
     // TODO: @refac Stop adding location_selection to root of response before sending. Don't need it anymore. (https://gitlab.com/disarm/disarm-feedback/issues/47)

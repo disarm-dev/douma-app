@@ -58,7 +58,8 @@ function create_response(state, single_location_selection) {
     username: user,
     userAgent: navigator.userAgent,
     synced: false,
-    team_name: 'Team' + random_number_between(1, 5)
+    team_name: 'Team' + random_number_between(1, 5),
+    instance_id: instance_config.instance_id,
   }
   return response
 }

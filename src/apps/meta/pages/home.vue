@@ -71,6 +71,7 @@
       }),
       ...mapState({
         slug: state => state.instance_config.instance.slug,
+        instance_config: state => state.instance_config,
         config_version: state => state.instance_config.config_version,
         personalised_instance_id: state => state.meta.personalised_instance_id,
         api_key: state => state.meta.user.key
@@ -85,7 +86,10 @@
         return `${this.slug}@${this.config_version}`
       },
       bulk_download_url() {
-        return `${get_api_url()}/download_records?country=${this.slug}&personalised_instance_id=${this.personalised_instance_id}&download_key=${this.api_key}`
+        const instance_id = this.instance_config.instance_id
+        return `${get_api_url()}/download_records` +
+          `?country=${this.slug}&personalised_instance_id=${this.personalised_instance_id}` +
+          `&download_key=${this.api_key}&instance_id=${instance_id}`
       }
     },
     methods: {
