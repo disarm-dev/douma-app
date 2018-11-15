@@ -1,7 +1,6 @@
 export default {
   api: {
-    protocol: 'http',
-    port: 3000,
+    dev_port: 3000,
     version: 'v8'
   },
   applets: {
