@@ -3,7 +3,7 @@ import CONFIG from 'config/common'
 export function get_api_url() {
   const protocol = location.protocol
   const host = location.hostname
-  const production_host = `api.${host}`
+  const production_host = host.replace('app', 'api')
   const dev_port = CONFIG.api.dev_port
   const version = CONFIG.api.version
 
