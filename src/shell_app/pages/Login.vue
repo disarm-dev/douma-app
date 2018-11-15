@@ -91,6 +91,8 @@
       },
     },
     mounted() {
+      this.$store.commit('reset_store')
+
       this.$nextTick(() => this.$refs.username.$el.focus())
 
       if (this.user) {

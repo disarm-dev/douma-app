@@ -1,9 +1,12 @@
 import {retrieve_shell_data} from './lib/shell_data'
-import {fast_boot, have_enough_to_boot_main} from 'shell_app/lib/shell_data'
-import {launch_shell_app} from 'shell_app/lib/launch_shell_app'
+import {fast_boot, have_enough_to_boot_main, persist_shell_data} from 'shell_app/lib/shell_data'
+import {launch_shell_app, store_defaults} from 'shell_app/lib/launch_shell_app'
 import {launch_main_app} from 'config/launch_main_app'
 
-export function main_or_shell() {
+export function main_or_shell({forget_instance = false} = {}) {
+  // 'forget_instance' is set in main_app, to signal intention to return to list of instances
+  if (forget_instance) persist_shell_data('instance_config', store_defaults.instance_config)
+
   // Rehydrate data from localStorage and try to boot straight to main_app
   const {user, personalised_instance_id, instance_config} = retrieve_shell_data()
 

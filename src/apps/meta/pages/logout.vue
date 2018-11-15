@@ -12,8 +12,7 @@
     mounted() {
       this.$store.dispatch('meta/logout').then(() => {
         setTimeout(() => {
-          // location.reload()
-          main_or_shell({reset_instance: true})
+          main_or_shell({forget_instance: true})
         }, 1000)
       })
     }

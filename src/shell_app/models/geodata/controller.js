@@ -10,8 +10,10 @@ export async function get_and_save_layer({ level_name, instance_slug, instance_i
   await save_geodata_to_idb({ level_name, level_geodata: geodata_layer, instance_slug, geodata_version })
 }
 
-export function geodata_required(permissions) {
-  const permission_applet_names = permissions.map(p => {
+export function geodata_required(permissions, instance_id) {
+  const instance_permission_values = permissions.filter(p => p.instance_id === instance_id).map(p => p.value)
+
+  const permission_applet_names = instance_permission_values.map(p => {
     return p.split(':')[1]
   })
 

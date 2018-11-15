@@ -81,8 +81,7 @@
         launch_from_instance_config_id(config_id, this.$store, this.$router)
       },
       logout() {
-        this.$store.commit('reset_store')
-        this.$router.push({to: '/'})
+        this.$router.push({name: 'shell:login'})
       }
     }
   }

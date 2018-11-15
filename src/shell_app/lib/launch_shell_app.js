@@ -18,6 +18,12 @@ import {persist_shell_data} from 'shell_app/lib/shell_data'
 let shell_app
 export let store
 
+export const store_defaults = {
+  user: null,
+  personalised_instance_id: 'default',
+  instances: [],
+  instance_config: null,
+}
 
 export function launch_shell_app({user, personalised_instance_id}) {
 
@@ -32,6 +38,10 @@ export function launch_shell_app({user, personalised_instance_id}) {
   const routes = [
     {
       path: '/',
+      redirect: '/instance_configs'
+    },
+    {
+      path: '/login',
       name: 'shell:login',
       component: Login,
     },
@@ -57,22 +67,12 @@ export function launch_shell_app({user, personalised_instance_id}) {
   })
 
   router.beforeEach((to, from, next) => {
-    if (get(store.state, 'user', false)) return next()
-
-    if (to.name === 'shell:login') {
-      // next() if destination is the login page
-      return next()
-    } else {
-      next({name: 'shell:login'})
-    }
+    if (to.name === 'shell:login') return next()
+    if (!get(store.state, 'user', false)) return next({name: 'shell:login'})
+    return next()
   })
 
-  const store_defaults = {
-    user: null,
-    personalised_instance_id: 'default',
-    instances: [],
-    instance_config: null,
-  }
+
 
   store = new Vuex.Store({
     state: {
@@ -84,25 +84,28 @@ export function launch_shell_app({user, personalised_instance_id}) {
     mutations: {
       set_user: (state, user) => {
         state.user = user
-        persist_shell_data(state)
+        persist_shell_data('user', state.user)
       },
       set_personalised_instance_id: (state, personalised_instance_id) => {
         state.personalised_instance_id = personalised_instance_id
-        persist_shell_data(state)
+        persist_shell_data('personalised_instance_id', state.personalised_instance_id)
       },
       set_instances: (state, instances) => {
         state.instances = instances
       },
       set_instance_config: (state, instance_config) => {
         state.instance_config = instance_config
-        persist_shell_data(state)
+        persist_shell_data('instance_config', state.instance_config)
       },
       reset_store: (state) => {
         state.user = store_defaults.user
         state.personalised_instance_id = store_defaults.personalised_instance_id
         state.instances = store_defaults.instances
         state.instance_config = store_defaults.instance_config
-        persist_shell_data({})
+
+        persist_shell_data('user', store_defaults.user)
+        persist_shell_data('personalised_instance_id', store_defaults.personalised_instance_id)
+        persist_shell_data('instance_config', store_defaults.instance_config)
       }
     },
   })

@@ -7,12 +7,6 @@ const have_enough_to_boot_main = function({user, instance_config, personalised_i
   return true
 }
 
-const persist_shell_data = function({user, instance_config, personalised_instance_id}) {
-  set('user', user)
-  set('instance_config', instance_config)
-  set('personalised_instance_id', personalised_instance_id)
-}
-
 const retrieve_shell_data = function () {
   const user = get('user')
   const instance_config = get('instance_config')
@@ -22,7 +16,7 @@ const retrieve_shell_data = function () {
 
 const prefix = 'disarm-shell-'
 
-const set = function(key, value) {
+const persist_shell_data = function(key, value) {
   localStorage.setItem(prefix + key, JSON.stringify(value))
 }
 
