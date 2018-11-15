@@ -14,6 +14,7 @@ import {add_token_to_headers} from 'shell_app/lib/shell_request_handler'
 import {hide_loading_page} from 'config/hide_loading_page'
 import {remove_douma_app} from 'config/launch_main_app'
 import {remove_app} from 'config/remove_app'
+import {persist_shell_data} from 'shell_app/lib/shell_data'
 
 let shell_app
 export let store
@@ -67,21 +68,55 @@ export function launch_shell_app({user, instance_config, personalised_instance_i
     }
   })
 
+  const store_defaults = {
+    user: null,
+    personalised_instance_id: 'default',
+    instances: [],
+    instance_config: null,
+    instance: null,
+  }
+
   store = new Vuex.Store({
-    plugins: [createPersistedState({key: 'disarm_shell_app'})],
+    // plugins: [createPersistedState({key: 'disarm_shell_app'})],
     state: {
-      user: null,
-      instance: null,
-      instances: [],
-      instance_config: null,
-      personalised_instance_id: 'default'
+      user: store_defaults.user,
+      personalised_instance_id: store_defaults.personalised_instance_id,
+      instances: store_defaults.instances,
+      instance_config: store_defaults.instance_config,
+      instance: store_defaults.instance,
     },
     mutations: {
-      set_user: (state, user) => state.user = user,
-      set_personalised_instance_id: (state, personalised_instance_id) => state.personalised_instance_id = personalised_instance_id,
-      set_instance: (state, instance) => state.instance = instance,
-      set_instance_config: (state, instance_config) => state.instance_config = instance_config,
-      set_instances: (state, instances) => state.instances = instances
+      set_user: (state, user) => {
+        console.log('PERSIST MUTATION: set_user')
+        persist_shell_data(state)
+        state.user = user
+      },
+      set_personalised_instance_id: (state, personalised_instance_id) => {
+        console.log('PERSIST MUTATION: set_personalised_instance_id')
+        persist_shell_data(state)
+        state.personalised_instance_id = personalised_instance_id
+      },
+      set_instances: (state, instances) => {
+        console.log('MUTATION: set_instances')
+        state.instances = instances
+      },
+      set_instance_config: (state, instance_config) => {
+        console.log('PERSIST MUTATION: set_instance_config')
+        persist_shell_data(state)
+        state.instance_config = instance_config
+      },
+      set_instance: (state, instance) => {
+        console.log('MUTATION: set_instance')
+        state.instance = instance
+      },
+      reset_store: (state) => {
+        state.user = store_defaults.user
+        state.personalised_instance_id = store_defaults.personalised_instance_id
+        state.instances = store_defaults.instances
+        state.instance_config = store_defaults.instance_config
+        state.instance = store_defaults.instance
+        persist_shell_data({})
+      }
     },
   })
 

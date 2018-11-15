@@ -11,12 +11,14 @@ async function launch_from_instance_id(id, store) {
   const user = store.state.user
   const personalised_instance_id = store.state.personalised_instance_id
 
+  // Store an INSTANCE_CONFIG
   store.commit('set_instance_config', instance_config)
 
+  // Create and store an INSTANCE
   const instance = {
     application_version: instance_config.application_version,
     createdAt: instance_config.createdAt,
-    id: instance_config.id,
+    id: instance_config.instance_id,
     instance: instance_config.instance,
     updatedAt: instance_config.updatedAt,
     version: instance_config.version,
@@ -44,4 +46,4 @@ async function launch_from_instance_id(id, store) {
   }
 }
 
-export {launch_from_instance_id, check_geodata_and_launch}
+export {launch_from_instance_id}
