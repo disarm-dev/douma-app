@@ -20,7 +20,7 @@ let shell_app
 export let store
 
 
-export function launch_shell_app({user, instance_config, personalised_instance_id}, reset_instance) {
+export function launch_shell_app({user, instance_config, personalised_instance_id}) {
 
   Vue.material.registerTheme({
     shell: {
@@ -73,7 +73,6 @@ export function launch_shell_app({user, instance_config, personalised_instance_i
     personalised_instance_id: 'default',
     instances: [],
     instance_config: null,
-    instance: null,
   }
 
   store = new Vuex.Store({
@@ -83,7 +82,6 @@ export function launch_shell_app({user, instance_config, personalised_instance_i
       personalised_instance_id: store_defaults.personalised_instance_id,
       instances: store_defaults.instances,
       instance_config: store_defaults.instance_config,
-      instance: store_defaults.instance,
     },
     mutations: {
       set_user: (state, user) => {
@@ -105,16 +103,11 @@ export function launch_shell_app({user, instance_config, personalised_instance_i
         persist_shell_data(state)
         state.instance_config = instance_config
       },
-      set_instance: (state, instance) => {
-        console.log('MUTATION: set_instance')
-        state.instance = instance
-      },
       reset_store: (state) => {
         state.user = store_defaults.user
         state.personalised_instance_id = store_defaults.personalised_instance_id
         state.instances = store_defaults.instances
         state.instance_config = store_defaults.instance_config
-        state.instance = store_defaults.instance
         persist_shell_data({})
       }
     },
@@ -122,11 +115,6 @@ export function launch_shell_app({user, instance_config, personalised_instance_i
 
   if (store.state.user) {
     add_token_to_headers(store.state.user.key)
-  }
-
-  if (reset_instance) {
-    console.log('resetting instance')
-    store.commit('set_instance', null)
   }
 
 

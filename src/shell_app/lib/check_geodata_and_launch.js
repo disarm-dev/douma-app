@@ -14,16 +14,6 @@ async function launch_from_instance_id(id, store) {
   // Store an INSTANCE_CONFIG
   store.commit('set_instance_config', instance_config)
 
-  // Create and store an INSTANCE
-  const instance = {
-    application_version: instance_config.application_version,
-    createdAt: instance_config.createdAt,
-    id: instance_config.instance_id,
-    instance: instance_config.instance,
-    updatedAt: instance_config.updatedAt,
-    version: instance_config.version,
-  }
-  store.commit('set_instance', instance)
 
   // remove permissions for other instances
   let copy_of_user = {...user} // copy so we don't mutate state, which is bad
