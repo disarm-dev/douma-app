@@ -65,17 +65,7 @@
         return CONFIG.temporal_intervals
       }
     },
-    created() {
-      this.create_defaults()
-    },
     methods: {
-      create_defaults() {
-        if (!this.dashboard_options.spatial_aggregation_level) {
-          // TODO: Should be setting this default somewhere in a model, not relying on the view
-          const planning_level_name = get_planning_level_name()
-          this.set_spatial_aggregation_level(planning_level_name)
-        }
-      },
       set_spatial_aggregation_level(level) {
         const planning_level_name = get_planning_level_name()
         const is_planning_level = planning_level_name === level

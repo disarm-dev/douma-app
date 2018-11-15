@@ -42,12 +42,11 @@ export async function launch_main_app({user, personalised_instance_id, instance_
 
   // Set page title
   const title = get(instance_config, 'instance.title', '')
-  document.title = `DiSARM - ${title}`
+  document.title = `${title}`
 
   // Configure spatial_helpers to use instance_config
   // We need to do this before we create the store, the store relies on some of the function in spatial_hierarchy_helpers
-  configure_spatial_helpers(instance_config)
-
+  const caches = await configure_spatial_helpers(instance_config)
 
   /////////////////////////////
   //

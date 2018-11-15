@@ -8,6 +8,9 @@ let spatial_hierarchy_cache = null
 const configure_spatial_helpers = (instance_config) => {
   instance_config_cache = cloneDeep(instance_config)
   spatial_hierarchy_cache = instance_config_cache.spatial_hierarchy
+  return {
+    instance_config_cache, spatial_hierarchy_cache
+  }
 }
 
 

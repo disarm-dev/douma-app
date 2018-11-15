@@ -61,7 +61,7 @@
   import {Plan} from 'lib/models/plan/model'
   import {get_targets} from 'apps/irs_monitor/lib/aggregate_targets'
   import {filter_responses} from 'apps/irs_monitor/lib/filters'
-  import {create_plan_from_all_geodata} from 'lib/instance_data/spatial_hierarchy_helper'
+  import {create_plan_from_all_geodata, get_planning_level_name} from 'lib/instance_data/spatial_hierarchy_helper'
   import cache from 'config/cache'
   import {geodata_in_cache_and_valid} from 'lib/models/geodata/geodata.valid'
 
@@ -136,10 +136,6 @@
         // responses metadata
         last_id: state => state.irs_monitor.last_id
       }),
-      // ...mapGetters({
-      //   targets: 'irs_monitor/targets',
-      // }),
-
       targets() {
         let areas_to_include
 
@@ -161,6 +157,12 @@
       }
     },
     async created() {
+      const new_options = {
+        ...this.dashboard_options,
+        spatial_aggregation_level: get_planning_level_name()
+      }
+      this.$store.commit('irs_monitor/set_dashboard_options', new_options)
+
       if (geodata_in_cache_and_valid()) {
         await this.load_responses()
         await this.load_plan()
