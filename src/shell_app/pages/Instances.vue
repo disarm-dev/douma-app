@@ -19,7 +19,7 @@
         <li v-for='instance in instances' :key='instance.id' >
           {{instance.name}}
           <ul>
-            <li v-for="config in instance.configs" :key="config.id" @click="get_instance_and_attempt_launch(config._id)">
+            <li v-for="config in instance.configs" :key="config.id" @click="get_config_and_attempt_launch(config._id)">
               {{instance.name}}@{{config.version}}
             </li>
           </ul>
@@ -33,7 +33,7 @@
   import {InstancesController} from 'shell_app/models/instances/controller'
   import {InstanceConfigsController} from 'shell_app/models/instance_configs/controller'
   import { mapState } from 'vuex';
-  import {launch_from_instance_id} from 'shell_app/lib/check_geodata_and_launch'
+  import {launch_from_instance_config_id} from 'shell_app/lib/check_geodata_and_launch'
 
   export default {
     name: 'instances',
@@ -46,7 +46,7 @@
     computed: {
       ...mapState({
         instance_config: state => state.instance_config,
-        instance_id: state => state.instance._id,
+        instance_id: state => state.instance_config.instance_id,
         instance_slug: state => state.instance_config.instance.slug,
         user: state => state.user,
         personalised_instance_id: state => state.personalised_instance_id
@@ -77,16 +77,12 @@
         }
         this.local_instances = local_instances
       },
-      async get_instance_and_attempt_launch(id) {
-        launch_from_instance_id(id, this.$store)
-          .then((geodata_success) => {
-            // If geodata_success is true then it has already started launching the main_app
-            if (!geodata_success) this.$router.push('/geodata')
-          })
+      async get_config_and_attempt_launch(config_id) {
+        launch_from_instance_config_id(config_id, this.$store, this.$router)
       },
       logout() {
-        this.$store.commit('set_user', null)
-        this.$router.push({name: 'shell:login'})
+        this.$store.commit('reset_store')
+        this.$router.push({to: '/'})
       }
     }
   }

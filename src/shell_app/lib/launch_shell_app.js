@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import VueRouter from 'vue-router'
-import createPersistedState from 'vuex-persistedstate'
 import VueLoading from 'vuex-loading'
 import {get} from 'lodash'
 
@@ -20,7 +19,7 @@ let shell_app
 export let store
 
 
-export function launch_shell_app({user, instance_config, personalised_instance_id}) {
+export function launch_shell_app({user, personalised_instance_id}) {
 
   Vue.material.registerTheme({
     shell: {
@@ -76,32 +75,27 @@ export function launch_shell_app({user, instance_config, personalised_instance_i
   }
 
   store = new Vuex.Store({
-    // plugins: [createPersistedState({key: 'disarm_shell_app'})],
     state: {
-      user: store_defaults.user,
-      personalised_instance_id: store_defaults.personalised_instance_id,
+      user: user || store_defaults.user,
+      personalised_instance_id: personalised_instance_id || store_defaults.personalised_instance_id,
       instances: store_defaults.instances,
       instance_config: store_defaults.instance_config,
     },
     mutations: {
       set_user: (state, user) => {
-        console.log('PERSIST MUTATION: set_user')
-        persist_shell_data(state)
         state.user = user
+        persist_shell_data(state)
       },
       set_personalised_instance_id: (state, personalised_instance_id) => {
-        console.log('PERSIST MUTATION: set_personalised_instance_id')
-        persist_shell_data(state)
         state.personalised_instance_id = personalised_instance_id
+        persist_shell_data(state)
       },
       set_instances: (state, instances) => {
-        console.log('MUTATION: set_instances')
         state.instances = instances
       },
       set_instance_config: (state, instance_config) => {
-        console.log('PERSIST MUTATION: set_instance_config')
-        persist_shell_data(state)
         state.instance_config = instance_config
+        persist_shell_data(state)
       },
       reset_store: (state) => {
         state.user = store_defaults.user

@@ -25,7 +25,12 @@ import {remove_shell_app} from 'shell_app/lib/launch_shell_app'
 
 let douma_app
 
-export async function launch_main_app({ instance_config, user, personalised_instance_id}) {
+export async function launch_main_app({user, personalised_instance_id, instance_config}) {
+
+  // User permissions have come from server, might include other instances
+  // TODO: Move elsewhere
+  const instance_id = instance_config.instance_id
+  user.permissions = user.permissions.filter(p => p.instance_id === instance_id).map(p => p.value)
 
   Vue.material.setCurrentTheme('default')
 
