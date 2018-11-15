@@ -14,20 +14,6 @@
     </div>
 
     <div>
-      <h4>Select locally saved instance</h4>
-      <ul>
-        <li v-for='instance in local_instances' :key='instance.id' v-if="instance.configs.length">
-          {{instance.name}}
-          <ul>
-            <li v-for="config in instance.configs" :key="config.id" @click="check_geodata_and_launch(config)">
-              {{instance.name}}@{{config.version}}
-            </li>
-          </ul>
-        </li>
-      </ul>
-    </div>
-    
-    <div>
       <h4>Select remote instance to load config for</h4>
       <ul>
         <li v-for='instance in instances' :key='instance.id' >
