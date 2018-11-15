@@ -71,6 +71,7 @@
     methods: {
       create_defaults() {
         if (!this.dashboard_options.spatial_aggregation_level) {
+          // TODO: Should be setting this default somewhere in a model, not relying on the view
           const planning_level_name = get_planning_level_name()
           this.set_spatial_aggregation_level(planning_level_name)
         }

@@ -161,12 +161,11 @@
       }
     },
     async created() {
-      // hydrate
-      await this.load_responses()
-      await this.load_plan()
-      this.load_all_plans()
-
-      if (!geodata_in_cache_and_valid()) {
+      if (geodata_in_cache_and_valid()) {
+        await this.load_responses()
+        await this.load_plan()
+        this.load_all_plans()
+      } else {
         this.$store.commit('meta/set_snackbar', {message: 'Message from PLAN: Problem with geodata'})
         this.$router.push({name: 'meta:geodata'})
       }
