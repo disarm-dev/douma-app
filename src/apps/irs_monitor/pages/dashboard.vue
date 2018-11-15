@@ -63,6 +63,7 @@
   import {filter_responses} from 'apps/irs_monitor/lib/filters'
   import {create_plan_from_all_geodata} from 'lib/instance_data/spatial_hierarchy_helper'
   import cache from 'config/cache'
+  import {geodata_in_cache_and_valid} from 'lib/models/geodata/geodata.valid'
 
   //import { isEqual, get } from 'lodash'
 
@@ -164,6 +165,11 @@
       await this.load_responses()
       await this.load_plan()
       this.load_all_plans()
+
+      if (!geodata_in_cache_and_valid()) {
+        this.$store.commit('meta/set_snackbar', {message: 'Message from PLAN: Problem with geodata'})
+        this.$router.push({name: 'meta:geodata'})
+      }
     },
     methods: {
       async load_responses() {
