@@ -148,13 +148,6 @@
         const spatial_aggregation_level = this.dashboard_options.spatial_aggregation_level
         return get_targets(areas_to_include, spatial_aggregation_level)
       },
-      plan_target_area_ids() {
-        if (this.plan && this.plan.targets) {
-          return this.plan.targets.map(target => target.id)
-        } else {
-          return []
-        }
-      }
     },
     async created() {
       const new_options = {
