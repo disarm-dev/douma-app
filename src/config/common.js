@@ -1,7 +1,7 @@
 export default {
   api: {
-    dev_port: 3000,
-    version: 'v8'
+    version: 'v8',
+    dev_url: 'http://localhost:3000',
   },
   applets: {
     // The order here is irrelevant to sidebar - that is currently fixed by the user auth/permissions sheet,
