@@ -67,6 +67,8 @@ export function launch_shell_app({user, personalised_instance_id}) {
     mode: 'history'
   })
 
+
+  
   router.beforeEach((to, from, next) => {
     if (to.name === 'shell:login') return next()
     if (!get(store.state, 'user', false)) return next({name: 'shell:login'})
