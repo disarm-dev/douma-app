@@ -50,13 +50,15 @@ function retrieve_geodata_from_idb(instance_slug) {
 /**
  * Try to retrieve geodata from IDB, and set on cache if it exists
  */
-export function hydrate_geodata_cache_from_idb(instance_slug) {
-  return retrieve_geodata_from_idb(instance_slug)
-    .then((geodata) => {
-      if (geodata) {
-        cache.geodata = geodata.geodata
-        decorate_geodata_on_cache()
-      }
-      return geodata
-    })
+export async function hydrate_geodata_cache_from_idb(instance_slug) {
+  try {
+    const geodata = await retrieve_geodata_from_idb(instance_slug)
+    if (geodata) {
+      cache.geodata = geodata.geodata
+      decorate_geodata_on_cache()
+    }
+    return geodata
+  } catch (e) {
+    throw e
+  }
 }

@@ -11,7 +11,10 @@ export function main_or_shell({forget_instance = false} = {}) {
   // Rehydrate data from localStorage and try to boot straight to main_app
   const {user, personalised_instance_id, instance_config} = retrieve_shell_data()
 
-  if (have_enough_to_boot_main({user, instance_config, personalised_instance_id})) {
+  // Need to check geodata already exists and is correct version, and is actual geodata
+  const geodata_valid = false
+
+  if (have_enough_to_boot_main({user, instance_config, personalised_instance_id}) && geodata_valid) {
     // FAST!
     launch_main_app({user, instance_config, personalised_instance_id})
   } else {

@@ -5,12 +5,8 @@ import {hydrate_geodata_cache_from_idb} from 'lib/models/geodata/local.geodata_s
 import {geodata_in_cache_and_valid} from 'lib/models/geodata/geodata.valid'
 import {InstanceConfigsController} from 'shell_app/models/instance_configs/controller'
 
-async function launch_from_instance_config_id(config_id, store, router) {
-  const instance_config = await InstanceConfigsController.instance_config({id: config_id})
-
-  // Store an INSTANCE_CONFIG
-  store.commit('set_instance_config', instance_config)
-
+async function launch_from_instance_config_id(store, router) {
+  const instance_config = store.state.instance_config
   const user = store.state.user
   const personalised_instance_id = store.state.personalised_instance_id
 

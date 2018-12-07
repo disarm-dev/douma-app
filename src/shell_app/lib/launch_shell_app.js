@@ -72,7 +72,8 @@ export function launch_shell_app({user, personalised_instance_id}) {
   router.beforeEach((to, from, next) => {
     if (to.name === 'shell:login') return next()
     if (!get(store.state, 'user', false)) return next({name: 'shell:login'})
-    if (to.name === 'shell:geodata' && !store.instance_config) return next({name: 'shell:root'})
+    if (to.name === 'shell:geodata' && !store.state.instance_config) {
+      return next({name: 'shell:root'})}
 
     return next()
   })

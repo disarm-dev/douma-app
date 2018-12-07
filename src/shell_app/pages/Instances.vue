@@ -52,7 +52,7 @@ export default {
         instance
       });
       this.$store.commit("set_instance_config", config);
-      launch_from_instance_config_id(config._id, this.$store, this.$router);
+      launch_from_instance_config_id(this.$store, this.$router);
     },
     logout() {
       this.$router.push({ name: "shell:login" });
