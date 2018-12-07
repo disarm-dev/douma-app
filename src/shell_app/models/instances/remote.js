@@ -12,6 +12,17 @@ function instances_for_user({user}) {
   return shell_axios(request)
 }
 
+function config_for_instance({instance}) {
+  const request = {
+    url: `/config/latest`,
+    params: {
+      instance_id: instance._id,
+    },
+  }
+  return shell_axios(request)
+}
+
 export default {
   instances_for_user,
+  config_for_instance,
 }

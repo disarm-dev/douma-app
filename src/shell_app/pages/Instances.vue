@@ -8,21 +8,10 @@
     </div>
 
     <div>
-      <md-button @click="logout()">
-        Logout
-      </md-button>
-    </div>
-
-    <div>
-      <h4>Select remote instance to load config for</h4>
+      <h4>Select instance to load</h4>
       <ul>
         <li v-for='instance in instances' :key='instance.id' >
-          {{instance.name}}
-          <ul>
-            <li v-for="config in instance.configs" :key="config.id" @click="get_config_and_attempt_launch(config._id)">
-              {{instance.name}}@{{config.version}}
-            </li>
-          </ul>
+          <md-button @click="load_instance(instance)">{{instance.name}}</md-button>
         </li>
       </ul>
     </div>
@@ -37,19 +26,11 @@
 
   export default {
     name: 'instances',
-    data() {
-      return {
-        local_instances: [],
-        instances: []
-      }
-    },
     computed: {
       ...mapState({
-        instance_config: state => state.instance_config,
-        instance_id: state => state.instance_config.instance_id,
-        instance_slug: state => state.instance_config.instance.slug,
         user: state => state.user,
-        personalised_instance_id: state => state.personalised_instance_id
+        instances: state => state.instances,
+        personalised_instance_id: state => state.personalised_instance_id,
       })
     },
     mounted() {
@@ -59,19 +40,12 @@
       async load_published() {
         const instances = await InstancesController.instances_for_user({user: this.user})
         this.$store.commit('set_instances', instances)
-        
-        for (const instance of instances) {
-          instance.configs = await InstanceConfigsController.published_instance_config({id: instance._id})
-        }
-
-        this.instances = instances
       },
-      async get_config_and_attempt_launch(config_id) {
-        launch_from_instance_config_id(config_id, this.$store, this.$router)
+      async load_instance(instance) {
+        const config = await InstancesController.config_for_instance({instance})
+        this.$store.commit('set_instance_config', config)
+        launch_from_instance_config_id(config._id, this.$store, this.$router)
       },
-      logout() {
-        this.$router.push({name: 'shell:login'})
-      }
     }
   }
 </script>
