@@ -54,12 +54,10 @@
     },
     mounted() {
       this.load_published()
-      this.load_local()
     },
     methods: {
       async load_published() {
-        const user_id = this.user.id
-        const instances = await InstancesController.published_instances({user_id})
+        const instances = await InstancesController.instances_for_user({user: this.user})
         this.$store.commit('set_instances', instances)
         
         for (const instance of instances) {
@@ -67,15 +65,6 @@
         }
 
         this.instances = instances
-      },
-      async load_local() {
-        const local_instances = await InstancesController.retrieve_local_instances()
-        const local_configs = await InstanceConfigsController.retrieve_local_configs()
-
-        for (const instance of local_instances) {
-          instance.configs = local_configs.filter(config => config.instance === instance.id)
-        }
-        this.local_instances = local_instances
       },
       async get_config_and_attempt_launch(config_id) {
         launch_from_instance_config_id(config_id, this.$store, this.$router)

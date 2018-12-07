@@ -1,6 +1,8 @@
 import {shell_axios} from 'shell_app/lib/shell_request_handler'
 
-function published_instances({user_id}) {
+function instances_for_user({user}) {
+  const user_id = user._id
+  
   const request = {
     url: `/instance`,
     params: {
@@ -11,5 +13,5 @@ function published_instances({user_id}) {
 }
 
 export default {
-  published_instances,
+  instances_for_user,
 }
