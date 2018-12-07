@@ -4,7 +4,7 @@
       <md-list>
 
         <md-list-item>
-          <p class="md-title">Teams for {{instance_location_name}}</p>
+          <p class="md-title">Teams</p>
         </md-list-item>
 
 
@@ -63,7 +63,6 @@
     },
     computed: {
       ...mapState({
-        instance_location_name: state => state.instance_config.instance.location_name,
         team_names: state => state.irs_tasker.teams,
         assignments: state => state.irs_tasker.assignments,
       }),
