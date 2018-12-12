@@ -8,10 +8,11 @@ const have_enough_to_boot_main = function({user, instance_config, personalised_i
 }
 
 const retrieve_shell_data = function () {
+  const api_url = get('api_url')
   const user = get('user')
   const instance_config = get('instance_config')
   const personalised_instance_id = get('personalised_instance_id')
-  return {user, instance_config, personalised_instance_id}
+  return {api_url, user, instance_config, personalised_instance_id}
 }
 
 const prefix = 'disarm-shell-'

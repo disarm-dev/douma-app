@@ -1,11 +1,22 @@
 import axios from 'axios/index'
-import {get_api_url} from 'config/api_url'
+import {get, merge} from 'lodash'
+import {store} from 'shell_app/lib/launch_shell_app'
 
-export const shell_axios = axios.create({
-  baseURL: get_api_url(),
-  timeout: 10000,
-})
+export const shell_axios = (incoming_options) => {
+  const api_url = get(store, 'state.api_url')
+  const api_key = get(store, 'state.user.key', '')
+  const instance_id = get(store, 'state.instance_config', '')
 
-export function add_token_to_headers(token) {
-  axios.defaults.headers = { 'API-key': token }
+  const default_options = {
+    headers: {
+      'API-Key': api_key,
+    },
+    baseURL: api_url,
+    params: {
+      instance_id,
+    }
+  };
+  const merged = merge(default_options, incoming_options);
+
+  return axios(merged);
 }
