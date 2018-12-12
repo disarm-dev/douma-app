@@ -20,21 +20,21 @@ function read_plan_list() {
 
 function _read_plan_current() {
   return {
-    url_suffix: '/plan/current',
+    url: '/plan/current',
     timeout: 10000
   }
 }
 
 function _read_plan_detail(plan_id) {
   return {
-    url_suffix: `/plan/detail/${plan_id}`,
+    url: `/plan/detail/${plan_id}`,
     timeout: 10000
   }
 }
 
 function _read_plan_list() {
   return {
-    url_suffix: '/plan/list',
+    url: '/plan/list',
     timeout: 10000
   }
 }
@@ -47,7 +47,7 @@ function create_plan(plan) {
 
 function _create_plan(plan) {
   return {
-    url_suffix: '/plan/create',
+    url: '/plan/create',
     data: plan,
     method: 'post',
     timeout: 10000
@@ -61,7 +61,7 @@ function update_plan({plan,_id}){
 
 function _update_plan({plan,_id}) {
   return {
-    url_suffix: `/plan/${_id}`,
+    url: `/plan/${_id}`,
     data: plan,
     method: 'put',
     timeout: 10000
@@ -77,7 +77,7 @@ function delete_plan(plan){
 
 function _delete_plan(plan) {
   return {
-    url_suffix: `/plan/${plan}`,
+    url: `/plan/${plan}`,
     method: 'delete',
     timeout: 10000
   }

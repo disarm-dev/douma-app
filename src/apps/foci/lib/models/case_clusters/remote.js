@@ -13,7 +13,7 @@ async function read_all() {
 
 function _read_all() {
   return {
-    url_suffix: '/foci/case_clusters'
+    url: '/foci/case_clusters'
   }
 }
 
@@ -25,7 +25,7 @@ async function update(case_cluster) {
 function _update(case_cluster) {
   return {
     method: 'PUT',
-    url_suffix: '/foci/case_clusters',
+    url: '/foci/case_clusters',
     data: case_cluster
   }
 }
@@ -37,7 +37,7 @@ async function read_count() {
 
 function _read_count() {
   return {
-    url_suffix: '/foci/number_of_case_clusters'
+    url: '/foci/number_of_case_clusters'
   }
 }
 
@@ -49,6 +49,6 @@ async function run_model() {
 function _run_model() {
   return {
     method: 'POST',
-    url_suffix: '/foci/model/run'
+    url: '/foci/model/run'
   }
 }

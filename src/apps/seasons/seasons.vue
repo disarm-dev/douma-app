@@ -143,7 +143,7 @@
               config_id: this.slug,
               config_version: this.config_version
             },
-            url_suffix: '/seasons'
+            url: '/seasons'
           })
 
           this.reset_ui()

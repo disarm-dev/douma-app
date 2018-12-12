@@ -42,7 +42,7 @@ export const request_handler = async (incoming_options) => {
     const res = await axios(merged);
     return res.data;
   } catch(err) {
-    if (incoming_options.url_suffix !== '/login' && err.response && err.response.status === 401) {
+    if (incoming_options.url !== '/login' && err.response && err.response.status === 401) {
       const message = err.response.data.message
       store.commit('root:set_snackbar', {message})
     }
