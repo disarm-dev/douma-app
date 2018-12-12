@@ -97,7 +97,7 @@
     },
     async mounted() {
       configure_spatial_helpers(this.instance_config)
-      await hydrate_geodata_cache_from_idb(this.instance_slug)
+      await hydrate_geodata_cache_from_idb(this.instance_id)
       this.calculate_loading_progress()
     },
     methods: {
@@ -129,7 +129,7 @@
             geodata_version: this.instance_config.spatial_hierarchy.data_version
           })
 
-          await hydrate_geodata_cache_from_idb(this.instance_slug)
+          await hydrate_geodata_cache_from_idb(this.instance_id)
           this.calculate_loading_progress()
         } catch (err) {
           console.error(err)

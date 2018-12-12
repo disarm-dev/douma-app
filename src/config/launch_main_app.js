@@ -100,7 +100,7 @@ export async function launch_main_app({api_url, user, personalised_instance_id, 
   // Clean up old dbs, do migrations/upgrades here in the future
   await clean_up_local_dbs()
 
-  await hydrate_geodata_cache_from_idb(instance_config.instance.slug)
+  await hydrate_geodata_cache_from_idb(instance_config.instance_id)
 
   /////////////////////////////
   //

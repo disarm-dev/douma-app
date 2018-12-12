@@ -50,9 +50,9 @@ function retrieve_geodata_from_idb(instance_slug) {
 /**
  * Try to retrieve geodata from IDB, and set on cache if it exists
  */
-export async function hydrate_geodata_cache_from_idb(instance_slug) {
+export async function hydrate_geodata_cache_from_idb(instance_id) {
   try {
-    const geodata = await retrieve_geodata_from_idb(instance_slug)
+    const geodata = await retrieve_geodata_from_idb(instance_id)
     if (geodata) {
       cache.geodata = geodata.geodata
       decorate_geodata_on_cache()

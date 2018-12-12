@@ -14,7 +14,7 @@ async function launch_from_instance_config_id(store, router) {
   } else {
     configure_spatial_helpers(instance_config)
 
-    await hydrate_geodata_cache_from_idb(instance_config.instance.slug)
+    await hydrate_geodata_cache_from_idb(instance_config.instance_id)
     const valid = geodata_in_cache_and_valid()
 
     if (valid) {
