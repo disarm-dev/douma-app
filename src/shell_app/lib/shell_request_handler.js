@@ -20,4 +20,3 @@ export const shell_axios = (incoming_options) => {
 
   return axios(merged);
 }
-}
