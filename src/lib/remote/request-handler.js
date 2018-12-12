@@ -1,5 +1,6 @@
 import {store} from 'apps/store'
 import axios from 'axios'
+import {get, merge} from 'lodash'
 
 const default_options = () => {
   const api_url = get(store, 'state.api_url')

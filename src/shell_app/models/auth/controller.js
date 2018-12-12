@@ -17,6 +17,7 @@ async function login({ username, password, personalised_instance_id}) {
   try {
     const permissions_res = await Remote.get_permissions({user_id: user._id})
     user.permissions = permissions_res.data
+    store.commit('set_user', user)
   } catch (e) {
     throw e
   }

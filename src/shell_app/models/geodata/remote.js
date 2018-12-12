@@ -1,10 +1,10 @@
 import { shell_axios } from 'shell_app/lib/shell_request_handler'
 
 
-async function get_geodata_layer({ level_id, instance_id }) {
+async function get_geodata_layer({ level_id }) {
   const request = {
     method: 'get',
-    url: `/geodata_level/${level_id}?instance_id=${instance_id}`
+    url: `/geodata_level/${level_id}`
   }
   return shell_axios(request)
 }

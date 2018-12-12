@@ -3,7 +3,7 @@ import { save_geodata_to_idb } from 'lib/models/geodata/local.geodata_store'
 import CONFIG from '@/config/common'
 
 export async function get_and_save_layer({ level_id, instance_slug, instance_id, geodata_version}) {
-  const res = await Remote.get_geodata_layer({ level_id, instance_id})
+  const res = await Remote.get_geodata_layer({ level_id })
 
   const geodata_layer = res.data
 
