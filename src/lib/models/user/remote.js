@@ -9,10 +9,9 @@ function authenticate(user) {
 }
 function _authenticate(user) {
   return {
-    url_suffix: '/login',
+    url: '/login',
     data: user,
     method: 'post',
     timeout: 10000,
-    params: {country: 'instance'}
   }
 }

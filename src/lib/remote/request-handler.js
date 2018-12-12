@@ -1,38 +1,53 @@
-import CONFIG from 'config/common'
-import {config_axios_instance} from 'lib/remote/axios_instance'
-import {get_api_url} from 'config/api_url'
 import {store} from 'apps/store'
+import axios from 'axios'
+import {get, merge} from 'lodash'
 
-/**
- * Standard request handler for all remote requests (currently both client server and API)
- * Passed options overwrite any default options.
- * @param request_config
- */
-export function request_handler(request_config) {
+const default_options = () => {
+  const api_url = get(store, 'state.api_url')
+  const personalised_instance_id = get(store, 'state.meta.personalised_instance_id')
+  const user = get(store, 'state.user.username')
+  const instance_id = get(store, 'state.instance_config.instance_id')
+  const api_key = get(store, 'state.meta.user.key')
 
-  if (!request_config) return Promise.reject(new Error("request is empty"))
-
-  // If a `request.url` is not already provided, will create one
-  // to send request to API server
-  if (!request_config.url) {
-    if (!request_config.url_suffix && request_config.url_suffix !== '') throw new Error("Missing `url_suffix` on request")
-
-    request_config.url = get_api_url() + request_config.url_suffix
+  return {
+    baseURL: api_url,
+    timeout: 10000,
+    params: {
+      personalised_instance_id,
+      user,
+      instance_id,
+    },
+    headers: {
+      'API-Key': api_key,
+    }
   }
-
-  const axios_instance = config_axios_instance()
-
-  return axios_instance(request_config)
-    .then(json => json.data)
-    .catch(err => {
-      // Any route other than login which receives 401 needs to tell user
-      if (request_config.url_suffix !== '/login' && err.response && err.response.status === 401) {
-        const message = err.response.data.message
-        store.commit('root:set_snackbar', {message})
-      }
-      throw err
-    })
 }
 
 
+export const request_handler = async (incoming_options) => {
+  const merged = merge(default_options(), incoming_options);
+
+  // Interceptors for online/offline notification
+  axios.interceptors.response.use(function (response) {
+    window.dispatchEvent(new Event('online'))
+    return response
+  }, function (error) {
+    if (/timeout/.test(error.message)) {
+      window.dispatchEvent(new Event('offline'))
+    }
+    return Promise.reject(error)
+  })
+
+  // Execute the request and handle failures with an error snackbar
+  try {
+    const res = await axios(merged);
+    return res.data;
+  } catch(err) {
+    if (incoming_options.url !== '/login' && err.response && err.response.status === 401) {
+      const message = err.response.data.message
+      store.commit('root:set_snackbar', {message})
+    }
+    throw err
+  }
+}
 

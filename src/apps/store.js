@@ -1,5 +1,6 @@
 import Vuex from 'vuex'
 import createPersistedState from 'vuex-persistedstate'
+import COMMON from 'config/common'
 
 let store
 export { store }
@@ -14,6 +15,7 @@ export function create_store(instance_config, instance_stores) {
     plugins: [createPersistedState()],
     state: {
       // Global config
+      api_url: COMMON.api.default_url,
       instance_config: instance_config,
 
       // Global UI
@@ -25,6 +27,9 @@ export function create_store(instance_config, instance_stores) {
 
     },
     mutations: {
+      'root:set_api_url': (state, api_url) => {
+        state.api_url = api_url
+      },
       'root:set_instance_config': (state, instance_config) => {
         state.instance_config = instance_config
       },

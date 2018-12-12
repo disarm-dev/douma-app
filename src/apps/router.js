@@ -21,6 +21,7 @@ export function create_router(instance_routes) {
     routes,
     mode: 'history'
   })
+
   return router
 }
 

@@ -51,7 +51,6 @@
   import {get} from 'lodash';
 
   import BUILD_TIME from 'config/build-time'
-  import {get_api_url} from 'config/api_url'
 
   export default {
     name: 'home',
@@ -85,9 +84,12 @@
       which_config() {
         return `${this.slug}@${this.config_version}`
       },
+      api_url() {
+        return this.$store.state.api_url;
+      },
       bulk_download_url() {
         const instance_id = this.instance_config.instance_id
-        return `${get_api_url()}/download_records` +
+        return `${this.api_url}/download_records` +
           `?country=${this.slug}&personalised_instance_id=${this.personalised_instance_id}` +
           `&download_key=${this.api_key}&instance_id=${instance_id}`
       }

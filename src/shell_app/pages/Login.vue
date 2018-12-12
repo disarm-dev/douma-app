@@ -20,10 +20,21 @@
             <md-input v-model="password" required type="password"></md-input>
           </md-input-container>
 
+          <div v-if="ui_edit_api_url">
+            <md-input-container>
+              <label>API URL</label>
+              <md-input v-model="updated_api_url"></md-input>
+            </md-input-container>
+            <md-button @click="reset_api_url">Reset</md-button>
+          </div>
+
           <md-button class="md-accent md-raised login-button"
                      :disabled="$loading.isLoading('shell:login') || !can_login"
                      type="submit">
             Login
+          </md-button>
+          <md-button @click="ui_edit_api_url = !ui_edit_api_url" v-if="!ui_edit_api_url">
+            Edit API URL
           </md-button>
         </form>
 
@@ -66,10 +77,15 @@
         error: '',
         username: '',
         password: '',
+        updated_api_url: '',
+        ui_edit_api_url: false,
         raw_local_personalised_instance_id: 'default',
       }
     },
     computed: {
+      api_url() {
+        return this.$store.state.api_url
+        },
       user() {
         return this.$store.state.user
       },
@@ -92,6 +108,7 @@
     },
     mounted() {
       this.$store.commit('reset_store')
+      this.updated_api_url = this.api_url;
 
       this.$nextTick(() => this.$refs.username.$el.focus())
 
@@ -102,6 +119,10 @@
       this.local_personalised_instance_id = this.$store.state.personalised_instance_id
     },
     methods: {
+      reset_api_url() {
+        this.$store.commit('reset_api_url');
+        this.updated_api_url = this.api_url;
+      },
       open_personalised_instance_id() {
         if (this.local_personalised_instance_id === 'default') {
           this.local_personalised_instance_id = generate_personalised_instance_id()
@@ -127,6 +148,9 @@
         return true
       },
       login() {
+        if (this.api_url !== this.updated_api_url) {
+          this.$store.commit('set_api_url', this.updated_api_url);
+        }
         this.$loading.startLoading('shell:login')
         this.error = ''
 
@@ -139,14 +163,9 @@
         }
 
         AuthController.login(credentials)
-          .then((res) => {
-            if (res.status === 200) {
-              this.$store.commit('set_user', res.data)
-              this.$store.commit('set_personalised_instance_id', this.local_personalised_instance_id)
-              this.$router.push({name: 'shell:instance_configs'})
-            } else {
-              console.error('some error logging-in', res)
-            }
+          .then((user) => {
+            this.$store.commit('set_personalised_instance_id', this.local_personalised_instance_id)
+            this.$router.push({name: 'shell:instance_configs'})
             // dimension3 is the dimension we use for the user attribute we send to GA. Could refactor.
             // this.$ga.set('dimension3', `${this.$store.state.meta.user.username}/${this.$store.state.meta.user.name}`)
             this.$loading.endLoading('shell:login')

@@ -9,7 +9,7 @@ function read_assignment_plan() {
 }
 function _read_assignment_plan() {
   return {
-    url_suffix: '/assignment_plan/current',
+    url: '/assignment_plan/current',
     timeout: 10000
   }
 }
@@ -22,7 +22,7 @@ function create_assignment_plan(assignment_plan) {
 
 function _create_assignment_plan(assignment_plan) {
   return {
-    url_suffix: '/assignment_plan/create',
+    url: '/assignment_plan/create',
     data: assignment_plan,
     method: 'post',
     timeout: 10000

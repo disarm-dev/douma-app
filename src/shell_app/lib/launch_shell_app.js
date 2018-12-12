@@ -9,23 +9,24 @@ import Login from '../pages/Login'
 import InstanceConfigs from '../pages/Instances'
 import Geodata from '../pages/geodata'
 
-import {add_token_to_headers} from 'shell_app/lib/shell_request_handler'
 import {hide_loading_page} from 'config/hide_loading_page'
 import {remove_douma_app} from 'config/launch_main_app'
 import {remove_app} from 'config/remove_app'
 import {persist_shell_data} from 'shell_app/lib/shell_data'
+import COMMON from 'config/common'
 
 let shell_app
 export let store
 
 export const store_defaults = {
+  api_url: COMMON.api.default_url,
   user: null,
   personalised_instance_id: 'default',
   instances: [],
   instance_config: null,
 }
 
-export function launch_shell_app({user, personalised_instance_id}) {
+export function launch_shell_app({api_url, user, personalised_instance_id}) {
 
   Vue.material.registerTheme({
     shell: {
@@ -82,12 +83,20 @@ export function launch_shell_app({user, personalised_instance_id}) {
 
   store = new Vuex.Store({
     state: {
+      api_url: api_url || store_defaults.api_url,
       user: user || store_defaults.user,
       personalised_instance_id: personalised_instance_id || store_defaults.personalised_instance_id,
       instances: store_defaults.instances,
       instance_config: store_defaults.instance_config,
     },
     mutations: {
+      set_api_url: (state, api_url) => {
+        state.api_url = api_url
+        persist_shell_data('api_url', state.api_url)
+      },
+      reset_api_url: (state) => {
+        state.api_url = store_defaults.api_url
+      },
       set_user: (state, user) => {
         state.user = user
         persist_shell_data('user', state.user)
@@ -109,16 +118,12 @@ export function launch_shell_app({user, personalised_instance_id}) {
         state.instances = store_defaults.instances
         state.instance_config = store_defaults.instance_config
 
-        persist_shell_data('user', store_defaults.user)
-        persist_shell_data('personalised_instance_id', store_defaults.personalised_instance_id)
-        persist_shell_data('instance_config', store_defaults.instance_config)
+        persist_shell_data('user', state.user)
+        persist_shell_data('personalised_instance_id', state.personalised_instance_id)
+        persist_shell_data('instance_config', state.instance_config)
       }
     },
   })
-
-  if (store.state.user) {
-    add_token_to_headers(store.state.user.key)
-  }
 
 
 // TODO: Check if necessary to manually recreate the div like this

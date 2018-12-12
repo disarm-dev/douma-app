@@ -22,10 +22,10 @@ import {get_all_spatial_hierarchy_level_names, get_slug, get_data_version} from 
 // function _get_geodata_for(level_name) {
 //   const data_version = get_data_version()
 
-//   const url_suffix = geodata_url_for(level_name)
+//   const url = geodata_url_for(level_name)
 
 //   return {
-//     url_suffix,
+//     url,
 //     timeout: 300000,
 //     params: {
 //       data_version

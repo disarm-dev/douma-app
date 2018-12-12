@@ -2,6 +2,8 @@ export default {
   api: {
     version: 'v8',
     dev_url: 'http://localhost:3000',
+    query_parameter: 'api-url',
+    default_url: 'https://demo-editor-server.herokuapp.com/v8',
   },
   applets: {
     // The order here is irrelevant to sidebar - that is currently fixed by the user auth/permissions sheet,
