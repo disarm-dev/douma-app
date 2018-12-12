@@ -1,16 +1,17 @@
 import Remote from './remote'
-import { save_geodata_to_idb } from 'lib/models/geodata/local.geodata_store'
-import CONFIG from 'config/common'
+import { save_geodata_to_idb } from 'shell_app/lib/local.geodata_store'
+import CONFIG from '@/config/common'
 
-export async function get_and_save_layer({ level_name, instance_slug, instance_id, geodata_version}) {
-  const res = await Remote.get_geodata_layer({ level_name, instance_id})
+export async function get_and_save_layer({ level_id, instance_slug, instance_id, geodata_version}) {
+  const res = await Remote.get_geodata_layer({ level_id, instance_id})
 
   const geodata_layer = res.data
 
-  await save_geodata_to_idb({ level_name, level_geodata: geodata_layer, instance_slug, geodata_version })
+  await save_geodata_to_idb({ level_name:geodata_layer.level_name, level_geodata: geodata_layer.geojson, instance_slug, geodata_version })
 }
 
 export function geodata_required(permissions, instance_id) {
+
   const instance_permission_values = permissions.filter(p => p.instance_id === instance_id).map(p => p.value)
 
   const permission_applet_names = instance_permission_values.map(p => {

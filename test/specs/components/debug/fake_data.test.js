@@ -3,7 +3,7 @@ import {shallow} from 'vue-test-utils'
 
 import fake_responses_debug from 'apps/debug/pages/fake_data_debug.vue'
 import * as exports from 'lib/models/geodata/geodata.valid'
-import * as db from 'lib/models/geodata/local.geodata_store'
+import * as db from 'shell_app/lib/local.geodata_store'
 
 // What's this?!
 db.hydrate_geodata_cache_from_idb = () => Promise.resolve()

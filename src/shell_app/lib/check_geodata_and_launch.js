@@ -1,7 +1,7 @@
 import {configure_spatial_helpers} from 'lib/instance_data/spatial_hierarchy_helper'
 import {launch_main_app} from 'config/launch_main_app'
 import {geodata_required} from 'shell_app/models/geodata/controller'
-import {hydrate_geodata_cache_from_idb} from 'lib/models/geodata/local.geodata_store'
+import {hydrate_geodata_cache_from_idb} from 'shell_app/lib/local.geodata_store'
 import {geodata_in_cache_and_valid} from 'lib/models/geodata/geodata.valid'
 import {InstanceConfigsController} from 'shell_app/models/instance_configs/controller'
 

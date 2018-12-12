@@ -1,35 +1,35 @@
 <template>
   <div class="applet_container">
     <h2>Geographic data</h2>
-    <p>To continue, you need to download {{level_names.length}} files of geographic data. They will be stored on your device (if possible), so you should only have to download one time.</p>
+    <p>To continue, you need to download {{levels.length}} files of geographic data. They will be stored on your device (if possible), so you should only have to download one time.</p>
     <p>If you have a slow connection, try downloading one at a time. Otherwise you can start multiple downloads going at the same time.</p>
     <p>Downloading will stop if it's taking too long. You can resume downloading if this happens by clicking 'download' again.</p>
     <div class="list">
 
       <md-list>
-        <md-list-item v-for="level in level_names" :key="level" >
+        <md-list-item v-for="level in levels" :key="level._id" >
 
 
           <!-- DOWNLOAD STATUS-->
           <md-avatar>
-            <md-icon v-if="loading_progress[level].status === 'complete'" class="success">check_circle</md-icon>
-            <md-icon v-else-if="loading_progress[level].status === 'update_available'" class="md-warn">update</md-icon>
-            <span v-else-if="$loading.isLoading(`geodata/${level}`)"><md-spinner md-indeterminate class="md-accent" :md-size="30"></md-spinner></span>
+            <md-icon v-if="loading_progress[level.name].status === 'complete'" class="success">check_circle</md-icon>
+            <md-icon v-else-if="loading_progress[level.name].status === 'update_available'" class="md-warn">update</md-icon>
+            <span v-else-if="$loading.isLoading(`geodata/${level.name}`)"><md-spinner md-indeterminate class="md-accent" :md-size="30"></md-spinner></span>
             <md-icon v-else class="md-warn">error</md-icon>
           </md-avatar>
 
 
           <!-- LEVEL NAME -->
           <span>
-            <md-chip v-if="loading_progress[level].status === 'update_available'" class="md-warn"> update available</md-chip>
-            {{level}}
+            <md-chip v-if="loading_progress[level.name].status === 'update_available'" class="md-warn"> update available</md-chip>
+            {{level.name}}
           </span>
 
 
           <!--Retrieve BUTTON -->
           <md-button
             @click.native="retrieve_geodata_for(level)"
-            :disabled="$loading.isLoading(`geodata/${level}`)"
+            :disabled="$loading.isLoading(`geodata/${level.name}`)"
             class="md-dense list-button md-raised md-primary"
           >
             Retrieve
@@ -63,7 +63,7 @@
   import {get_all_spatial_hierarchy_level_names, configure_spatial_helpers} from 'lib/instance_data/spatial_hierarchy_helper'
   import {geodata_has_level, geodata_versions_correct, geodata_level_version_matches_instance_config } from 'lib/models/geodata/geodata.valid'
   import {get_geodata_for} from 'lib/models/geodata/remote'
-  import {hydrate_geodata_cache_from_idb} from "lib/models/geodata/local.geodata_store";
+  import {hydrate_geodata_cache_from_idb} from "shell_app/lib/local.geodata_store";
   import cache from 'config/cache'
 
   import {get_and_save_layer} from '../models/geodata/controller'
@@ -73,7 +73,7 @@
     data () {
       return {
         loading_progress: {},
-        level_names: []
+        levels: []
       }
     },
     computed: {
@@ -84,11 +84,11 @@
       })
     },
     created() {
-      const level_names = this.instance_config.spatial_hierarchy.levels.map(l => l.name)
-      this.level_names = level_names
+      const levels = this.instance_config.spatial_hierarchy.levels
+      this.levels = levels
 
-      for (let level_name of this.level_names) {
-        this.$set(this.loading_progress, level_name,  {
+      for (let level of this.levels) {
+        this.$set(this.loading_progress, level.name,  {
           status: '',
           progress: '',
           total: ''
@@ -102,11 +102,11 @@
     },
     methods: {
       calculate_loading_progress() {
-        this.level_names.forEach(level => {
+        this.levels.forEach(level => {
           let status
 
-          if (geodata_has_level(level)) {
-            if (!geodata_level_version_matches_instance_config(level)) {
+          if (geodata_has_level(level.name)) {
+            if (!geodata_level_version_matches_instance_config(level.name)) {
               status = 'update_available'
             } else {
               status = 'complete'
@@ -115,15 +115,15 @@
             status = 'none'
           }
 
-          this.loading_progress[level].status = status
+          this.loading_progress[level.name].status = status
         })
       },
       async retrieve_geodata_for(level) {
-        this.$loading.startLoading(`geodata/${level}`)
+        this.$loading.startLoading(`geodata/${level.name}`)
 
         try {
           await get_and_save_layer({
-            level_name: level, 
+            level_id: level.level_id,
             instance_slug: this.instance_slug, 
             instance_id: this.instance_id,
             geodata_version: this.instance_config.spatial_hierarchy.data_version
@@ -135,7 +135,7 @@
           console.error(err)
         }
 
-        this.$loading.endLoading(`geodata/${level}`)
+        this.$loading.endLoading(`geodata/${level.name}`)
       },
       back() {
         this.$router.push('/')
