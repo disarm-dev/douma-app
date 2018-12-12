@@ -51,7 +51,6 @@
   import {get} from 'lodash';
 
   import BUILD_TIME from 'config/build-time'
-  import {get_api_url} from 'config/api_url'
 
   export default {
     name: 'home',
