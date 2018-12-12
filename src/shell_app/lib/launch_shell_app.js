@@ -15,6 +15,7 @@ import {remove_douma_app} from 'config/launch_main_app'
 import {remove_app} from 'config/remove_app'
 import {persist_shell_data} from 'shell_app/lib/shell_data'
 import COMMON from 'config/common'
+import {store_api_url_if_found_as_query_param} from 'lib/helpers/get_parameter'
 
 let shell_app
 export let store
@@ -72,6 +73,7 @@ export function launch_shell_app({user, personalised_instance_id}) {
 
   
   router.beforeEach((to, from, next) => {
+    store_api_url_if_found_as_query_param(store);
     if (to.name === 'shell:login') return next()
     if (!get(store.state, 'user', false)) return next({name: 'shell:login'})
     if (to.name === 'shell:geodata' && !store.state.instance_config) {
