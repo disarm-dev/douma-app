@@ -163,14 +163,9 @@
         }
 
         AuthController.login(credentials)
-          .then((res) => {
-            if (res.status === 200) {
-              this.$store.commit('set_user', res.data)
-              this.$store.commit('set_personalised_instance_id', this.local_personalised_instance_id)
-              this.$router.push({name: 'shell:instance_configs'})
-            } else {
-              console.error('some error logging-in', res)
-            }
+          .then((user) => {
+            this.$store.commit('set_personalised_instance_id', this.local_personalised_instance_id)
+            this.$router.push({name: 'shell:instance_configs'})
             // dimension3 is the dimension we use for the user attribute we send to GA. Could refactor.
             // this.$ga.set('dimension3', `${this.$store.state.meta.user.username}/${this.$store.state.meta.user.name}`)
             this.$loading.endLoading('shell:login')

@@ -1,25 +1,32 @@
 import Remote from './remote'
+import {store} from 'shell_app/lib/launch_shell_app'
 
 async function login({ username, password, personalised_instance_id}) {
-  const res = await Remote.login({ username, password, personalised_instance_id})
+  let user
 
-  // GET user permissions here
+  // Authenticate
+  try {
+    const res = await Remote.login({ username, password, personalised_instance_id})
+    user = res.data
+    store.commit('set_user', user)
+  } catch (e) {
+    throw e
+  }
 
-  const permissions_res = await Remote.get_permissions({user_id: res.data._id})
+  // Authorise
+  try {
+    const permissions_res = await Remote.get_permissions({user_id: user._id})
+    user.permissions = permissions_res.data
+  } catch (e) {
+    throw e
+  }
 
-  res.data.permissions = permissions_res.data
-
-  res.personalised_instance_id = personalised_instance_id
-
-  return res
-}
-
-function prepare_user_for_instance(instance, user) {
-  user.permissions = user.permissions.filter(p => p.instance_id === instance).map(p => p.value)
+  if (!user) {
+    throw new Error('Invalid user created')
+  }
   return user
 }
 
 export const AuthController = {
-  prepare_user_for_instance,
   login,
 }
