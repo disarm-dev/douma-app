@@ -25,7 +25,7 @@ import {remove_shell_app} from 'shell_app/lib/launch_shell_app'
 
 let douma_app
 
-export async function launch_main_app({user, personalised_instance_id, instance_config}) {
+export async function launch_main_app({api_url, user, personalised_instance_id, instance_config}) {
 
   // User permissions have come from server, might include other instances
   // TODO: Move elsewhere
@@ -62,6 +62,7 @@ export async function launch_main_app({user, personalised_instance_id, instance_
   // Make Vuex#$store and replace rehydrated (by vuex-persistedstate) instance_config with received instance_config
   // (Required for the app)
   const store = create_store(instance_config, instance_applets_stores_and_routes.stores)
+  store.commit('root:set_api_url', api_url)
   store.commit('root:set_instance_config', instance_config)
   store.commit('meta/set_user', user)
   store.commit('meta/set_personalised_instance_id', personalised_instance_id)

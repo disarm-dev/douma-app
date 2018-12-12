@@ -4,7 +4,6 @@ import {launch_shell_app, store_defaults} from 'shell_app/lib/launch_shell_app'
 import {launch_main_app} from 'config/launch_main_app'
 
 export function main_or_shell({forget_instance = false} = {}) {
-
   // 'forget_instance' is set in main_app, to signal intention to return to list of instances
   if (forget_instance) persist_shell_data('instance_config', store_defaults.instance_config)
 
@@ -14,7 +13,7 @@ export function main_or_shell({forget_instance = false} = {}) {
   // Need to check geodata already exists and is correct version, and is actual geodata
   const geodata_valid = false
 
-  if (have_enough_to_boot_main({api_url, user, instance_config, personalised_instance_id}) && geodata_valid) {
+  if (have_enough_to_boot_main({user, instance_config, personalised_instance_id}) && geodata_valid) {
     // FAST!
     launch_main_app({api_url, user, instance_config, personalised_instance_id})
   } else {
