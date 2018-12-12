@@ -6,14 +6,13 @@ export function get_api_url() {
   const dev_url = CONFIG.api.dev_url
   const version = CONFIG.api.version
 
-  let url
-  if (__DOUMA_PRODUCTION_MODE) {
+  let url = 'https://demo-editor-server.herokuapp.com/v8'
+  /*if (__DOUMA_PRODUCTION_MODE) {
     url = `https://${production_host}/${version}`
   } else {
     url = `${dev_url}/${version}`
-  }
+  }*/
 
-  console.log('api_url', url)
   return url
 
 }
