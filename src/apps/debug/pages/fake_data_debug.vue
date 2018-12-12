@@ -26,7 +26,7 @@
 
 <script>
   import {geodata_in_cache_and_valid} from 'lib/models/geodata/geodata.valid'
-  import {hydrate_geodata_cache_from_idb} from 'shell_app/lib/local.geodata_store'
+  import {hydrate_geodata_cache_from_idb} from 'lib/models/geodata/local.geodata_store'
   import {ResponseController} from 'lib/models/response/controller'
   import {generate_data} from 'lib/helpers/generate_fake_data'
   const controller = new ResponseController('record')

@@ -1,5 +1,5 @@
 import Remote from './remote'
-import { save_geodata_to_idb } from 'shell_app/lib/local.geodata_store'
+import { save_geodata_to_idb } from 'lib/models/geodata/local.geodata_store'
 import CONFIG from '@/config/common'
 
 export async function get_and_save_layer({ level_id, instance_slug, instance_id, geodata_version}) {

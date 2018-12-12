@@ -16,7 +16,7 @@ import { set_raven_user_context } from 'config/error_tracking.js'
 import { clean_up_local_dbs } from 'lib/local_db'
 import { setup_acl } from 'lib/acess-control-list'
 import { hydrate_geodata_cache_from_idb } from 'lib/models/geodata/local.geodata_store'
-import {configure_pubsubcache_listeners} from 'config/configure_pubsubcache_listeners'
+import { configure_pubsubcache_listeners } from 'config/configure_pubsubcache_listeners'
 
 import BUILD_TIME from 'config/build-time'
 import {hide_loading_page} from 'config/hide_loading_page'
