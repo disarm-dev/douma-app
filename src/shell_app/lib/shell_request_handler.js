@@ -7,5 +7,5 @@ export const shell_axios = axios.create({
 })
 
 export function add_token_to_headers(token) {
-  axios.defaults.headers = { 'API-key': token }
+  axios.defaults.headers = { 'API-Key': token }
 }
