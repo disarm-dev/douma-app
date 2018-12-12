@@ -1,6 +1,6 @@
-import cache from '../../config/cache'
-import {decorate_geodata_on_cache} from '../../lib/models/geodata/geodata.decorate'
-import {db} from '../../lib/local_db'
+import cache from 'config/cache'
+import {decorate_geodata_on_cache} from './geodata.decorate'
+import {db} from 'lib/local_db'
 
 const key_suffix = 'disarm_geodata_key'
 

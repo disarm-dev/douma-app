@@ -63,7 +63,7 @@
   import {get_all_spatial_hierarchy_level_names, configure_spatial_helpers} from 'lib/instance_data/spatial_hierarchy_helper'
   import {geodata_has_level, geodata_versions_correct, geodata_level_version_matches_instance_config } from 'lib/models/geodata/geodata.valid'
   import {get_geodata_for} from 'lib/models/geodata/remote'
-  import {hydrate_geodata_cache_from_idb} from "shell_app/lib/local.geodata_store";
+  import {hydrate_geodata_cache_from_idb} from "lib/models/geodata/local.geodata_store";
   import cache from 'config/cache'
 
   import {get_and_save_layer} from '../models/geodata/controller'
