@@ -117,7 +117,7 @@
 
         const content = JSON.stringify(result)
         const date = moment().format('YYYY-MM-DD_HHmm')
-        download(content, `${this.instance_config.instance.slug}.location_selection.${date}.json`)
+        download(content, `${this.instance_config.instance_id}.location_selection.${date}.json`)
 
         this.success.location_selection_created = !!(result)
       }

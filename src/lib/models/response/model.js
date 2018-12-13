@@ -54,8 +54,6 @@ export class Response {
 
     const decorated = omit(this.model, 'synced')
 
-    decorated.country = decorated.instance_slug
-
     // TODO: @refac Stop adding location_selection to root of response before sending. Don't need it anymore. (https://gitlab.com/disarm/disarm-feedback/issues/47)
     decorated.location_selection = decorated.location.selection
 

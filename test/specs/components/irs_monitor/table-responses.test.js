@@ -6,7 +6,7 @@ import get_data from 'apps/irs_monitor/lib/get_data_for_viz'
 // Input for get_data
 const responses = [
   {
-    instance_slug: 'test_instance',
+    instance_id: 'test_instance',
     username: 'test_user',
 
     id: 'id',
@@ -27,7 +27,7 @@ const responses = [
     }
   },
   {
-    instance_slug: 'test_instance',
+    instance_id: 'test_instance',
     username: 'test_user',
 
     id: 'id',

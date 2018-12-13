@@ -582,7 +582,7 @@
       },
       "instance": {
         "location_name": "Test Location",
-        "slug": "test",
+        "instance_id": "test",
         "title": "Test Application"
       },
       "map_focus": {
@@ -2765,7 +2765,7 @@
       },
       "instance": {
         "location_name": "Botswana",
-        "slug": "bwa",
+        "instance_id": "bwa",
         "title": "Botswana IRS Database"
       },
       "map_focus": {

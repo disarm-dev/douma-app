@@ -99,7 +99,7 @@
         const content = flatten_json_to_csv(this.responses)
 
         const date = moment().format('YYYY-MM-DD_HHmm')
-        download(content, `${this.instance_config.instance.slug}_responses_${date}.csv`)
+        download(content, `${this.instance_config.instance_id}_responses_${date}.csv`)
         this.$ga.event('irs_monitor','click_download_responses')
       }
     }

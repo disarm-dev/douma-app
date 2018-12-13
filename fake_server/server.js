@@ -665,7 +665,7 @@ server.get('/instances/:instance_id/published_instance_config', (req, res) => {
     },
     'instance': {
       'location_name': 'Botswana',
-      'slug': 'bwa',
+      'instance_id': 'bwa',
       'title': 'Botswana IRS Database',
       'support_number': 26876677616
     },

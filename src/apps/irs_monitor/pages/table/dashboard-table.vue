@@ -44,9 +44,9 @@
         const content = flatten_json_to_csv(this.table_data)
 
         const date = moment().format('YYYY-MM-DD_HHmm')
-        const slug = this.$store.state.instance_config.instance.slug
+        const instance_id = this.$store.state.instance_config.instance_id
 
-        download(content, `${slug}_irs_progress_${date}.csv`)
+        download(content, `${instance_id}_irs_progress_${date}.csv`)
         this.$ga.event('irs_monitor','click_download_progress_table')
       }
     }

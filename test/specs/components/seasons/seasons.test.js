@@ -14,7 +14,7 @@ test('should render', t => {
           }
         },
         instance: {
-          slug: 'example_slug'
+          instance_id: 'example_slug'
         }
       }
     }
@@ -43,7 +43,7 @@ test('should render the correct number of items', t => {
           }
         },
         instance: {
-          slug: 'example_slug'
+          instance_id: 'example_slug'
         }
       }
     }
@@ -76,7 +76,7 @@ test('renders a remove button for each list item', t => {
           }
         },
         instance: {
-          slug: 'example_slug'
+          instance_id: 'example_slug'
         }
       }
     }
@@ -109,7 +109,7 @@ test('shows an error if error', t => {
           }
         },
         instance: {
-          slug: 'example_slug'
+          instance_id: 'example_slug'
         }
       }
     }
@@ -136,7 +136,7 @@ test('renders an add button', t => {
           }
         },
         instance: {
-          slug: 'example_slug'
+          instance_id: 'example_slug'
         }
       }
     }
@@ -162,7 +162,7 @@ test('clicking add new season should call add_season', t => {
           }
         },
         instance: {
-          slug: 'example_slug'
+          instance_id: 'example_slug'
         }
       }
     }
@@ -201,7 +201,7 @@ test('clicking remove season should call remove_season', t => {
           }
         },
         instance: {
-          slug: 'example_slug'
+          instance_id: 'example_slug'
         }
       }
     }

@@ -69,7 +69,7 @@ test.cb("calls local methods in read_all_cache", t => {
 
 
 test.cb("calls local methods in read_all_cache with correct arguments", t => {
-  const responses = [{id: 1, personalised_instance_id: 'id', instance_slug: 'instance'}, {id: 2, personalised_instance_id: 'id', instance_slug: 'instance'}]
+  const responses = [{id: 1, personalised_instance_id: 'id', instance_id: 'instance'}, {id: 2, personalised_instance_id: 'id', instance_id: 'instance'}]
   const controller = new ResponseController('test')
 
   controller.local = {read_all: sinon.stub().returns(Promise.resolve(responses))}

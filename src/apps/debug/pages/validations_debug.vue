@@ -213,7 +213,7 @@
       download() {
         const content = JSON.stringify(this.validations)
         const date = moment().format('YYYY-MM-DD_HHmm')
-        download(content, `${this.instance_config.instance.slug}_validations_${date}.json`)
+        download(content, `${this.instance_config.instance_id}_validations_${date}.json`)
       }
     }
   }

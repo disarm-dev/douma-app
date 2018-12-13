@@ -99,7 +99,7 @@ export default {
     'save_assignment_plan': (context) => {
       const assignment_plan_content = {
         assignments: context.state.assignments,
-        country: context.rootState.instance_config.instance.slug
+        instance_id: context.rootState.instance_config.instance_id
       }
 
       const assignment_plan = new AssignmentPlan().create(assignment_plan_content)

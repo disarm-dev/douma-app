@@ -5,7 +5,7 @@ import {Response} from 'lib/models/response/model.js'
 
 
 const sample_valid_response = {
-  instance_slug: 'test_instance',
+  instance_id: 'test_instance',
   username: 'test_user',
 
   id: 'id',
@@ -27,7 +27,7 @@ const sample_valid_response = {
 }
 
 test('can create empty model with only the required parameters', t => {
-  const fn = () => new Response({username: 'test_user', instance_slug: 'test_instance'})
+  const fn = () => new Response({username: 'test_user', instance_id: 'test_instance'})
   t.notThrows(fn)
 })
 

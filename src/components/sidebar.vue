@@ -7,7 +7,7 @@
 
       <!--Status/top of sidebar: LOGGED-IN-->
       <div @click="navigate('meta:home')">Logged in: {{user.name}}</div>
-      <div class="version"><em>Config Version</em> {{instance_config_version}}</div>
+      <div class="version"><em>Instance ID</em> {{instance_id}}</div>
       <div class="version"><em>App Version</em> {{commit_hash}}</div>
       <div class="personalised-instance-id" v-if="personalised_instance_id !== 'default'">
         <em>Instance ID: {{personalised_instance_id}}</em>
@@ -60,8 +60,7 @@
     },
     computed: {
       ...mapState({
-        config_version: state => state.instance_config.config_version,
-        slug: state => state.instance_config.instance.slug,
+        instance_id: state => state.instance_config.instance_id,
         instance_title: state => state.instance_config.instance.title,
         user: state => state.meta.user,
         personalised_instance_id: state => state.meta.personalised_instance_id
@@ -72,9 +71,6 @@
       commit_hash() {
         return BUILD_TIME.VERSION_COMMIT_HASH_SHORT
       },
-      instance_config_version() {
-        return `${this.slug}@${this.config_version}`
-      }
     },
     watch: {
       'show_sidebar': 'show_hide_sidebar'
