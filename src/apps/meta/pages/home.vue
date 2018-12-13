@@ -26,6 +26,7 @@
     <span class='version' style='cursor: pointer;' @click="toggle_debug_info">
       Version: {{commit_hash}} <br/>
       <span v-if="debug_info_visible">
+        <p>Config ID: {{config_id}}</p>
         <p>Instance ID: {{instance_id}}</p>
         <p>UserAgent: {{userAgent}}</p>
         <p><a :href="bulk_download_url" target="_blank">Bulk download</a></p>
@@ -71,7 +72,7 @@
       ...mapState({
         instance_id: state => state.instance_config.instance_id,
         instance_config: state => state.instance_config,
-        config_version: state => state.instance_config.config_version,
+        config_id: state => state.instance_config._id,
         personalised_instance_id: state => state.meta.personalised_instance_id,
         api_key: state => state.meta.user.key
       }),
