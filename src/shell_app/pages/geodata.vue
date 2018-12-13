@@ -35,19 +35,12 @@
             Retrieve
           </md-button>
 
-          <md-button
-            @click="download(level)"
-          >
-            Download
-          </md-button>
-
-
-
         </md-list-item>
       </md-list>
 
       <div>
-        <md-button class='md-primary md-raised' @click.native="back">Back</md-button>
+        <md-button class="md-primary md-raised" :disabled='!can_launch' @click="launch">Launch</md-button>
+        <md-button class='' @click.native="back">Back</md-button>
       </div>
 
     </div>
@@ -65,20 +58,24 @@
   import cache from 'config/cache'
 
   import {get_and_save_layer} from '../models/geodata/controller'
+  import {launch_from_instance_config_id} from 'shell_app/lib/check_geodata_and_launch'
 
   export default {
     name: 'geodata',
     data () {
       return {
         loading_progress: {},
-        levels: []
+        levels: [],
       }
     },
     computed: {
       ...mapState({
         instance_config: state => state.instance_config,
         instance_id: state => state.instance_config.instance_id,
-      })
+      }),
+      can_launch() {
+        return this.levels.every(level => this.loading_progress[level.name].status === 'complete')
+      },
     },
     created() {
       this.levels = this.instance_config.spatial_hierarchy.levels
@@ -131,22 +128,12 @@
 
         this.$loading.endLoading(`geodata/${level.name}`)
       },
+      launch() {
+        launch_from_instance_config_id(this.$store, this.$router)
+      },
       back() {
         this.$router.push('/')
       },
-      download(level_name) {
-        console.log('download', level_name)
-        const level_geodata = get(cache.geodata, level_name, [])
-
-        if (level_geodata.length === 0) {
-          console.log("No geodata")
-          return false
-        }
-
-        const date = moment().format('YYYY-MM-DD_HHmm')
-
-        download(JSON.stringify(level_geodata), `${level_name}.geodata.${date}.geojson`)
-      }
     }
   }
 </script>

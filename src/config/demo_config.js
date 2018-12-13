@@ -96,7 +96,7 @@ function get_or_create_boundary_polygon() {
 
   // store result on cache
   set(cache, cache_key, demo_boundary_polygon)
-  
+
   return demo_boundary_polygon // geojson_fc
 }
 
