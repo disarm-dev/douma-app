@@ -31,8 +31,15 @@ db.version(2).stores({
 })
 
 db.version(3).stores({
-
-})
+  responses: 'id, [personalised_instance_id+instance_id]',
+  geodata_collection: 'disarm_geodata_key',
+}).upgrade (trans => {
+  return trans.responses.toCollection().modify (response => {
+    response.instance_id = response.instance_slug
+    delete response.instance_slug
+    delete response.country
+  });
+});
 
 
 async function clean_up_local_dbs() {
