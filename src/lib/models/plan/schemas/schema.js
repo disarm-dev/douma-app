@@ -5,7 +5,6 @@ import {TargetSchema} from './target.schema.js'
 export const PlanSchema = schema({
   instance_id: String,
   focus_filter_area: [Object, null],
-  country: String, // e.g. 'swz'
   name:String,
   targets: Array.of_x(0, Infinity, TargetSchema)
 })

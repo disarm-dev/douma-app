@@ -1,19 +1,18 @@
 import array_unique from 'array-unique'
-import get from 'lodash.get'
+import {get} from 'lodash'
 
-import {AssignmentSchema} from './schemas/assignment.schema'
 import {AssignmentPlanSchema} from './schemas/assignment_plan.schema'
 import {DECORATED_UNASSIGNED_TEAM} from 'apps/irs_tasker/unassigned_team'
 
 export class AssignmentPlan {
 
-  create({assignments, country}) {
-    if (!AssignmentPlanSchema({assignments, country})) {
-      const errors = AssignmentPlanSchema.errors({assignments, country})
+  create({assignments, instance_id}) {
+    if (!AssignmentPlanSchema({assignments, instance_id})) {
+      const errors = AssignmentPlanSchema.errors({assignments, instance_id})
       throw new Error(`AssignmentPlan failed validation: ${JSON.stringify(errors)}`)
     }
 
-    return {assignments, country}
+    return {assignments, instance_id}
   }
 
   load_from_json(assignment_plan_json, plan_target_ids) {

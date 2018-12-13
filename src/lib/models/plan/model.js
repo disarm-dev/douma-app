@@ -15,7 +15,6 @@ export class Plan {
       instance_id,
       focus_filter_area,
       targets: decorated_targets,
-      country: country,
       name:name,
       id: uuid()
     }
