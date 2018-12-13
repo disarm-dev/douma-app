@@ -22,10 +22,13 @@ import BUILD_TIME from 'config/build-time'
 import {hide_loading_page} from 'config/hide_loading_page'
 import {remove_app} from 'config/remove_app'
 import {remove_shell_app} from 'shell_app/lib/launch_shell_app'
+import {check_if_is_a_demo} from 'config/demo_config'
 
 let douma_app
 
 export async function launch_main_app({api_url, user, personalised_instance_id, instance_config}) {
+  // Check if we're running a demo instance, and configure
+  check_if_is_a_demo(instance_config)
 
   // User permissions have come from server, might include other instances
   // TODO: Move elsewhere

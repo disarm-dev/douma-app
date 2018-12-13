@@ -1,7 +1,11 @@
 import mapboxgl from 'mapbox-gl'
 import CONFIG from 'config/common'
+import cache from 'config/cache'
+import {__is_a_demo, add_boundary_polygon, demo_map_config} from 'config/demo_config'
 
-mapboxgl.accessToken = CONFIG.basemap.map_token
+const map_config = () => {
+  return !__is_a_demo ? CONFIG.basemap.default : demo_map_config
+}
 
 /**
  * Create a basic mapbox-gl map
@@ -9,11 +13,13 @@ mapboxgl.accessToken = CONFIG.basemap.map_token
  * @returns {mapboxgl.Map}
  */
 const basic_map = (store) => {
+  mapboxgl.accessToken = map_config().map_token
+
   const map = new mapboxgl.Map({
     container: 'map',
-    style: CONFIG.basemap.default.style,
-    center: CONFIG.basemap.default.coords,
-    zoom: CONFIG.basemap.default.zoom
+    style: map_config().style,
+    center: map_config().coords,
+    zoom: map_config().zoom
   })
 
   // disable zooming with mouse scroll. now you can scroll
@@ -26,6 +32,10 @@ const basic_map = (store) => {
     if (store) store.commit('root:set_snackbar', {message: 'Problem with map data'})
   })
 
+  if (__is_a_demo) {
+    add_boundary_polygon(map)
+  }
+
   // not sure
   map.addControl(new mapboxgl.NavigationControl())
 
@@ -33,3 +43,7 @@ const basic_map = (store) => {
 }
 
 export {basic_map}
+
+function create_boundary_polygon() {
+  const geojson = cache.geodata
+}

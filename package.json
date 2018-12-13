@@ -31,6 +31,7 @@
     "@turf/invariant": "^4.5.2",
     "@turf/points-within-polygon": "^5.0.4",
     "@turf/turf": "^4.1.0",
+    "@turf/union": "^6.0.3",
     "@turf/within": "^4.4.0",
     "@vue/test-utils": "^1.0.0-beta.20",
     "ajv": "^6.1.1",
