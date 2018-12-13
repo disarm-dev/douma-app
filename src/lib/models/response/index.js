@@ -1,5 +1,4 @@
 import remote from './remote'
-import local from './local'
 
 export {read_all_network, read_all_cache, create_batch_network}
 
