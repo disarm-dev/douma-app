@@ -29,21 +29,7 @@ export default {
       icon: 'person',
       geodata_required: false
     },
-    'foci': {
-      title: 'Foci',
-      icon: 'bubble_chart',
-      geodata_required: false
-    },
-    record2: {
-      title: 'Record2',
-      icon: 'assignment',
-      geodata_required: false,
-    },
-    'bod-client': {
-      title: 'BOD Client',
-      icon: 'battery_charging_full',
-      geodata_required: false
-    }
+
   },
   hash_params: {
     INSTANCE_ID: 'instance',
