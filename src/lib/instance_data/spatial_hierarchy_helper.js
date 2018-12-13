@@ -71,8 +71,6 @@ const get_group_by_for_level = (level_name) => {
 
 
 // Property helpers
-const get_slug = () => instance_config_cache.instance.slug
-
 const get_denominator_fields = () => spatial_hierarchy_cache.markers.denominator_fields
 
 const get_denominator_enumerable_name = () => Object.keys(get_denominator_fields())[0]
@@ -149,7 +147,6 @@ const create_plan_from_all_geodata = (cache) => {
 export {
   configure_spatial_helpers,
 
-  get_slug,
   get_planning_level_id_field,
   get_denominator_fields,
   get_denominator_enumerable_name,

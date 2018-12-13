@@ -26,7 +26,7 @@
     <span class='version' style='cursor: pointer;' @click="toggle_debug_info">
       Version: {{commit_hash}} <br/>
       <span v-if="debug_info_visible">
-        <p>Config: {{which_config}}</p>
+        <p>Instance ID: {{instance_id}}</p>
         <p>UserAgent: {{userAgent}}</p>
         <p><a :href="bulk_download_url" target="_blank">Bulk download</a></p>
       </span>
@@ -69,7 +69,7 @@
         decorated_applets: 'meta/decorated_applets'
       }),
       ...mapState({
-        slug: state => state.instance_config.instance.slug,
+        instance_id: state => state.instance_config.instance_id,
         instance_config: state => state.instance_config,
         config_version: state => state.instance_config.config_version,
         personalised_instance_id: state => state.meta.personalised_instance_id,
@@ -81,17 +81,13 @@
       user() {
         return this.$store.state.meta.user
       },
-      which_config() {
-        return `${this.slug}@${this.config_version}`
-      },
       api_url() {
         return this.$store.state.api_url;
       },
       bulk_download_url() {
-        const instance_id = this.instance_config.instance_id
         return `${this.api_url}/download_records` +
-          `?country=${this.slug}&personalised_instance_id=${this.personalised_instance_id}` +
-          `&download_key=${this.api_key}&instance_id=${instance_id}`
+          `?personalised_instance_id=${this.personalised_instance_id}` +
+          `&download_key=${this.api_key}&instance_id=${this.instance_id}`
       }
     },
     methods: {

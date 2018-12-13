@@ -203,7 +203,7 @@
       download_records() {
         const content = JSON.stringify(this.unsynced_responses)
         const date = moment().format('YYYY-MM-DD_HHmm')
-        download(content, `${this.instance_config.instance.slug}_responses_export_${date}.json`)
+        download(content, `${this.instance_config.instance_id}_responses_export_${date}.json`)
       },
     }
   }

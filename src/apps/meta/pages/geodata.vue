@@ -32,7 +32,7 @@
     methods: {
       download(level_name) {
         const level_geodata = get(cache.geodata, level_name, [])
-        const slug = this.instance_config.instance.slug
+        const instance_id = this.instance_config.instance_id
 
         if (level_geodata.length === 0) {
           console.log(`No geodata for ${level_name}`)
@@ -40,7 +40,7 @@
         }
 
         const date = moment().format('YYYY-MM-DD_HHmm')
-        download(JSON.stringify(level_geodata), `${slug}.${level_name}.${date}.geojson`)
+        download(JSON.stringify(level_geodata), `${instance_id}.${level_name}.${date}.geojson`)
       }
     }
   }
