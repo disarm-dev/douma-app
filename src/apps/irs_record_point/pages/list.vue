@@ -141,9 +141,9 @@
       async load_responses() {
         this.$loading.startLoading('responses')
         const personalised_instance_id = this.$store.state.meta.personalised_instance_id
-        const instance = this.$store.state.instance_config.instance.slug
+        const instance_id = this.$store.state.instance_config.instance_id
 
-        const found = await controller.read_all_cache({personalised_instance_id, instance})
+        const found = await controller.read_all_cache({personalised_instance_id, instance_id})
         this.responses = found.sort((a, b) => new Date(b.recorded_on) - new Date(a.recorded_on))
         this.$loading.endLoading('responses')
       },

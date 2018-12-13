@@ -165,9 +165,8 @@
     methods: {
       async load_responses() {
         const personalised_instance_id = this.$store.state.meta.personalised_instance_id
-        const instance = this.$store.state.instance_config.instance.slug
-        this.cache_responses(await responses_controller.read_all_cache({personalised_instance_id, instance}))
-      //  debugger
+        const instance_id = this.$store.state.instance_config.instance_id
+        this.cache_responses(await responses_controller.read_all_cache({personalised_instance_id, instance_id}))
       },
 
       cache_responses(response_list){
@@ -175,12 +174,11 @@
         this.responses_length = cached_responses.length;
 
       },
-      //endof getters
-      //Startof actions
       get_responses_local: (context) => {
         const personalised_instance_id = this.$store.meta.personalised_instance_id
-        const instance = this.$store.instance_config.instance.slug
-        return response_controller.read_all_cache({personalised_instance_id, instance}).then(responses => {
+        const instance_id = this.$store.instance_config.instance_id
+        console.warn("debugger not reached")
+        return response_controller.read_all_cache({personalised_instance_id, instance_id}).then(responses => {
           this.cache_responses(responses)
           debugger
         })

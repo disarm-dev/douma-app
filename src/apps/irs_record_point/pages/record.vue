@@ -234,9 +234,8 @@
     },
     async created() {
       const personalised_instance_id = this.$store.state.meta.personalised_instance_id
-      const instance = this.$store.state.instance_config.instance.slug
-
-      const responses = await controller.read_all_cache({personalised_instance_id, instance})
+      const instance_id = this.$store.state.instance_config.instance_id
+      const responses = await controller.read_all_cache({personalised_instance_id, instance_id})
 
       this._validator = new Validator(this.instance_config.validations)
 

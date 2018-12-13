@@ -588,9 +588,9 @@
         let title
         if (this.selected_filter_area) {
           const selected_filter_area_name = this.selected_filter_area.properties[this.next_level_up.display_field_name]
-          title = `${this.instance_config.instance.slug}_${selected_filter_area_name}_irs_plan_${date}.geojson`
+          title = `${this.instance_config.instance_id}_${selected_filter_area_name}_irs_plan_${date}.geojson`
         } else {
-          title = `${this.instance_config.instance.slug}_irs_plan_${date}.geojson`
+          title = `${this.instance_config.instance_id}_irs_plan_${date}.geojson`
         }
 
         download(JSON.stringify(fc), title)

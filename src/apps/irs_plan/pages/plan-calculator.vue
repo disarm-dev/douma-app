@@ -30,7 +30,6 @@
     },
     computed: {
       ...mapState({
-        slug: state => state.instance_config.instance.slug,
         instance_config: state => state.instance_config
       }),
       ...mapGetters({

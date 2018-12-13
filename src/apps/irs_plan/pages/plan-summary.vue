@@ -32,7 +32,7 @@
     },
     computed: {
       ...mapState({
-        slug: state => state.instance_config.instance.slug,
+        instance_id: state => state.instance_config.instance_id,
         table_output: state => state.instance_config.applets.irs_plan.table_output
       }),
       ...mapGetters({
@@ -66,7 +66,7 @@
         const content = flatten_json_to_csv(this.table.data)
         const date = moment().format('YYYY-MM-DD_HHmm')
 
-        download(content, `${this.slug}_irs_plan_${date}.csv`)
+        download(content, `${this.instance_id}_irs_plan_${date}.csv`)
         this.$ga.event('irs_plan','click_download_plan')
       }
     }
