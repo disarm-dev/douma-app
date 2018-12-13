@@ -1,7 +1,6 @@
 import applet from './applet.vue'
 import home from './pages/home.vue'
 import logout from './pages/logout.vue'
-import geodata from './pages/geodata.vue'
 import clear_data from './pages/clear_data.vue'
 
 export default [
@@ -24,11 +23,6 @@ export default [
         path: 'clear_data',
         name: 'meta:clear_data',
         component: clear_data,
-      },
-      {
-        path: 'geodata',
-        name: 'meta:geodata',
-        component: geodata
       }
     ]
   }

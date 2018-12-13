@@ -1,18 +1,15 @@
 <template>
   <div class='profile'>
+    <demo_create_fake_data v-if="show_demo_button"></demo_create_fake_data>
+
     <md-card>
+
       <md-card-content>
         <div>Hi <em>{{user.name}}</em>, you are logged in as <em>{{user.username}}</em>, with access to</div>
 
         <md-list>
           <md-list-item v-for='applet in decorated_applets' :key='applet.name' @click="$router.push({name: applet.name})">
             <md-icon>{{applet.icon}}</md-icon><span class="applet-item">{{applet.title}}</span>
-          </md-list-item>
-
-          <md-divider class="md-inset"></md-divider>
-
-          <md-list-item @click="$router.push({name: 'meta:geodata'})">
-            <md-icon>explore</md-icon><span class="applet-item">Geodata</span>
           </md-list-item>
         </md-list>
 
@@ -52,9 +49,15 @@
   import {get} from 'lodash';
 
   import BUILD_TIME from 'config/build-time'
+  import {__is_a_demo} from 'config/demo_config'
+  import demo_create_fake_data from 'components/demo_create_fake_data'
+  import {ResponseController} from 'lib/models/response/controller'
+
+  const response_controller = new ResponseController('record')
 
   export default {
     name: 'home',
+    components: {demo_create_fake_data},
     data() {
       return {
         license_text: {
@@ -89,6 +92,9 @@
         return `${this.api_url}/download_records` +
           `?personalised_instance_id=${this.personalised_instance_id}` +
           `&download_key=${this.api_key}&instance_id=${this.instance_id}`
+      },
+      show_demo_button() {
+        return __is_a_demo
       }
     },
     methods: {
