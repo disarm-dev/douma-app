@@ -255,13 +255,6 @@
 
         const last_id = this.last_id
 
-        // Guessing
-        if (last_id == null) {
-          console.log('🚒 what is happening with guessing stuff')
-          // store.commit('irs_record_point/clear_responses_not_inVillage')
-          // store.commit('irs_record_point/clear_guessed_responses')
-        }
-        
         let remote_responses_batch
         try {
           remote_responses_batch = await responses_controller.read_new_network_write_local(last_id)
