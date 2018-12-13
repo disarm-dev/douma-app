@@ -12,8 +12,8 @@
         <md-list-item @click="check_network">
           <md-icon>settings_ethernet</md-icon>
           <span>Check network</span>
-          <md-icon v-if="network_pass === false" class="md-warn">signal_wifi_off</md-icon>
-          <md-icon v-if='network_pass' class="md-primary">check</md-icon>
+          <md-icon v-if="network_pass === 'failed'" class="md-warn">signal_wifi_off</md-icon>
+          <md-icon v-if="network_pass === 'success'" class="md-primary">check</md-icon>
         </md-list-item>
 
         <!--GEODATA VALID-->
@@ -86,7 +86,7 @@
       return {
         geolocation_pass: false,
         geodata_valid: false,
-        network_pass: null,
+        network_pass: '',
       }
     },
     methods: {
@@ -97,11 +97,10 @@
         this.geodata_valid = geodata_in_cache_and_valid()
       },
       check_network() {
-        this.network_pass = false
         try_reconnect().then(res => {
-          if (res) this.network_pass = true
+          this.network_pass = "success"
         }).catch(() => {
-          this.network_pass = false
+          this.network_pass = "failed"
         })
       },
     }
