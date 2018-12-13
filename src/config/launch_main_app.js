@@ -46,7 +46,7 @@ export async function launch_main_app({api_url, user, personalised_instance_id, 
 
   // Configure spatial_helpers to use instance_config
   // We need to do this before we create the store, the store relies on some of the function in spatial_hierarchy_helpers
-  const caches = await configure_spatial_helpers(instance_config)
+  await configure_spatial_helpers(instance_config)
 
   /////////////////////////////
   //

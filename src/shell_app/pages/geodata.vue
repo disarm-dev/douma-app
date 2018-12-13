@@ -60,7 +60,6 @@
   import download from 'downloadjs'
   import moment from 'moment'
 
-  import {configure_spatial_helpers} from 'lib/instance_data/spatial_hierarchy_helper'
   import {geodata_has_level, geodata_level_version_matches_instance_config} from 'lib/models/geodata/geodata.valid'
   import {hydrate_geodata_cache_from_idb} from 'lib/models/geodata/local.geodata_store';
   import cache from 'config/cache'
@@ -93,7 +92,6 @@
       }
     },
     async mounted() {
-      configure_spatial_helpers(this.instance_config)
       await hydrate_geodata_cache_from_idb(this.instance_id)
       this.calculate_loading_progress()
     },
