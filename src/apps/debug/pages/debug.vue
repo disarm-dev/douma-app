@@ -12,7 +12,7 @@
         <md-list-item @click="check_network">
           <md-icon>settings_ethernet</md-icon>
           <span>Check network</span>
-          <md-icon v-if="network_pass === false" class="md-warn">signal_wifi_off</md-icon>
+          <md-icon v-if="!network_pass" class="md-warn">signal_wifi_off</md-icon>
           <md-icon v-if='network_pass' class="md-primary">check</md-icon>
         </md-list-item>
 
@@ -99,7 +99,7 @@
       check_network() {
         this.network_pass = false
         try_reconnect().then(res => {
-          if (res) this.network_pass = true
+          this.network_pass = true
         }).catch(() => {
           this.network_pass = false
         })
