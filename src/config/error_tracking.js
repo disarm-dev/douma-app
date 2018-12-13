@@ -26,7 +26,7 @@ const set_raven_user_context = (state) => {
   }
 
   const tags = {
-    instance_slug: state.instance_config.instance.slug,
+    instance_id: state.instance_config.instance_id,
     branch: BUILD_TIME.BRANCH
   }
 

@@ -24,7 +24,6 @@
 
 <script>
 import { InstancesController } from "shell_app/models/instances/controller";
-import { InstanceConfigsController } from "shell_app/models/instance_configs/controller";
 import { mapState } from "vuex";
 import { launch_from_instance_config_id } from "shell_app/lib/check_geodata_and_launch";
 

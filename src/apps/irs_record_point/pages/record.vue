@@ -187,7 +187,7 @@
       ...mapState({
         username: state => state.meta.user.username,
         user_id: state => state.meta.user._id,
-        instance_slug: state => state.instance_config.instance.slug,
+        instance_id: state => state.instance_config.instance_id,
         personalised_instance_id: state => state.meta.personalised_instance_id,
         instance_config: state => state.instance_config,
         team_name: state => state.irs_record_point.team_name
@@ -253,7 +253,7 @@
           personalised_instance_id: this.personalised_instance_id,
           user_id: this.user_id,
           username: this.username,
-          instance_slug: this.instance_slug,
+          instance_id: this.instance_id,
           team_name: this.team_name, // TODO: @refac Brittle: this needs to match what's set in `instance.json`
         }
         this.not_response_response = new Response(empty_response)

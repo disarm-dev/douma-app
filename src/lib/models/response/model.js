@@ -21,7 +21,7 @@ export class Response {
   }
 
   /**
-   * Required options: username, instance_slug
+   * Required options: username, instance_id
    * @param options
    */
   constructor(options) {

@@ -34,7 +34,7 @@ function get_form_data(instance_config) {
 
 function create_response(state, single_location_selection) {
   const user =  state.meta.user.username
-  const slug = state.instance_config.instance.slug
+  const instance_id = state.instance_config.instance_id
   const personalised_instance_id = state.meta.personalised_instance_id
   const instance_config = state.instance_config
 
@@ -44,7 +44,7 @@ function create_response(state, single_location_selection) {
   const response = {
     id: uuid(),
     personalised_instance_id: personalised_instance_id,
-    instance_slug: slug,
+    instance_id,
     form_data: get_form_data(instance_config),
     location: {
       coords: {

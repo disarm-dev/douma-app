@@ -45,63 +45,13 @@ export default {
     }
   },
   actions: {
-    login: (context, login_details) => {
-
-      const instance_id_changed = (login_details.personalised_instance_id !== context.state.personalised_instance_id)
-
-      return authenticate(login_details).then(response => {
-        if (response.error) {
-          return Promise.reject(response)
-        }
-
-        // Reject user if login or password is incorrect
-        if (response.status === 401) {
-          return Promise.reject({error: 'User with this username or password is not found.'})
-        }
-
-        // Reject user if not authorised for this instance
-        if (response.instance_slug !== context.rootState.instance_config.instance.slug && response.instance_slug !== 'all') {
-          return Promise.reject({error: 'User not authenticated for this instance'})
-        }
-        
-        const authenticated_user = new User(response)
-
-        // You have a valid, authenticated user
-        if (authenticated_user.is_valid()) {
-
-          // Start by clearing instance-specific data ONLY if instance_id has changed
-          context.dispatch('clear_data_storage', {instance_id_changed, authenticated_user: authenticated_user.model}).then(() => {
-            // Set some basic stuff
-            context.commit('set_personalised_instance_id', login_details.personalised_instance_id)
-            context.commit('set_user', authenticated_user.model)
-
-            // Setup the access control list after we are logged in
-            // User will not be able to navigate or click butons if this is not done
-            setup_acl()
-
-            // Add extra info to error logging
-            set_raven_user_context(context.rootState)
-
-            return Promise.resolve(authenticated_user.model)
-
-          }).catch(err => console.warn('Something unthought of', err))
-
-        } else {
-          return Promise.reject({error: 'Validation issues with user record.'})
-        }
-
-      })
-    },
     logout: (context) => {
-
-      Raven.setUserContext({
-        instance_slug: context.rootState.instance_config.instance.slug
-      })
+      Raven.setUserContext({})
 
       // This is the actual log-out side-effect. No `user` means router goes to login
       context.commit('set_user', null)
 
-      console.log('remove instance_config from store')
+      console.log('TODO: remove instance_config from store')
     },
     clear_data_storage: (context, {instance_id_changed, authenticated_user}) => {
       if (!instance_id_changed) return // Nothing changed

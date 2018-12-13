@@ -85,8 +85,6 @@
     },
     computed: {
       ...mapState({
-        instance_slug: state => state.instance_config.instance.slug,
-
         unsynced_changes: state => state.irs_tasker.unsynced_changes,
         selected_team_name: state => state.irs_tasker.selected_team_name,
         plan_target_ids: state => state.irs_tasker.plan_target_ids,

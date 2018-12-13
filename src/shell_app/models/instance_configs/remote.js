@@ -1,12 +1,5 @@
 import { shell_axios } from 'shell_app/lib/shell_request_handler'
 
-function published_instance_config({ id }) {
-  const request = {
-    url: `/instance/${id}/published_instanceconfigs`,
-  }
-  return shell_axios(request)
-}
-
 function instance_config({ id }) {
   const request = {
     url: `/config/${id}`,
@@ -16,5 +9,4 @@ function instance_config({ id }) {
 
 export default {
   instance_config,
-  published_instance_config,
 }

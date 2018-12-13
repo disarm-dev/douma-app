@@ -51,7 +51,7 @@ export class ResponseController {
   async read_all_cache({personalised_instance_id, instance}) {
     const responses = await this.local.read_all() // TODO: Filter in DB rather than processing all responses?
     return responses.filter(r => {
-      return r.instance_slug === instance && r.personalised_instance_id === personalised_instance_id
+      return r.instance_id === instance && r.personalised_instance_id === personalised_instance_id
     })
   }
 
