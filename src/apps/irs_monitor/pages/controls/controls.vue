@@ -12,11 +12,6 @@
     <md-card-content v-show="show_filters">
       <md-tabs class="md-transparent filter-container" ref="tabs">
 
-        <md-tab id="season_plan" md-label="Season/plan">
-          <seasons :season_start_dates="season_start_dates"></seasons>
-          <plans :plans="plans" @get_plan="get_plan"></plans>
-        </md-tab>
-
         <md-tab id="form_field_filters" md-label="form Fields">
           <fields_filters :responses="responses"></fields_filters>
         </md-tab>
@@ -49,7 +44,6 @@
   import {mapState} from 'vuex'
   import aggregation_settings from './aggregation-settings.vue'
   import plans from './plans'
-  import seasons from './seasons'
   import advanced_controls from './advanced_controls'
   import filters_summary from './filters/summary'
   import fields_filters from './filters/fields'
@@ -59,7 +53,7 @@
 
   export default {
     name: 'controls',
-    components: {filters_summary, plans, seasons, temporal_filter, spatial_filter, fields_filters,  aggregation_settings, advanced_controls, },
+    components: {filters_summary, plans, temporal_filter, spatial_filter, fields_filters,  aggregation_settings, advanced_controls, },
     props: ['responses', 'targets', 'plans'],
     computed: {
       ...mapState({

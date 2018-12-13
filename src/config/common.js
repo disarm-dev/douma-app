@@ -34,11 +34,6 @@ export default {
       icon: 'bubble_chart',
       geodata_required: false
     },
-    'seasons': {
-      title: 'Seasons',
-      icon: 'bubble_chart',
-      geodata_required: false
-    },
     record2: {
       title: 'Record2',
       icon: 'assignment',

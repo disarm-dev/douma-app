@@ -171,7 +171,6 @@ server.get('/instances/:instance_id/published_instance_config', (req, res) => {
         'title': 'Data Collection + Reporting',
         'filter_field': 'household_name'
       },
-      'seasons': {'title': 'Admin'},
       'debug': {},
       'meta': {}
     },
