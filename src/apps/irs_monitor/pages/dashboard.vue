@@ -45,7 +45,7 @@
 </template>
 
 <script>
-  import {mapState, mapGetters} from 'vuex'
+  import {mapState} from 'vuex'
   import {get, cloneDeep as clone_deep} from 'lodash'
 
   // Components
@@ -55,7 +55,6 @@
   import dashboard_table from './table/dashboard-table.vue'
   import charts from './charts/dashboard-charts.vue'
 
-  import {get_geodata} from 'lib/models/geodata/remote.js'
   import {ResponseController} from 'lib/models/response/controller'
   import {PlanController} from 'lib/models/plan/controller'
   import {Plan} from 'lib/models/plan/model'
@@ -64,8 +63,6 @@
   import {create_plan_from_all_geodata, get_planning_level_name} from 'lib/instance_data/spatial_hierarchy_helper'
   import cache from 'config/cache'
   import {geodata_in_cache_and_valid} from 'lib/models/geodata/geodata.valid'
-
-  //import { isEqual, get } from 'lodash'
 
   let cached_responses = []
 

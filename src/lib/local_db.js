@@ -12,7 +12,8 @@ const fields = {
 }
 
 db.version(1).stores({
-  geodata_collection: 'disarm_geodata_key, geodata', // geodata_collection has two columns, called 'disarm_geodata_key' and 'geodata'
+  // geodata_collection has two columns, called 'disarm_geodata_key' and 'geodata'
+  geodata_collection: 'disarm_geodata_key, geodata',
 
   "monitor/responses": fields.v1.responses,
   "record/responses": fields.v1.responses,
@@ -27,6 +28,10 @@ db.version(1).stores({
 db.version(2).stores({
   "foci/case_clusters": '_id',
   "foci/case_locations": '_id',
+})
+
+db.version(3).stores({
+
 })
 
 

@@ -55,15 +55,14 @@
 </template>
 
 <script>
-  import {mapGetters, mapState} from 'vuex'
+  import {mapState} from 'vuex'
   import {get} from 'lodash'
   import download from 'downloadjs'
   import moment from 'moment'
 
-  import {get_all_spatial_hierarchy_level_names, configure_spatial_helpers} from 'lib/instance_data/spatial_hierarchy_helper'
-  import {geodata_has_level, geodata_versions_correct, geodata_level_version_matches_instance_config } from 'lib/models/geodata/geodata.valid'
-  import {get_geodata_for} from 'lib/models/geodata/remote'
-  import {hydrate_geodata_cache_from_idb} from "lib/models/geodata/local.geodata_store";
+  import {configure_spatial_helpers} from 'lib/instance_data/spatial_hierarchy_helper'
+  import {geodata_has_level, geodata_level_version_matches_instance_config} from 'lib/models/geodata/geodata.valid'
+  import {hydrate_geodata_cache_from_idb} from 'lib/models/geodata/local.geodata_store';
   import cache from 'config/cache'
 
   import {get_and_save_layer} from '../models/geodata/controller'
@@ -80,12 +79,10 @@
       ...mapState({
         instance_config: state => state.instance_config,
         instance_id: state => state.instance_config.instance_id,
-        instance_slug: state => state.instance_config.instance.slug,
       })
     },
     created() {
-      const levels = this.instance_config.spatial_hierarchy.levels
-      this.levels = levels
+      this.levels = this.instance_config.spatial_hierarchy.levels
 
       for (let level of this.levels) {
         this.$set(this.loading_progress, level.name,  {
@@ -124,7 +121,6 @@
         try {
           await get_and_save_layer({
             level_id: level.level_id,
-            instance_slug: this.instance_slug, 
             instance_id: this.instance_id,
             geodata_version: this.instance_config.spatial_hierarchy.data_version
           })
@@ -151,7 +147,7 @@
 
         const date = moment().format('YYYY-MM-DD_HHmm')
 
-        download(JSON.stringify(level_geodata), `${this.instance_slug}.${level_name}.${date}.geojson`)
+        download(JSON.stringify(level_geodata), `${level_name}.geodata.${date}.geojson`)
       }
     }
   }
