@@ -96,6 +96,7 @@ export function launch_shell_app({api_url, user, personalised_instance_id}) {
       },
       reset_api_url: (state) => {
         state.api_url = store_defaults.api_url
+        persist_shell_data('api_url', state.api_url)
       },
       set_user: (state, user) => {
         state.user = user
@@ -114,12 +115,15 @@ export function launch_shell_app({api_url, user, personalised_instance_id}) {
       },
       reset_store: (state) => {
         state.user = store_defaults.user
-        state.personalised_instance_id = store_defaults.personalised_instance_id
-        state.instances = store_defaults.instances
-        state.instance_config = store_defaults.instance_config
-
         persist_shell_data('user', state.user)
+
+        state.personalised_instance_id = store_defaults.personalised_instance_id
         persist_shell_data('personalised_instance_id', state.personalised_instance_id)
+
+        state.instances = store_defaults.instances
+        // these are not persisted normally
+
+        state.instance_config = store_defaults.instance_config
         persist_shell_data('instance_config', state.instance_config)
       }
     },
