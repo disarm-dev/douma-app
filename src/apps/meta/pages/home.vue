@@ -23,10 +23,7 @@
     <span class='version' style='cursor: pointer;' @click="toggle_debug_info">
       Version: {{commit_hash}} <br/>
       <span v-if="debug_info_visible">
-        <p>Config ID: {{config_id}}</p>
-        <p>Instance ID: {{instance_id}}</p>
-        <p>API URL: {{api_url}}</p>
-        <p>UserAgent: {{userAgent}}</p>
+        <debug_info></debug_info>
         <p><a :href="bulk_download_url" target="_blank">Bulk download</a></p>
       </span>
     </span>
@@ -50,22 +47,22 @@
   import {get} from 'lodash';
 
   import BUILD_TIME from 'config/build-time'
+  import {ResponseController} from 'lib/models/response/controller'
+  import debug_info from 'components/debug_info'
   import {__is_a_demo} from 'config/demo_config'
   import demo_create_fake_data from 'components/demo_create_fake_data'
-  import {ResponseController} from 'lib/models/response/controller'
 
   const response_controller = new ResponseController('record')
 
   export default {
     name: 'home',
-    components: {demo_create_fake_data},
+    components: {debug_info, demo_create_fake_data},
     data() {
       return {
         license_text: {
           title: 'Licenses',
           content: 'Loading license text...',
         },
-        userAgent: get(navigator, 'userAgent', 'unknown'),
         debug_info_visible: false,
       }
     },
@@ -86,9 +83,6 @@
       },
       user() {
         return this.$store.state.meta.user
-      },
-      api_url() {
-        return this.$store.state.api_url;
       },
       bulk_download_url() {
         return `${this.api_url}/download_records` +

@@ -72,6 +72,14 @@
       </md-list>
 
 
+      <md-divider class="md-inset"></md-divider>
+
+      <md-toolbar md-theme="white">
+        <span class="md-title">Debug info</span>
+      </md-toolbar>
+
+      <debug_info style='padding-left: 70px;'></debug_info>
+
     </div>
   </div>
 </template>
@@ -79,9 +87,10 @@
 <script>
   import {try_reconnect} from 'lib/remote/util'
   import {geodata_in_cache_and_valid} from 'lib/models/geodata/geodata.valid'
+  import debug_info from 'components/debug_info'
 
   export default {
-    name: 'debug',
+    components: {debug_info},
     data() {
       return {
         geolocation_pass: false,
