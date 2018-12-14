@@ -25,6 +25,7 @@
       <span v-if="debug_info_visible">
         <p>Config ID: {{config_id}}</p>
         <p>Instance ID: {{instance_id}}</p>
+        <p>API URL: {{api_url}}</p>
         <p>UserAgent: {{userAgent}}</p>
         <p><a :href="bulk_download_url" target="_blank">Bulk download</a></p>
       </span>
@@ -77,7 +78,8 @@
         instance_config: state => state.instance_config,
         config_id: state => state.instance_config._id,
         personalised_instance_id: state => state.meta.personalised_instance_id,
-        api_key: state => state.meta.user.key
+        api_key: state => state.meta.user.key,
+        api_url: state => state.api_url,
       }),
       commit_hash() {
         return BUILD_TIME.VERSION_COMMIT_HASH_SHORT
